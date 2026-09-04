@@ -90,25 +90,119 @@
             text-decoration: none;
         }
 
+        .btn-rpg:hover {
+            background: var(--primary-gold);
+            color: #ffffff;
+        }
+
         .btn-rpg.primary {
             background: var(--primary-gold);
             color: #ffffff;
         }
 
-        .char-preview {
+        /* Modal / Popup-Fenster */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(44, 34, 30, 0.6);
+            backdrop-filter: blur(2px);
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            z-index: 1000;
+        }
+
+        .modal-card {
+            background: var(--surface-color);
+            border: 2px solid var(--primary-gold);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: left;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--surface-border);
+            padding-bottom: 10px;
+            margin-bottom: 14px;
+        }
+
+        .modal-header h2 {
+            font-size: 1.1rem;
+            margin: 0;
+            color: var(--primary-gold);
+            text-transform: uppercase;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .character-list {
+            overflow-y: auto;
+            max-height: 50vh;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .char-item {
             background: #faf7f2;
             border: 1px solid var(--surface-border);
             border-radius: 6px;
             padding: 12px;
-            margin-bottom: 20px;
-            text-align: left;
-            font-size: 0.85rem;
-            display: none;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .char-preview span {
-            color: var(--primary-gold);
+        .char-item:hover {
+            border-color: var(--primary-gold);
+            background: #fdfbf7;
+            transform: translateY(-1px);
+        }
+
+        .char-item-title {
             font-weight: bold;
+            color: var(--text-color);
+            font-size: 1rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .char-item-details {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200px 0; }
+            100% { background-position: 200px 0; }
+        }
+
+        .skeleton-bar {
+            height: 50px;
+            border-radius: 6px;
+            background: linear-gradient(90deg, #eae3d9 25%, #f4f0ea 50%, #eae3d9 75%);
+            background-size: 400px 100%;
+            animation: shimmer 1.5s infinite;
+            margin-bottom: 8px;
         }
     </style>
 </head>
@@ -125,41 +219,92 @@
             <h1>Heldenarchiv</h1>
             <div class="subtitle">D&D 2024 Regeln & Edition</div>
 
-            <div id="preview-box" class="char-preview">
-                <div><i class="fa-solid fa-user-shield"></i> Letzter Held: <span id="prev-name">-</span></div>
-                <div><i class="fa-solid fa-hat-wizard"></i> Klasse: <span id="prev-class">-</span> (Stufe <span id="prev-level">1</span>)</div>
-            </div>
-
             <a href="creator.html" class="btn-rpg primary">
                 <i class="fa-solid fa-user-plus"></i> Neuen Charakter erstellen
             </a>
-            <button id="btn-load" class="btn-rpg" onclick="loadCharacter()" style="display: none;">
+            <button class="btn-rpg" onclick="openCharacterModal()">
                 <i class="fa-solid fa-scroll"></i> Abenteuer fortsetzen
             </button>
         </div>
     </div>
 
-    <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            const saved = localStorage.getItem('dnd_active_character');
-            if (saved) {
-                try {
-                    const char = JSON.parse(saved);
-                    document.getElementById('prev-name').innerText = char.name || "Unbenannt";
-                    document.getElementById('prev-class').innerText = char.class || "-";
-                    document.getElementById('prev-level').innerText = char.level || 1;
-                    document.getElementById('preview-box').style.display = 'block';
-                    document.getElementById('btn-load').style.display = 'flex';
-                } catch (e) {
-                    console.error(e);
-                }
-            }
-        });
+    <!-- MODAL: Charakter-Auswahl -->
+    <div id="char-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>Wähle deinen Helden</h2>
+                <button class="close-btn" onclick="closeCharacterModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div id="character-list-container" class="character-list">
+                <!-- Wird per JavaScript befüllt -->
+            </div>
 
-        function loadCharacter() {
-            if (localStorage.getItem('dnd_active_character')) {
-                window.location.href = 'manager.html';
+            <button class="btn-rpg" onclick="closeCharacterModal()" style="margin-bottom: 0;">Abbrechen</button>
+        </div>
+    </div>
+
+    <script>
+        function openCharacterModal() {
+            const container = document.getElementById('character-list-container');
+            container.innerHTML = '';
+
+            let characters = [];
+            const savedList = localStorage.getItem('dnd_character_list');
+            const singleSaved = localStorage.getItem('dnd_active_character');
+
+            if (savedList) {
+                try { characters = JSON.parse(savedList); } catch(e) {}
+            } else if (singleSaved) {
+                try { characters = [JSON.parse(singleSaved)]; } catch(e) {}
             }
+
+            if (characters.length === 0) {
+                container.innerHTML = `
+                    <div style="font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-bottom: 8px;">Keine Helden im Archiv gefunden...</div>
+                    <div class="skeleton-bar"></div>
+                    <div class="skeleton-bar"></div>
+                `;
+            } else {
+                characters.forEach((char, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'char-item';
+                    item.onclick = () => selectCharacter(index);
+                    
+                    const lastAccess = char.lastAccess ? new Date(char.lastAccess).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : "Unbekannt";
+
+                    item.innerHTML = `
+                        <div class="char-item-title">
+                            <span><i class="fa-solid fa-shield-halved"></i> ${char.name || "Unbenannter Held"}</span>
+                            <span style="color: var(--primary-gold);">Stufe ${char.level || 1}</span>
+                        </div>
+                        <div class="char-item-details">
+                            <span><i class="fa-solid fa-hat-wizard"></i> ${char.class || "-"} (${char.species || "-"})</span>
+                            <span><i class="fa-solid fa-clock"></i> ${lastAccess}</span>
+                        </div>
+                    `;
+                    container.appendChild(item);
+                });
+            }
+
+            document.getElementById('char-modal').style.display = 'flex';
+        }
+
+        function closeCharacterModal() {
+            document.getElementById('char-modal').style.display = 'none';
+        }
+
+        function selectCharacter(index) {
+            let characters = [];
+            const savedList = localStorage.getItem('dnd_character_list');
+            if (savedList) {
+                characters = JSON.parse(savedList);
+                // Zeitstempel bei Auswahl aktualisieren
+                characters[index].lastAccess = new Date().toISOString();
+                localStorage.setItem('dnd_character_list', JSON.stringify(characters));
+                localStorage.setItem('dnd_active_character', JSON.stringify(characters[index]));
+            }
+            window.location.href = 'manager.html';
         }
     </script>
 </body>
