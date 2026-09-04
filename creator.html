@@ -166,25 +166,25 @@
         </a>
     </div>
 
-    <div class="page-title">Charakter erstellen</div>
+    <div class="page-title">Held/in erstellen</div>
 
     <!-- SCHRITT 1: IDENTITÄT & SPEZIES -->
     <div class="step-card">
-        <div class="step-title">Schritt 1: Identität & Species</div>
+        <div class="step-title">Identität & Ethnie</div>
         <div class="grid-2">
             <div>
-                <label for="char-name">Charaktername:</label>
+                <label for="char-name">Name</label>
                 <input type="text" id="char-name" value="Gimble">
             </div>
             <div>
-                <label for="main-race">Haupt-Species / Race:</label>
+                <label for="main-race">Ethnie / Volk</label>
                 <div class="input-row">
                     <select id="main-race" onchange="onMainRaceChange()"></select>
                 </div>
             </div>
         </div>
         <div id="subrace-container" style="display: none; margin-top: 5px;">
-            <label for="sub-race">Subrace / Lineage:</label>
+            <label for="sub-race">Abstammung</label>
             <div class="input-row">
                 <select id="sub-race" onchange="updateSpellsUI()"></select>
                 <button type="button" class="info-btn" onclick="showRaceModal()">ℹ</button>
@@ -194,17 +194,17 @@
 
     <!-- SCHRITT 2: KLASSE & HINTERGRUND -->
     <div class="step-card">
-        <div class="step-title">Schritt 2: Class & Background</div>
+        <div class="step-title">Klasse und Hintergrund</div>
         <div class="grid-2">
             <div>
-                <label for="class-select">Class (Stufe 1):</label>
+                <label for="class-select">Klasse</label>
                 <div class="input-row">
                     <select id="class-select" onchange="onClassChange()"></select>
                     <button type="button" class="info-btn" onclick="showClassModal()">ℹ</button>
                 </div>
             </div>
             <div>
-                <label for="bg-select">Background:</label>
+                <label for="bg-select">Hintergrund</label>
                 <div class="input-row">
                     <select id="bg-select" onchange="updateBgInfo()"></select>
                     <button type="button" class="info-btn" onclick="showBgModal()">ℹ</button>
@@ -215,7 +215,7 @@
 
     <!-- SCHRITT 3: ATTRIBUTSWERTE -->
     <div class="step-card">
-        <div class="step-title">Schritt 3: Standard Array zuweisen (15, 14, 13, 12, 10, 8)</div>
+        <div class="step-title">Start-Attribute verteilen</div>
         <div class="grid-3">
             <div><label>STR</label><select class="array-select" id="str-val" onchange="onStatsChange()"></select></div>
             <div><label>DEX</label><select class="array-select" id="dex-val" onchange="onStatsChange()"></select></div>
