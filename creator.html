@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D&D 5e / 2024 Sandbox Builder</title>
+    <title>D&D 5e / 2024 Charakter erstellen</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { 
@@ -27,8 +27,6 @@
         .container { max-width: 750px; margin: 0 auto; }
         
         .top-nav { margin-bottom: 15px; }
-        
-        /* Zurück-Button jetzt auch mit dem rauhen Stein-Look */
         .btn-back {
             display: inline-flex;
             align-items: center;
@@ -48,7 +46,6 @@
 
         h1 { font-size: 1.6rem; text-align: center; color: var(--text); font-family: serif; text-transform: uppercase; margin-bottom: 20px; }
         
-        /* Grisselig-rauher Stein-Look für die Karten */
         .step-card { 
             background: var(--card); 
             border: 3px solid var(--border); 
@@ -65,14 +62,12 @@
         select, button, input { width: 100%; padding: 10px; border-radius: 6px; border: 1.5px solid var(--border); background: #faf7f2; color: var(--text); font-size: 0.95rem; box-sizing: border-box; }
         select:focus, input:focus { outline: none; border-color: var(--accent); }
         
-        /* Info-Buttons */
         .info-btn { width: 38px; height: 38px; flex-shrink: 0; padding: 0; background: #faf7f2; color: var(--accent); border: 1.5px solid var(--border); border-radius: 6px; font-weight: bold; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; filter: url(#rough-edge); }
         .info-btn:hover { background: #f0ebe1; }
 
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         
-        /* Haupt-Button */
         .main-btn { 
             background: var(--accent); 
             color: #fff; 
@@ -116,7 +111,6 @@
         .clickable-tag { background: #faf7f2; color: var(--accent); padding: 3px 8px; border-radius: 4px; border: 1.5px solid var(--border); cursor: pointer; display: inline-block; margin: 2px; font-size: 0.85rem; }
         .clickable-tag:hover { background: #f0ebe1; border-color: var(--accent); }
 
-        /* Modal Popup */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(44,34,30,0.6); backdrop-filter: blur(2px); z-index: 1000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
         .modal-content { 
             background: var(--card); 
@@ -150,22 +144,22 @@
 <div class="container">
     <div class="top-nav">
         <a href="index.html" class="btn-back">
-            <i class="fa-solid fa-arrow-left"></i> Zurück zum Archiv
+            <i class="fa-solid fa-arrow-left"></i> Zurück zum Gewölbe
         </a>
     </div>
 
-    <h1>D&D 5e / 2024 Sandbox Builder</h1>
+    <h1>Charakter erstellen</h1>
 
-    <!-- STEP 1: IDENTITY & SPECIES -->
+    <!-- SCHRITT 1: IDENTITÄT & SPEZIES -->
     <div class="step-card">
-        <div class="step-title">Step 1: Character Identity & Species</div>
+        <div class="step-title">Schritt 1: Identität & Species</div>
         <div class="grid-2">
             <div>
-                <label for="char-name">Character Name:</label>
+                <label for="char-name">Charaktername:</label>
                 <input type="text" id="char-name" value="Gimble">
             </div>
             <div>
-                <label for="main-race">Main Species / Race:</label>
+                <label for="main-race">Haupt-Species / Race:</label>
                 <div class="input-row">
                     <select id="main-race" onchange="onMainRaceChange()"></select>
                 </div>
@@ -180,12 +174,12 @@
         </div>
     </div>
 
-    <!-- STEP 2: CLASS & BACKGROUND -->
+    <!-- SCHRITT 2: KLASSE & HINTERGRUND -->
     <div class="step-card">
-        <div class="step-title">Step 2: Class & Background</div>
+        <div class="step-title">Schritt 2: Class & Background</div>
         <div class="grid-2">
             <div>
-                <label for="class-select">Class (Level 1):</label>
+                <label for="class-select">Class (Stufe 1):</label>
                 <div class="input-row">
                     <select id="class-select" onchange="onClassChange()"></select>
                     <button type="button" class="info-btn" onclick="showClassModal()">ℹ</button>
@@ -201,9 +195,9 @@
         </div>
     </div>
 
-    <!-- STEP 3: ABILITY SCORES -->
+    <!-- SCHRITT 3: ATTRIBUTSWERTE -->
     <div class="step-card">
-        <div class="step-title">Step 3: Assign Standard Array (15, 14, 13, 12, 10, 8)</div>
+        <div class="step-title">Schritt 3: Standard Array zuweisen (15, 14, 13, 12, 10, 8)</div>
         <div class="grid-3">
             <div><label>STR</label><select class="array-select" id="str-val" onchange="onStatsChange()"></select></div>
             <div><label>DEX</label><select class="array-select" id="dex-val" onchange="onStatsChange()"></select></div>
@@ -212,45 +206,45 @@
             <div><label>WIS</label><select class="array-select" id="wis-val" onchange="onStatsChange()"></select></div>
             <div><label>CHA</label><select class="array-select" id="cha-val" onchange="onStatsChange()"></select></div>
         </div>
-        <div id="array-error" class="error">Assign 15, 14, 13, 12, 10, 8 without duplicates!</div>
+        <div id="array-error" class="error">Wähle 15, 14, 13, 12, 10, 8 ohne Dopplungen!</div>
     </div>
 
-    <!-- STEP 4: CLASS SKILLS -->
+    <!-- SCHRITT 4: FERTIGKEITEN -->
     <div class="step-card">
-        <div class="step-title">Step 4: Skills Selection</div>
+        <div class="step-title">Schritt 4: Fertigkeiten-Auswahl</div>
         <div class="grid-2">
             <div>
-                <label for="skill1">Skill 1:</label>
+                <label for="skill1">Fertigkeit 1:</label>
                 <div class="input-row">
                     <select id="skill1" onchange="validateSkills()"></select>
                     <button type="button" class="info-btn" onclick="showSkillModal('skill1')">ℹ</button>
                 </div>
             </div>
             <div>
-                <label for="skill2">Skill 2:</label>
+                <label for="skill2">Fertigkeit 2:</label>
                 <div class="input-row">
                     <select id="skill2" onchange="validateSkills()"></select>
                     <button type="button" class="info-btn" onclick="showSkillModal('skill2')">ℹ</button>
                 </div>
             </div>
         </div>
-        <div id="skill-error" class="error">Select 2 different skills that don't overlap with your Background!</div>
+        <div id="skill-error" class="error">Wähle 2 verschiedene Fertigkeiten, die sich nicht mit deinem Background überschneiden!</div>
     </div>
 
-    <!-- STEP 5: SPELLS -->
+    <!-- SCHRITT 5: ZAUBER -->
     <div class="step-card" id="spells-step-card">
-        <div class="step-title">Step 5: Class Spell Selection</div>
+        <div class="step-title">Schritt 5: Klassen-Zauber wählen</div>
         
-        <label id="cantrip-label">Select Cantrips:</label>
+        <label id="cantrip-label">Cantrips wählen:</label>
         <div class="spell-grid" id="cantrips-group"></div>
 
-        <label id="prep-spells-label" style="margin-top:15px;">Select Level 1 Spells:</label>
+        <label id="prep-spells-label" style="margin-top:15px;">Grad 1 Spells wählen:</label>
         <div class="spell-grid" id="level1-group"></div>
     </div>
 
-    <button class="main-btn" onclick="buildCharacter()">Generate Character Sheet</button>
+    <button class="main-btn" onclick="buildCharacter()">Charakterblatt generieren</button>
 
-    <!-- OUTPUT SHEET -->
+    <!-- AUSGABE / CHARAKTERBLATT -->
     <div id="sheet" class="sheet">
         <h2 id="screen-out-name" style="margin-top:0; color:var(--accent);"></h2>
         <div id="screen-out-meta" style="font-size:0.9rem; color:var(--text-muted); text-align:center; margin-bottom:10px;"></div>
@@ -263,16 +257,16 @@
             <span class="badge" id="screen-out-speed">Speed: 30 ft</span>
         </div>
 
-        <h3 style="color:var(--accent);">Ability Scores & Modifiers</h3>
+        <h3 style="color:var(--accent);">Attributswerte & Modifikatoren</h3>
         <div class="grid-3" id="screen-out-stats" style="margin-bottom:15px;"></div>
 
         <h3 style="color:var(--accent);">Proficiencies & Traits</h3>
         <ul id="screen-out-features" style="margin-bottom:15px;"></ul>
 
-        <h3 style="color:var(--accent);">Equipment & Weapon Configuration</h3>
+        <h3 style="color:var(--accent);">Ausrüstung & Waffen-Konfiguration</h3>
         <div id="sheet-equipment-controls" style="background:#faf7f2; padding:12px; border-radius:6px; border:1.5px solid var(--border); margin-bottom:15px;"></div>
 
-        <h3 style="color:var(--accent);">Spells & Cantrips Overview</h3>
+        <h3 style="color:var(--accent);">Spells & Cantrips Übersicht</h3>
         <div id="screen-out-spells" style="margin-bottom:20px;"></div>
 
         <div style="display: flex; gap: 10px; margin-top: 15px;">
@@ -289,8 +283,8 @@
 <!-- MODAL POPUP -->
 <div class="modal-overlay" id="rule-modal" onclick="closeModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
-        <div class="modal-title" id="modal-title">Rule Details</div>
-        <div class="modal-body" id="modal-body">Description text...</div>
+        <div class="modal-title" id="modal-title">Regeldetails</div>
+        <div class="modal-body" id="modal-body">Beschreibungstext...</div>
     </div>
 </div>
 
@@ -533,8 +527,8 @@ function updateSpellsUI() {
     lvl1Group.innerHTML = '';
 
     if (cls.casterType === "NONE") {
-        document.getElementById('cantrip-label').innerText = "Cantrips: None for this class.";
-        document.getElementById('prep-spells-label').innerText = "Level 1 Spells: None for this class.";
+        document.getElementById('cantrip-label').innerText = "Cantrips: Keine für diese Class.";
+        document.getElementById('prep-spells-label').innerText = "Grad 1 Spells: Keine für diese Class.";
         return;
     }
 
@@ -544,7 +538,7 @@ function updateSpellsUI() {
     });
 
     const maxCantrips = cls.cantripsKnown;
-    document.getElementById('cantrip-label').innerText = `Select ${maxCantrips} Cantrips:`;
+    document.getElementById('cantrip-label').innerText = `Wähle ${maxCantrips} Cantrips:`;
 
     allowedCantrips.forEach(c => {
         cantripGroup.innerHTML += `
@@ -563,7 +557,7 @@ function updateSpellsUI() {
     });
 
     const maxPrep = getPrepSpellsLimit(className);
-    document.getElementById('prep-spells-label').innerText = `Select Level 1 Spells (Limit: ${maxPrep}):`;
+    document.getElementById('prep-spells-label').innerText = `Wähle Grad 1 Spells (Limit: ${maxPrep}):`;
 
     allowedLvl1.forEach(s => {
         lvl1Group.innerHTML += `
@@ -581,7 +575,7 @@ function limitCheckboxes(name, max) {
     const checked = document.querySelectorAll(`input[name="${name}"]:checked`);
     if (checked.length > max) {
         event.target.checked = false;
-        alert(`Limit of ${max} reached!`);
+        alert(`Limit von ${max} erreicht!`);
     }
 }
 
@@ -594,10 +588,10 @@ function getWeaponData(wName) {
 
 function buildCharacter() {
     if (!validateArray() || !validateSkills()) {
-        return alert("Please resolve selection errors!");
+        return alert("Bitte behebe die Markierungsfehler!");
     }
 
-    const name = document.getElementById('char-name').value || "Unnamed Hero";
+    const name = document.getElementById('char-name').value || "Unbenannter Held";
     const mainRace = document.getElementById('main-race').value;
     const subRace = document.getElementById('sub-race').value;
     const cls = document.getElementById('class-select').value;
@@ -662,7 +656,7 @@ function buildCharacter() {
     markAsUnsaved();
 
     document.getElementById('screen-out-name').innerText = name;
-    document.getElementById('screen-out-meta').innerText = `${subRace} | ${cls} Level 1 | ${bg}`;
+    document.getElementById('screen-out-meta').innerText = `${subRace} | ${cls} Stufe 1 | ${bg}`;
     document.getElementById('screen-out-hp').innerText = `HP: ${hp}`;
     document.getElementById('screen-out-ac').innerText = `AC: ${ac}`;
     document.getElementById('screen-out-init').innerText = `Initiative: ${mods.DEX >= 0 ? '+' : ''}${mods.DEX}`;
@@ -672,7 +666,7 @@ function buildCharacter() {
     screenStatsDiv.innerHTML = '';
     for (let s in stats) {
         screenStatsDiv.innerHTML += `
-            <div class="stat-box" onclick="openModal('${s} Score', '${attributeDescriptions[s]}')">
+            <div class="stat-box" onclick="openModal('${s} Wert', '${attributeDescriptions[s]}')">
                 <div style="font-size:0.75rem; color:var(--text-muted);">${s}</div>
                 <div class="stat-val">${stats[s]}</div>
                 <div class="stat-mod">${mods[s] >= 0 ? '+' : ''}${mods[s]}</div>
@@ -680,11 +674,11 @@ function buildCharacter() {
     }
 
     let skillTags = allSkills.map(s => 
-        `<span class="clickable-tag" onclick="openModal('${s}', '${skillDescriptions[s] || 'Skill proficiency.'}')">${s}</span>`
+        `<span class="clickable-tag" onclick="openModal('${s}', '${skillDescriptions[s] || 'Fertigkeits-Proficiency.'}')">${s}</span>`
     ).join(' ');
 
     document.getElementById('screen-out-features').innerHTML = `
-        <li><b>Skill Proficiencies:</b> ${skillTags}</li>
+        <li><b>Fertigkeiten:</b> ${skillTags}</li>
         <li><b>Species Traits:</b> ${subInfo.text}</li>
         <li><b>Background Feat:</b> ${backgrounds[bg].feat}</li>
         <li><b>Class Saving Throws:</b> ${classes[cls].saves.join(', ')}</li>
@@ -700,14 +694,14 @@ function buildCharacter() {
     }).join(' ');
 
     let spellTags = chosenSpells.map(s => {
-        let rule = (spellCompendium.level1 && spellCompendium.level1[s]) ? spellCompendium.level1[s].rule : 'Level 1 Spell.';
+        let rule = (spellCompendium.level1 && spellCompendium.level1[s]) ? spellCompendium.level1[s].rule : 'Grad 1 Spell.';
         return `<span class="clickable-tag" onclick="openModal('${s}', '${rule}')">${s}</span>`;
     }).join(' ');
 
     document.getElementById('screen-out-spells').innerHTML = `
-        <b>Cantrips:</b> ${cantripTags || 'None'}<br><br>
-        <b>Prepared Level 1 Spells:</b> ${spellTags || 'None selected'}<br><br>
-        <b>Level 1 Spell Slots:</b> ${classes[cls].casterType !== "NONE" ? '2 / Long Rest' : '0'}
+        <b>Cantrips:</b> ${cantripTags || 'Keine'}<br><br>
+        <b>Vorbereitete Grad 1 Spells:</b> ${spellTags || 'Keine ausgewählt'}<br><br>
+        <b>Grad 1 Spell Slots:</b> ${classes[cls].casterType !== "NONE" ? '2 / Long Rest' : '0'}
     `;
 
     const sheetElem = document.getElementById('sheet');
@@ -764,26 +758,26 @@ function renderEquipmentSectionInSheet(className) {
     const martialWeapons = [...Object.keys(weaponsCompendium["Martial Melee"] || {}), ...Object.keys(weaponsCompendium["Martial Ranged"] || {})];
     const allWeapons = [...simpleWeapons, ...martialWeapons];
 
-    let html = `<div style="font-size:0.85rem; margin-bottom:8px;"><b>Fixed Starting Gear:</b> ${fixedEq}</div>`;
+    let html = `<div style="font-size:0.85rem; margin-bottom:8px;"><b>Feste Startausrüstung:</b> ${fixedEq}</div>`;
 
     if (["Fighter", "Paladin", "Ranger", "Barbarian", "Rogue", "Monk", "Bard"].includes(className)) {
         html += `
             <div class="grid-2">
                 <div>
-                    <label style="font-size:0.75rem;">Select Primary Weapon:</label>
+                    <label style="font-size:0.75rem;">Primärwaffe wählen:</label>
                     <select id="sheet-weapon-1">
                         ${(["Fighter", "Paladin", "Ranger", "Barbarian"].includes(className) ? martialWeapons : simpleWeapons).map(w => `<option value="${w}">${w}</option>`).join('')}
                     </select>
                 </div>
                 <div>
-                    <label style="font-size:0.75rem;">Select Secondary Weapon:</label>
+                    <label style="font-size:0.75rem;">Sekundärwaffe wählen:</label>
                     <select id="sheet-weapon-2">
                         ${allWeapons.map(w => `<option value="${w}">${w}</option>`).join('')}
                     </select>
                 </div>
             </div>`;
     } else {
-        html += `<div style="font-size:0.85rem; color:var(--text-muted); margin-top:4px;">This class uses fixed starter weapons defined above.</div>`;
+        html += `<div style="font-size:0.85rem; color:var(--text-muted); margin-top:4px;">Diese Class nutzt die oben definierte feste Startausrüstung.</div>`;
     }
 
     container.innerHTML = html;
