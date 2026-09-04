@@ -506,29 +506,6 @@ function validateSkills() {
 }
 
 function getPrepSpellsLimit(className) {
-    const mainRace = document.getElementById('main-race').value;
-    const subRace = document.getElementById('sub-race').value;
-    const subInfo = speciesData[mainRace]?.subraces[subRace];
-
-    let rawInt = parseInt(document.getElementById('int-val').value) || 10;
-    let rawWis = parseInt(document.getElementById('wis-val').value) || 10;
-    let rawCha = parseInt(document.getElementById('cha-val').value) || 10;
-
-    if (subInfo && subInfo.bonus) {
-        if (subInfo.bonus.INT) rawInt += subInfo.bonus.INT;
-        if (subInfo.bonus.WIS) rawWis += subInfo.bonus.WIS;
-        if (subInfo.bonus.CHA) rawCha += subInfo.bonus.CHA;
-    }
-
-    const intMod = getMod(rawInt);
-    const wisMod = getMod(rawWis);
-    const chaMod = getMod(rawCha);
-
-    if (className === "Artificer") return Math.max(1, intMod + 1);
-    if (className === "Wizard") return Math.max(1, intMod + 1);
-    if (className === "Cleric" || className === "Druid") return Math.max(1, wisMod + 1);
-    if (className === "Paladin") return Math.max(1, chaMod + 1);
-
     return classes[className]?.prepSpellsLvl1 || 2;
 }
 
