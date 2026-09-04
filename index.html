@@ -29,31 +29,35 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            /* Nutzt 100dvh, damit es bei eingeblendeter Browserleiste exakt zentriert bleibt */
             min-height: 100dvh;
             background-image: radial-gradient(#e6dbcc 15%, transparent 16%);
             background-size: 20px 20px;
+            overflow: hidden;
         }
 
         .menu-container {
             width: 100%;
             max-width: 400px;
             text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* Rauer, unruhiger Stein-Kasten mit Grunge/Noise-Filter-Anmutung */
+        /* Raue Stein-Optik mit SVG-Filter Kantenverzerrung */
         .logo-frame {
             background-color: var(--surface-color);
             border: 4px solid var(--stone-border);
             border-radius: 15px 9px 18px 11px;
             padding: 28px 20px;
             position: relative;
+            width: 100%;
             box-shadow: 0 10px 25px rgba(44, 34, 30, 0.25), inset 0 0 20px rgba(78, 69, 60, 0.15);
-            /* Erzeugt eine feine, raue Körnung auf dem Rahmen/Hintergrund */
-            filter: drop-shadow(1px 1px 0px rgba(0,0,0,0.1));
+            /* Wendet den Grunge-/Rauheits-Filter auf die Kanten an */
+            filter: url(#rough-edge) drop-shadow(2px 3px 4px rgba(44,34,30,0.2));
         }
 
-        /* Feine SVG-Körnung als Pseudo-Element über den Kasten gelegt für den "grisselig"-Look */
+        /* Feine Textur-Körnung */
         .logo-frame::before {
             content: "";
             position: absolute;
@@ -262,6 +266,14 @@
 </head>
 <body>
 
+    <!-- SVG-Filter für den unregelmäßigen, rauen Stein-Kanten-Effekt -->
+    <svg style="display:none;">
+        <filter id="rough-edge">
+            <feturbulence type="fractalNoise" baseFrequency="0.05" numOctaves="4" result="noise" />
+            <fedisplacementmap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+    </svg>
+
     <div class="menu-container">
         <div class="logo-frame">
             <div class="fantasy-landscape-icons">
@@ -328,6 +340,19 @@
             } else if (singleSaved) {
                 try { characters = [JSON.parse(singleSaved)]; } catch(e) {}
             }
+
+            // Automatische ID-Zuweisung für alte Helden, die noch keine ID hatten (verhindert Bugs beim Archivieren)
+            let updated = false;
+            characters.forEach((char, index) => {
+                if (!char.id) {
+                    char.id = 'char_legacy_' + index + '_' + Date.now();
+                    updated = true;
+                }
+            });
+            if (updated) {
+                saveStoredCharacters(characters);
+            }
+
             return characters;
         }
 
