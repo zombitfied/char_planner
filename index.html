@@ -28,8 +28,32 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            /* Pergament-Raster */
             background-image: radial-gradient(#e6dbcc 15%, transparent 16%);
-            background-size: 20px 20px;
+            background-size: 24px 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Dezent verteilte Landkarten-Symbole im Hintergrund */
+        .map-bg-decor {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            opacity: 0.12;
+            font-size: 2rem;
+            color: var(--primary-gold);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            padding: 20px;
+            z-index: 0;
+        }
+
+        .map-bg-decor i {
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .menu-container {
@@ -37,6 +61,7 @@
             max-width: 400px;
             padding: 24px;
             text-align: center;
+            z-index: 1; /* Über dem Hintergrund */
         }
 
         .logo-frame {
@@ -47,13 +72,26 @@
             box-shadow: 0 8px 24px rgba(44, 34, 30, 0.1);
         }
 
+        /* Landkarten-Leiste mit Symbolen für Gelände */
         .fantasy-landscape-icons {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             color: var(--primary-gold);
             margin-bottom: 12px;
             display: flex;
             justify-content: center;
-            gap: 16px;
+            gap: 14px;
+        }
+
+        .fantasy-landscape-icons i {
+            background: #faf7f2;
+            padding: 8px;
+            border-radius: 50%;
+            border: 1px solid var(--surface-border);
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         h1 {
@@ -62,6 +100,7 @@
             margin: 0 0 4px 0;
             text-transform: uppercase;
             font-family: serif;
+            letter-spacing: 1px;
         }
 
         .subtitle {
@@ -90,6 +129,11 @@
             text-decoration: none;
         }
 
+        .btn-rpg:hover {
+            background: var(--primary-gold);
+            color: #ffffff;
+        }
+
         .btn-rpg.primary {
             background: var(--primary-gold);
             color: #ffffff;
@@ -114,12 +158,24 @@
 </head>
 <body>
 
+    <!-- Hintergrund-Landkartenelemente (Dezente Symbole im Grid) -->
+    <div class="map-bg-decor">
+        <i class="fa-solid fa-mountain" style="grid-column: 1; grid-row: 1;"></i>
+        <i class="fa-solid fa-tree" style="grid-column: 4; grid-row: 1;"></i>
+        <i class="fa-solid fa-water" style="grid-column: 2; grid-row: 2;"></i>
+        <i class="fa-solid fa-city" style="grid-column: 3; grid-row: 3;"></i>
+        <i class="fa-solid fa-tree" style="grid-column: 1; grid-row: 4;"></i>
+        <i class="fa-solid fa-mountain" style="grid-column: 4; grid-row: 4;"></i>
+    </div>
+
     <div class="menu-container">
         <div class="logo-frame">
+            <!-- Landkarten-Legende als Icons oben -->
             <div class="fantasy-landscape-icons">
-                <i class="fa-solid fa-mountain"></i>
-                <i class="fa-solid fa-chess-rook"></i>
-                <i class="fa-solid fa-dragon"></i>
+                <i class="fa-solid fa-mountain" title="Gebirge"></i>
+                <i class="fa-solid fa-tree" title="Wälder"></i>
+                <i class="fa-solid fa-water" title="Flüsse"></i>
+                <i class="fa-solid fa-city" title="Städte"></i>
             </div>
 
             <h1>Heldenarchiv</h1>
