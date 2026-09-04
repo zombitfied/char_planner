@@ -98,6 +98,7 @@
 
     <h1>D&D 5e / 2024 Sandbox Builder</h1>
 
+    <!-- STEP 1: IDENTITY & SPECIES -->
     <div class="step-card">
         <div class="step-title">Step 1: Character Identity & Species</div>
         <div class="grid-2">
@@ -121,6 +122,7 @@
         </div>
     </div>
 
+    <!-- STEP 2: CLASS & BACKGROUND -->
     <div class="step-card">
         <div class="step-title">Step 2: Class & Background</div>
         <div class="grid-2">
@@ -141,6 +143,7 @@
         </div>
     </div>
 
+    <!-- STEP 3: ABILITY SCORES -->
     <div class="step-card">
         <div class="step-title">Step 3: Assign Standard Array (15, 14, 13, 12, 10, 8)</div>
         <div class="grid-3">
@@ -154,6 +157,7 @@
         <div id="array-error" class="error">Assign 15, 14, 13, 12, 10, 8 without duplicates!</div>
     </div>
 
+    <!-- STEP 4: CLASS SKILLS -->
     <div class="step-card">
         <div class="step-title">Step 4: Skills Selection</div>
         <div class="grid-2">
@@ -175,6 +179,7 @@
         <div id="skill-error" class="error">Select 2 different skills that don't overlap with your Background!</div>
     </div>
 
+    <!-- STEP 5: SPELLS -->
     <div class="step-card" id="spells-step-card">
         <div class="step-title">Step 5: Class Spell Selection</div>
         
@@ -187,6 +192,7 @@
 
     <button class="main-btn" onclick="buildCharacter()">Generate Character Sheet</button>
 
+    <!-- OUTPUT SHEET -->
     <div id="sheet" class="sheet">
         <h2 id="screen-out-name" style="margin-top:0; color:var(--accent);"></h2>
         <div id="screen-out-meta" style="font-size:0.9rem; color:var(--text-muted); text-align:center; margin-bottom:10px;"></div>
@@ -215,13 +221,14 @@
             <button class="main-btn" onclick="manualSaveCharacter()" style="margin-top:0; background:#6c757d; color:#fff;">
                 <i class="fa-solid fa-floppy-disk"></i> Held speichern
             </button>
-            <button class="main-btn" onclick="startAdventure()" style="margin-top:0; background:#2e7d32; color:#fff;">
+            <button id="btn-adventure" class="main-btn" onclick="startAdventure()" style="margin-top:0; background:#cccccc; color:#666666; cursor: not-allowed;" disabled>
                 <i class="fa-solid fa-dungeon"></i> Auf ins Abenteuer!
             </button>
         </div>
     </div>
 </div>
 
+<!-- MODAL POPUP -->
 <div class="modal-overlay" id="rule-modal" onclick="closeModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-title" id="modal-title">Rule Details</div>
@@ -261,6 +268,7 @@ let weaponsCompendium = {};
 
 let currentCalculatedMods = { STR:0, DEX:0, CON:0, INT:0, WIS:0, CHA:0 };
 let lastBuiltCharacter = null;
+let isSaved = false;
 
 window.onload = async function() {
     try {
@@ -307,6 +315,21 @@ function initApp() {
     onMainRaceChange();
     onClassChange();
     updateBgInfo();
+
+    // Event-Listener zur Erkennung von Änderungen (Sperrt den Abenteuer-Button bei Modifikation)
+    document.addEventListener('input', markAsUnsaved);
+    document.addEventListener('change', markAsUnsaved);
+}
+
+function markAsUnsaved() {
+    isSaved = false;
+    const advBtn = document.getElementById('btn-adventure');
+    if (advBtn) {
+        advBtn.disabled = true;
+        advBtn.style.background = '#cccccc';
+        advBtn.style.color = '#666666';
+        advBtn.style.cursor = 'not-allowed';
+    }
 }
 
 function populateSelect(id, items) {
@@ -579,6 +602,8 @@ function buildCharacter() {
         lastAccess: new Date().toISOString()
     };
 
+    markAsUnsaved();
+
     document.getElementById('screen-out-name').innerText = name;
     document.getElementById('screen-out-meta').innerText = `${subRace} | ${cls} Level 1 | ${bg}`;
     document.getElementById('screen-out-hp').innerText = `HP: ${hp}`;
@@ -640,9 +665,7 @@ function saveCharacterToStorage(charObj) {
         try { characters = JSON.parse(savedList); } catch(e) {}
     }
     
-    // Immer als neuer Eintrag angehängt, damit sich gleiche Namen nicht überschreiben
     characters.push(charObj);
-
     localStorage.setItem('dnd_character_list', JSON.stringify(characters));
     localStorage.setItem('dnd_active_character', JSON.stringify(charObj));
 }
@@ -651,13 +674,26 @@ function manualSaveCharacter() {
     if (!lastBuiltCharacter) return;
     lastBuiltCharacter.lastAccess = new Date().toISOString();
     saveCharacterToStorage(lastBuiltCharacter);
-    alert("Held erfolgreich als neuer Eintrag gespeichert!");
+    
+    isSaved = true;
+    const advBtn = document.getElementById('btn-adventure');
+    if (advBtn) {
+        advBtn.disabled = false;
+        advBtn.style.background = '#2e7d32';
+        advBtn.style.color = '#fff';
+        advBtn.style.cursor = 'pointer';
+    }
+
+    alert("Held erfolgreich gespeichert!");
 }
 
 function startAdventure() {
+    if (!isSaved) {
+        alert("Bitte speichere den Helden zuerst ab!");
+        return;
+    }
     if (lastBuiltCharacter) {
-        lastBuiltCharacter.lastAccess = new Date().toISOString();
-        saveCharacterToStorage(lastBuiltCharacter);
+        localStorage.setItem('dnd_active_character', JSON.stringify(lastBuiltCharacter));
     }
     window.location.href = 'manager.html';
 }
