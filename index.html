@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&D 5e / 2024 Sandbox Builder</title>
+    <style>
+        :root { --bg: #121212; --card: #1e1e1e; --accent: #29b6f6; --text: #e0e0e0; --border: #333; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 15px; }
+        .container { max-width: 750px; margin: 0 auto; }
+        h1 { font-size: 1.6rem; text-align: center; color: var(--accent); margin-bottom: 20px; }
+        .step-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 15px; margin-bottom: 15px; }
+        .step-title { font-size: 1.1rem; color: var(--accent); margin-top: 0; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-weight: bold; }
+        label { display: block; margin-top: 8px; font-weight: bold; font-size: 0.85rem; color: #aaa; }
+        
+        .input-row { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+        select, button, input { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: #2a2a2a; color: var(--text); font-size: 0.95rem; box-sizing: border-box; }
+        .info-btn { width: 38px; height: 38px; flex-shrink: 0; padding: 0; background: #333; color: var(--accent); border: 1px solid var(--border); border-radius: 6px; font-weight: bold; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .info-btn:hover { background: #444; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        
+        .main-btn { background: var(--accent); color: #000; font-weight: bold; border: none; margin-top: 15px; padding: 14px; cursor: pointer; font-size: 1rem; border-radius: 6px; width: 100%; }
+        .main-btn:active { opacity: 0.8; }
+        
+        .pdf-btn { background: #4caf50; color: #fff; font-weight: bold; border: none; margin-top: 15px; padding: 12px; cursor: pointer; font-size: 0.95rem; border-radius: 6px; width: 100%; }
+        .pdf-btn:active { opacity: 0.8; }
+
+        .sheet { background: var(--card); padding: 15px; border-radius: 8px; margin-top: 20px; border: 1px solid var(--border); display: none; }
+        .stat-box { background: #2a2a2a; padding: 8px; border-radius: 6px; text-align: center; cursor: pointer; transition: background 0.2s; }
+        .stat-box:hover { background: #3a3a3a; }
+        .stat-val { font-size: 1.2rem; font-weight: bold; color: #fff; }
+        .stat-mod { font-size: 0.85rem; color: var(--accent); }
+        .badge { background: #333; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; display: inline-block; margin-right: 5px; margin-top: 5px; }
+        .error { color: #ff5252; font-size: 0.85rem; margin-top: 5px; display: none; }
+        
+        .spell-grid { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; max-height: 250px; overflow-y: auto; background: #1a1a1a; padding: 8px; border-radius: 6px; border: 1px solid #2a2a2a; }
+        .spell-card { background: #2a2a2a; border: 1px solid #3b3b3b; border-radius: 6px; padding: 8px; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; }
+        .spell-header { display: flex; align-items: center; font-weight: bold; font-size: 0.9rem; color: #fff; }
+        .spell-header input { width: auto; margin: 0 10px 0 0; cursor: pointer; }
+        
+        .clickable-tag { background: #2a2a2a; color: var(--accent); padding: 3px 8px; border-radius: 4px; border: 1px solid #444; cursor: pointer; display: inline-block; margin: 2px; font-size: 0.85rem; }
+        .clickable-tag:hover { background: #3a3a3a; border-color: var(--accent); }
+
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 1000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+        .modal-content { background: var(--card); border: 2px solid var(--accent); border-radius: 10px; max-width: 500px; width: 100%; padding: 20px; color: var(--text); box-shadow: 0 4px 20px rgba(0,0,0,0.8); text-align: center; }
+        .modal-title { font-size: 1.2rem; color: var(--accent); font-weight: bold; margin-bottom: 10px; }
+        .modal-body { font-size: 0.9rem; line-height: 1.5; color: #ddd; text-align: left; max-height: 300px; overflow-y: auto; }
+
+        ul { margin: 5px 0; padding-left: 20px; font-size: 0.9rem; color: #bbb; }
+        li { margin-bottom: 4px; }
+
+        .print-only { display: none; }
+
+        @media print {
+            @page { size: A4 portrait; margin: 4mm; }
+            body { background: #fff !important; color: #000 !important; font-family: Arial, sans-serif; font-size: 7.5pt; line-height: 1.1; padding: 0; margin: 0; }
+            
+            h1, .step-card, .main-btn, .pdf-btn, .modal-overlay, .screen-only { display: none !important; }
+            .print-only { display: block !important; }
+            .container { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+            .sheet { display: block !important; border: none !important; background: transparent !important; padding: 0 !important; margin: 0 !important; }
+
+            .page { width: 200mm; height: 287mm; box-sizing: border-box; position: relative; page-break-after: always; }
+
+            .p-header { border: 1.5px solid #000; border-radius: 8px; padding: 4px; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4px; height: 32mm; box-sizing: border-box; }
+            .p-field { border-bottom: 1px solid #999; padding-bottom: 1px; margin-bottom: 3px; }
+            .p-field .lbl { font-size: 5.5pt; font-weight: bold; text-transform: uppercase; color: #444; }
+            .p-field .val { font-size: 8.5pt; font-weight: bold; color: #000; }
+
+            .p-main-grid { display: grid; grid-template-columns: 135mm 1fr; gap: 4mm; margin-top: 3mm; height: 248mm; }
+            .p-left-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; }
+
+            .p-attr-box { border: 1.5px solid #000; border-radius: 8px; padding: 4px; position: relative; margin-bottom: 2mm; background: #fff; }
+            .p-attr-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #000; padding-bottom: 2px; }
+            .p-attr-name { font-size: 8pt; font-weight: 900; text-transform: uppercase; }
+            .p-attr-score { font-size: 8pt; border: 1px solid #000; border-radius: 4px; padding: 0 4px; font-weight: bold; background: #eee; }
+            .p-attr-mod { font-size: 14pt; font-weight: 900; text-align: center; margin: 2px 0; }
+            
+            .p-skill-list { font-size: 6.5pt; margin-top: 3px; }
+            .p-skill-item { display: flex; align-items: center; margin-bottom: 1px; }
+            .p-dot { width: 6px; height: 6px; border: 1px solid #000; border-radius: 50%; margin-right: 3px; display: inline-block; }
+            .p-dot.active { background: #000; }
+
+            .p-combat-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2mm; margin-bottom: 3mm; text-align: center; }
+            .p-cbox { border: 1.5px solid #000; border-radius: 6px; padding: 3px; }
+            .p-cbox .lbl { font-size: 5.5pt; font-weight: bold; text-transform: uppercase; border-bottom: 1px solid #ccc; margin-bottom: 2px; }
+            .p-cbox .val { font-size: 11pt; font-weight: 900; }
+
+            .p-box { border: 1.5px solid #000; border-radius: 6px; padding: 4px; margin-bottom: 3mm; background: #fff; }
+            .p-box-title { font-size: 7pt; font-weight: 900; text-transform: uppercase; border-bottom: 1px solid #000; padding-bottom: 2px; margin-bottom: 3px; }
+
+            .p-table { width: 100%; border-collapse: collapse; font-size: 7pt; }
+            .p-table th { border-bottom: 1px solid #000; text-align: left; font-size: 6pt; text-transform: uppercase; }
+            .p-table td { border-bottom: 1px solid #eee; padding: 2px 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>D&D 5e / 2024 Sandbox Builder</h1>
+
+    <!-- STEP 1: IDENTITY & SPECIES -->
+    <div class="step-card">
+        <div class="step-title">Step 1: Character Identity & Species</div>
+        <div class="grid-2">
+            <div>
+                <label for="char-name">Character Name:</label>
+                <input type="text" id="char-name" value="Gimble">
+            </div>
+            <div>
+                <label for="main-race">Main Species / Race:</label>
+                <div class="input-row">
+                    <select id="main-race" onchange="onMainRaceChange()"></select>
+                </div>
+            </div>
+        </div>
+        <div id="subrace-container" style="display: none; margin-top: 5px;">
+            <label for="sub-race">Subrace / Lineage:</label>
+            <div class="input-row">
+                <select id="sub-race" onchange="updateSpellsUI()"></select>
+                <button type="button" class="info-btn" onclick="showRaceModal()">ℹ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 2: CLASS & BACKGROUND -->
+    <div class="step-card">
+        <div class="step-title">Step 2: Class & Background</div>
+        <div class="grid-2">
+            <div>
+                <label for="class-select">Class (Level 1):</label>
+                <div class="input-row">
+                    <select id="class-select" onchange="onClassChange()"></select>
+                    <button type="button" class="info-btn" onclick="showClassModal()">ℹ</button>
+                </div>
+            </div>
+            <div>
+                <label for="bg-select">Background:</label>
+                <div class="input-row">
+                    <select id="bg-select" onchange="updateBgInfo()"></select>
+                    <button type="button" class="info-btn" onclick="showBgModal()">ℹ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 3: ABILITY SCORES -->
+    <div class="step-card">
+        <div class="step-title">Step 3: Assign Standard Array (15, 14, 13, 12, 10, 8)</div>
+        <div class="grid-3">
+            <div><label>STR</label><select class="array-select" id="str-val" onchange="onStatsChange()"></select></div>
+            <div><label>DEX</label><select class="array-select" id="dex-val" onchange="onStatsChange()"></select></div>
+            <div><label>CON</label><select class="array-select" id="con-val" onchange="onStatsChange()"></select></div>
+            <div><label>INT</label><select class="array-select" id="int-val" onchange="onStatsChange()"></select></div>
+            <div><label>WIS</label><select class="array-select" id="wis-val" onchange="onStatsChange()"></select></div>
+            <div><label>CHA</label><select class="array-select" id="cha-val" onchange="onStatsChange()"></select></div>
+        </div>
+        <div id="array-error" class="error">Assign 15, 14, 13, 12, 10, 8 without duplicates!</div>
+    </div>
+
+    <!-- STEP 4: CLASS SKILLS -->
+    <div class="step-card">
+        <div class="step-title">Step 4: Skills Selection</div>
+        <div class="grid-2">
+            <div>
+                <label for="skill1">Skill 1:</label>
+                <div class="input-row">
+                    <select id="skill1" onchange="validateSkills()"></select>
+                    <button type="button" class="info-btn" onclick="showSkillModal('skill1')">ℹ</button>
+                </div>
+            </div>
+            <div>
+                <label for="skill2">Skill 2:</label>
+                <div class="input-row">
+                    <select id="skill2" onchange="validateSkills()"></select>
+                    <button type="button" class="info-btn" onclick="showSkillModal('skill2')">ℹ</button>
+                </div>
+            </div>
+        </div>
+        <div id="skill-error" class="error">Select 2 different skills that don't overlap with your Background!</div>
+    </div>
+
+    <!-- STEP 5: SPELLS -->
+    <div class="step-card" id="spells-step-card">
+        <div class="step-title">Step 5: Class Spell Selection</div>
+        
+        <label id="cantrip-label">Select Cantrips:</label>
+        <div class="spell-grid" id="cantrips-group"></div>
+
+        <label id="prep-spells-label" style="margin-top:15px;">Select Level 1 Spells:</label>
+        <div class="spell-grid" id="level1-group"></div>
+    </div>
+
+    <button class="main-btn" onclick="buildCharacter()">Generate Character Sheet</button>
+
+    <!-- OUTPUT SHEET -->
+    <div id="sheet" class="sheet">
+        
+        <!-- SCREEN VIEW -->
+        <div class="screen-only">
+            <h2 id="screen-out-name" style="margin-top:0; color:var(--accent);"></h2>
+            <div id="screen-out-meta" style="font-size:0.9rem; color:#aaa; text-align:center; margin-bottom:10px;"></div>
+            
+            <div style="margin-bottom: 12px;">
+                <span class="badge" id="screen-out-hp"></span>
+                <span class="badge" id="screen-out-ac"></span>
+                <span class="badge" id="screen-out-init"></span>
+                <span class="badge">Prof. Bonus: +2</span>
+                <span class="badge" id="screen-out-speed">Speed: 30 ft</span>
+            </div>
+
+            <h3 style="color:var(--accent);">Ability Scores & Modifiers</h3>
+            <div class="grid-3" id="screen-out-stats" style="margin-bottom:15px;"></div>
+
+            <h3 style="color:var(--accent);">Proficiencies & Traits</h3>
+            <ul id="screen-out-features" style="margin-bottom:15px;"></ul>
+
+            <!-- DYNAMIC EQUIPMENT SELECTION IN THE GENERATED SHEET -->
+            <h3 style="color:var(--accent);">Equipment & Weapon Configuration</h3>
+            <div id="sheet-equipment-controls" style="background:#1a1a1a; padding:12px; border-radius:6px; border:1px solid #333; margin-bottom:15px;"></div>
+
+            <h3 style="color:var(--accent);">Spells & Cantrips Overview</h3>
+            <div id="screen-out-spells"></div>
+        </div>
+
+        <!-- PRINT VIEW -->
+        <div class="print-only">
+            <div class="page">
+                <div class="p-header">
+                    <div>
+                        <div class="p-field"><div class="lbl">Character Name</div><div class="val" id="pr-name"></div></div>
+                        <div class="p-field"><div class="lbl">Background</div><div class="val" id="pr-bg"></div></div>
+                        <div class="p-field"><div class="lbl">Species</div><div class="val" id="pr-species"></div></div>
+                    </div>
+                    <div>
+                        <div class="p-field"><div class="lbl">Class</div><div class="val" id="pr-class"></div></div>
+                        <div class="p-field"><div class="lbl">Subclass</div><div class="val">--</div></div>
+                    </div>
+                    <div>
+                        <div class="p-field"><div class="lbl">Level</div><div class="val">1</div></div>
+                        <div class="p-field"><div class="lbl">XP</div><div class="val">0</div></div>
+                    </div>
+                    <div>
+                        <div class="p-field"><div class="lbl">Proficiency Bonus</div><div class="val">+2</div></div>
+                        <div class="p-field"><div class="lbl">Heroic Inspiration</div><div class="val">[  ]</div></div>
+                    </div>
+                </div>
+
+                <div class="p-combat-row" style="margin-top:3mm;">
+                    <div class="p-cbox"><div class="lbl">Armor Class</div><div class="val" id="pr-ac">12</div></div>
+                    <div class="p-cbox"><div class="lbl">Initiative</div><div class="val" id="pr-init">+0</div></div>
+                    <div class="p-cbox"><div class="lbl">Speed</div><div class="val" id="pr-speed">30 ft</div></div>
+                    <div class="p-cbox"><div class="lbl">Hit Points</div><div class="val" id="pr-hp">8</div></div>
+                    <div class="p-cbox"><div class="lbl">Hit Die</div><div class="val" id="pr-hitdie">d8</div></div>
+                </div>
+
+                <div class="p-main-grid">
+                    <div class="p-left-col">
+                        <div>
+                            <div class="p-attr-box" id="pr-box-str"></div>
+                            <div class="p-attr-box" id="pr-box-dex"></div>
+                            <div class="p-attr-box" id="pr-box-con"></div>
+                            
+                            <div class="p-box">
+                                <div class="p-box-title">Proficiencies</div>
+                                <div id="pr-prof-list" style="font-size:6.5pt;"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="p-attr-box" id="pr-box-int"></div>
+                            <div class="p-attr-box" id="pr-box-wis"></div>
+                            <div class="p-attr-box" id="pr-box-cha"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="p-box">
+                            <div class="p-box-title">Weapons & Attacks</div>
+                            <table class="p-table">
+                                <thead><tr><th>Name</th><th>Atk</th><th>Damage</th></tr></thead>
+                                <tbody id="pr-weapons"></tbody>
+                            </table>
+                        </div>
+
+                        <div class="p-box">
+                            <div class="p-box-title">Class Features</div>
+                            <div id="pr-class-feat" style="font-size:7pt;"></div>
+                        </div>
+
+                        <div class="p-box">
+                            <div class="p-box-title">Species Traits</div>
+                            <div id="pr-species-trait" style="font-size:7pt;"></div>
+                        </div>
+
+                        <div class="p-box">
+                            <div class="p-box-title">Feats & Background</div>
+                            <div id="pr-feats" style="font-size:7pt;"></div>
+                        </div>
+
+                        <div class="p-box">
+                            <div class="p-box-title">Equipment</div>
+                            <div id="pr-equipment" style="font-size:7pt;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page 2: Spells -->
+            <div class="page">
+                <div class="p-header" style="height:22mm; grid-template-columns: 2fr 1fr 1fr 1fr;">
+                    <div><div class="p-field"><div class="lbl">Spellcaster</div><div class="val" id="pr2-name"></div></div></div>
+                    <div><div class="p-field"><div class="lbl">Spellcasting Ability</div><div class="val" id="pr2-ability">INT</div></div></div>
+                    <div><div class="p-field"><div class="lbl">Spell Save DC</div><div class="val" id="pr2-dc">13</div></div></div>
+                    <div><div class="p-field"><div class="lbl">Spell Attack Bonus</div><div class="val" id="pr2-atk">+5</div></div></div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:4mm; margin-top:4mm;">
+                    <div class="p-box">
+                        <div class="p-box-title">Cantrips (Level 0)</div>
+                        <div id="pr2-cantrips" style="font-size:7.5pt;"></div>
+                    </div>
+                    <div class="p-box">
+                        <div class="p-box-title">Level 1 Spells (Slots: [  ][  ])</div>
+                        <div id="pr2-level1" style="font-size:7.5pt;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="pdf-btn" onclick="window.print()">📄 Save / Print as PDF</button>
+    </div>
+</div>
+
+<!-- MODAL POPUP -->
+<div class="modal-overlay" id="rule-modal" onclick="closeModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-title" id="modal-title">Rule Details</div>
+        <div class="modal-body" id="modal-body">Description text...</div>
+    </div>
+</div>
+
+<script>
+// Relativer Pfad zur compendium.json im selben Repository
+const LOCAL_JSON_URL = "./compendium.json";
+
+const standardArray = [15, 14, 13, 12, 10, 8];
+
+const attributeDescriptions = {
+    "STR": "<b>Strength:</b> Athletics, melee attacks, capacity.",
+    "DEX": "<b>Dexterity:</b> Acrobatics, Sleight of Hand, Stealth, AC, Initiative.",
+    "CON": "<b>Constitution:</b> Hit Points, Concentration saves.",
+    "INT": "<b>Intelligence:</b> Arcana, History, Investigation, Nature, Religion.",
+    "WIS": "<b>Wisdom:</b> Animal Handling, Insight, Medicine, Perception, Survival.",
+    "CHA": "<b>Charisma:</b> Deception, Intimidation, Performance, Persuasion."
+};
+
+const skillDescriptions = {
+    "Acrobatics": "(DEX) Balance, flips.", "Animal Handling": "(WIS) Calm beasts.", "Arcana": "(INT) Magic lore.",
+    "Athletics": "(STR) Physical feats.", "Crafting": "(INT/DEX) Repairs, crafting.", "Deception": "(CHA) Lies, disguises.",
+    "History": "(INT) Historical events.", "Insight": "(WIS) Intuition, body language.", "Intimidation": "(CHA) Coercion.",
+    "Investigation": "(INT) Clues, deduction.", "Medicine": "(WIS) Stabilize, diseases.", "Nature": "(INT) Flora, fauna.",
+    "Perception": "(WIS) Spot hidden things.", "Performance": "(CHA) Stage acts.", "Persuasion": "(CHA) Diplomacy.",
+    "Religion": "(WIS/INT) Deities, rites.", "Sleight of Hand": "(DEX) Sleight, pickpocket.", "Stealth": "(DEX) Hiding.",
+    "Survival": "(WIS) Tracking, foraging."
+};
+
+const attrSkillsMap = {
+    "STR": ["Athletics"],
+    "DEX": ["Acrobatics", "Sleight of Hand", "Stealth"],
+    "CON": [],
+    "INT": ["Arcana", "History", "Investigation", "Nature", "Religion"],
+    "WIS": ["Animal Handling", "Insight", "Medicine", "Perception", "Survival"],
+    "CHA": ["Deception", "Intimidation", "Performance", "Persuasion"]
+};
+
+let speciesData = {};
+let classes = {};
+let backgrounds = {};
+let spellCompendium = {};
+let weaponsCompendium = {};
+
+let currentCalculatedMods = { STR:0, DEX:0, CON:0, INT:0, WIS:0, CHA:0 };
+
+window.onload = async function() {
+    try {
+        const cacheBusterUrl = LOCAL_JSON_URL + "?t=" + new Date().getTime();
+        const response = await fetch(cacheBusterUrl);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP Error Status: ${response.status}`);
+        }
+        
+        const rawText = await response.text();
+        let data;
+        try {
+            data = JSON.parse(rawText);
+        } catch (jsonErr) {
+            throw new Error("JSON Syntax-Fehler! Bitte compendium.json prüfen.");
+        }
+
+        speciesData = data.speciesData;
+        classes = data.classes;
+        backgrounds = data.backgrounds;
+        spellCompendium = data.spellCompendium;
+        weaponsCompendium = data.weapons || {};
+
+        initApp();
+    } catch (err) {
+        alert("Ladefehler: " + err.message);
+        console.error("JSON Load Details:", err);
+    }
+};
+
+function initApp() {
+    populateSelect('main-race', Object.keys(speciesData));
+    populateSelect('class-select', Object.keys(classes));
+    populateSelect('bg-select', Object.keys(backgrounds));
+
+    const arraySelects = document.querySelectorAll('.array-select');
+    arraySelects.forEach((sel, idx) => {
+        sel.innerHTML = '<option value="">--</option>';
+        standardArray.forEach(val => sel.innerHTML += `<option value="${val}">${val}</option>`);
+        sel.selectedIndex = idx + 1;
+    });
+
+    onMainRaceChange();
+    onClassChange();
+    updateBgInfo();
+}
+
+function populateSelect(id, items) {
+    const sel = document.getElementById(id);
+    sel.innerHTML = '';
+    items.forEach(i => sel.innerHTML += `<option value="${i}">${i}</option>`);
+}
+
+function openModal(title, text) {
+    document.getElementById('modal-title').innerText = title;
+    document.getElementById('modal-body').innerHTML = text;
+    document.getElementById('rule-modal').style.display = 'flex';
+}
+
+function closeModal() {
+    document.getElementById('rule-modal').style.display = 'none';
+}
+
+function showRaceModal() {
+    const mainRace = document.getElementById('main-race').value;
+    const subRace = document.getElementById('sub-race').value;
+    const info = speciesData[mainRace].subraces[subRace];
+    openModal(subRace, info.text);
+}
+
+function showClassModal() {
+    const c = document.getElementById('class-select').value;
+    const cls = classes[c];
+    openModal(c, `<b>Hit Die:</b> d${cls.hp}<br><b>Primary Stat:</b> ${cls.primary}<br><b>Saving Throws:</b> ${cls.saves.join(', ')}<br><b>Armor:</b> ${cls.armor}<br><br>${cls.text}`);
+}
+
+function showBgModal() {
+    const b = document.getElementById('bg-select').value;
+    const bg = backgrounds[b];
+    openModal(b, `<b>Skills:</b> ${bg.skills.join(', ')}<br><b>Origin Feat:</b> ${bg.feat}<br><br>${bg.text}`);
+}
+
+function showSkillModal(selectId) {
+    const sk = document.getElementById(selectId).value;
+    openModal(sk, skillDescriptions[sk] || "Skill proficiency.");
+}
+
+function showSpellModal(category, spellName) {
+    const item = spellCompendium[category][spellName];
+    if (item) openModal(spellName, item.rule);
+}
+
+function onMainRaceChange() {
+    const mainRace = document.getElementById('main-race').value;
+    const subContainer = document.getElementById('subrace-container');
+    const subSelect = document.getElementById('sub-race');
+
+    const subraces = speciesData[mainRace].subraces;
+    subSelect.innerHTML = '';
+    for (let subKey in subraces) {
+        subSelect.innerHTML += `<option value="${subKey}">${subKey}</option>`;
+    }
+    subContainer.style.display = 'block';
+    updateSpellsUI();
+}
+
+function onClassChange() {
+    const c = document.getElementById('class-select').value;
+    const cls = classes[c];
+    
+    const s1 = document.getElementById('skill1');
+    const s2 = document.getElementById('skill2');
+    s1.innerHTML = ''; s2.innerHTML = '';
+    cls.skills.forEach(sk => {
+        s1.innerHTML += `<option value="${sk}">${sk}</option>`;
+        s2.innerHTML += `<option value="${sk}">${sk}</option>`;
+    });
+    s1.selectedIndex = 0;
+    s2.selectedIndex = 1;
+
+    validateSkills();
+    updateSpellsUI();
+}
+
+function updateBgInfo() { validateSkills(); }
+function getMod(score) { return Math.floor((score - 10) / 2); }
+
+function onStatsChange() { 
+    validateArray();
+    updateSpellsUI();
+}
+
+function validateArray() {
+    const selects = Array.from(document.querySelectorAll('.array-select'));
+    const vals = selects.map(s => parseInt(s.value)).filter(v => !isNaN(v));
+    const unique = new Set(vals);
+    const isValid = vals.length === 6 && unique.size === 6;
+    document.getElementById('array-error').style.display = isValid ? 'none' : 'block';
+    return isValid;
+}
+
+function validateSkills() {
+    const sk1 = document.getElementById('skill1').value;
+    const sk2 = document.getElementById('skill2').value;
+    const bg = document.getElementById('bg-select').value;
+    const bgSkills = backgrounds[bg].skills;
+
+    const isValid = (sk1 !== sk2) && !bgSkills.includes(sk1) && !bgSkills.includes(sk2);
+    document.getElementById('skill-error').style.display = isValid ? 'none' : 'block';
+    return isValid;
+}
+
+function getPrepSpellsLimit(className) {
+    const mainRace = document.getElementById('main-race').value;
+    const subRace = document.getElementById('sub-race').value;
+    const subInfo = speciesData[mainRace]?.subraces[subRace];
+
+    let rawInt = parseInt(document.getElementById('int-val').value) || 10;
+    let rawWis = parseInt(document.getElementById('wis-val').value) || 10;
+    let rawCha = parseInt(document.getElementById('cha-val').value) || 10;
+
+    if (subInfo && subInfo.bonus) {
+        if (subInfo.bonus.INT) rawInt += subInfo.bonus.INT;
+        if (subInfo.bonus.WIS) rawWis += subInfo.bonus.WIS;
+        if (subInfo.bonus.CHA) rawCha += subInfo.bonus.CHA;
+    }
+
+    const intMod = getMod(rawInt);
+    const wisMod = getMod(rawWis);
+    const chaMod = getMod(rawCha);
+
+    if (className === "Artificer") return Math.max(1, intMod + 1);
+    if (className === "Wizard") return Math.max(1, intMod + 1);
+    if (className === "Cleric" || className === "Druid") return Math.max(1, wisMod + 1);
+    if (className === "Paladin") return Math.max(1, chaMod + 1);
+
+    return classes[className]?.prepSpellsLvl1 || 2;
+}
+
+function updateSpellsUI() {
+    const className = document.getElementById('class-select').value;
+    const cls = classes[className];
+
+    if (!cls) return;
+
+    const cantripGroup = document.getElementById('cantrips-group');
+    const lvl1Group = document.getElementById('level1-group');
+    cantripGroup.innerHTML = '';
+    lvl1Group.innerHTML = '';
+
+    if (cls.casterType === "NONE") {
+        document.getElementById('cantrip-label').innerText = "Cantrips: None for this class.";
+        document.getElementById('prep-spells-label').innerText = "Level 1 Spells: None for this class.";
+        return;
+    }
+
+    const allowedCantrips = Object.keys(spellCompendium.cantrips || {}).filter(c => {
+        const clsList = spellCompendium.cantrips[c].classes.map(item => item.trim());
+        return clsList.includes(className);
+    });
+
+    const maxCantrips = cls.cantripsKnown;
+    document.getElementById('cantrip-label').innerText = `Select ${maxCantrips} Cantrips:`;
+
+    allowedCantrips.forEach(c => {
+        cantripGroup.innerHTML += `
+            <div class="spell-card">
+                <div class="spell-header">
+                    <input type="checkbox" name="cantrip" value="${c}" onchange="limitCheckboxes('cantrip', ${maxCantrips})">
+                    <span>${c}</span>
+                </div>
+                <button type="button" class="info-btn" onclick="showSpellModal('cantrips', '${c}')">ℹ</button>
+            </div>`;
+    });
+
+    const allowedLvl1 = Object.keys(spellCompendium.level1 || {}).filter(s => {
+        const clsList = spellCompendium.level1[s].classes.map(item => item.trim());
+        return clsList.includes(className);
+    });
+
+    const maxPrep = getPrepSpellsLimit(className);
+    document.getElementById('prep-spells-label').innerText = `Select Level 1 Spells (Limit: ${maxPrep}):`;
+
+    allowedLvl1.forEach(s => {
+        lvl1Group.innerHTML += `
+            <div class="spell-card">
+                <div class="spell-header">
+                    <input type="checkbox" name="prepSpell" value="${s}" onchange="limitCheckboxes('prepSpell', ${maxPrep})">
+                    <span>${s}</span>
+                </div>
+                <button type="button" class="info-btn" onclick="showSpellModal('level1', '${s}')">ℹ</button>
+            </div>`;
+    });
+}
+
+function limitCheckboxes(name, max) {
+    const checked = document.querySelectorAll(`input[name="${name}"]:checked`);
+    if (checked.length > max) {
+        event.target.checked = false;
+        alert(`Limit of ${max} reached!`);
+    }
+}
+
+function getWeaponData(wName) {
+    for (let cat in weaponsCompendium) {
+        if (weaponsCompendium[cat][wName]) return weaponsCompendium[cat][wName];
+    }
+    return { "damage": "1d6", "type": "Slashing", "properties": [] };
+}
+
+function buildCharacter() {
+    if (!validateArray() || !validateSkills()) {
+        return alert("Please resolve selection errors!");
+    }
+
+    const name = document.getElementById('char-name').value || "Unnamed Hero";
+    const mainRace = document.getElementById('main-race').value;
+    const subRace = document.getElementById('sub-race').value;
+    const cls = document.getElementById('class-select').value;
+    const bg = document.getElementById('bg-select').value;
+
+    const subInfo = speciesData[mainRace].subraces[subRace];
+
+    let stats = {
+        STR: parseInt(document.getElementById('str-val').value),
+        DEX: parseInt(document.getElementById('dex-val').value),
+        CON: parseInt(document.getElementById('con-val').value),
+        INT: parseInt(document.getElementById('int-val').value),
+        WIS: parseInt(document.getElementById('wis-val').value),
+        CHA: parseInt(document.getElementById('cha-val').value)
+    };
+
+    for (let s in subInfo.bonus) stats[s] += subInfo.bonus[s];
+
+    let mods = {};
+    for (let s in stats) mods[s] = getMod(stats[s]);
+    currentCalculatedMods = mods;
+
+    const hp = classes[cls].hp + mods.CON;
+    const ac = 12 + mods.DEX;
+
+    let chosenCantrips = Array.from(document.querySelectorAll('input[name="cantrip"]:checked')).map(cb => cb.value);
+    
+    if (subRace === "Rock Gnome" && !chosenCantrips.includes("Prestidigitation")) chosenCantrips.unshift("Prestidigitation (Racial)");
+    if (subRace === "High Elf" && !chosenCantrips.includes("Prestidigitation")) chosenCantrips.unshift("Prestidigitation (Racial)");
+    if (subRace === "Wood Elf" && !chosenCantrips.includes("Druidcraft")) chosenCantrips.unshift("Druidcraft (Racial)");
+    if (subRace === "Drow" && !chosenCantrips.includes("Dancing Lights")) chosenCantrips.unshift("Dancing Lights (Racial)");
+
+    if (classes[cls].autoCantrip) {
+        chosenCantrips.unshift(`${classes[cls].autoCantrip} (Auto)`);
+    }
+
+    let chosenSpells = Array.from(document.querySelectorAll('input[name="prepSpell"]:checked')).map(cb => cb.value);
+
+    const sk1 = document.getElementById('skill1').value;
+    const sk2 = document.getElementById('skill2').value;
+    const allSkills = [...backgrounds[bg].skills, sk1, sk2];
+
+    document.getElementById('screen-out-name').innerText = name;
+    document.getElementById('screen-out-meta').innerText = `${subRace} | ${cls} Level 1 | ${bg}`;
+    document.getElementById('screen-out-hp').innerText = `HP: ${hp}`;
+    document.getElementById('screen-out-ac').innerText = `AC: ${ac}`;
+    document.getElementById('screen-out-init').innerText = `Initiative: ${mods.DEX >= 0 ? '+' : ''}${mods.DEX}`;
+    document.getElementById('screen-out-speed').innerText = `Speed: ${subInfo.speed} ft`;
+
+    const screenStatsDiv = document.getElementById('screen-out-stats');
+    screenStatsDiv.innerHTML = '';
+    for (let s in stats) {
+        screenStatsDiv.innerHTML += `
+            <div class="stat-box" onclick="openModal('${s} Score', '${attributeDescriptions[s]}')">
+                <div style="font-size:0.75rem; color:#aaa;">${s}</div>
+                <div class="stat-val">${stats[s]}</div>
+                <div class="stat-mod">${mods[s] >= 0 ? '+' : ''}${mods[s]}</div>
+            </div>`;
+    }
+
+    let skillTags = allSkills.map(s => 
+        `<span class="clickable-tag" onclick="openModal('${s}', '${skillDescriptions[s] || 'Skill proficiency.'}')">${s}</span>`
+    ).join(' ');
+
+    document.getElementById('screen-out-features').innerHTML = `
+        <li><b>Skill Proficiencies:</b> ${skillTags}</li>
+        <li><b>Species Traits:</b> ${subInfo.text}</li>
+        <li><b>Background Feat:</b> ${backgrounds[bg].feat}</li>
+        <li><b>Class Saving Throws:</b> ${classes[cls].saves.join(', ')}</li>
+        <li><b>Armor Proficiency:</b> ${classes[cls].armor}</li>
+    `;
+
+    renderEquipmentSectionInSheet(cls);
+
+    let cantripTags = chosenCantrips.map(c => {
+        let cleanName = c.replace(/ \(.*\)/, '');
+        let rule = (spellCompendium.cantrips && spellCompendium.cantrips[cleanName]) ? spellCompendium.cantrips[cleanName].rule : 'Racial or Class Feature Cantrip.';
+        return `<span class="clickable-tag" onclick="openModal('${cleanName}', '${rule}')">${c}</span>`;
+    }).join(' ');
+
+    let spellTags = chosenSpells.map(s => {
+        let rule = (spellCompendium.level1 && spellCompendium.level1[s]) ? spellCompendium.level1[s].rule : 'Level 1 Spell.';
+        return `<span class="clickable-tag" onclick="openModal('${s}', '${rule}')">${s}</span>`;
+    }).join(' ');
+
+    document.getElementById('screen-out-spells').innerHTML = `
+        <b>Cantrips:</b> ${cantripTags || 'None'}<br><br>
+        <b>Prepared Level 1 Spells:</b> ${spellTags || 'None selected'}<br><br>
+        <b>Level 1 Spell Slots:</b> ${classes[cls].casterType !== "NONE" ? '2 / Long Rest' : '0'}
+    `;
+
+    document.getElementById('pr-name').innerText = name;
+    document.getElementById('pr-class').innerText = cls;
+    document.getElementById('pr-bg').innerText = bg;
+    document.getElementById('pr-species').innerText = subRace;
+    document.getElementById('pr-ac').innerText = ac;
+    document.getElementById('pr-init').innerText = `${mods.DEX >= 0 ? '+' : ''}${mods.DEX}`;
+    document.getElementById('pr-speed').innerText = `${subInfo.speed} ft`;
+    document.getElementById('pr-hp').innerText = hp;
+    document.getElementById('pr-hitdie').innerText = `d${classes[cls].hp}`;
+
+    ["STR", "DEX", "CON", "INT", "WIS", "CHA"].forEach(s => {
+        let box = document.getElementById(`pr-box-${s.toLowerCase()}`);
+        let isSaveProf = classes[cls].saves.includes(s);
+        let saveVal = mods[s] + (isSaveProf ? 2 : 0);
+        
+        let skillsHTML = attrSkillsMap[s].map(sk => {
+            let isSkillProf = allSkills.includes(sk);
+            let skVal = mods[s] + (isSkillProf ? 2 : 0);
+            return `<div class="p-skill-item">
+                <span class="p-dot ${isSkillProf ? 'active' : ''}"></span>
+                <span style="width:20px; text-align:right; margin-right:4px;">${skVal >= 0 ? '+' : ''}${skVal}</span>
+                <span>${sk}</span>
+            </div>`;
+        }).join('');
+
+        box.innerHTML = `
+            <div class="p-attr-head">
+                <span class="p-attr-name">${s}</span>
+                <span class="p-attr-score">${stats[s]}</span>
+            </div>
+            <div class="p-attr-mod">${mods[s] >= 0 ? '+' : ''}${mods[s]}</div>
+            <div style="border-top:1px dashed #ccc; padding-top:2px; font-size:6.5pt;">
+                <div class="p-skill-item">
+                    <span class="p-dot ${isSaveProf ? 'active' : ''}"></span>
+                    <span style="width:20px; text-align:right; margin-right:4px;">${saveVal >= 0 ? '+' : ''}${saveVal}</span>
+                    <b>Saving Throw</b>
+                </div>
+                ${skillsHTML}
+            </div>`;
+    });
+
+    document.getElementById('pr-prof-list').innerText = classes[cls].armor;
+    document.getElementById('pr-class-feat').innerHTML = classes[cls].text;
+    document.getElementById('pr-species-trait').innerHTML = subInfo.text;
+    document.getElementById('pr-feats').innerHTML = `<b>${backgrounds[bg].feat}:</b> ${backgrounds[bg].text}`;
+
+    document.getElementById('pr2-name').innerText = name;
+    let casterStat = classes[cls].casterType !== "NONE" ? classes[cls].casterType : "INT";
+    let spellDC = 8 + 2 + mods[casterStat];
+    let spellAtk = 2 + mods[casterStat];
+
+    document.getElementById('pr2-ability').innerText = casterStat;
+    document.getElementById('pr2-dc').innerText = spellDC;
+    document.getElementById('pr2-atk').innerText = `+${spellAtk}`;
+
+    document.getElementById('pr2-cantrips').innerHTML = chosenCantrips.map(c => `• <b>${c}:</b> ${spellCompendium.cantrips[c.replace(/ \(.*\)/, '')]?.rule || 'Racial or Class Feature Cantrip.'}`).join('<br><br>');
+    document.getElementById('pr2-level1').innerHTML = chosenSpells.map(s => `• <b>${s}:</b> ${spellCompendium.level1[s]?.rule || ''}`).join('<br><br>');
+
+    updateWeaponCalculations(cls);
+
+    const sheetElem = document.getElementById('sheet');
+    sheetElem.style.display = 'block';
+    sheetElem.scrollIntoView({ behavior: 'smooth' });
+}
+
+function renderEquipmentSectionInSheet(className) {
+    const container = document.getElementById('sheet-equipment-controls');
+    const cls = classes[className];
+    const fixedEq = cls.equipment[0].fixed;
+
+    const simpleWeapons = [...Object.keys(weaponsCompendium["Simple Melee"] || {}), ...Object.keys(weaponsCompendium["Simple Ranged"] || {})];
+    const martialWeapons = [...Object.keys(weaponsCompendium["Martial Melee"] || {}), ...Object.keys(weaponsCompendium["Martial Ranged"] || {})];
+    const allWeapons = [...simpleWeapons, ...martialWeapons];
+
+    let html = `<div style="font-size:0.85rem; margin-bottom:8px;"><b>Fixed Starting Gear:</b> ${fixedEq}</div>`;
+
+    if (["Fighter", "Paladin", "Ranger", "Barbarian", "Rogue", "Monk", "Bard"].includes(className)) {
+        html += `
+            <div class="grid-2">
+                <div>
+                    <label style="font-size:0.75rem;">Select Primary Weapon:</label>
+                    <select id="sheet-weapon-1" onchange="updateWeaponCalculations('${className}')">
+                        ${(["Fighter", "Paladin", "Ranger", "Barbarian"].includes(className) ? martialWeapons : simpleWeapons).map(w => `<option value="${w}">${w}</option>`).join('')}
+                    </select>
+                </div>
+                <div>
+                    <label style="font-size:0.75rem;">Select Secondary Weapon:</label>
+                    <select id="sheet-weapon-2" onchange="updateWeaponCalculations('${className}')">
+                        ${allWeapons.map(w => `<option value="${w}">${w}</option>`).join('')}
+                    </select>
+                </div>
+            </div>`;
+    } else {
+        html += `<div style="font-size:0.85rem; color:#aaa; margin-top:4px;">This class uses fixed starter weapons defined above.</div>`;
+    }
+
+    container.innerHTML = html;
+}
+
+function updateWeaponCalculations(className) {
+    const cls = classes[className];
+    const mods = currentCalculatedMods;
+
+    let w1Name = "Dagger";
+    let w2Name = "Quarterstaff";
+
+    const sel1 = document.getElementById('sheet-weapon-1');
+    const sel2 = document.getElementById('sheet-weapon-2');
+
+    if (sel1 && sel2) {
+        w1Name = sel1.value;
+        w2Name = sel2.value;
+    } else {
+        if (className === "Artificer") { w1Name = "Dagger"; w2Name = "Quarterstaff"; }
+        else if (className === "Cleric") { w1Name = "Mace"; w2Name = "Light Crossbow"; }
+        else if (className === "Druid") { w1Name = "Quarterstaff"; w2Name = "Dagger"; }
+        else if (className === "Wizard" || className === "Sorcerer") { w1Name = "Quarterstaff"; w2Name = "Dagger"; }
+        else if (className === "Warlock") { w1Name = "Dagger"; w2Name = "Quarterstaff"; }
+    }
+
+    const w1Data = getWeaponData(w1Name);
+    const w2Data = getWeaponData(w2Name);
+
+    const getAtkMod = (wData) => {
+        let isFinesse = wData.properties.includes("Finesse");
+        let isRanged = wData.properties.includes("Ammunition");
+        if (isRanged || (isFinesse && mods.DEX > mods.STR)) {
+            return mods.DEX + 2;
+        }
+        return mods.STR + 2;
+    };
+
+    const getDmgBonus = (wData) => {
+        let isFinesse = wData.properties.includes("Finesse");
+        let isRanged = wData.properties.includes("Ammunition");
+        if (isRanged || (isFinesse && mods.DEX > mods.STR)) {
+            return mods.DEX >= 0 ? `+${mods.DEX}` : `${mods.DEX}`;
+        }
+        return mods.STR >= 0 ? `+${mods.STR}` : `${mods.STR}`;
+    };
+
+    document.getElementById('pr-weapons').innerHTML = `
+        <tr><td>${w1Name}</td><td>+${getAtkMod(w1Data)}</td><td>${w1Data.damage}${getDmgBonus(w1Data)} ${w1Data.type}</td></tr>
+        <tr><td>${w2Name}</td><td>+${getAtkMod(w2Data)}</td><td>${w2Data.damage}${getDmgBonus(w2Data)} ${w2Data.type}</td></tr>`;
+
+    document.getElementById('pr-equipment').innerHTML = `${cls.equipment[0].fixed}${sel1 ? ', ' + w1Name + ', ' + w2Name : ''}`;
+}
+</script>
+
+</body>
+</html>
+
