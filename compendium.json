@@ -347,6 +347,27 @@
     "Soldier": { "skills": ["Athletics", "Intimidation"], "feat": "Savage Attacker", "text": "<b>Origin Feat:</b> Savage Attacker — Roll weapon damage dice twice once per turn." },
     "Wayfarer": { "skills": ["Insight", "Stealth"], "feat": "Lucky", "text": "<b>Origin Feat:</b> Lucky — Gain Luck Points equal to PB for rerolls." }
   },
+  "skills": {
+    "Acrobatics": "<b>Akrobatik (Geschicklichkeit):</b> Hilft dir, die Balance zu halten, über schmale Vorsprünge zu laufen oder Saltos zu schlagen.",
+    "Animal Handling": "<b>Tierumgang (Weisheit):</b> Ermöglicht es dir, Tiere zu beruhigen, ihre Reaktionen einzuschätzen oder Reittiere zu lenken.",
+    "Arcana": "<b>Arkankunde (Intelligenz):</b> Dein Wissen über Zauber, magische Gegenstände, arkane Symbole und Bestien magischen Ursprungs.",
+    "Athletics": "<b>Athletik (Stärke):</b> Deckt körperliche Kraftakte wie Klettern, Springen, Schwimmen oder das Durchbrechen von Hindernissen ab.",
+    "Crafting": "<b>Handwerk (Intelligenz):</b> Erlaubt dir das Reparieren von Gegenständen, den Umgang mit Werkzeugen oder das Herstellen von Ausrüstung.",
+    "Deception": "<b>Täuschen (Charisma):</b> Hilft dir, andere durch Worte, Lügen oder raffinierte Verkleidungen in die Irre zu führen.",
+    "History": "<b>Geschichte (Intelligenz):</b> Dein Wissen über vergangene Ereignisse, königliche Familien, Kriege, Legenden und alte Zivilisationen.",
+    "Insight": "<b>Einblick (Weisheit):</b> Die Fähigkeit, die Absichten, Emotionen oder Täuschungen einer anderen Person anhand ihrer Körpersprache zu erkennen.",
+    "Intimidation": "<b>Einschüchtern (Charisma):</b> Anderen durch Drohungen, Stärke oder finstere Blicke Angst einjagen, um ihren Willen zu brechen.",
+    "Investigation": "<b>Untersuchung (Intelligenz):</b> Gezieltes Suchen nach Hinweisen, das Kombinieren von Spuren oder das Entschlüsseln von Logikrätseln.",
+    "Medicine": "<b>Heilkunde (Weisheit):</b> Ermöglicht das Stabilisieren sterbender Gefährten oder das Diagnostizieren von Krankheiten und Verletzungen.",
+    "Nature": "<b>Naturkunde (Intelligenz):</b> Dein Wissen über Pflanzen, Tiere, Wetterbedingungen und geografische Gegebenheiten der Wildnis.",
+    "Perception": "<b>Wahrnehmung (Weisheit):</b> Passive oder aktive Sinne (Hören, Sehen, Riechen), um versteckte Dinge oder lauernde Gefahren zu entdecken.",
+    "Performance": "<b>Bühnenkunst (Charisma):</b> Talent für Musik, Schauspiel, Tanz, Geschichtenerzählen oder das Unterhalten von Publikum.",
+    "Persuasion": "<b>Überzeugen (Charisma):</b> Andere durch Diplomatie, Höflichkeit, gute Argumente oder Charme auf deine Seite zu ziehen.",
+    "Religion": "<b>Religion (Intelligenz):</b> Wissen über Gottheiten, heilige Riten, Sekten, Gebete und göttliche Symbole.",
+    "Sleight of Hand": "<b>Fingerfertigkeit (Geschicklichkeit):</b> Nützlich für Taschendiebstahl, Zaubertricks oder das Verstecken kleiner Gegenstände.",
+    "Stealth": "<b>Heimlichkeit (Geschicklichkeit):</b> Das unbemerkte Bewegen im Schatten, Schleichen und Verstecken vor Gegnern.",
+    "Survival": "<b>Überleben (Weisheit):</b> Spurenlesen, das Finden von Nahrung in der Wildnis, Orientierung und das Vermeiden von Naturgefahren."
+  },
   "spellCompendium": {
     "cantrips": {
       "Acid Splash": { "classes": ["Artificer", "Sorcerer", "Wizard"], "rule": "<b>School:</b> Evocation | <b>Casting Time:</b> 1 Action | <b>Range:</b> 60 ft | <b>Components:</b> V, S<br>• Bubble of acid: 1-2 targets DEX save or 1d6 Acid damage." },
