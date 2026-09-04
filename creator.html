@@ -141,7 +141,22 @@
             text-align: center;
             filter: url(#rough-edge);
         }
-        .modal-title { font-size: 1.2rem; color: var(--accent); font-weight: bold; margin-bottom: 10px; text-transform: uppercase; }
+        .modal-title { font-size: 1.2rem; color: var(--accent); font-weight: bold; margin-bottom: 12px; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        
+        /* Wappen-Kasten im Modal für das Icon */
+        .modal-icon-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: #faf7f2;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            color: var(--accent);
+            font-size: 1rem;
+        }
+
         .modal-body { font-size: 0.9rem; line-height: 1.5; color: var(--text-muted); text-align: left; max-height: 300px; overflow-y: auto; }
 
         ul { margin: 5px 0; padding-left: 20px; font-size: 0.9rem; color: var(--text-muted); }
@@ -406,8 +421,13 @@ function populateSelect(id, items) {
     items.forEach(i => sel.innerHTML += `<option value="${i}">${i}</option>`);
 }
 
-function openModal(title, text) {
-    document.getElementById('modal-title').innerText = title;
+function openModal(title, text, iconClass = null) {
+    const titleElem = document.getElementById('modal-title');
+    if (iconClass) {
+        titleElem.innerHTML = `<span class="modal-icon-box"><i class="fa-solid ${iconClass}"></i></span> ${title}`;
+    } else {
+        titleElem.innerText = title;
+    }
     document.getElementById('modal-body').innerHTML = text;
     document.getElementById('rule-modal').style.display = 'flex';
 }
@@ -420,35 +440,35 @@ function showRaceModal() {
     const mainRace = document.getElementById('main-race').value;
     const subRace = document.getElementById('sub-race').value;
     const info = speciesData[mainRace].subraces[subRace];
-    openModal(subRace, info.text);
+    openModal(subRace, info.text, "fa-child");
 }
 
 function showClassModal() {
     const c = document.getElementById('class-select').value;
     const cls = classes[c];
-    openModal(c, `<b>Trefferwürfel:</b> d${cls.hp}<br><b>Hauptattribut:</b> ${cls.primary}<br><b>Rettungswürfe:</b> ${cls.saves.join(', ')}<br><b>Rüstung:</b> ${cls.armor}<br><br>${cls.text}`);
+    openModal(c, `<b>Trefferwürfel:</b> d${cls.hp}<br><b>Hauptattribut:</b> ${cls.primary}<br><b>Rettungswürfe:</b> ${cls.saves.join(', ')}<br><b>Rüstung:</b> ${cls.armor}<br><br>${cls.text}`, getClassIcon(c));
 }
 
 function showBgModal() {
     const b = document.getElementById('bg-select').value;
     const bg = backgrounds[b];
-    openModal(b, `<b>Fertigkeiten:</b> ${bg.skills.join(', ')}<br><b>Ursprungstalent:</b> ${bg.feat}<br><br>${bg.text}`);
+    openModal(b, `<b>Fertigkeiten:</b> ${bg.skills.join(', ')}<br><b>Ursprungstalent:</b> ${bg.feat}<br><br>${bg.text}`, "fa-book");
 }
 
 function showSkillModal(selectId) {
     const sk = document.getElementById(selectId).value;
-    openModal(sk, skillDescriptions[sk] || "Fertigkeits-Proficiency.");
+    openModal(sk, skillDescriptions[sk] || "Fertigkeits-Proficiency.", "fa-check");
 }
 
 function showSpellModal(category, spellName) {
     const item = spellCompendium[category][spellName];
-    if (item) openModal(spellName, item.rule);
+    if (item) openModal(spellName, item.rule, "fa-wand-magic-sparkles");
 }
 
 function getClassIcon(className) {
     switch (className) {
         case "Artificer": return "fa-wrench";
-        case "Barbarian": return "fa-axe";
+        case "Barbarian": return "fa-hammer";
         case "Bard": return "fa-guitar";
         case "Cleric": return "fa-cross";
         case "Druid": return "fa-tree";
