@@ -182,11 +182,16 @@
                 </div>
             </div>
         </div>
-        <div id="subrace-container" style="display: none; margin-top: 5px;">
-            <label for="sub-race">Abstammung</label>
-            <div class="input-row">
-                <select id="sub-race" onchange="updateSpellsUI()"></select>
-                <button type="button" class="info-btn" onclick="showRaceModal()">ℹ</button>
+        <div id="subrace-container" style="display: none; margin-top: 10px;">
+            <div class="grid-2">
+                <div>
+                    <label for="sub-race">Abstammung</label>
+                    <div class="input-row">
+                        <select id="sub-race" onchange="updateSpellsUI()"></select>
+                        <button type="button" class="info-btn" onclick="showRaceModal()">ℹ</button>
+                    </div>
+                </div>
+                <div></div>
             </div>
         </div>
     </div>
@@ -199,7 +204,7 @@
                 <label for="class-select">Klasse</label>
                 <div class="input-row">
                     <select id="class-select" onchange="onClassChange()"></select>
-                    <button type="button" class="info-btn" onclick="showClassModal()">ℹ</button>
+                    <button type="button" class="info-btn" id="class-info-btn" onclick="showClassModal()"><i class="fa-solid fa-wrench" id="class-icon-indicator"></i></button>
                 </div>
             </div>
             <div>
@@ -464,6 +469,14 @@ function getClassIcon(className) {
     }
 }
 
+function updateClassIconDisplay() {
+    const c = document.getElementById('class-select').value;
+    const iconElem = document.getElementById('class-icon-indicator');
+    if (iconElem) {
+        iconElem.className = `fa-solid ${getClassIcon(c)}`;
+    }
+}
+
 function onMainRaceChange() {
     const mainRace = document.getElementById('main-race').value;
     const subContainer = document.getElementById('subrace-container');
@@ -482,6 +495,8 @@ function onClassChange() {
     const c = document.getElementById('class-select').value;
     const cls = classes[c];
     
+    updateClassIconDisplay();
+
     const s1 = document.getElementById('skill1');
     const s2 = document.getElementById('skill2');
     s1.innerHTML = ''; s2.innerHTML = '';
