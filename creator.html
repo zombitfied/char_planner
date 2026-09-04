@@ -170,28 +170,23 @@
     <!-- SCHRITT 1: IDENTITÄT & VOLK -->
     <div class="step-card">
         <div class="step-title">Identität & Volk</div>
-        <div class="grid-2">
-            <div>
-                <label for="char-name">Name</label>
-                <input type="text" id="char-name" value="Gimble">
-            </div>
+        <div>
+            <label for="char-name">Name</label>
+            <input type="text" id="char-name" value="Gimble">
+        </div>
+        <div class="grid-2" style="margin-top: 8px;">
             <div>
                 <label for="main-race">Volk</label>
                 <div class="input-row">
                     <select id="main-race" onchange="onMainRaceChange()"></select>
                 </div>
             </div>
-        </div>
-        <div id="subrace-container" style="display: none; margin-top: 10px;">
-            <div class="grid-2">
-                <div>
-                    <label for="sub-race">Abstammung</label>
-                    <div class="input-row">
-                        <select id="sub-race" onchange="updateSpellsUI()"></select>
-                        <button type="button" class="info-btn" onclick="showRaceModal()">ℹ</button>
-                    </div>
+            <div id="subrace-container" style="display: none;">
+                <label for="sub-race">Abstammung</label>
+                <div class="input-row">
+                    <select id="sub-race" onchange="updateSpellsUI()"></select>
+                    <button type="button" class="info-btn" onclick="showRaceModal()">ℹ</button>
                 </div>
-                <div></div>
             </div>
         </div>
     </div>
