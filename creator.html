@@ -26,7 +26,6 @@
         }
         .container { max-width: 750px; margin: 0 auto; }
         
-        /* Top Navigation */
         .top-nav { margin-bottom: 15px; }
         .btn-back {
             display: inline-flex;
@@ -62,9 +61,6 @@
         .main-btn { background: var(--accent); color: #fff; font-weight: bold; border: none; margin-top: 15px; padding: 14px; cursor: pointer; font-size: 1rem; border-radius: 6px; width: 100%; text-transform: uppercase; }
         .main-btn:hover { background: var(--accent-hover); }
         .main-btn:active { opacity: 0.8; }
-        
-        .pdf-btn { background: #4caf50; color: #fff; font-weight: bold; border: none; margin-top: 15px; padding: 12px; cursor: pointer; font-size: 0.95rem; border-radius: 6px; width: 100%; }
-        .pdf-btn:active { opacity: 0.8; }
 
         .sheet { background: var(--card); padding: 15px; border-radius: 8px; margin-top: 20px; border: 1px solid var(--border); display: none; box-shadow: 0 4px 12px rgba(44, 34, 30, 0.05); }
         .stat-box { background: #faf7f2; border: 1px solid var(--border); padding: 8px; border-radius: 6px; text-align: center; cursor: pointer; transition: background 0.2s; }
@@ -89,57 +85,11 @@
 
         ul { margin: 5px 0; padding-left: 20px; font-size: 0.9rem; color: var(--text-muted); }
         li { margin-bottom: 4px; }
-
-        .print-only { display: none; }
-
-        @media print {
-            @page { size: A4 portrait; margin: 4mm; }
-            body { background: #fff !important; color: #000 !important; font-family: Arial, sans-serif; font-size: 7.5pt; line-height: 1.1; padding: 0; margin: 0; }
-            
-            h1, .step-card, .main-btn, .pdf-btn, .modal-overlay, .screen-only, .top-nav { display: none !important; }
-            .print-only { display: block !important; }
-            .container { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
-            .sheet { display: block !important; border: none !important; background: transparent !important; padding: 0 !important; margin: 0 !important; }
-
-            .page { width: 200mm; height: 287mm; box-sizing: border-box; position: relative; page-break-after: always; }
-
-            .p-header { border: 1.5px solid #000; border-radius: 8px; padding: 4px; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4px; height: 32mm; box-sizing: border-box; }
-            .p-field { border-bottom: 1px solid #999; padding-bottom: 1px; margin-bottom: 3px; }
-            .p-field .lbl { font-size: 5.5pt; font-weight: bold; text-transform: uppercase; color: #444; }
-            .p-field .val { font-size: 8.5pt; font-weight: bold; color: #000; }
-
-            .p-main-grid { display: grid; grid-template-columns: 135mm 1fr; gap: 4mm; margin-top: 3mm; height: 248mm; }
-            .p-left-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; }
-
-            .p-attr-box { border: 1.5px solid #000; border-radius: 8px; padding: 4px; position: relative; margin-bottom: 2mm; background: #fff; }
-            .p-attr-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #000; padding-bottom: 2px; }
-            .p-attr-name { font-size: 8pt; font-weight: 900; text-transform: uppercase; }
-            .p-attr-score { font-size: 8pt; border: 1px solid #000; border-radius: 4px; padding: 0 4px; font-weight: bold; background: #eee; }
-            .p-attr-mod { font-size: 14pt; font-weight: 900; text-align: center; margin: 2px 0; }
-            
-            .p-skill-list { font-size: 6.5pt; margin-top: 3px; }
-            .p-skill-item { display: flex; align-items: center; margin-bottom: 1px; }
-            .p-dot { width: 6px; height: 6px; border: 1px solid #000; border-radius: 50%; margin-right: 3px; display: inline-block; }
-            .p-dot.active { background: #000; }
-
-            .p-combat-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2mm; margin-bottom: 3mm; text-align: center; }
-            .p-cbox { border: 1.5px solid #000; border-radius: 6px; padding: 3px; }
-            .p-cbox .lbl { font-size: 5.5pt; font-weight: bold; text-transform: uppercase; border-bottom: 1px solid #ccc; margin-bottom: 2px; }
-            .p-cbox .val { font-size: 11pt; font-weight: 900; }
-
-            .p-box { border: 1.5px solid #000; border-radius: 6px; padding: 4px; margin-bottom: 3mm; background: #fff; }
-            .p-box-title { font-size: 7pt; font-weight: 900; text-transform: uppercase; border-bottom: 1px solid #000; padding-bottom: 2px; margin-bottom: 3px; }
-
-            .p-table { width: 100%; border-collapse: collapse; font-size: 7pt; }
-            .p-table th { border-bottom: 1px solid #000; text-align: left; font-size: 6pt; text-transform: uppercase; }
-            .p-table td { border-bottom: 1px solid #eee; padding: 2px 0; }
-        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- Top Nav zurück zum Archiv -->
     <div class="top-nav">
         <a href="index.html" class="btn-back">
             <i class="fa-solid fa-arrow-left"></i> Zurück zum Archiv
@@ -244,145 +194,38 @@
 
     <!-- OUTPUT SHEET -->
     <div id="sheet" class="sheet">
+        <h2 id="screen-out-name" style="margin-top:0; color:var(--accent);"></h2>
+        <div id="screen-out-meta" style="font-size:0.9rem; color:var(--text-muted); text-align:center; margin-bottom:10px;"></div>
         
-        <!-- SCREEN VIEW -->
-        <div class="screen-only">
-            <h2 id="screen-out-name" style="margin-top:0; color:var(--accent);"></h2>
-            <div id="screen-out-meta" style="font-size:0.9rem; color:var(--text-muted); text-align:center; margin-bottom:10px;"></div>
-            
-            <div style="margin-bottom: 12px;">
-                <span class="badge" id="screen-out-hp"></span>
-                <span class="badge" id="screen-out-ac"></span>
-                <span class="badge" id="screen-out-init"></span>
-                <span class="badge">Prof. Bonus: +2</span>
-                <span class="badge" id="screen-out-speed">Speed: 30 ft</span>
-            </div>
+        <div style="margin-bottom: 12px;">
+            <span class="badge" id="screen-out-hp"></span>
+            <span class="badge" id="screen-out-ac"></span>
+            <span class="badge" id="screen-out-init"></span>
+            <span class="badge">Prof. Bonus: +2</span>
+            <span class="badge" id="screen-out-speed">Speed: 30 ft</span>
+        </div>
 
-            <h3 style="color:var(--accent);">Ability Scores & Modifiers</h3>
-            <div class="grid-3" id="screen-out-stats" style="margin-bottom:15px;"></div>
+        <h3 style="color:var(--accent);">Ability Scores & Modifiers</h3>
+        <div class="grid-3" id="screen-out-stats" style="margin-bottom:15px;"></div>
 
-            <h3 style="color:var(--accent);">Proficiencies & Traits</h3>
-            <ul id="screen-out-features" style="margin-bottom:15px;"></ul>
+        <h3 style="color:var(--accent);">Proficiencies & Traits</h3>
+        <ul id="screen-out-features" style="margin-bottom:15px;"></ul>
 
-            <!-- DYNAMIC EQUIPMENT SELECTION IN THE GENERATED SHEET -->
-            <h3 style="color:var(--accent);">Equipment & Weapon Configuration</h3>
-            <div id="sheet-equipment-controls" style="background:#faf7f2; padding:12px; border-radius:6px; border:1px solid var(--border); margin-bottom:15px;"></div>
+        <h3 style="color:var(--accent);">Equipment & Weapon Configuration</h3>
+        <div id="sheet-equipment-controls" style="background:#faf7f2; padding:12px; border-radius:6px; border:1px solid var(--border); margin-bottom:15px;"></div>
 
-            <h3 style="color:var(--accent);">Spells & Cantrips Overview</h3>
-            <div id="screen-out-spells"></div>
+        <h3 style="color:var(--accent);">Spells & Cantrips Overview</h3>
+        <div id="screen-out-spells" style="margin-bottom:20px;"></div>
 
-            <!-- Direkt-Start in den Manager nach Generierung -->
-            <button class="main-btn" onclick="startAdventure()" style="margin-top:20px; background:#2e7d32; color:#fff;">
-                <i class="fa-solid fa-dungeon"></i> Auf ins Abenteuer! (Zum Manager)
+        <!-- Aktions-Buttons am Ende des Sheets -->
+        <div style="display: flex; gap: 10px; margin-top: 15px;">
+            <button class="main-btn" onclick="manualSaveCharacter()" style="margin-top:0; background:#6c757d; color:#fff;">
+                <i class="fa-solid fa-floppy-disk"></i> Held speichern
+            </button>
+            <button class="main-btn" onclick="startAdventure()" style="margin-top:0; background:#2e7d32; color:#fff;">
+                <i class="fa-solid fa-dungeon"></i> Auf ins Abenteuer!
             </button>
         </div>
-
-        <!-- PRINT VIEW -->
-        <div class="print-only">
-            <div class="page">
-                <div class="p-header">
-                    <div>
-                        <div class="p-field"><div class="lbl">Character Name</div><div class="val" id="pr-name"></div></div>
-                        <div class="p-field"><div class="lbl">Background</div><div class="val" id="pr-bg"></div></div>
-                        <div class="p-field"><div class="lbl">Species</div><div class="val" id="pr-species"></div></div>
-                    </div>
-                    <div>
-                        <div class="p-field"><div class="lbl">Class</div><div class="val" id="pr-class"></div></div>
-                        <div class="p-field"><div class="lbl">Subclass</div><div class="val">--</div></div>
-                    </div>
-                    <div>
-                        <div class="p-field"><div class="lbl">Level</div><div class="val">1</div></div>
-                        <div class="p-field"><div class="lbl">XP</div><div class="val">0</div></div>
-                    </div>
-                    <div>
-                        <div class="p-field"><div class="lbl">Proficiency Bonus</div><div class="val">+2</div></div>
-                        <div class="p-field"><div class="lbl">Heroic Inspiration</div><div class="val">[  ]</div></div>
-                    </div>
-                </div>
-
-                <div class="p-combat-row" style="margin-top:3mm;">
-                    <div class="p-cbox"><div class="lbl">Armor Class</div><div class="val" id="pr-ac">12</div></div>
-                    <div class="p-cbox"><div class="lbl">Initiative</div><div class="val" id="pr-init">+0</div></div>
-                    <div class="p-cbox"><div class="lbl">Speed</div><div class="val" id="pr-speed">30 ft</div></div>
-                    <div class="p-cbox"><div class="lbl">Hit Points</div><div class="val" id="pr-hp">8</div></div>
-                    <div class="p-cbox"><div class="lbl">Hit Die</div><div class="val" id="pr-hitdie">d8</div></div>
-                </div>
-
-                <div class="p-main-grid">
-                    <div class="p-left-col">
-                        <div>
-                            <div class="p-attr-box" id="pr-box-str"></div>
-                            <div class="p-attr-box" id="pr-box-dex"></div>
-                            <div class="p-attr-box" id="pr-box-con"></div>
-                            
-                            <div class="p-box">
-                                <div class="p-box-title">Proficiencies</div>
-                                <div id="pr-prof-list" style="font-size:6.5pt;"></div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="p-attr-box" id="pr-box-int"></div>
-                            <div class="p-attr-box" id="pr-box-wis"></div>
-                            <div class="p-attr-box" id="pr-box-cha"></div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="p-box">
-                            <div class="p-box-title">Weapons & Attacks</div>
-                            <table class="p-table">
-                                <thead><tr><th>Name</th><th>Atk</th><th>Damage</th></tr></thead>
-                                <tbody id="pr-weapons"></tbody>
-                            </table>
-                        </div>
-
-                        <div class="p-box">
-                            <div class="p-box-title">Class Features</div>
-                            <div id="pr-class-feat" style="font-size:7pt;"></div>
-                        </div>
-
-                        <div class="p-box">
-                            <div class="p-box-title">Species Traits</div>
-                            <div id="pr-species-trait" style="font-size:7pt;"></div>
-                        </div>
-
-                        <div class="p-box">
-                            <div class="p-box-title">Feats & Background</div>
-                            <div id="pr-feats" style="font-size:7pt;"></div>
-                        </div>
-
-                        <div class="p-box">
-                            <div class="p-box-title">Equipment</div>
-                            <div id="pr-equipment" style="font-size:7pt;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Page 2: Spells -->
-            <div class="page">
-                <div class="p-header" style="height:22mm; grid-template-columns: 2fr 1fr 1fr 1fr;">
-                    <div><div class="p-field"><div class="lbl">Spellcaster</div><div class="val" id="pr2-name"></div></div></div>
-                    <div><div class="p-field"><div class="lbl">Spellcasting Ability</div><div class="val" id="pr2-ability">INT</div></div></div>
-                    <div><div class="p-field"><div class="lbl">Spell Save DC</div><div class="val" id="pr2-dc">13</div></div></div>
-                    <div><div class="p-field"><div class="lbl">Spell Attack Bonus</div><div class="val" id="pr2-atk">+5</div></div></div>
-                </div>
-
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:4mm; margin-top:4mm;">
-                    <div class="p-box">
-                        <div class="p-box-title">Cantrips (Level 0)</div>
-                        <div id="pr2-cantrips" style="font-size:7.5pt;"></div>
-                    </div>
-                    <div class="p-box">
-                        <div class="p-box-title">Level 1 Spells (Slots: [  ][  ])</div>
-                        <div id="pr2-level1" style="font-size:7.5pt;"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <button class="pdf-btn" onclick="window.print()">📄 Save / Print as PDF</button>
     </div>
 </div>
 
@@ -416,15 +259,6 @@ const skillDescriptions = {
     "Perception": "(WIS) Spot hidden things.", "Performance": "(CHA) Stage acts.", "Persuasion": "(CHA) Diplomacy.",
     "Religion": "(WIS/INT) Deities, rites.", "Sleight of Hand": "(DEX) Sleight, pickpocket.", "Stealth": "(DEX) Hiding.",
     "Survival": "(WIS) Tracking, foraging."
-};
-
-const attrSkillsMap = {
-    "STR": ["Athletics"],
-    "DEX": ["Acrobatics", "Sleight of Hand", "Stealth"],
-    "CON": [],
-    "INT": ["Arcana", "History", "Investigation", "Nature", "Religion"],
-    "WIS": ["Animal Handling", "Insight", "Medicine", "Perception", "Survival"],
-    "CHA": ["Deception", "Intimidation", "Performance", "Persuasion"]
 };
 
 let speciesData = {};
@@ -734,7 +568,6 @@ function buildCharacter() {
     const sk2 = document.getElementById('skill2').value;
     const allSkills = [...backgrounds[bg].skills, sk1, sk2];
 
-    // Objekt für LocalStorage speichern
     lastBuiltCharacter = {
         name: name,
         class: cls,
@@ -752,8 +585,6 @@ function buildCharacter() {
         spells: chosenSpells,
         lastAccess: new Date().toISOString()
     };
-
-    saveCharacterToStorage(lastBuiltCharacter);
 
     document.getElementById('screen-out-name').innerText = name;
     document.getElementById('screen-out-meta').innerText = `${subRace} | ${cls} Level 1 | ${bg}`;
@@ -804,66 +635,6 @@ function buildCharacter() {
         <b>Level 1 Spell Slots:</b> ${classes[cls].casterType !== "NONE" ? '2 / Long Rest' : '0'}
     `;
 
-    document.getElementById('pr-name').innerText = name;
-    document.getElementById('pr-class').innerText = cls;
-    document.getElementById('pr-bg').innerText = bg;
-    document.getElementById('pr-species').innerText = subRace;
-    document.getElementById('pr-ac').innerText = ac;
-    document.getElementById('pr-init').innerText = `${mods.DEX >= 0 ? '+' : ''}${mods.DEX}`;
-    document.getElementById('pr-speed').innerText = `${subInfo.speed} ft`;
-    document.getElementById('pr-hp').innerText = hp;
-    document.getElementById('pr-hitdie').innerText = `d${classes[cls].hp}`;
-
-    ["STR", "DEX", "CON", "INT", "WIS", "CHA"].forEach(s => {
-        let box = document.getElementById(`pr-box-${s.toLowerCase()}`);
-        let isSaveProf = classes[cls].saves.includes(s);
-        let saveVal = mods[s] + (isSaveProf ? 2 : 0);
-        
-        let skillsHTML = attrSkillsMap[s].map(sk => {
-            let isSkillProf = allSkills.includes(sk);
-            let skVal = mods[s] + (isSkillProf ? 2 : 0);
-            return `<div class="p-skill-item">
-                <span class="p-dot ${isSkillProf ? 'active' : ''}"></span>
-                <span style="width:20px; text-align:right; margin-right:4px;">${skVal >= 0 ? '+' : ''}${skVal}</span>
-                <span>${sk}</span>
-            </div>`;
-        }).join('');
-
-        box.innerHTML = `
-            <div class="p-attr-head">
-                <span class="p-attr-name">${s}</span>
-                <span class="p-attr-score">${stats[s]}</span>
-            </div>
-            <div class="p-attr-mod">${mods[s] >= 0 ? '+' : ''}${mods[s]}</div>
-            <div style="border-top:1px dashed #ccc; padding-top:2px; font-size:6.5pt;">
-                <div class="p-skill-item">
-                    <span class="p-dot ${isSaveProf ? 'active' : ''}"></span>
-                    <span style="width:20px; text-align:right; margin-right:4px;">${saveVal >= 0 ? '+' : ''}${saveVal}</span>
-                    <b>Saving Throw</b>
-                </div>
-                ${skillsHTML}
-            </div>`;
-    });
-
-    document.getElementById('pr-prof-list').innerText = classes[cls].armor;
-    document.getElementById('pr-class-feat').innerHTML = classes[cls].text;
-    document.getElementById('pr-species-trait').innerHTML = subInfo.text;
-    document.getElementById('pr-feats').innerHTML = `<b>${backgrounds[bg].feat}:</b> ${backgrounds[bg].text}`;
-
-    document.getElementById('pr2-name').innerText = name;
-    let casterStat = classes[cls].casterType !== "NONE" ? classes[cls].casterType : "INT";
-    let spellDC = 8 + 2 + mods[casterStat];
-    let spellAtk = 2 + mods[casterStat];
-
-    document.getElementById('pr2-ability').innerText = casterStat;
-    document.getElementById('pr2-dc').innerText = spellDC;
-    document.getElementById('pr2-atk').innerText = `+${spellAtk}`;
-
-    document.getElementById('pr2-cantrips').innerHTML = chosenCantrips.map(c => `• <b>${c}:</b> ${spellCompendium.cantrips[c.replace(/ \(.*\)/, '')]?.rule || 'Racial or Class Feature Cantrip.'}`).join('<br><br>');
-    document.getElementById('pr2-level1').innerHTML = chosenSpells.map(s => `• <b>${s}:</b> ${spellCompendium.level1[s]?.rule || ''}`).join('<br><br>');
-
-    updateWeaponCalculations(cls);
-
     const sheetElem = document.getElementById('sheet');
     sheetElem.style.display = 'block';
     sheetElem.scrollIntoView({ behavior: 'smooth' });
@@ -876,7 +647,6 @@ function saveCharacterToStorage(charObj) {
         try { characters = JSON.parse(savedList); } catch(e) {}
     }
     
-    // Prüfen ob ein Charakter gleichen Namens existiert und aktualisieren oder anhängen
     const existingIndex = characters.findIndex(c => c.name === charObj.name);
     if (existingIndex >= 0) {
         characters[existingIndex] = charObj;
@@ -888,8 +658,16 @@ function saveCharacterToStorage(charObj) {
     localStorage.setItem('dnd_active_character', JSON.stringify(charObj));
 }
 
+function manualSaveCharacter() {
+    if (!lastBuiltCharacter) return;
+    lastBuiltCharacter.lastAccess = new Date().toISOString();
+    saveCharacterToStorage(lastBuiltCharacter);
+    alert("Held erfolgreich gespeichert!");
+}
+
 function startAdventure() {
     if (lastBuiltCharacter) {
+        lastBuiltCharacter.lastAccess = new Date().toISOString();
         saveCharacterToStorage(lastBuiltCharacter);
     }
     window.location.href = 'manager.html';
@@ -911,13 +689,13 @@ function renderEquipmentSectionInSheet(className) {
             <div class="grid-2">
                 <div>
                     <label style="font-size:0.75rem;">Select Primary Weapon:</label>
-                    <select id="sheet-weapon-1" onchange="updateWeaponCalculations('${className}')">
+                    <select id="sheet-weapon-1">
                         ${(["Fighter", "Paladin", "Ranger", "Barbarian"].includes(className) ? martialWeapons : simpleWeapons).map(w => `<option value="${w}">${w}</option>`).join('')}
                     </select>
                 </div>
                 <div>
                     <label style="font-size:0.75rem;">Select Secondary Weapon:</label>
-                    <select id="sheet-weapon-2" onchange="updateWeaponCalculations('${className}')">
+                    <select id="sheet-weapon-2">
                         ${allWeapons.map(w => `<option value="${w}">${w}</option>`).join('')}
                     </select>
                 </div>
@@ -927,55 +705,6 @@ function renderEquipmentSectionInSheet(className) {
     }
 
     container.innerHTML = html;
-}
-
-function updateWeaponCalculations(className) {
-    const cls = classes[className];
-    const mods = currentCalculatedMods;
-
-    let w1Name = "Dagger";
-    let w2Name = "Quarterstaff";
-
-    const sel1 = document.getElementById('sheet-weapon-1');
-    const sel2 = document.getElementById('sheet-weapon-2');
-
-    if (sel1 && sel2) {
-        w1Name = sel1.value;
-        w2Name = sel2.value;
-    } else {
-        if (className === "Artificer") { w1Name = "Dagger"; w2Name = "Quarterstaff"; }
-        else if (className === "Cleric") { w1Name = "Mace"; w2Name = "Light Crossbow"; }
-        else if (className === "Druid") { w1Name = "Quarterstaff"; w2Name = "Dagger"; }
-        else if (className === "Wizard" || className === "Sorcerer") { w1Name = "Quarterstaff"; w2Name = "Dagger"; }
-        else if (className === "Warlock") { w1Name = "Dagger"; w2Name = "Quarterstaff"; }
-    }
-
-    const w1Data = getWeaponData(w1Name);
-    const w2Data = getWeaponData(w2Name);
-
-    const getAtkMod = (wData) => {
-        let isFinesse = wData.properties.includes("Finesse");
-        let isRanged = wData.properties.includes("Ammunition");
-        if (isRanged || (isFinesse && mods.DEX > mods.STR)) {
-            return mods.DEX + 2;
-        }
-        return mods.STR + 2;
-    };
-
-    const getDmgBonus = (wData) => {
-        let isFinesse = wData.properties.includes("Finesse");
-        let isRanged = wData.properties.includes("Ammunition");
-        if (isRanged || (isFinesse && mods.DEX > mods.STR)) {
-            return mods.DEX >= 0 ? `+${mods.DEX}` : `${mods.DEX}`;
-        }
-        return mods.STR >= 0 ? `+${mods.STR}` : `${mods.STR}`;
-    };
-
-    document.getElementById('pr-weapons').innerHTML = `
-        <tr><td>${w1Name}</td><td>+${getAtkMod(w1Data)}</td><td>${w1Data.damage}${getDmgBonus(w1Data)} ${w1Data.type}</td></tr>
-        <tr><td>${w2Name}</td><td>+${getAtkMod(w2Data)}</td><td>${w2Data.damage}${getDmgBonus(w2Data)} ${w2Data.type}</td></tr>`;
-
-    document.getElementById('pr-equipment').innerHTML = `${cls.equipment[0].fixed}${sel1 ? ', ' + w1Name + ', ' + w2Name : ''}`;
 }
 </script>
 
