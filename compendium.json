@@ -1,353 +1,399 @@
 {
-  "speciesData": {
-    "Aasimar (2024)": {
-      "subraces": {
-        "Aasimar": { 
-          "bonus": { "CHA": 2, "WIS": 1 }, 
-          "speed": 30, 
-          "text": "<b>Creature Type:</b> Humanoid | <b>Size:</b> Medium or Small | <b>Speed:</b> 30 ft.<br>• <b>Darkvision:</b> 60 feet.<br>• <b>Celestial Resistance:</b> Resistance to Necrotic and Radiant damage.<br>• <b>Healing Hands:</b> As an Action, touch a creature to restore d4s equal to your PB. (1/Long Rest).<br>• <b>Light Bearer:</b> You know the <i>Light</i> cantrip.<br>• <b>Celestial Revelation (Lvl 3):</b> Transform for 1 min (Heavenly Wings, Radiant Soul, or Necrotic Shroud)." 
+    "speciesData": {
+        "Aasimar": {
+            "subraces": {
+                "Aasimar": {
+                    "bonus": { "WIS": 1, "CHA": 2 },
+                    "speed": 30,
+                    "text": "Himmlische Resistenz gegen Nekrotisch und Strahlung, Licht-Zaubertrick und Himmlische Offenbarung auf Stufe 3."
+                }
+            }
+        },
+        "Changeling": {
+            "subraces": {
+                "Changeling": {
+                    "bonus": { "DEX": 1, "CHA": 2 },
+                    "speed": 30,
+                    "text": "Gestaltwandler: Du kannst dein Aussehen und deine Stimme nach Belieben verändern. Erhältst zwei Fertigkeiten aus einer Liste (z.B. Täuschen, Einschüchtern)."
+                }
+            }
+        },
+        "Dragonborn": {
+            "subraces": {
+                "Dragonborn": {
+                    "bonus": { "STR": 2, "CHA": 1 },
+                    "speed": 30,
+                    "text": "Drachenatem (Atemwaffe), Schadensresistenz passend zum Drachentyp und Dunkelsicht."
+                }
+            }
+        },
+        "Dwarf": {
+            "subraces": {
+                "Hill Dwarf": {
+                    "bonus": { "CON": 2, "WIS": 1 },
+                    "speed": 25,
+                    "text": "Zwergenzähigkeit, Giftresistenz und zusätzlicher Trefferpunkt pro Stufe."
+                },
+                "Mountain Dwarf": {
+                    "bonus": { "STR": 2, "CON": 2 },
+                    "speed": 25,
+                    "text": "Rüstungstraining (Leichte und Mittlere Rüstung), Giftresistenz und Dunkelsicht."
+                }
+            }
+        },
+        "Elf": {
+            "subraces": {
+                "High Elf": {
+                    "bonus": { "DEX": 2, "INT": 1 },
+                    "speed": 30,
+                    "text": "Feenabstammung, Trance, ein Magie-Zaubertrick der Magierliste und Dunkelsicht."
+                },
+                "Wood Elf": {
+                    "bonus": { "DEX": 2, "WIS": 1 },
+                    "speed": 35,
+                    "text": "Feenabstammung, Trance, Heimlichkeit in der Natur und Dunkelsicht."
+                },
+                "Drow": {
+                    "bonus": { "DEX": 2, "CHA": 1 },
+                    "speed": 30,
+                    "text": "Überlegene Dunkelsicht, Drow-Magie (Feenfeuer) und Sonnenlicht-Empfindlichkeit."
+                }
+            }
+        },
+        "Gnome": {
+            "subraces": {
+                "Rock Gnome": {
+                    "bonus": { "INT": 2, "CON": 1 },
+                    "speed": 25,
+                    "text": "Gnomisches Genie, Bastler-Wissen (Tinkering) und Dunkelsicht."
+                },
+                "Forest Gnome": {
+                    "bonus": { "INT": 2, "DEX": 1 },
+                    "speed": 25,
+                    "text": "Gnomisches Genie, Illusionen-Zaubertrick (Minor Illusion) und Tiere sprechen."
+                }
+            }
+        },
+        "Goliath": {
+            "subraces": {
+                "Goliath": {
+                    "bonus": { "STR": 2, "CON": 1 },
+                    "speed": 30,
+                    "text": "Riesenabstammung (Mächtige Felsenhände/Teleport/Schubsen), Zähigkeit der Riesen."
+                }
+            }
+        },
+        "Halfling": {
+            "subraces": {
+                "Lightfoot": {
+                    "bonus": { "DEX": 2, "CHA": 1 },
+                    "speed": 25,
+                    "text": "Halbling-Glück (Neuwurf von Einsen), Mut und natürliche Heimlichkeit hinter größeren Kreaturen."
+                },
+                "Stout": {
+                    "bonus": { "DEX": 2, "CON": 1 },
+                    "speed": 25,
+                    "text": "Halbling-Glück, Mut und Giftresistenz (Stout Resilience)."
+                }
+            }
+        },
+        "Human": {
+            "subraces": {
+                "Human": {
+                    "bonus": { "STR": 1, "DEX": 1, "CON": 1, "INT": 1, "WIS": 1, "CHA": 1 },
+                    "speed": 30,
+                    "text": "Vielseitig: Ein zusätzliches Ursprungstalent (Origin Feat) und ein Bonuseintrag in Fertigkeiten."
+                }
+            }
+        },
+        "Kalashtar": {
+            "subraces": {
+                "Kalashtar": {
+                    "bonus": { "WIS": 2, "CHA": 1 },
+                    "speed": 30,
+                    "text": "Doppelsele: Resistenz gegen psychischen Schaden, Telepathie auf bis zu 30 Fuß und Vorteil auf Weisheits-Rettungswürfe."
+                }
+            }
+        },
+        "Orc": {
+            "subraces": {
+                "Orc": {
+                    "bonus": { "STR": 2, "CON": 1 },
+                    "speed": 30,
+                    "text": "Aggressiv (Bonusaktion für Bewegung auf Feind zu), Zähigkeit der Orks (Bei 0 HP auf 1 HP bleiben)."
+                }
+            }
+        },
+        "Shifter": {
+            "subraces": {
+                "Beasthide": {
+                    "bonus": { "CON": 2, "STR": 1 },
+                    "speed": 30,
+                    "text": "Gestaltwandel (Shifting): Erhält temporäre Trefferpunkte und Rüstungsbonus."
+                },
+                "Longtooth": {
+                    "bonus": { "STR": 2, "DEX": 1 },
+                    "speed": 30,
+                    "text": "Gestaltwandel: Ermöglicht einen tödlichen Reißzahn-Angriff als Bonusaktion."
+                },
+                "Swiftstride": {
+                    "bonus": { "DEX": 2, "CHA": 1 },
+                    "speed": 35,
+                    "text": "Gestaltwandel: Erhöht die Bewegungsrate und lässt dich Reaktionen nutzen, um Gelegenheitsangriffen zu entkommen."
+                },
+                "Wildhunt": {
+                    "bonus": { "WIS": 2, "DEX": 1 },
+                    "speed": 30,
+                    "text": "Gestaltwandel: Verhindert, dass Angreifer im Umkreis Vorteil gegen dich haben."
+                }
+            }
+        },
+        "Tiefling": {
+            "subraces": {
+                "Abyssal Tiefling": {
+                    "bonus": { "CHA": 2, "CON": 1 },
+                    "speed": 30,
+                    "text": "Höllenresistenz (Feuer), Dunkelsicht und dämonische Zauber (Giftkugel etc.)."
+                },
+                "Chthonic Tiefling": {
+                    "bonus": { "CHA": 2, "WIS": 1 },
+                    "speed": 30,
+                    "text": "Höllenresistenz (Feuer), Dunkelsicht und geisterhafte Magie."
+                }
+            }
+        },
+        "Warforged": {
+            "subraces": {
+                "Warforged": {
+                    "bonus": { "CON": 2, "STR": 1 },
+                    "speed": 30,
+                    "text": "Konstruiertes Wesen: Integrierte Rüstung (+1 RK), Immunität gegen Krankheiten, Vorteil gegen Gift und kein Bedürfnis zu schlafen, essen oder atmen."
+                }
+            }
         }
-      }
     },
-    "Dragonborn (2024)": {
-      "subraces": {
-        "Chromatic Dragonborn": { 
-          "bonus": { "STR": 2, "CHA": 1 }, 
-          "speed": 30, 
-          "text": "<b>Creature Type:</b> Humanoid | <b>Size:</b> Medium | <b>Speed:</b> 30 ft.<br>• <b>Darkvision:</b> 60 feet.<br>• <b>Draconic Ancestry:</b> Choose Acid, Cold, Fire, Lightning, or Poison.<br>• <b>Breath Weapon:</b> Replace 1 attack with 15ft cone or 30ft line. DEX save (DC 8 + CON mod + PB). Deals 1d10 damage. Usage: PB times per Long Rest.<br>• <b>Damage Resistance:</b> Resistance to chosen element." 
+    "classes": {
+        "Artificer": {
+            "hp": 8,
+            "primary": "Intelligenz",
+            "saves": ["Constitution", "Intelligence"],
+            "armor": "Leichte und mittlere Rüstung, Schilde",
+            "skills": ["Arcana", "History", "Investigation", "Medicine", "Nature", "Perception", "Sleight of Hand"],
+            "cantripsKnown": 2,
+            "prepSpellsLvl1": 2,
+            "casterType": "HALF",
+            "equipment": [{"fixed": "Lederüstung, Diebeswerkzeug, Handwerkerwerkzeug"}],
+            "text": "Ein Meister der Magie durch Erfindung, der magische Gegenstände erschafft und technologische Wunder wirkt."
         },
-        "Metallic Dragonborn": { 
-          "bonus": { "STR": 2, "CHA": 1 }, 
-          "speed": 30, 
-          "text": "<b>Creature Type:</b> Humanoid | <b>Size:</b> Medium | <b>Speed:</b> 30 ft.<br>• <b>Darkvision:</b> 60 feet.<br>• <b>Draconic Ancestry:</b> Choose Acid, Cold, Fire, Lightning, or Poison.<br>• <b>Breath Weapon:</b> 15ft cone dealing 1d10 damage (DEX save). PB times per Long Rest.<br>• <b>Damage Resistance:</b> Resistance to chosen element." 
+        "Barbarian": {
+            "hp": 12,
+            "primary": "Stärke",
+            "saves": ["Strength", "Constitution"],
+            "armor": "Leichte und mittlere Rüstung, Schilde",
+            "skills": ["Animal Handling", "Athletics", "Intimidation", "Nature", "Perception", "Survival"],
+            "cantripsKnown": 0,
+            "prepSpellsLvl1": 0,
+            "casterType": "NONE",
+            "equipment": [{"fixed": "Wurfbeil (4x), Entdeckerausrüstung"}],
+            "text": "Ein wilder Krieger, der seine innere Wut entfesseln kann, um im Kampf unaufhaltsam zu werden."
         },
-        "Gem Dragonborn": { 
-          "bonus": { "INT": 2, "CHA": 1 }, 
-          "speed": 30, 
-          "text": "<b>Creature Type:</b> Humanoid | <b>Size:</b> Medium | <b>Speed:</b> 30 ft.<br>• <b>Darkvision:</b> 60 feet.<br>• <b>Draconic Ancestry:</b> Choose Force, Necrotic, Psychic, Radiant, or Thunder.<br>• <b>Breath Weapon:</b> 15ft cone dealing 1d10 damage (DEX save). PB times per Long Rest.<br>• <b>Psionic Sending:</b> Telepathy up to 30ft." 
+        "Bard": {
+            "hp": 8,
+            "primary": "Charisma",
+            "saves": ["Dexterity", "Charisma"],
+            "armor": "Leichte Rüstung",
+            "skills": ["Acrobatics", "Animal Handling", "Arcana", "Athletics", "Deception", "History", "Insight", "Intimidation", "Investigation", "Medicine", "Nature", "Perception", "Performance", "Persuasion", "Religion", "Sleight of Hand", "Stealth", "Survival"],
+            "cantripsKnown": 2,
+            "prepSpellsLvl1": 4,
+            "casterType": "FULL",
+            "equipment": [{"fixed": "Lederrüstung, Musikinstrument, Künstlerausrüstung"}],
+            "text": "Ein inspirierender Künstler, dessen Worte und Musik die Realität formen und Verbündete stärken."
+        },
+        "Cleric": {
+            "hp": 8,
+            "primary": "Weisheit",
+            "saves": ["Wisdom", "Charisma"],
+            "armor": "Leichte und mittlere Rüstung, Schilde",
+            "skills": ["History", "Insight", "Medicine", "Persuasion", "Religion"],
+            "cantripsKnown": 3,
+            "prepSpellsLvl1": 4,
+            "casterType": "FULL",
+            "equipment": [{"fixed": "Schuppenpanzer, Schild, Priesterpack"}],
+            "text": "Ein heiliger Diener einer Gottheit, der göttliche Macht für Heilung und Schutz kanalisiert."
+        },
+        "Druid": {
+            "hp": 8,
+            "primary": "Weisheit",
+            "saves": ["Intelligence", "Wisdom"],
+            "armor": "Leichte und mittlere Rüstung (nicht aus Metall), Schilde (nicht aus Metall)",
+            "skills": ["Arcana", "Animal Handling", "Insight", "Medicine", "Nature", "Perception", "Religion", "Survival"],
+            "cantripsKnown": 2,
+            "prepSpellsLvl1": 4,
+            "casterType": "FULL",
+            "equipment": [{"fixed": "Lederüstung (aus Leder), Druidenfokus, Entdeckerausrüstung"}],
+            "text": "Ein Beschützer der Natur, der die Elemente kontrolliert und sich in Tiere verwandeln kann."
+        },
+        "Fighter": {
+            "hp": 10,
+            "primary": "Stärke oder Geschicklichkeit",
+            "saves": ["Strength", "Constitution"],
+            "armor": "Alle Rüstungen, Schilde",
+            "skills": ["Acrobatics", "Animal Handling", "Athletics", "History", "Insight", "Intimidation", "Perception", "Survival"],
+            "cantripsKnown": 0,
+            "prepSpellsLvl1": 0,
+            "casterType": "NONE",
+            "equipment": [{"fixed": "Kettenhemd, Dungeonausrüstung"}],
+            "text": "Ein vielseitiger Waffenmeister, der auf dem Schlachtfeld unvergleichliche taktische Brillanz zeigt."
+        },
+        "Monk": {
+            "hp": 8,
+            "primary": "Geschicklichkeit und Weisheit",
+            "saves": ["Strength", "Dexterity"],
+            "armor": "Keine Rüstung",
+            "skills": ["Acrobatics", "Athletics", "History", "Insight", "Religion", "Stealth"],
+            "cantripsKnown": 0,
+            "prepSpellsLvl1": 0,
+            "casterType": "NONE",
+            "equipment": [{"fixed": "Werkzeug oder einfaches Instrument, Entdeckerausrüstung"}],
+            "text": "Ein Kampfkünstler, der seine innere Ki-Energie bündelt, um übermenschliche physische Taten vollbringen."
+        },
+        "Paladin": {
+            "hp": 10,
+            "primary": "Stärke und Charisma",
+            "saves": ["Wisdom", "Charisma"],
+            "armor": "Alle Rüstungen, Schilde",
+            "skills": ["Athletics", "Insight", "Intimidation", "Medicine", "Persuasion", "Religion"],
+            "cantripsKnown": 0,
+            "prepSpellsLvl1": 2,
+            "casterType": "HALF",
+            "equipment": [{"fixed": "Kettenhemd, Schild, Priesterpack"}],
+            "text": "Ein heiliger Krieger, der durch einen unerschütterlichen Eid an eine Sache oder Gottheit gebunden ist."
+        },
+        "Ranger": {
+            "hp": 10,
+            "primary": "Geschicklichkeit und Weisheit",
+            "saves": ["Strength", "Dexterity"],
+            "armor": "Leichte und mittlere Rüstung, Schilde",
+            "skills": ["Animal Handling", "Athletics", "Insight", "Investigation", "Nature", "Perception", "Stealth", "Survival"],
+            "cantripsKnown": 0,
+            "prepSpellsLvl1": 2,
+            "casterType": "HALF",
+            "equipment": [{"fixed": "Lederüstung, Kurzbogen, Pfeile, Entdeckerausrüstung"}],
+            "text": "Ein Jäger und Späher der Wildnis, der sich in den unwegsamsten Regionen bestens auskennt."
+        },
+        "Rogue": {
+            "hp": 8,
+            "primary": "Geschicklichkeit",
+            "saves": ["Dexterity", "Intelligence"],
+            "armor": "Leichte Rüstung",
+            "skills": ["Acrobatics", "Athletics", "Deception", "Insight", "Intimidation", "Investigation", "Perception", "Performance", "Persuasion", "Sleight of Hand", "Stealth"],
+            "cantripsKnown": 0,
+            "prepSpellsLvl1": 0,
+            "casterType": "NONE",
+            "equipment": [{"fixed": "Lederüstung, Diebeswerkzeug, Einbruchswerkzeug"}],
+            "text": "Ein geschickter Schattenkämpfer und Dieb, der Gegner im unpassendsten Moment hinterhältig trifft."
+        },
+        "Sorcerer": {
+            "hp": 6,
+            "primary": "Charisma",
+            "saves": ["Constitution", "Charisma"],
+            "armor": "Keine Rüstung",
+            "skills": ["Arcana", "Deception", "Insight", "Intimidation", "Persuasion", "Religion"],
+            "cantripsKnown": 4,
+            "prepSpellsLvl1": 2,
+            "casterType": "FULL",
+            "equipment": [{"fixed": "Arkaner Fokus, Dungeonausrüstung"}],
+            "text": "Ein Magiewirker mit angeborener Urkraft, deren pure Magie aus dem Blut oder einer Herkunft quillt."
+        },
+        "Warlock": {
+            "hp": 8,
+            "primary": "Charisma",
+            "saves": ["Wisdom", "Charisma"],
+            "armor": "Leichte Rüstung",
+            "skills": ["Arcana", "Deception", "History", "Intimidation", "Investigation", "Nature", "Religion"],
+            "cantripsKnown": 2,
+            "prepSpellsLvl1": 2,
+            "casterType": "PACT",
+            "equipment": [{"fixed": "Lederrüstung, Arkaner Fokus, Gelehrtenpack"}],
+            "text": "Ein Paktierer, der sich mit einer jenseitigen Entität verbündet hat, um verbotenes Wissen zu erlangen."
+        },
+        "Wizard": {
+            "hp": 6,
+            "primary": "Intelligenz",
+            "saves": ["Intelligence", "Wisdom"],
+            "armor": "Keine Rüstung",
+            "skills": ["Arcana", "History", "Insight", "Investigation", "Medicine", "Religion"],
+            "cantripsKnown": 3,
+            "prepSpellsLvl1": 4,
+            "casterType": "FULL",
+            "equipment": [{"fixed": "Zauberbuch, Arkaner Fokus, Gelehrtenpack"}],
+            "text": "Ein studierter Gelehrter der arkanen Künste, der Zauber über minutiöse Formeln in seinem Buch wirkt."
         }
-      }
     },
-    "Dwarf (2024)": {
-      "subraces": {
-        "Dwarf": { 
-          "bonus": { "CON": 2, "WIS": 1 }, 
-          "speed": 30, 
-          "text": "<b>Creature Type:</b> Humanoid | <b>Size:</b> Medium | <b>Speed:</b> 30 ft.<br>• <b>Dwarven Toughness:</b> HP max increases by 1 at Lvl 1 and +1 per additional Level.<br>• <b>Darkvision:</b> 120 feet.<br>• <b>Poison Resilience:</b> Advantage on saves vs poison, and Poison Resistance.<br>• <b>Stonecunning:</b> Bonus Action Tremorsense 60ft on stone for 10 min. Usage: PB times per Long Rest." 
+    "backgrounds": {
+        "Acolyte": {
+            "skills": ["Insight", "Religion"],
+            "feat": "Magic Initiate (Cleric)",
+            "text": "Du hast dein Leben im Dienst an einem Tempel verbracht und göttliche Riten gelernt."
+        },
+        "Criminal": {
+            "skills": ["Deception", "Stealth"],
+            "feat": "Alert",
+            "text": "Du bist im Untergrund zu Hause und kennst dich mit Gesetzesbrüchen bestens aus."
+        },
+        "Sage": {
+            "skills": ["Arcana", "History"],
+            "feat": "Resilient",
+            "text": "Du hast Jahre in Archiven und Bibliotheken verbracht, um die Geheimnisse der Welt zu studieren."
+        },
+        "Soldier": {
+            "skills": ["Athletics", "Intimidation"],
+            "feat": "Savage Attacker",
+            "text": "Du hast gelernt, wie man Kriege schlägt, Formationen hält und im Nahkampf überlebt."
         }
-      }
     },
-    "Elf (2024)": {
-      "subraces": {
-        "High Elf": { 
-          "bonus": { "DEX": 2, "INT": 1 }, 
-          "speed": 30, 
-          "text": "<b>Creature Type:</b> Humanoid | <b>Size:</b> Medium | <b>Speed:</b> 30 ft.<br>• <b>Darkvision:</b> 60 feet.<br>• <b>Fey Ancestry:</b> Advantage vs Charm; immune to magical sleep.<br>• <b>Keen Senses:</b> Proficiency in Perception.<br>• <b>Elven Lineage (High Elf):</b> You learn 1 Wizard Cantrip (e.g. <i>Prestidigitation</i>). Lvl 3: <i>Detect Magic</i>. Lvl 5: <i>Misty Step</i>." 
+    "spellCompendium": {
+        "cantrips": {
+            "Blade Ward": { "classes": ["Bard", "Sorcerer", "Warlock", "Wizard"], "rule": "Erhöht kurzzeitig deine physische Resistenz." },
+            "Dancing Lights": { "classes": ["Bard", "Sorcerer", "Wizard"], "rule": "Erschafft schwebende Lichter." },
+            "Druidcraft": { "classes": ["Druid"], "rule": "Ermöglicht kleine Naturwunder." },
+            "Fire Bolt": { "classes": ["Sorcerer", "Wizard"], "rule": "Schießt einen Feuerstrahl ab." },
+            "Light": { "classes": ["Bard", "Cleric", "Sorcerer", "Wizard"], "rule": "Lässt ein Objekt hell erstrahlen." },
+            "Mage Hand": { "classes": ["Bard", "Sorcerer", "Warlock", "Wizard"], "rule": "Erschafft eine magische Geisterhand." },
+            "Prestidigitation": { "classes": ["Bard", "Sorcerer", "Warlock", "Wizard"], "rule": "Bewirkt kleinere magische Effekte und Tricks." },
+            "Spare the Dying": { "classes": ["Artificer", "Cleric"], "rule": "Stabilisiert eine sterbende Kreatur sofort." },
+            "Thorn Whip": { "classes": ["Artificer", "Druid"], "rule": "Zieht einen Gegner mit einer Dornenpeitsche heran." },
+            "Thunderclap": { "classes": ["Artificer", "Bard", "Druid", "Sorcerer", "Warlock", "Wizard"], "rule": "Erzeugt einen lauten Donnerschlag im Umkreis." },
+            "True Strike": { "classes": ["Bard", "Sorcerer", "Warlock", "Wizard"], "rule": "Fokussiert magische Präzision auf den nächsten Angriff." }
         },
-        "Wood Elf": { 
-          "bonus": { "DEX": 2, "WIS": 1 }, 
-          "speed": 35, 
-          "text": "<b>Creature Type:</b> Humanoid | <b>Size:</b> Medium | <b>Speed:</b> 35 ft.<br>• <b>Darkvision:</b> 60 feet.<br>• <b>Fey Ancestry & Keen Senses:</b> Adv. vs Charm, Sleep Immunity, Perception proficiency.<br>• <b>Elven Lineage (Wood Elf):</b> You learn <i>Druidcraft</i>. Lvl 3: <i>Longstrider</i>. Lvl 5: <i>Pass Without Trace</i>." 
-        },
-        "Drow": { 
-          "bonus": { "DEX": 2, "CHA": 1 }, 
-          "speed": 30, 
-          "text": "<b>Creature Type:</b> Humanoid | <b>Size:</b> Medium | <b>Speed:</b> 30 ft.<br>• <b>Superior Darkvision:</b> 120 feet.<br>• <b>Fey Ancestry & Keen Senses:</b> Adv. vs Charm, Sleep Immunity, Perception proficiency.<br>• <b>Elven Lineage (Drow):</b> You learn <i>Dancing Lights</i>. Lvl 3: <i>Faerie Fire</i>. Lvl 5: <i>Darkness</i>." 
+        "level1": {
+            "Cure Wounds": { "classes": ["Artificer", "Bard", "Cleric", "Druid", "Paladin", "Ranger"], "rule": "Heilt Ziel-Trefferpunkte basierend auf dem Attribut." },
+            "Detect Magic": { "classes": ["Artificer", "Bard", "Cleric", "Druid", "Paladin", "Ranger", "Wizard"], "rule": "Spürt magische Auren in der Nähe auf." },
+            "Feather Fall": { "classes": ["Bard", "Sorcerer", "Wizard"], "rule": "Reduziert die Fallgeschwindigkeit massiv." },
+            "Healing Word": { "classes": ["Bard", "Cleric", "Druid"], "rule": "Heilt ein Ziel auf Distanz per Bonusaktion." },
+            "Jump": { "classes": ["Artificer", "Druid", "Ranger", "Sorcerer", "Wizard"], "rule": "Vervielfacht die Sprungdistanz." },
+            "Longstrider": { "classes": ["Artificer", "Bard", "Druid", "Ranger", "Wizard"], "rule": "Erhöht die Bewegungsrate um 10 Fuß." },
+            "Purify Food and Drink": { "classes": ["Cleric", "Druid", "Paladin"], "rule": "Entgiftet Nahrung und Wasser." },
+            "Sanctuary": { "classes": ["Cleric"], "rule": "Schützt eine Kreatur vor direkten Angriffen." }
         }
-      }
     },
-    "Gnome (2024)": {
-      "subraces": {
-        "Rock Gnome": { 
-          "bonus": { "CON": 1, "INT": 2 }, 
-          "speed": 30, 
-          "text": "<b>Creature Type:</b> Humanoid | <b>Size:</b> Small | <b>Speed:</b> 30 ft.<br>• <b>Darkvision:</b> 60 feet.<br>• <b>Gnome Cunning:</b> Advantage on INT, WIS, and CHA saves against magic.<br>• <b>Gnomish Lineage (Rock Gnome):</b> You learn <i>Prestidigitation</i> and can create tiny clockwork devices." 
+    "weapons": {
+        "Simple Melee": {
+            "Dagger": { "damage": "1d4", "type": "Piercing", "properties": ["Finesse", "Light", "Thrown"] },
+            "Club": { "damage": "1d4", "type": "Bludgeoning", "properties": ["Light"] },
+            "Spear": { "damage": "1d6", "type": "Piercing", "properties": ["Thrown", "Versatile"] }
         },
-        "Forest Gnome": { 
-          "bonus": { "DEX": 1, "INT": 2 }, 
-          "speed": 30, 
-          "text": "<b>Creature Type:</b> Humanoid | <b>Size:</b> Small | <b>Speed:</b> 30 ft.<br>• <b>Darkvision:</b> 60 feet.<br>• <b>Gnome Cunning:</b> Advantage on INT, WIS, and CHA saves against magic.<br>• <b>Gnomish Lineage (Forest Gnome):</b> You learn <i>Minor Illusion</i> and can cast <i>Speak with Animals</i> (PB times per Long Rest)." 
+        "Simple Ranged": {
+            "Light Crossbow": { "damage": "1d8", "type": "Piercing", "properties": ["Ammunition", "Loading", "Range", "Two-Handed"] },
+            "Shortbow": { "damage": "1d6", "type": "Piercing", "properties": ["Ammunition", "Range", "Two-Handed"] }
+        },
+        "Martial Melee": {
+            "Longsword": { "damage": "1d8", "type": "Slashing", "properties": ["Versatile"] },
+            "Rapier": { "damage": "1d8", "type": "Piercing", "properties": ["Finesse"] },
+            "Greatsword": { "damage": "2d6", "type": "Slashing", "properties": ["Heavy", "Two-Handed"] }
+        },
+        "Martial Ranged": {
+            "Longbow": { "damage": "1d8", "type": "Piercing", "properties": ["Ammunition", "Heavy", "Range", "Two-Handed"] }
         }
-      }
-    },
-    "Goliath (2024)": {
-      "subraces": {
-        "Cloud Giant Lineage": { 
-          "bonus": { "STR": 2, "CON": 1 }, 
-          "speed": 35, 
-          "text": "<b>Creature Type:</b> Humanoid | <b>Size:</b> Medium | <b>Speed:</b> 35 ft.<br>• <b>Cloud Jaunt:</b> Bonus Action teleport up to 30ft. Usage: PB times per Long Rest.<br>• <b>Powerful Build:</b> Increased carrying capacity." 
-        },
-        "Fire Giant Lineage": { 
-          "bonus": { "STR": 2, "CON": 1 }, 
-          "speed": 35, 
-          "text": "<b>Creature Type:</b> Humanoid | <b>Size:</b> Medium | <b>Speed:</b> 35 ft.<br>• <b>Fire's Burn:</b> Deal +1d10 Fire damage on hit. Usage: PB times per Long Rest.<br>• <b>Powerful Build:</b> Increased carrying capacity." 
-        },
-        "Frost Giant Lineage": { 
-          "bonus": { "STR": 2, "CON": 1 }, 
-          "speed": 35, 
-          "text": "<b>Creature Type:</b> Humanoid | <b>Size:</b> Medium | <b>Speed:</b> 35 ft.<br>• <b>Frost's Chill:</b> Deal +1d6 Cold damage on hit & -10ft speed. Usage: PB times per Long Rest.<br>• <b>Powerful Build:</b> Increased carrying capacity." 
-        },
-        "Hill Giant Lineage": { 
-          "bonus": { "STR": 2, "CON": 1 }, 
-          "speed": 35, 
-          "text": "<b>Creature Type:</b> Humanoid | <b>Size:</b> Medium | <b>Speed:</b> 35 ft.<br>• <b>Hill's Tumble:</b> Knock target Prone on hit. Usage: PB times per Long Rest.<br>• <b>Powerful Build:</b> Increased carrying capacity." 
-        },
-        "Stone Giant Lineage": { 
-          "bonus": { "STR": 2, "CON": 1 }, 
-          "speed": 35, 
-          "text": "<b>Creature Type:</b> Humanoid | <b>Size:</b> Medium | <b>Speed:</b> 35 ft.<br>• <b>Stone's Endurance:</b> Reaction to reduce damage by 1d12 + CON mod. Usage: PB times per Long Rest.<br>• <b>Powerful Build:</b> Increased carrying capacity." 
-        },
-        "Storm Giant Lineage": { 
-          "bonus": { "STR": 2, "CON": 1 }, 
-          "speed": 35, 
-          "text": "<b>Creature Type:</b> Humanoid | <b>Size:</b> Medium | <b>Speed:</b> 35 ft.<br>• <b>Storm's Thunder:</b> Reaction when damaged: deal 1d8 Thunder damage. Usage: PB times per Long Rest.<br>• <b>Powerful Build:</b> Increased carrying capacity." 
-        }
-      }
-    },
-    "Halfling (2024)": {
-      "subraces": {
-        "Halfling": { 
-          "bonus": { "DEX": 2, "CHA": 1 }, 
-          "speed": 30, 
-          "text": "<b>Creature Type:</b> Humanoid | <b>Size:</b> Small | <b>Speed:</b> 30 ft.<br>• <b>Lucky:</b> Reroll natural 1s on d20 rolls.<br>• <b>Brave:</b> Advantage on saves vs Frightened.<br>• <b>Halfling Nimbleness:</b> Move through space of larger creatures.<br>• <b>Naturally Stealthy:</b> Hide behind Medium or larger creatures." 
-        }
-      }
-    },
-    "Human (2024)": {
-      "subraces": {
-        "Human": { 
-          "bonus": { "STR": 1, "DEX": 1, "CON": 1, "INT": 1, "WIS": 1, "CHA": 1 }, 
-          "speed": 30, 
-          "text": "<b>Creature Type:</b> Humanoid | <b>Size:</b> Medium or Small | <b>Speed:</b> 30 ft.<br>• <b>Resourceful:</b> Gain Heroic Inspiration after every Long Rest.<br>• <b>Skillful:</b> Gain proficiency in 1 skill of choice.<br>• <b>Versatile:</b> Gain 1 Origin Feat of choice." 
-        }
-      }
-    },
-    "Orc (2024)": {
-      "subraces": {
-        "Orc": { 
-          "bonus": { "STR": 2, "CON": 1 }, 
-          "speed": 30, 
-          "text": "<b>Creature Type:</b> Humanoid | <b>Size:</b> Medium | <b>Speed:</b> 30 ft.<br>• <b>Darkvision:</b> 120 feet.<br>• <b>Adrenaline Rush:</b> Bonus Action Dash + Temp HP equal to PB. Usage: PB times per Long Rest.<br>• <b>Relentless Endurance:</b> Drop to 1 HP instead of 0 HP once per Long Rest." 
-        }
-      }
-    },
-    "Tiefling (2024)": {
-      "subraces": {
-        "Abyssal Tiefling": { 
-          "bonus": { "CHA": 2, "CON": 1 }, 
-          "speed": 30, 
-          "text": "<b>Creature Type:</b> Humanoid | <b>Size:</b> Medium or Small | <b>Speed:</b> 30 ft.<br>• <b>Darkvision:</b> 60 feet.<br>• <b>Fiendish Legacy (Abyssal):</b> Poison Resistance. You learn <i>Poison Spray</i>. Lvl 3: <i>Ray of Sickness</i>. Lvl 5: <i>Hold Person</i>." 
-        },
-        "Chthonic Tiefling": { 
-          "bonus": { "CHA": 2, "CON": 1 }, 
-          "speed": 30, 
-          "text": "<b>Creature Type:</b> Humanoid | <b>Size:</b> Medium or Small | <b>Speed:</b> 30 ft.<br>• <b>Darkvision:</b> 60 feet.<br>• <b>Fiendish Legacy (Chthonic):</b> Necrotic Resistance. You learn <i>Chill Touch</i>. Lvl 3: <i>False Life</i>. Lvl 5: <i>Ray of Enfeeblement</i>." 
-        },
-        "Fiendish Tiefling": { 
-          "bonus": { "CHA": 2, "DEX": 1 }, 
-          "speed": 30, 
-          "text": "<b>Creature Type:</b> Humanoid | <b>Size:</b> Medium or Small | <b>Speed:</b> 30 ft.<br>• <b>Darkvision:</b> 60 feet.<br>• <b>Fiendish Legacy (Fiendish):</b> Fire Resistance. You learn <i>Fire Bolt</i>. Lvl 3: <i>Hellish Rebuke</i>. Lvl 5: <i>Darkness</i>." 
-        }
-      }
     }
-  },
-  "classes": {
-    "Artificer": { 
-      "hp": 8, "primary": "INT", "saves": ["CON", "INT"], "armor": "Light Armor, Medium Armor, Shields", "cantripsKnown": 2, "prepSpellsLvl1": 2, "casterType": "INT", 
-      "text": "<b>Level 1 Features:</b><br>• <b>Magical Tinkering:</b> Infuse tiny nonmagical objects with minor magical properties.<br>• <b>Spellcasting:</b> Prepare INT mod + 1 Level 1 spells daily. Focus: Thieves' Tools or Tinker's Tools.",
-      "skills": ["Arcana", "History", "Investigation", "Medicine", "Nature", "Perception", "Sleight of Hand"], "autoCantrip": "Mending",
-      "equipment": [{ "fixed": "Studded Leather Armor, Dagger, Quarterstaff, Thieves' Tools, Tinker's Tools, Dungeoneer's Pack, 16 GP" }]
-    },
-    "Barbarian": {
-      "hp": 12, "primary": "STR", "saves": ["STR", "CON"], "armor": "Light Armor, Medium Armor, Shields", "cantripsKnown": 0, "prepSpellsLvl1": 0, "casterType": "NONE", 
-      "text": "<b>Level 1 Features:</b><br>• <b>Rage:</b> Bonus Action to enter Rage (2/Long Rest). +2 damage, Adv. on STR checks/saves, physical damage Resistance.<br>• <b>Unarmored Defense:</b> AC = 10 + DEX mod + CON mod.<br>• <b>Weapon Mastery:</b> Master 2 weapon properties.",
-      "skills": ["Animal Handling", "Athletics", "Intimidation", "Nature", "Perception", "Survival"], "autoCantrip": "",
-      "equipment": [{ "fixed": "4 Handaxes, Explorer's Pack, 15 GP" }]
-    },
-    "Bard": { 
-      "hp": 8, "primary": "CHA", "saves": ["DEX", "CHA"], "armor": "Light Armor", "cantripsKnown": 2, "prepSpellsLvl1": 4, "casterType": "CHA", 
-      "text": "<b>Level 1 Features:</b><br>• <b>Bardic Inspiration:</b> Grant a d6 die to a creature within 60ft.<br>• <b>Spellcasting:</b> Know 2 Cantrips, prepare 4 Level 1 spells daily.",
-      "skills": ["Acrobatics", "Animal Handling", "Arcana", "Athletics", "Deception", "History", "Insight", "Intimidation", "Investigation", "Medicine", "Nature", "Perception", "Performance", "Persuasion", "Religion", "Sleight of Hand", "Stealth", "Survival"], "autoCantrip": "",
-      "equipment": [{ "fixed": "Leather Armor, Musical Instrument, Entertainer's Pack, 18 GP" }]
-    },
-    "Cleric": { 
-      "hp": 8, "primary": "WIS", "saves": ["WIS", "CHA"], "armor": "Light Armor, Medium Armor, Shields", "cantripsKnown": 3, "prepSpellsLvl1": 4, "casterType": "WIS", 
-      "text": "<b>Level 1 Features:</b><br>• <b>Divine Order:</b> Choose <i>Protector</i> (Heavy Armor & Martial Weapons) OR <i>Thaumaturg</i> (Extra Cantrip + Religion bonus).<br>• <b>Spellcasting:</b> Know 3 Cantrips, prepare WIS mod + 1 Level 1 spells daily.",
-      "skills": ["History", "Insight", "Medicine", "Persuasion", "Religion"], "autoCantrip": "",
-      "equipment": [{ "fixed": "Chain Mail or Scale Mail, Mace, Light Crossbow, Shield, Holy Symbol, Priest's Pack, 7 GP" }]
-    },
-    "Druid": { 
-      "hp": 8, "primary": "WIS", "saves": ["INT", "WIS"], "armor": "Light Armor, Shields", "cantripsKnown": 2, "prepSpellsLvl1": 4, "casterType": "WIS", 
-      "text": "<b>Level 1 Features:</b><br>• <b>Primal Order:</b> Choose <i>Magician</i> (Extra Cantrip + Nature bonus) OR <i>Warden</i> (Medium Armor & Martial Weapons).<br>• <b>Wild Companion:</b> Cast <i>Find Familiar</i>.<br>• <b>Spellcasting:</b> Know 2 Cantrips, prepare WIS mod + 1 Level 1 spells.",
-      "skills": ["Arcana", "Animal Handling", "Insight", "Medicine", "Nature", "Perception", "Religion", "Survival"], "autoCantrip": "",
-      "equipment": [{ "fixed": "Leather Armor, Quarterstaff, Shield, Druidic Focus, Explorer's Pack, 9 GP" }]
-    },
-    "Fighter": { 
-      "hp": 10, "primary": "STR/DEX", "saves": ["STR", "CON"], "armor": "All Armor, Shields", "cantripsKnown": 0, "prepSpellsLvl1": 0, "casterType": "NONE", 
-      "text": "<b>Level 1 Features:</b><br>• <b>Fighting Style:</b> Gain 1 Fighting Style feat.<br>• <b>Second Wind:</b> Bonus Action to regain 1d10 + Lvl HP.<br>• <b>Weapon Mastery:</b> Master 3 weapon properties.",
-      "skills": ["Acrobatics", "Animal Handling", "Athletics", "History", "Insight", "Intimidation", "Perception", "Survival"], "autoCantrip": "",
-      "equipment": [{ "fixed": "Chain Mail, Dungeoneer's Pack, 9 GP" }]
-    },
-    "Monk": { 
-      "hp": 8, "primary": "DEX/WIS", "saves": ["STR", "DEX"], "armor": "None", "cantripsKnown": 0, "prepSpellsLvl1": 0, "casterType": "NONE", 
-      "text": "<b>Level 1 Features:</b><br>• <b>Unarmored Defense:</b> AC = 10 + DEX mod + WIS mod.<br>• <b>Martial Arts:</b> Unarmed die = 1d6. Use DEX for unarmed/Monk weapons.",
-      "skills": ["Acrobatics", "Athletics", "History", "Insight", "Religion", "Stealth"], "autoCantrip": "",
-      "equipment": [{ "fixed": "10 Daggers, Artisan's Tools, Explorer's Pack, 11 GP" }]
-    },
-    "Paladin": { 
-      "hp": 10, "primary": "STR/CHA", "saves": ["WIS", "CHA"], "armor": "All Armor, Shields", "cantripsKnown": 0, "prepSpellsLvl1": 2, "casterType": "CHA", 
-      "text": "<b>Level 1 Features:</b><br>• <b>Lay on Hands:</b> Pool of 5 HP healing.<br>• <b>Spellcasting:</b> Prepare CHA mod + 1 Level 1 spells daily (includes free <i>Divine Smite</i>).<br>• <b>Weapon Mastery:</b> Master 2 weapon properties.",
-      "skills": ["Athletics", "Insight", "Intimidation", "Medicine", "Persuasion", "Religion"], "autoCantrip": "",
-      "equipment": [{ "fixed": "Chain Mail, Shield, Holy Symbol, Priest's Pack, 9 GP" }]
-    },
-    "Ranger": { 
-      "hp": 10, "primary": "DEX/WIS", "saves": ["STR", "DEX"], "armor": "Light Armor, Medium Armor, Shields", "cantripsKnown": 0, "prepSpellsLvl1": 2, "casterType": "WIS", 
-      "text": "<b>Level 1 Features:</b><br>• <b>Favored Enemy:</b> Free prepared <i>Hunter's Mark</i>.<br>• <b>Spellcasting:</b> Prepare 2 Level 1 spells daily.<br>• <b>Weapon Mastery:</b> Master 2 weapon properties.",
-      "skills": ["Animal Handling", "Athletics", "Insight", "Investigation", "Nature", "Perception", "Stealth", "Survival"], "autoCantrip": "",
-      "equipment": [{ "fixed": "Studded Leather Armor, Shortbow, 20 Arrows, Explorer's Pack, 7 GP" }]
-    },
-    "Rogue": { 
-      "hp": 8, "primary": "DEX", "saves": ["DEX", "INT"], "armor": "Light Armor", "cantripsKnown": 0, "prepSpellsLvl1": 0, "casterType": "NONE", 
-      "text": "<b>Level 1 Features:</b><br>• <b>Sneak Attack:</b> +1d6 extra damage on hit with Finesse/Ranged weapon.<br>• <b>Expertise:</b> Double PB for 2 skills/tools.<br>• <b>Weapon Mastery:</b> Master 2 weapon properties.",
-      "skills": ["Acrobatics", "Athletics", "Deception", "Insight", "Intimidation", "Investigation", "Perception", "Performance", "Persuasion", "Sleight of Hand", "Stealth"], "autoCantrip": "",
-      "equipment": [{ "fixed": "Leather Armor, Thieves' Tools, Burglar's Pack, 18 GP" }]
-    },
-    "Sorcerer": { 
-      "hp": 6, "primary": "CHA", "saves": ["CON", "CHA"], "armor": "None", "cantripsKnown": 4, "prepSpellsLvl1": 2, "casterType": "CHA", 
-      "text": "<b>Level 1 Features:</b><br>• <b>Innate Sorcery:</b> Bonus Action: Adv. on Sorcerer spell attack rolls & +1 Spell Save DC.<br>• <b>Spellcasting:</b> Know 4 Cantrips, prepare 2 Level 1 spells.",
-      "skills": ["Arcana", "Deception", "Insight", "Intimidation", "Persuasion", "Religion"], "autoCantrip": "",
-      "equipment": [{ "fixed": "Quarterstaff, Dagger, Arcane Focus, Dungeoneer's Pack, 28 GP" }]
-    },
-    "Warlock": { 
-      "hp": 8, "primary": "CHA", "saves": ["WIS", "CHA"], "armor": "Light Armor", "cantripsKnown": 2, "prepSpellsLvl1": 2, "casterType": "CHA", 
-      "text": "<b>Level 1 Features:</b><br>• <b>Eldritch Invocations:</b> Gain 1 Invocation at Lvl 1.<br>• <b>Pact Magic:</b> Know 2 Cantrips, prepare 2 Level 1 spells.",
-      "skills": ["Arcana", "Deception", "History", "Intimidation", "Investigation", "Nature", "Religion"], "autoCantrip": "",
-      "equipment": [{ "fixed": "Leather Armor, Dagger, Arcane Focus, Scholar's Pack, 15 GP" }]
-    },
-    "Wizard": { 
-      "hp": 6, "primary": "INT", "saves": ["INT", "WIS"], "armor": "None", "cantripsKnown": 3, "prepSpellsLvl1": 4, "casterType": "INT", 
-      "text": "<b>Level 1 Features:</b><br>• <b>Arcane Recovery:</b> Regain 1 Level 1 spell slot after Short Rest once/day.<br>• <b>Ritual Casting:</b> Cast Ritual spells directly from Spellbook.<br>• <b>Spellcasting:</b> Prepare INT mod + 1 Level 1 spells daily.",
-      "skills": ["Arcana", "History", "Insight", "Investigation", "Medicine", "Religion"], "autoCantrip": "",
-      "equipment": [{ "fixed": "Quarterstaff, Spellbook, Arcane Focus, Scholar's Pack, 10 GP" }]
-    }
-  },
-  "weapons": {
-    "Simple Melee": {
-      "Club": { "damage": "1d4", "type": "Bludgeoning", "properties": ["Light"] },
-      "Dagger": { "damage": "1d4", "type": "Piercing", "properties": ["Finesse", "Light", "Thrown"] },
-      "Greatclub": { "damage": "1d8", "type": "Bludgeoning", "properties": ["Two-Handed"] },
-      "Handaxe": { "damage": "1d6", "type": "Slashing", "properties": ["Light", "Thrown"] },
-      "Javelin": { "damage": "1d6", "type": "Piercing", "properties": ["Thrown"] },
-      "Light Hammer": { "damage": "1d4", "type": "Bludgeoning", "properties": ["Light", "Thrown"] },
-      "Mace": { "damage": "1d6", "type": "Bludgeoning", "properties": [] },
-      "Quarterstaff": { "damage": "1d6", "type": "Bludgeoning", "properties": ["Versatile"] },
-      "Sickle": { "damage": "1d4", "type": "Slashing", "properties": ["Light"] },
-      "Spear": { "damage": "1d6", "type": "Piercing", "properties": ["Thrown", "Versatile"] }
-    },
-    "Simple Ranged": {
-      "Dart": { "damage": "1d4", "type": "Piercing", "properties": ["Finesse", "Thrown"] },
-      "Light Crossbow": { "damage": "1d8", "type": "Piercing", "properties": ["Ammunition", "Loading", "Two-Handed"] },
-      "Shortbow": { "damage": "1d6", "type": "Piercing", "properties": ["Ammunition", "Two-Handed"] },
-      "Sling": { "damage": "1d4", "type": "Bludgeoning", "properties": ["Ammunition"] }
-    },
-    "Martial Melee": {
-      "Battleaxe": { "damage": "1d8", "type": "Slashing", "properties": ["Versatile"] },
-      "Flail": { "damage": "1d8", "type": "Bludgeoning", "properties": [] },
-      "Glaive": { "damage": "1d10", "type": "Slashing", "properties": ["Heavy", "Reach", "Two-Handed"] },
-      "Greataxe": { "damage": "1d12", "type": "Slashing", "properties": ["Heavy", "Two-Handed"] },
-      "Greatsword": { "damage": "2d6", "type": "Slashing", "properties": ["Heavy", "Two-Handed"] },
-      "Halberd": { "damage": "1d10", "type": "Slashing", "properties": ["Heavy", "Reach", "Two-Handed"] },
-      "Lance": { "damage": "1d10", "type": "Piercing", "properties": ["Heavy", "Reach", "Two-Handed"] },
-      "Longsword": { "damage": "1d8", "type": "Slashing", "properties": ["Versatile"] },
-      "Maul": { "damage": "2d6", "type": "Bludgeoning", "properties": ["Heavy", "Two-Handed"] },
-      "Morningstar": { "damage": "1d8", "type": "Piercing", "properties": [] },
-      "Pike": { "damage": "1d10", "type": "Piercing", "properties": ["Heavy", "Reach", "Two-Handed"] },
-      "Rapier": { "damage": "1d8", "type": "Piercing", "properties": ["Finesse"] },
-      "Scimitar": { "damage": "1d6", "type": "Slashing", "properties": ["Finesse", "Light"] },
-      "Shortsword": { "damage": "1d6", "type": "Piercing", "properties": ["Finesse", "Light"] },
-      "Trident": { "damage": "1d8", "type": "Piercing", "properties": ["Thrown", "Versatile"] },
-      "War Pick": { "damage": "1d8", "type": "Piercing", "properties": ["Versatile"] },
-      "Warhammer": { "damage": "1d8", "type": "Bludgeoning", "properties": ["Versatile"] },
-      "Whip": { "damage": "1d4", "type": "Slashing", "properties": ["Finesse", "Reach"] }
-    },
-    "Martial Ranged": {
-      "Blowgun": { "damage": "1", "type": "Piercing", "properties": ["Ammunition", "Loading"] },
-      "Heavy Crossbow": { "damage": "1d10", "type": "Piercing", "properties": ["Ammunition", "Heavy", "Loading", "Two-Handed"] },
-      "Hand Crossbow": { "damage": "1d6", "type": "Piercing", "properties": ["Ammunition", "Light", "Loading"] },
-      "Longbow": { "damage": "1d8", "type": "Piercing", "properties": ["Ammunition", "Heavy", "Two-Handed"] },
-      "Musket": { "damage": "1d12", "type": "Piercing", "properties": ["Ammunition", "Loading", "Two-Handed"] },
-      "Pistol": { "damage": "1d10", "type": "Piercing", "properties": ["Ammunition", "Loading"] }
-    }
-  },
-  "backgrounds": {
-    "Acolyte": { "skills": ["Insight", "Religion"], "feat": "Magic Initiate (Cleric)", "text": "<b>Origin Feat:</b> Magic Initiate (Cleric) — Gain 2 Cleric Cantrips and 1 Level 1 Cleric spell." },
-    "Artisan": { "skills": ["Crafting", "Persuasion"], "feat": "Crafter", "text": "<b>Origin Feat:</b> Crafter — Gain tool proficiencies and a 20% discount on nonmagical items." },
-    "Charlatan": { "skills": ["Deception", "Sleight of Hand"], "feat": "Skilled", "text": "<b>Origin Feat:</b> Skilled — Gain proficiency in 3 skills or tools of choice." },
-    "Criminal": { "skills": ["Deception", "Stealth"], "feat": "Alert", "text": "<b>Origin Feat:</b> Alert — Gain +PB to Initiative and swap Initiative with willing allies." },
-    "Entertainer": { "skills": ["Acrobatics", "Performance"], "feat": "Musician", "text": "<b>Origin Feat:</b> Musician — Grant Heroic Inspiration to allies after a Rest." },
-    "Farmer": { "skills": ["Animal Handling", "Nature"], "feat": "Tough", "text": "<b>Origin Feat:</b> Tough — Increase HP maximum by +2 per character level." },
-    "Guard": { "skills": ["Athletics", "Perception"], "feat": "Alert", "text": "<b>Origin Feat:</b> Alert — Gain +PB to Initiative and swap Initiative with allies." },
-    "Guide": { "skills": ["Survival", "Stealth"], "feat": "Magic Initiate (Druid)", "text": "<b>Origin Feat:</b> Magic Initiate (Druid) — Gain 2 Druid Cantrips and 1 Level 1 Druid spell." },
-    "Hermit": { "skills": ["Medicine", "Religion"], "feat": "Healer", "text": "<b>Origin Feat:</b> Healer — Reroll 1s on healing dice and use Healer's Kit." },
-    "Merchant": { "skills": ["Animal Handling", "Persuasion"], "feat": "Lucky", "text": "<b>Origin Feat:</b> Lucky — Gain Luck Points equal to PB." },
-    "Noble": { "skills": ["History", "Persuasion"], "feat": "Skilled", "text": "<b>Origin Feat:</b> Skilled — Gain proficiency in 3 skills or tools." },
-    "Sage": { "skills": ["Arcana", "History"], "feat": "Magic Initiate (Wizard)", "text": "<b>Origin Feat:</b> Magic Initiate (Wizard) — Gain 2 Wizard Cantrips and 1 Level 1 Wizard spell." },
-    "Sailor": { "skills": ["Athletics", "Perception"], "feat": "Tavern Brawler", "text": "<b>Origin Feat:</b> Tavern Brawler — Reroll 1s on Unarmed damage, push foes 5ft with Unarmed strike." },
-    "Soldier": { "skills": ["Athletics", "Intimidation"], "feat": "Savage Attacker", "text": "<b>Origin Feat:</b> Savage Attacker — Roll weapon damage dice twice once per turn." },
-    "Wayfarer": { "skills": ["Insight", "Stealth"], "feat": "Lucky", "text": "<b>Origin Feat:</b> Lucky — Gain Luck Points equal to PB for rerolls." }
-  },
-  "spellCompendium": {
-    "cantrips": {
-      "Acid Splash": { "classes": ["Artificer", "Sorcerer", "Wizard"], "rule": "<b>School:</b> Evocation | <b>Casting Time:</b> 1 Action | <b>Range:</b> 60 ft | <b>Components:</b> V, S<br>• Bubble of acid: 1-2 targets DEX save or 1d6 Acid damage." },
-      "Blade Ward": { "classes": ["Bard", "Sorcerer", "Warlock", "Wizard"], "rule": "<b>School:</b> Abjuration (Concentration) | <b>Casting Time:</b> 1 Reaction | <b>Range:</b> Self | <b>Components:</b> V, S<br>• Subtract 1d4 from enemy attack roll." },
-      "Chill Touch": { "classes": ["Sorcerer", "Warlock", "Wizard"], "rule": "<b>School:</b> Necromancy | <b>Casting Time:</b> 1 Action | <b>Range:</b> Touch | <b>Components:</b> V, S<br>• Melee spell attack: 1d10 Necrotic damage & target can't heal until start of your next turn." },
-      "Dancing Lights": { "classes": ["Artificer", "Bard", "Sorcerer", "Wizard"], "rule": "<b>School:</b> Illusion (Concentration) | <b>Casting Time:</b> 1 Action | <b>Range:</b> 120 ft | <b>Components:</b> V, S, M<br>• Create 4 torch-sized lights." },
-      "Druidcraft": { "classes": ["Druid"], "rule": "<b>School:</b> Transmutation | <b>Casting Time:</b> 1 Action | <b>Range:</b> 30 ft | <b>Components:</b> V, S<br>• Minor nature effects: weather, bloom, candle light/snuff." },
-      "Eldritch Blast": { "classes": ["Warlock"], "rule": "<b>School:</b> Evocation | <b>Casting Time:</b> 1 Action | <b>Range:</b> 120 ft | <b>Components:</b> V, S<br>• Ranged attack: 1d10 Force damage." },
-      "Elementalism": { "classes": ["Artificer", "Druid", "Sorcerer", "Wizard"], "rule": "<b>School:</b> Transmutation | <b>Casting Time:</b> 1 Action | <b>Range:</b> 30 ft | <b>Components:</b> V, S<br>• Minor elemental effects: Breeze, Fire Spark, Sculpt Dust, Water Spray." },
-      "Fire Bolt": { "classes": ["Artificer", "Sorcerer", "Wizard"], "rule": "<b>School:</b> Evocation | <b>Casting Time:</b> 1 Action | <b>Range:</b> 120 ft | <b>Components:</b> V, S<br>• Ranged attack: 1d10 Fire damage." },
-      "Guidance": { "classes": ["Artificer", "Cleric", "Druid"], "rule": "<b>School:</b> Divination (Concentration) | <b>Casting Time:</b> 1 Action | <b>Range:</b> Touch | <b>Components:</b> V, S<br>• Target adds +1d4 to an ability check." },
-      "Light": { "classes": ["Artificer", "Bard", "Cleric", "Sorcerer", "Wizard"], "rule": "<b>School:</b> Evocation | <b>Casting Time:</b> 1 Action | <b>Range:</b> Touch | <b>Components:</b> V, M<br>• Touched object sheds bright light in 20ft radius." },
-      "Mage Hand": { "classes": ["Artificer", "Bard", "Sorcerer", "Warlock", "Wizard"], "rule": "<b>School:</b> Conjuration | <b>Casting Time:</b> 1 Action | <b>Range:</b> 30 ft | <b>Components:</b> V, S<br>• Spectral hand carries up to 10 lbs." },
-      "Mending": { "classes": ["Artificer", "Bard", "Cleric", "Druid", "Sorcerer", "Wizard"], "rule": "<b>School:</b> Transmutation | <b>Casting Time:</b> 1 minute | <b>Range:</b> Touch | <b>Components:</b> V, S, M<br>• Repair single break or tear in an object." },
-      "Message": { "classes": ["Artificer", "Bard", "Sorcerer", "Wizard"], "rule": "<b>School:</b> Transmutation | <b>Casting Time:</b> 1 Action | <b>Range:</b> 120 ft | <b>Components:</b> V, S, M<br>• Whisper message to a target." },
-      "Mind Sliver": { "classes": ["Sorcerer", "Warlock", "Wizard"], "rule": "<b>School:</b> Enchantment | <b>Casting Time:</b> 1 Action | <b>Range:</b> 60 ft | <b>Components:</b> V<br>• INT save or 1d6 Psychic damage & -1d4 on next save." },
-      "Minor Illusion": { "classes": ["Bard", "Sorcerer", "Warlock", "Wizard"], "rule": "<b>School:</b> Illusion | <b>Casting Time:</b> 1 Action | <b>Range:</b> 30 ft | <b>Components:</b> S, M<br>• Create sound or static image." },
-      "Poison Spray": { "classes": ["Artificer", "Druid", "Sorcerer", "Wizard"], "rule": "<b>School:</b> Necromancy | <b>Casting Time:</b> 1 Action | <b>Range:</b> 30 ft | <b>Components:</b> V, S<br>• Ranged spell attack: 1d12 Poison damage." },
-      "Prestidigitation": { "classes": ["Artificer", "Bard", "Sorcerer", "Warlock", "Wizard"], "rule": "<b>School:</b> Transmutation | <b>Casting Time:</b> 1 Action | <b>Range:</b> 10 ft | <b>Components:</b> V, S<br>• Perform minor magic tricks." },
-      "Ray of Frost": { "classes": ["Artificer", "Sorcerer", "Wizard"], "rule": "<b>School:</b> Evocation | <b>Casting Time:</b> 1 Action | <b>Range:</b> 60 ft | <b>Components:</b> V, S<br>• Ranged attack: 1d8 Cold damage & -10ft speed." },
-      "Resistance": { "classes": ["Artificer", "Cleric", "Druid"], "rule": "<b>School:</b> Abjuration (Concentration) | <b>Casting Time:</b> 1 Action | <b>Range:</b> Touch | <b>Components:</b> V, S<br>• Target adds +1d4 to next save." },
-      "Sacred Flame": { "classes": ["Cleric"], "rule": "<b>School:</b> Evocation | <b>Casting Time:</b> 1 Action | <b>Range:</b> 60 ft | <b>Components:</b> V, S<br>• DEX save or 1d8 Radiant damage." },
-      "Shillelagh": { "classes": ["Druid"], "rule": "<b>School:</b> Transmutation | <b>Casting Time:</b> 1 Bonus Action | <b>Range:</b> Touch | <b>Components:</b> V, S, M<br>• Staff/Club uses Spellcasting Mod for attack/damage, 1d8 Force." },
-      "Shocking Grasp": { "classes": ["Artificer", "Sorcerer", "Wizard"], "rule": "<b>School:</b> Evocation | <b>Casting Time:</b> 1 Action | <b>Range:</b> Touch | <b>Components:</b> V, S<br>• Melee attack: 1d8 Lightning damage & target loses Reactions." },
-      "Spare the Dying": { "classes": ["Artificer", "Cleric"], "rule": "<b>School:</b> Necromancy | <b>Casting Time:</b> 1 Action | <b>Range:</b> 15 ft | <b>Components:</b> V, S<br>• Stabilize creature at 0 HP." },
-      "Starry Wisp": { "classes": ["Bard", "Druid"], "rule": "<b>School:</b> Evocation | <b>Casting Time:</b> 1 Action | <b>Range:</b> 60 ft | <b>Components:</b> V, S<br>• Ranged attack: 1d8 Radiant damage & emits light." },
-      "Thaumaturg": { "classes": ["Cleric"], "rule": "<b>School:</b> Transmutation | <b>Casting Time:</b> 1 Action | <b>Range:</b> 30 ft | <b>Components:</b> V<br>• Minor divine wonders." },
-      "Thorn Whip": { "classes": ["Artificer", "Druid"], "rule": "<b>School:</b> Transmutation | <b>Casting Time:</b> 1 Action | <b>Range:</b> 30 ft | <b>Components:</b> V, S, M<br>• Melee attack: 1d6 Piercing damage & pull 10ft." },
-      "Thunderclap": { "classes": ["Artificer", "Bard", "Druid", "Sorcerer", "Wizard"], "rule": "<b>School:</b> Evocation | <b>Casting Time:</b> 1 Action | <b>Range:</b> 5 ft radius | <b>Components:</b> S<br>• CON save or 1d6 Thunder damage." },
-      "Toll the Dead": { "classes": ["Cleric", "Warlock", "Wizard"], "rule": "<b>School:</b> Necromancy | <b>Casting Time:</b> 1 Action | <b>Range:</b> 60 ft | <b>Components:</b> V, S<br>• WIS save or 1d8 Necrotic damage (1d12 if missing HP)." },
-      "True Strike": { "classes": ["Artificer", "Bard", "Sorcerer", "Warlock", "Wizard"], "rule": "<b>School:</b> Divination | <b>Casting Time:</b> 1 Action | <b>Range:</b> Self | <b>Components:</b> S, M<br>• Guided attack using Spellcasting Mod for attack/damage (Radiant)." },
-      "Vicious Mockery": { "classes": ["Bard"], "rule": "<b>School:</b> Enchantment | <b>Casting Time:</b> 1 Action | <b>Range:</b> 60 ft | <b>Components:</b> V<br>• WIS save or 1d6 Psychic damage & Disadvantage on next attack." }
-    },
-    "level1": {
-      "Alarm": { "classes": ["Artificer", "Ranger", "Wizard"], "rule": "<b>School:</b> Abjuration (Ritual) | <b>Casting Time:</b> 1 minute | <b>Range:</b> 30 ft | <b>Components:</b> V, S, M<br>• Set mental or audible alarm in 20ft cube." },
-      "Cure Wounds": { "classes": ["Artificer", "Bard", "Cleric", "Druid", "Paladin", "Ranger"], "rule": "<b>School:</b> Abjuration | <b>Casting Time:</b> 1 Action | <b>Range:</b> Touch | <b>Components:</b> V, S<br>• Touch creature: Heal 2d8 + Spellcasting Mod HP." },
-      "Detect Magic": { "classes": ["Artificer", "Bard", "Cleric", "Druid", "Paladin", "Ranger", "Sorcerer", "Wizard"], "rule": "<b>School:</b> Divination (Concentration, Ritual) | <b>Casting Time:</b> 1 Action | <b>Range:</b> Self | <b>Components:</b> V, S<br>• Sense presence and school of magic within 30ft for 10 minutes." },
-      "Disguise Self": { "classes": ["Artificer", "Bard", "Sorcerer", "Wizard"], "rule": "<b>School:</b> Illusion | <b>Casting Time:</b> 1 Action | <b>Range:</b> Self | <b>Components:</b> V, S<br>• Change appearance for 1 hour." },
-      "Expeditious Retreat": { "classes": ["Artificer", "Sorcerer", "Warlock", "Wizard"], "rule": "<b>School:</b> Transmutation (Concentration) | <b>Casting Time:</b> 1 Bonus Action | <b>Range:</b> Self | <b>Components:</b> V, S<br>• Take Dash action immediately and as Bonus Action on turn." },
-      "Faerie Fire": { "classes": ["Artificer", "Bard", "Druid"], "rule": "<b>School:</b> Evocation (Concentration) | <b>Casting Time:</b> 1 Action | <b>Range:</b> 60 ft | <b>Components:</b> V<br>• 20ft cube DEX save or outline in light. Attacks vs targets have Advantage; targets can't turn invisible." },
-      "False Life": { "classes": ["Artificer", "Sorcerer", "Wizard"], "rule": "<b>School:</b> Necromancy | <b>Casting Time:</b> 1 Action | <b>Range:</b> Self | <b>Components:</b> V, S, M<br>• Gain 2d4 + 4 Temporary Hit Points for 1 hour." },
-      "Feather Fall": { "classes": ["Artificer", "Bard", "Sorcerer", "Wizard"], "rule": "<b>School:</b> Transmutation | <b>Casting Time:</b> 1 Reaction | <b>Range:</b> 60 ft | <b>Components:</b> V, M<br>• Up to 5 falling creatures descend slowly and take no fall damage." },
-      "Grease": { "classes": ["Artificer", "Wizard"], "rule": "<b>School:</b> Conjuration | <b>Casting Time:</b> 1 Action | <b>Range:</b> 60 ft | <b>Components:</b> V, S, M<br>• 10ft square becomes difficult terrain. Creatures in area DEX save or knock Prone." },
-      "Healing Word": { "classes": ["Bard", "Cleric", "Druid"], "rule": "<b>School:</b> Abjuration | <b>Casting Time:</b> 1 Bonus Action | <b>Range:</b> 60 ft | <b>Components:</b> V<br>• Heal 2d4 + Spellcasting Mod HP." },
-      "Identify": { "classes": ["Artificer", "Bard", "Wizard"], "rule": "<b>School:</b> Divination (Ritual) | <b>Casting Time:</b> 1 minute | <b>Range:</b> Touch | <b>Components:</b> V, S, M<br>• Learn magical properties and attuned spells of an item or creature." },
-      "Jump": { "classes": ["Artificer", "Druid", "Ranger", "Sorcerer", "Wizard"], "rule": "<b>School:</b> Transmutation | <b>Casting Time:</b> 1 Bonus Action | <b>Range:</b> Touch | <b>Components:</b> V, S, M<br>• Triple target's jump distance for 1 minute." },
-      "Longstrider": { "classes": ["Artificer", "Bard", "Druid", "Ranger", "Wizard"], "rule": "<b>School:</b> Transmutation | <b>Casting Time:</b> 1 Action | <b>Range:</b> Touch | <b>Components:</b> V, S, M<br>• Increase target's speed by 10ft for 1 hour." },
-      "Purify Food and Drink": { "classes": ["Artificer", "Cleric", "Druid", "Paladin"], "rule": "<b>School:</b> Transmutation (Ritual) | <b>Casting Time:</b> 1 Action | <b>Range:</b> 10 ft | <b>Components:</b> V, S<br>• Purify nonmagical food and drink within 5ft sphere." },
-      "Sanctuary": { "classes": ["Artificer", "Cleric"], "rule": "<b>School:</b> Abjuration | <b>Casting Time:</b> 1 Bonus Action | <b>Range:</b> 30 ft | <b>Components:</b> V, S, M<br>• Wards creature. Attackers against target must make WIS save or choose new target." },
-      "Shield": { "classes": ["Sorcerer", "Wizard"], "rule": "<b>School:</b> Abjuration | <b>Casting Time:</b> 1 Reaction | <b>Range:</b> Self | <b>Components:</b> V, S<br>• +5 AC until next turn & immune to Magic Missile." },
-      "Tasha's Hideous Laughter": { "classes": ["Bard", "Wizard"], "rule": "<b>School:</b> Enchantment (Concentration) | <b>Casting Time:</b> 1 Action | <b>Range:</b> 30 ft | <b>Components:</b> V, S, M<br>• Target WIS save or falls Prone and Incapacitated with laughter." }
-    }
-  }
 }
-
