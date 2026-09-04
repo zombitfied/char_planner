@@ -44,28 +44,15 @@
             align-items: center;
         }
 
-        /* Raue Stein-Optik mit SVG-Filter Kantenverzerrung */
+        /* Sauberer Kasten mit unregelmäßigem, handgemachten SVG-Rand als Hintergrund */
         .logo-frame {
             background-color: var(--surface-color);
-            border: 4px solid var(--stone-border);
-            border-radius: 15px 9px 18px 11px;
-            padding: 28px 20px;
+            padding: 32px 24px;
             position: relative;
             width: 100%;
-            box-shadow: 0 10px 25px rgba(44, 34, 30, 0.25), inset 0 0 20px rgba(78, 69, 60, 0.15);
-            /* Wendet den Grunge-/Rauheits-Filter auf die Kanten an */
-            filter: url(#rough-edge) drop-shadow(2px 3px 4px rgba(44,34,30,0.2));
-        }
-
-        /* Feine Textur-Körnung */
-        .logo-frame::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            opacity: 0.04;
-            pointer-events: none;
-            border-radius: 12px;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            /* Nutzen eines SVG-Pfads als Rahmen, um echte, unregelmäßige Steinlinien zu erzeugen ohne den Text zu verzerren */
+            border-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Cpath d='M 12 6 Q 150 2 288 8 Q 295 150 292 292 Q 150 298 8 292 Q 2 150 12 6 Z' fill='none' stroke='%237c7265' stroke-width='6' stroke-linejoin='round'/%3E%3C/svg%3E") 12 round;
+            box-shadow: 0 10px 25px rgba(44, 34, 30, 0.2);
         }
 
         .fantasy-landscape-icons {
@@ -266,14 +253,6 @@
 </head>
 <body>
 
-    <!-- SVG-Filter für den unregelmäßigen, rauen Stein-Kanten-Effekt -->
-    <svg style="display:none;">
-        <filter id="rough-edge">
-            <feturbulence type="fractalNoise" baseFrequency="0.05" numOctaves="4" result="noise" />
-            <fedisplacementmap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" />
-        </filter>
-    </svg>
-
     <div class="menu-container">
         <div class="logo-frame">
             <div class="fantasy-landscape-icons">
@@ -341,7 +320,6 @@
                 try { characters = [JSON.parse(singleSaved)]; } catch(e) {}
             }
 
-            // Automatische ID-Zuweisung für alte Helden, die noch keine ID hatten (verhindert Bugs beim Archivieren)
             let updated = false;
             characters.forEach((char, index) => {
                 if (!char.id) {
