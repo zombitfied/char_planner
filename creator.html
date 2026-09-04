@@ -167,7 +167,7 @@
 
     <div class="page-title">Held/in erstellen</div>
 
-    <!-- SCHRITT 1: IDENTITÄT & SPEZIES -->
+    <!-- SCHRITT 1: IDENTITÄT & VOLK -->
     <div class="step-card">
         <div class="step-title">Identität & Volk</div>
         <div class="grid-2">
@@ -176,14 +176,14 @@
                 <input type="text" id="char-name" value="Gimble">
             </div>
             <div>
-                <label for="main-race">Volk (Species)</label>
+                <label for="main-race">Volk</label>
                 <div class="input-row">
                     <select id="main-race" onchange="onMainRaceChange()"></select>
                 </div>
             </div>
         </div>
         <div id="subrace-container" style="display: none; margin-top: 5px;">
-            <label for="sub-race">Abstammung (Subrace / Lineage)</label>
+            <label for="sub-race">Abstammung</label>
             <div class="input-row">
                 <select id="sub-race" onchange="updateSpellsUI()"></select>
                 <button type="button" class="info-btn" onclick="showRaceModal()">ℹ</button>
@@ -196,14 +196,14 @@
         <div class="step-title">Klasse und Hintergrund</div>
         <div class="grid-2">
             <div>
-                <label for="class-select">Klasse (Stufe 1)</label>
+                <label for="class-select">Klasse</label>
                 <div class="input-row">
                     <select id="class-select" onchange="onClassChange()"></select>
                     <button type="button" class="info-btn" onclick="showClassModal()">ℹ</button>
                 </div>
             </div>
             <div>
-                <label for="bg-select">Hintergrund (Background)</label>
+                <label for="bg-select">Hintergrund</label>
                 <div class="input-row">
                     <select id="bg-select" onchange="updateBgInfo()"></select>
                     <button type="button" class="info-btn" onclick="showBgModal()">ℹ</button>
@@ -214,14 +214,14 @@
 
     <!-- SCHRITT 3: ATTRIBUTSWERTE -->
     <div class="step-card">
-        <div class="step-title">Start-Attribute zuweisen (Standard Array)</div>
+        <div class="step-title">Start-Attribute zuweisen</div>
         <div class="grid-3">
-            <div><label>Stärke (STR)</label><select class="array-select" id="str-val" onchange="onStatsChange()"></select></div>
-            <div><label>Geschicklichkeit (DEX)</label><select class="array-select" id="dex-val" onchange="onStatsChange()"></select></div>
-            <div><label>Konstitution (CON)</label><select class="array-select" id="con-val" onchange="onStatsChange()"></select></div>
-            <div><label>Intelligenz (INT)</label><select class="array-select" id="int-val" onchange="onStatsChange()"></select></div>
-            <div><label>Weisheit (WIS)</label><select class="array-select" id="wis-val" onchange="onStatsChange()"></select></div>
-            <div><label>Charisma (CHA)</label><select class="array-select" id="cha-val" onchange="onStatsChange()"></select></div>
+            <div><label>Stärke</label><select class="array-select" id="str-val" onchange="onStatsChange()"></select></div>
+            <div><label>Geschicklichkeit</label><select class="array-select" id="dex-val" onchange="onStatsChange()"></select></div>
+            <div><label>Konstitution</label><select class="array-select" id="con-val" onchange="onStatsChange()"></select></div>
+            <div><label>Intelligenz</label><select class="array-select" id="int-val" onchange="onStatsChange()"></select></div>
+            <div><label>Weisheit</label><select class="array-select" id="wis-val" onchange="onStatsChange()"></select></div>
+            <div><label>Charisma</label><select class="array-select" id="cha-val" onchange="onStatsChange()"></select></div>
         </div>
         <div id="array-error" class="error">Wähle 15, 14, 13, 12, 10, 8 ohne Dopplungen!</div>
     </div>
@@ -252,7 +252,7 @@
     <div class="step-card" id="spells-step-card">
         <div class="step-title">Klassen-Zauber wählen</div>
         
-        <label id="cantrip-label">Zaubertricks (Cantrips) wählen</label>
+        <label id="cantrip-label">Zaubertricks wählen</label>
         <div class="spell-grid" id="cantrips-group"></div>
 
         <label id="prep-spells-label" style="margin-top:15px;">Stufe 1 Zauber wählen:</label>
@@ -277,7 +277,7 @@
         <h3 style="color:var(--accent);">Attributswerte & Modifikatoren</h3>
         <div class="grid-3" id="screen-out-stats" style="margin-bottom:15px;"></div>
 
-        <h3 style="color:var(--accent);">Fertigkeiten & Merkmale (Proficiencies & Traits)</h3>
+        <h3 style="color:var(--accent);">Fertigkeiten & Merkmale</h3>
         <ul id="screen-out-features" style="margin-bottom:15px;"></ul>
 
         <h3 style="color:var(--accent);">Ausrüstung & Waffen-Konfiguration</h3>
@@ -311,22 +311,22 @@ const LOCAL_JSON_URL = "./compendium.json";
 const standardArray = [15, 14, 13, 12, 10, 8];
 
 const attributeDescriptions = {
-    "STR": "<b>Stärke (Strength):</b> Athletik, Nahkampfangriffe, Tragekapazität.",
-    "DEX": "<b>Geschicklichkeit (Dexterity):</b> Akrobatik, Fingerfertigkeit, Heimlichkeit, RK, Initiative.",
-    "CON": "<b>Konstitution (Constitution):</b> Trefferpunkte, Konzentrationswürfe.",
-    "INT": "<b>Intelligenz (Intelligence):</b> Arkankunde, Geschichte, Untersuchung, Naturkunde, Religion.",
-    "WIS": "<b>Weisheit (Wisdom):</b> Tierumgang, Einblick, Heilkunde, Wahrnehmung, Überleben.",
-    "CHA": "<b>Charisma (Charisma):</b> Täuschen, Einschüchtern, Auftreten, Überzeugen."
+    "STR": "<b>Stärke:</b> Athletik, Nahkampfangriffe, Tragekapazität.",
+    "DEX": "<b>Geschicklichkeit:</b> Akrobatik, Fingerfertigkeit, Heimlichkeit, RK, Initiative.",
+    "CON": "<b>Konstitution:</b> Trefferpunkte, Konzentrationswürfe.",
+    "INT": "<b>Intelligenz:</b> Arkankunde, Geschichte, Untersuchung, Naturkunde, Religion.",
+    "WIS": "<b>Weisheit:</b> Tierumgang, Einblick, Heilkunde, Wahrnehmung, Überleben.",
+    "CHA": "<b>Charisma:</b> Täuschen, Einschüchtern, Auftreten, Überzeugen."
 };
 
 const skillDescriptions = {
-    "Acrobatics": "(GES) Balance halten, Saltos.", "Animal Handling": "(WEI) Tiere beruhigen.", "Arcana": "(INT) Magie-Wissen.",
-    "Athletics": "(STR) Physische Kraftakte.", "Crafting": "(INT/GES) Reparaturen, Handwerk.", "Deception": "(CHA) Lügen, Verkleidungen.",
-    "History": "(INT) Historische Ereignisse.", "Insight": "(WEI) Intuition, Körpersprache lesen.", "Intimidation": "(CHA) Einschüchterung.",
-    "Investigation": "(INT) Spurensuche, Logik.", "Medicine": "(WEI) Stabilisieren, Krankheiten.", "Nature": "(INT) Flora, Fauna.",
-    "Perception": "(WEI) Verstecktes entdecken.", "Performance": "(CHA) Bühnenkunst.", "Persuasion": "(CHA) Diplomatie.",
-    "Religion": "(WEI/INT) Gottheiten, Riten.", "Sleight of Hand": "(GES) Taschendiebstahl, Fingerfertigkeit.", "Stealth": "(GES) Schleichen.",
-    "Survival": "(WEI) Spurenlesen, Orientierung."
+    "Acrobatics": "Balance halten, Saltos.", "Animal Handling": "Tiere beruhigen.", "Arcana": "Magie-Wissen.",
+    "Athletics": "Physische Kraftakte.", "Crafting": "Reparaturen, Handwerk.", "Deception": "Lügen, Verkleidungen.",
+    "History": "Historische Ereignisse.", "Insight": "Intuition, Körpersprache lesen.", "Intimidation": "Einschüchterung.",
+    "Investigation": "Spurensuche, Logik.", "Medicine": "Stabilisieren, Krankheiten.", "Nature": "Flora, Fauna.",
+    "Perception": "Verstecktes entdecken.", "Performance": "Bühnenkunst.", "Persuasion": "Diplomatie.",
+    "Religion": "Gottheiten, Riten.", "Sleight of Hand": "Taschendiebstahl, Fingerfertigkeit.", "Stealth": "Schleichen.",
+    "Survival": "Spurenlesen, Orientierung."
 };
 
 let speciesData = {};
@@ -426,13 +426,13 @@ function showRaceModal() {
 function showClassModal() {
     const c = document.getElementById('class-select').value;
     const cls = classes[c];
-    openModal(c, `<b>Trefferwürfel (Hit Die):</b> d${cls.hp}<br><b>Hauptattribut:</b> ${cls.primary}<br><b>Rettungswürfe:</b> ${cls.saves.join(', ')}<br><b>Rüstung:</b> ${cls.armor}<br><br>${cls.text}`);
+    openModal(c, `<b>Trefferwürfel:</b> d${cls.hp}<br><b>Hauptattribut:</b> ${cls.primary}<br><b>Rettungswürfe:</b> ${cls.saves.join(', ')}<br><b>Rüstung:</b> ${cls.armor}<br><br>${cls.text}`);
 }
 
 function showBgModal() {
     const b = document.getElementById('bg-select').value;
     const bg = backgrounds[b];
-    openModal(b, `<b>Fertigkeiten:</b> ${bg.skills.join(', ')}<br><b>Ursprungstalent (Feat):</b> ${bg.feat}<br><br>${bg.text}`);
+    openModal(b, `<b>Fertigkeiten:</b> ${bg.skills.join(', ')}<br><b>Ursprungstalent:</b> ${bg.feat}<br><br>${bg.text}`);
 }
 
 function showSkillModal(selectId) {
@@ -691,22 +691,22 @@ function buildCharacter() {
     }
 
     let skillTags = allSkills.map(s => 
-        `<span class="clickable-tag" onclick="openModal('${s}', '${skillDescriptions[s] || 'Fertigkeits-Proficiency.'}')">${s}</span>`
+        `<span class="clickable-tag" onclick="openModal('${s}', '${skillDescriptions[s] || ''}')">${s}</span>`
     ).join(' ');
 
     document.getElementById('screen-out-features').innerHTML = `
         <li><b>Fertigkeiten:</b> ${skillTags}</li>
-        <li><b>Volksmerkmale (Species Traits):</b> ${subInfo.text}</li>
-        <li><b>Hintergrund-Talent (Feat):</b> ${backgrounds[bg].feat}</li>
+        <li><b>Volksmerkmale:</b> ${subInfo.text}</li>
+        <li><b>Hintergrund-Talent:</b> ${backgrounds[bg].feat}</li>
         <li><b>Klassen-Rettungswürfe:</b> ${classes[cls].saves.join(', ')}</li>
-        <li><b>Rüstung-Proficiency:</b> ${classes[cls].armor}</li>
+        <li><b>Rüstungs-Proficiency:</b> ${classes[cls].armor}</li>
     `;
 
     renderEquipmentSectionInSheet(cls);
 
     let cantripTags = chosenCantrips.map(c => {
         let cleanName = c.replace(/ \(.*\)/, '');
-        let rule = (spellCompendium.cantrips && spellCompendium.cantrips[cleanName]) ? spellCompendium.cantrips[cleanName].rule : 'Racial or Class Feature Cantrip.';
+        let rule = (spellCompendium.cantrips && spellCompendium.cantrips[cleanName]) ? spellCompendium.cantrips[cleanName].rule : 'Zaubertrick.';
         return `<span class="clickable-tag" onclick="openModal('${cleanName}', '${rule}')">${c}</span>`;
     }).join(' ');
 
@@ -716,7 +716,7 @@ function buildCharacter() {
     }).join(' ');
 
     document.getElementById('screen-out-spells').innerHTML = `
-        <b>Zaubertricks (Cantrips):</b> ${cantripTags || 'Keine'}<br><br>
+        <b>Zaubertricks:</b> ${cantripTags || 'Keine'}<br><br>
         <b>Vorbereitete Stufe 1 Zauber:</b> ${spellTags || 'Keine ausgewählt'}<br><br>
         <b>Stufe 1 Zauberplätze:</b> ${classes[cls].casterType !== "NONE" ? '2 / Lange Rast' : '0'}
     `;
@@ -794,7 +794,7 @@ function renderEquipmentSectionInSheet(className) {
                 </div>
             </div>`;
     } else {
-        html += `<div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">Diese Klasse nutzt die oben definierte feste Startausrüstung.</div>`;
+        html += `<div style="font-size:0.85rem; color:var(--text-muted); margin-top:4px;">Diese Klasse nutzt die oben definierte feste Startausrüstung.</div>`;
     }
 
     container.innerHTML = html;
