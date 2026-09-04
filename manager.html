@@ -1,1 +1,336 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&D 2024 - Charakter-Manager</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f4f0ea;
+            --surface-color: #ffffff;
+            --surface-border: #d4c5b9;
+            --primary-gold: #b8860b;
+            --primary-gold-hover: #996515;
+            --text-color: #2c221e;
+            --text-muted: #6b5b52;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            background-image: radial-gradient(#e6dbcc 15%, transparent 16%);
+            background-size: 20px 20px;
+        }
+
+        header {
+            background-color: var(--surface-color);
+            padding: 12px 16px;
+            border-bottom: 2px solid var(--surface-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(44, 34, 30, 0.05);
+            z-index: 10;
+        }
+
+        .header-title {
+            font-size: 1.1rem;
+            margin: 0;
+            color: var(--primary-gold);
+            font-family: serif;
+            text-transform: uppercase;
+        }
+
+        .btn-icon {
+            background: none;
+            border: 1px solid var(--surface-border);
+            color: var(--text-muted);
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-icon:hover {
+            color: var(--text-color);
+            border-color: var(--primary-gold);
+        }
+
+        .container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            padding-bottom: 90px;
+            max-width: 600px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: var(--surface-color);
+            border: 1px solid var(--surface-border);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgba(44, 34, 30, 0.05);
+        }
+
+        .card h2 {
+            font-size: 1rem;
+            margin-top: 0;
+            color: var(--primary-gold);
+            border-bottom: 1px solid var(--surface-border);
+            padding-bottom: 6px;
+            text-transform: uppercase;
+            font-family: serif;
+        }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+        .stat-box {
+            background: #faf7f2;
+            border: 1px solid var(--surface-border);
+            padding: 8px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .stat-val { font-size: 1.1rem; font-weight: bold; color: var(--text-color); }
+        .stat-mod { font-size: 0.8rem; color: var(--primary-gold); }
+
+        /* Unten angeordnete Tab-Leiste */
+        nav.tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--surface-color);
+            border-top: 2px solid var(--surface-border);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            z-index: 1000;
+            box-shadow: 0 -2px 8px rgba(44, 34, 30, 0.05);
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            flex: 1;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .tab-button.active {
+            color: var(--primary-gold);
+        }
+
+        .tab-button i {
+            font-size: 1.1rem;
+        }
+
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="btn-icon">
+            <i class="fa-solid fa-arrow-left"></i> Archiv
+        </a>
+        <h1 id="header-title" class="header-title">Charakter</h1>
+        <a href="creator.html" class="btn-icon" title="Neuen erstellen">
+            <i class="fa-solid fa-plus"></i>
+        </a>
+    </header>
+
+    <div class="container">
+
+        <!-- TAB 1: SHEET -->
+        <div id="tab-sheet" class="tab-pane active">
+            <div class="card">
+                <h2 id="sheet-name">-</h2>
+                <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 8px;">
+                    <span id="sheet-species">-</span> | <span id="sheet-class">-</span> (Stufe <span id="sheet-level">1</span>)
+                </div>
+                <div><strong>Hintergrund:</strong> <span id="sheet-bg">-</span></div>
+            </div>
+
+            <div class="card">
+                <h2>Kampfwerte</h2>
+                <div class="grid-3" style="text-align: center; margin-bottom: 10px;">
+                    <div class="stat-box">
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Trefferpunkte</div>
+                        <div class="stat-val"><span id="sheet-hp">10</span>/<span id="sheet-max-hp">10</span></div>
+                    </div>
+                    <div class="stat-box">
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Rüstungsklasse</div>
+                        <div class="stat-val" id="sheet-ac">12</div>
+                    </div>
+                    <div class="stat-box">
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Erfahrung (EP)</div>
+                        <div class="stat-val" id="sheet-xp">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Attribute</h2>
+                <div class="grid-3" id="sheet-stats-grid">
+                    <!-- Wird per JS befüllt -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: INVENTAR -->
+        <div id="tab-inventory" class="tab-pane">
+            <div class="card">
+                <h2>Inventar & Ausrüstung</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">Hier verwaltest du deine Gegenstände, Waffen und Gold.</p>
+            </div>
+        </div>
+
+        <!-- TAB 3: ZAUBER -->
+        <div id="tab-spells" class="tab-pane">
+            <div class="card">
+                <h2>Zauber & Cantrips</h2>
+                <div id="sheet-spells-container" style="font-size: 0.9rem;">
+                    <!-- Wird per JS befüllt -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: MERKMALE -->
+        <div id="tab-abilities" class="tab-pane">
+            <div class="card">
+                <h2>Fähigkeiten & Talente</h2>
+                <ul id="sheet-features-list" style="padding-left: 15px; font-size: 0.85rem;">
+                    <!-- Wird per JS befüllt -->
+                </ul>
+            </div>
+        </div>
+
+        <!-- TAB 5: JOURNAL -->
+        <div id="tab-journal" class="tab-pane">
+            <div class="card">
+                <h2>Tagebuch & Notizen</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">Notizen zu deinen Abenteuern und Erlebnissen.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Unten angeordnete Tab-Leiste -->
+    <nav class="tab-bar">
+        <button class="tab-button active" onclick="switchTab('sheet', event)">
+            <i class="fa-solid fa-shield-halved"></i>
+            Sheet
+        </button>
+        <button class="tab-button" onclick="switchTab('inventory', event)">
+            <i class="fa-solid fa-backpack"></i>
+            Inventar
+        </button>
+        <button class="tab-button" onclick="switchTab('spells', event)">
+            <i class="fa-solid fa-wand-sparkles"></i>
+            Zauber
+        </button>
+        <button class="tab-button" onclick="switchTab('abilities', event)">
+            <i class="fa-solid fa-star"></i>
+            Merkmale
+        </button>
+        <button class="tab-button" onclick="switchTab('journal', event)">
+            <i class="fa-solid fa-book-open"></i>
+            Journal
+        </button>
+    </nav>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedChar = localStorage.getItem('dnd_active_character');
+            if (!savedChar) {
+                alert("Kein aktiver Charakter gefunden! Bitte erstelle oder wähle einen Helden.");
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const char = JSON.parse(savedChar);
+            
+            // UI mit Charakterdaten füllen
+            document.getElementById('header-title').innerText = char.name || "Helden-Sheet";
+            document.getElementById('sheet-name').innerText = char.name || "Unbenannter Held";
+            document.getElementById('sheet-species').innerText = char.species || "-";
+            document.getElementById('sheet-class').innerText = char.class || "-";
+            document.getElementById('sheet-level').innerText = char.level || 1;
+            document.getElementById('sheet-bg').innerText = char.background || "-";
+            document.getElementById('sheet-hp').innerText = char.hp || 10;
+            document.getElementById('sheet-max-hp').innerText = char.maxHp || 10;
+            document.getElementById('sheet-ac').innerText = char.ac || 12;
+            document.getElementById('sheet-xp').innerText = char.xp || 0;
+
+            // Attribute rendern
+            if (char.stats && char.mods) {
+                const statsGrid = document.getElementById('sheet-stats-grid');
+                statsGrid.innerHTML = '';
+                for (let s in char.stats) {
+                    let mod = char.mods[s];
+                    let modStr = mod >= 0 ? `+${mod}` : `${mod}`;
+                    statsGrid.innerHTML += `
+                        <div class="stat-box">
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">${s}</div>
+                            <div class="stat-val">${char.stats[s]}</div>
+                            <div class="stat-mod">${modStr}</div>
+                        </div>
+                    `;
+                }
+            }
+
+            // Zauber rendern
+            const spellsContainer = document.getElementById('sheet-spells-container');
+            let cantripsText = char.cantrips && char.cantrips.length > 0 ? char.cantrips.join(', ') : 'Keine';
+            let spellsText = char.spells && char.spells.length > 0 ? char.spells.join(', ') : 'Keine';
+            spellsContainer.innerHTML = `
+                <p><strong>Cantrips:</strong> ${cantripsText}</p>
+                <p><strong>Vorbereitete Stufe 1 Zauber:</strong> ${spellsText}</p>
+            `;
+
+            // Skills / Merkmale rendern
+            if (char.skills) {
+                const featuresList = document.getElementById('sheet-features-list');
+                featuresList.innerHTML = `<li><strong>Fertigkeiten:</strong> ${char.skills.join(', ')}</li>`;
+            }
+        });
+
+        function switchTab(tabId, event) {
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById('tab-' + tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>
 
