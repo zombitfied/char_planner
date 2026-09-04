@@ -26,25 +26,43 @@
         }
         .container { max-width: 750px; margin: 0 auto; }
         
-        .top-nav { margin-bottom: 15px; }
+        .top-nav { margin-bottom: 20px; }
+        
         .btn-back {
             display: inline-flex;
             align-items: center;
             gap: 8px;
             background: #faf7f2;
             color: var(--text-muted);
-            border: 1.5px solid var(--border);
-            padding: 8px 12px;
-            border-radius: 6px 10px 8px 12px;
+            border: 3px solid var(--border);
+            padding: 10px 16px;
+            border-radius: 10px 14px 12px 16px;
             font-size: 0.85rem;
+            font-weight: bold;
             text-decoration: none;
             cursor: pointer;
             transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(44, 34, 30, 0.1);
             filter: url(#rough-edge);
         }
-        .btn-back:hover { color: var(--text); border-color: var(--accent); }
+        .btn-back:hover { color: var(--text); border-color: var(--accent); background: #f0ebe1; }
 
-        h1 { font-size: 1.6rem; text-align: center; color: var(--text); font-family: serif; text-transform: uppercase; margin-bottom: 20px; }
+        /* Hauptüberschrift jetzt als grisselig-rauh umrandetes Schild */
+        .page-title { 
+            font-size: 1.4rem; 
+            text-align: center; 
+            color: var(--text); 
+            font-family: serif; 
+            text-transform: uppercase; 
+            background: var(--card);
+            border: 3px solid var(--border);
+            border-radius: 14px 10px 16px 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 6px 18px rgba(44, 34, 30, 0.12);
+            filter: url(#rough-edge);
+            letter-spacing: 0.5px;
+        }
         
         .step-card { 
             background: var(--card); 
@@ -148,7 +166,7 @@
         </a>
     </div>
 
-    <h1>Charakter erstellen</h1>
+    <div class="page-title">Charakter erstellen</div>
 
     <!-- SCHRITT 1: IDENTITÄT & SPEZIES -->
     <div class="step-card">
