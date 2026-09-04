@@ -14,6 +14,7 @@
             --primary-gold-hover: #996515;
             --text-color: #2c221e;
             --text-muted: #6b5b52;
+            --danger-color: #a94442;
         }
 
         * { box-sizing: border-box; }
@@ -165,14 +166,47 @@
             border: 1px solid var(--surface-border);
             border-radius: 6px;
             padding: 12px;
-            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             transition: all 0.2s;
         }
 
         .char-item:hover {
             border-color: var(--primary-gold);
             background: #fdfbf7;
-            transform: translateY(-1px);
+        }
+
+        .char-info {
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .char-actions {
+            display: flex;
+            gap: 8px;
+            margin-left: 10px;
+        }
+
+        .icon-action-btn {
+            background: none;
+            border: 1px solid var(--surface-border);
+            border-radius: 4px;
+            padding: 6px 8px;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .icon-action-btn:hover {
+            background: var(--primary-gold);
+            color: #fff;
+            border-color: var(--primary-gold);
+        }
+
+        .icon-action-btn.delete:hover {
+            background: var(--danger-color);
+            border-color: var(--danger-color);
         }
 
         .char-item-title {
@@ -225,6 +259,9 @@
             <button class="btn-rpg" onclick="openCharacterModal()">
                 <i class="fa-solid fa-scroll"></i> Abenteuer fortsetzen
             </button>
+            <button class="btn-rpg" onclick="openGraveyardModal()" style="border-color: #6b5b52; color: #6b5b52;">
+                <i class="fa-solid fa-monument"></i> Heldenfriedhof
+            </button>
         </div>
     </div>
 
@@ -244,11 +281,24 @@
         </div>
     </div>
 
-    <script>
-        function openCharacterModal() {
-            const container = document.getElementById('character-list-container');
-            container.innerHTML = '';
+    <!-- MODAL: Heldenfriedhof (Archiv) -->
+    <div id="graveyard-modal" class="modal-overlay">
+        <div class="modal-card" style="border-color: #6b5b52;">
+            <div class="modal-header">
+                <h2 style="color: #6b5b52;"><i class="fa-solid fa-monument"></i> Heldenfriedhof</h2>
+                <button class="close-btn" onclick="closeGraveyardModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div id="graveyard-list-container" class="character-list">
+                <!-- Wird per JavaScript befüllt -->
+            </div>
 
+            <button class="btn-rpg" onclick="closeGraveyardModal()" style="margin-bottom: 0; border-color: #6b5b52; color: #6b5b52;">Schließen</button>
+        </div>
+    </div>
+
+    <script>
+        function getStoredCharacters() {
             let characters = [];
             const savedList = localStorage.getItem('dnd_character_list');
             const singleSaved = localStorage.getItem('dnd_active_character');
@@ -258,29 +308,48 @@
             } else if (singleSaved) {
                 try { characters = [JSON.parse(singleSaved)]; } catch(e) {}
             }
+            return characters;
+        }
+
+        function saveStoredCharacters(characters) {
+            localStorage.setItem('dnd_character_list', JSON.stringify(characters));
+        }
+
+        // --- AKTIVE CHARAKTERE MODAL ---
+        function openCharacterModal() {
+            const container = document.getElementById('character-list-container');
+            container.innerHTML = '';
+
+            const characters = getStoredCharacters().filter(c => !c.archived);
 
             if (characters.length === 0) {
                 container.innerHTML = `
-                    <div style="font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-bottom: 8px;">Keine Helden im Archiv gefunden...</div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-bottom: 8px;">Keine aktiven Helden gefunden...</div>
                     <div class="skeleton-bar"></div>
                     <div class="skeleton-bar"></div>
                 `;
             } else {
-                characters.forEach((char, index) => {
+                characters.forEach((char) => {
                     const item = document.createElement('div');
                     item.className = 'char-item';
-                    item.onclick = () => selectCharacter(index);
                     
                     const lastAccess = char.lastAccess ? new Date(char.lastAccess).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : "Unbekannt";
 
                     item.innerHTML = `
-                        <div class="char-item-title">
-                            <span><i class="fa-solid fa-shield-halved"></i> ${char.name || "Unbenannter Held"}</span>
-                            <span style="color: var(--primary-gold);">Stufe ${char.level || 1}</span>
+                        <div class="char-info" onclick="selectCharacter('${char.id}')">
+                            <div class="char-item-title">
+                                <span><i class="fa-solid fa-shield-halved"></i> ${char.name || "Unbenannter Held"}</span>
+                                <span style="color: var(--primary-gold);">Stufe ${char.level || 1}</span>
+                            </div>
+                            <div class="char-item-details">
+                                <span><i class="fa-solid fa-hat-wizard"></i> ${char.class || "-"} (${char.species || "-"})</span>
+                                <span><i class="fa-solid fa-clock"></i> ${lastAccess}</span>
+                            </div>
                         </div>
-                        <div class="char-item-details">
-                            <span><i class="fa-solid fa-hat-wizard"></i> ${char.class || "-"} (${char.species || "-"})</span>
-                            <span><i class="fa-solid fa-clock"></i> ${lastAccess}</span>
+                        <div class="char-actions">
+                            <button class="icon-action-btn" onclick="archiveCharacter(event, '${char.id}')" title="Ins Archiv (Friedhof) verschieben">
+                                <i class="fa-solid fa-monument"></i>
+                            </button>
                         </div>
                     `;
                     container.appendChild(item);
@@ -294,17 +363,94 @@
             document.getElementById('char-modal').style.display = 'none';
         }
 
-        function selectCharacter(index) {
-            let characters = [];
-            const savedList = localStorage.getItem('dnd_character_list');
-            if (savedList) {
-                characters = JSON.parse(savedList);
-                // Zeitstempel bei Auswahl aktualisieren
+        function selectCharacter(id) {
+            let characters = getStoredCharacters();
+            const index = characters.findIndex(c => c.id === id);
+            if (index >= 0) {
                 characters[index].lastAccess = new Date().toISOString();
-                localStorage.setItem('dnd_character_list', JSON.stringify(characters));
+                saveStoredCharacters(characters);
                 localStorage.setItem('dnd_active_character', JSON.stringify(characters[index]));
             }
             window.location.href = 'manager.html';
+        }
+
+        function archiveCharacter(event, id) {
+            event.stopPropagation();
+            let characters = getStoredCharacters();
+            const index = characters.findIndex(c => c.id === id);
+            if (index >= 0) {
+                characters[index].archived = true;
+                saveStoredCharacters(characters);
+                openCharacterModal(); // Liste aktualisieren
+            }
+        }
+
+        // --- FRIEDHOF (ARCHIV) MODAL ---
+        function openGraveyardModal() {
+            const container = document.getElementById('graveyard-list-container');
+            container.innerHTML = '';
+
+            const characters = getStoredCharacters().filter(c => c.archived);
+
+            if (characters.length === 0) {
+                container.innerHTML = `
+                    <div style="font-size: 0.85rem; color: var(--text-muted); text-align: center; padding: 20px;">Der Friedhof ist leer. Noch ruht kein Held in Frieden...</div>
+                `;
+            } else {
+                characters.forEach((char) => {
+                    const item = document.createElement('div');
+                    item.className = 'char-item';
+                    
+                    const lastAccess = char.lastAccess ? new Date(char.lastAccess).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }) : "Unbekannt";
+
+                    item.innerHTML = `
+                        <div class="char-info">
+                            <div class="char-item-title" style="color: #6b5b52;">
+                                <span><i class="fa-solid fa-ghost"></i> ${char.name || "Unbenannter Held"}</span>
+                                <span style="font-size: 0.8rem;">Stufe ${char.level || 1}</span>
+                            </div>
+                            <div class="char-item-details">
+                                <span>${char.class || "-"} (${char.species || "-"})</span>
+                                <span>Ruht seit: ${lastAccess}</span>
+                            </div>
+                        </div>
+                        <div class="char-actions">
+                            <button class="icon-action-btn" onclick="restoreCharacter('${char.id}')" title="Wiederbeleben">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            </button>
+                            <button class="icon-action-btn delete" onclick="deleteCharacterPermanently('${char.id}')" title="Endgültig löschen">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    `;
+                    container.appendChild(item);
+                });
+            }
+
+            document.getElementById('graveyard-modal').style.display = 'flex';
+        }
+
+        function closeGraveyardModal() {
+            document.getElementById('graveyard-modal').style.display = 'none';
+        }
+
+        function restoreCharacter(id) {
+            let characters = getStoredCharacters();
+            const index = characters.findIndex(c => c.id === id);
+            if (index >= 0) {
+                delete characters[index].archived; // Aus Archiv holen
+                saveStoredCharacters(characters);
+                openGraveyardModal(); // Friedhof-Liste aktualisieren
+            }
+        }
+
+        function deleteCharacterPermanently(id) {
+            if (confirm("Möchtest du diesen Helden wirklich endgültig aus dem Buch der Toten löschen?")) {
+                let characters = getStoredCharacters();
+                characters = characters.filter(c => c.id !== id);
+                saveStoredCharacters(characters);
+                openGraveyardModal(); // Friedhof-Liste aktualisieren
+            }
         }
     </script>
 </body>
