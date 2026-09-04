@@ -445,6 +445,25 @@ function showSpellModal(category, spellName) {
     if (item) openModal(spellName, item.rule);
 }
 
+function getClassIcon(className) {
+    switch (className) {
+        case "Artificer": return "fa-wrench";
+        case "Barbarian": return "fa-axe";
+        case "Bard": return "fa-guitar";
+        case "Cleric": return "fa-cross";
+        case "Druid": return "fa-tree";
+        case "Fighter": return "fa-shield";
+        case "Monk": return "fa-ring";
+        case "Paladin": return "fa-shield";
+        case "Ranger": return "fa-crosshairs";
+        case "Rogue": return "fa-dagger";
+        case "Sorcerer": return "fa-fire";
+        case "Warlock": return "fa-star-of-life";
+        case "Wizard": return "fa-hat-wizard";
+        default: return "fa-user";
+    }
+}
+
 function onMainRaceChange() {
     const mainRace = document.getElementById('main-race').value;
     const subContainer = document.getElementById('subrace-container');
@@ -649,7 +668,7 @@ function buildCharacter() {
 
     markAsUnsaved();
 
-    document.getElementById('screen-out-name').innerText = name;
+    document.getElementById('screen-out-name').innerHTML = `<i class="fa-solid ${getClassIcon(cls)}"></i> ${name}`;
     document.getElementById('screen-out-meta').innerText = `${subRace} | ${cls} Stufe 1 | ${bg}`;
     document.getElementById('screen-out-hp').innerText = `HP: ${hp}`;
     document.getElementById('screen-out-ac').innerText = `AC: ${ac}`;
