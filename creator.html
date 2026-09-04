@@ -83,6 +83,8 @@
         .info-btn:hover { background: #f0ebe1; }
 
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        /* Spezielles Grid für Volk & Abstammung: Volk kompakter, Abstammung breiter */
+        .grid-race { display: grid; grid-template-columns: 1fr 1.8fr; gap: 10px; }
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         
         .main-btn { 
@@ -189,7 +191,7 @@
             <label for="char-name">Name</label>
             <input type="text" id="char-name" value="Gimble">
         </div>
-        <div class="grid-2" style="margin-top: 8px;">
+        <div class="grid-race" style="margin-top: 8px;">
             <div>
                 <label for="main-race">Volk</label>
                 <div class="input-row">
@@ -334,19 +336,10 @@ const attributeDescriptions = {
     "CHA": "<b>Charisma:</b> Täuschen, Einschüchtern, Auftreten, Überzeugen."
 };
 
-const skillDescriptions = {
-    "Acrobatics": "Balance halten, Saltos.", "Animal Handling": "Tiere beruhigen.", "Arcana": "Magie-Wissen.",
-    "Athletics": "Physische Kraftakte.", "Crafting": "Reparaturen, Handwerk.", "Deception": "Lügen, Verkleidungen.",
-    "History": "Historische Ereignisse.", "Insight": "Intuition, Körpersprache lesen.", "Intimidation": "Einschüchterung.",
-    "Investigation": "Spurensuche, Logik.", "Medicine": "Stabilisieren, Krankheiten.", "Nature": "Flora, Fauna.",
-    "Perception": "Verstecktes entdecken.", "Performance": "Bühnenkunst.", "Persuasion": "Diplomatie.",
-    "Religion": "Gottheiten, Riten.", "Sleight of Hand": "Taschendiebstahl, Fingerfertigkeit.", "Stealth": "Schleichen.",
-    "Survival": "Spurenlesen, Orientierung."
-};
-
 let speciesData = {};
 let classes = {};
 let backgrounds = {};
+let skillDescriptions = {};
 let spellCompendium = {};
 let weaponsCompendium = {};
 
@@ -374,6 +367,7 @@ window.onload = async function() {
         speciesData = data.speciesData;
         classes = data.classes;
         backgrounds = data.backgrounds;
+        skillDescriptions = data.skills || {};
         spellCompendium = data.spellCompendium;
         weaponsCompendium = data.weapons || {};
 
