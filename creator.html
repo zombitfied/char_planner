@@ -647,6 +647,17 @@ function saveCharacterToStorage(charObj) {
         try { characters = JSON.parse(savedList); } catch(e) {}
     }
     
+    // Jedem Charakter eine eindeutige ID basierend auf der Zeit geben, damit sie sich nicht überschreiben
+    charObj.id = 'char_' + Date.now();
+
+    // Immer als neuen Helden anhängen
+    characters.push(charObj);
+
+    localStorage.setItem('dnd_character_list', JSON.stringify(characters));
+    localStorage.setItem('dnd_active_character', JSON.stringify(charObj));
+}
+
+    
     const existingIndex = characters.findIndex(c => c.name === charObj.name);
     if (existingIndex >= 0) {
         characters[existingIndex] = charObj;
