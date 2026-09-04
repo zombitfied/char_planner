@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #f4f0ea;
+            --bg-color: #f2ece1;
             --surface-color: #ffffff;
             --surface-border: #d4c5b9;
             --primary-gold: #b8860b;
@@ -28,29 +28,26 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            /* Pergament-Raster */
-            background-image: radial-gradient(#e6dbcc 15%, transparent 16%);
-            background-size: 24px 24px;
             position: relative;
             overflow: hidden;
         }
 
-        /* Dezent verteilte Landkarten-Symbole im Hintergrund */
-        .map-bg-decor {
+        /* Dichter, vollflächiger Landkarten-Hintergrund */
+        .map-bg-grid {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none;
-            opacity: 0.12;
-            font-size: 2rem;
-            color: var(--primary-gold);
+            opacity: 0.18;
+            font-size: 1.8rem;
+            color: #5c4033;
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(4, 1fr);
-            padding: 20px;
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(8, 1fr);
+            padding: 10px;
             z-index: 0;
         }
 
-        .map-bg-decor i {
+        .map-bg-grid i {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -61,7 +58,7 @@
             max-width: 400px;
             padding: 24px;
             text-align: center;
-            z-index: 1; /* Über dem Hintergrund */
+            z-index: 1;
         }
 
         .logo-frame {
@@ -69,17 +66,16 @@
             border: 2px solid var(--surface-border);
             border-radius: 12px;
             padding: 28px 20px;
-            box-shadow: 0 8px 24px rgba(44, 34, 30, 0.1);
+            box-shadow: 0 8px 24px rgba(44, 34, 30, 0.15);
         }
 
-        /* Landkarten-Leiste mit Symbolen für Gelände */
         .fantasy-landscape-icons {
             font-size: 1.3rem;
             color: var(--primary-gold);
             margin-bottom: 12px;
             display: flex;
             justify-content: center;
-            gap: 14px;
+            gap: 10px;
         }
 
         .fantasy-landscape-icons i {
@@ -87,8 +83,8 @@
             padding: 8px;
             border-radius: 50%;
             border: 1px solid var(--surface-border);
-            width: 36px;
-            height: 36px;
+            width: 34px;
+            height: 34px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -158,22 +154,87 @@
 </head>
 <body>
 
-    <!-- Hintergrund-Landkartenelemente (Dezente Symbole im Grid) -->
-    <div class="map-bg-decor">
-        <i class="fa-solid fa-mountain" style="grid-column: 1; grid-row: 1;"></i>
-        <i class="fa-solid fa-tree" style="grid-column: 4; grid-row: 1;"></i>
-        <i class="fa-solid fa-water" style="grid-column: 2; grid-row: 2;"></i>
-        <i class="fa-solid fa-city" style="grid-column: 3; grid-row: 3;"></i>
-        <i class="fa-solid fa-tree" style="grid-column: 1; grid-row: 4;"></i>
-        <i class="fa-solid fa-mountain" style="grid-column: 4; grid-row: 4;"></i>
+    <!-- Vollflächiges Landkarten-Raster mit Bergen, Bäumen, Flüssen, Straßen und Städten -->
+    <div class="map-bg-grid">
+        <i class="fa-solid fa-mountain"></i>
+        <i class="fa-solid fa-tree"></i>
+        <i class="fa-solid fa-road"></i>
+        <i class="fa-solid fa-water"></i>
+        <i class="fa-solid fa-tree"></i>
+        <i class="fa-solid fa-city"></i>
+        <i class="fa-solid fa-mountain"></i>
+        <i class="fa-solid fa-water"></i>
+
+        <i class="fa-solid fa-road"></i>
+        <i class="fa-solid fa-city"></i>
+        <i class="fa-solid fa-mountain"></i>
+        <i class="fa-solid fa-tree"></i>
+        <i class="fa-solid fa-water"></i>
+        <i class="fa-solid fa-road"></i>
+        <i class="fa-solid fa-tree"></i>
+        <i class="fa-solid fa-mountain"></i>
+
+        <i class="fa-solid fa-tree"></i>
+        <i class="fa-solid fa-water"></i>
+        <i class="fa-solid fa-city"></i>
+        <i class="fa-solid fa-road"></i>
+        <i class="fa-solid fa-mountain"></i>
+        <i class="fa-solid fa-tree"></i>
+        <i class="fa-solid fa-road"></i>
+        <i class="fa-solid fa-city"></i>
+
+        <i class="fa-solid fa-mountain"></i>
+        <i class="fa-solid fa-road"></i>
+        <i class="fa-solid fa-tree"></i>
+        <i class="fa-solid fa-water"></i>
+        <i class="fa-solid fa-city"></i>
+        <i class="fa-solid fa-mountain"></i>
+        <i class="fa-solid fa-water"></i>
+        <i class="fa-solid fa-tree"></i>
+
+        <i class="fa-solid fa-water"></i>
+        <i class="fa-solid fa-tree"></i>
+        <i class="fa-solid fa-mountain"></i>
+        <i class="fa-solid fa-city"></i>
+        <i class="fa-solid fa-road"></i>
+        <i class="fa-solid fa-tree"></i>
+        <i class="fa-solid fa-mountain"></i>
+        <i class="fa-solid fa-road"></i>
+
+        <i class="fa-solid fa-city"></i>
+        <i class="fa-solid fa-mountain"></i>
+        <i class="fa-solid fa-road"></i>
+        <i class="fa-solid fa-tree"></i>
+        <i class="fa-solid fa-water"></i>
+        <i class="fa-solid fa-city"></i>
+        <i class="fa-solid fa-road"></i>
+        <i class="fa-solid fa-mountain"></i>
+
+        <i class="fa-solid fa-tree"></i>
+        <i class="fa-solid fa-water"></i>
+        <i class="fa-solid fa-city"></i>
+        <i class="fa-solid fa-mountain"></i>
+        <i class="fa-solid fa-road"></i>
+        <i class="fa-solid fa-tree"></i>
+        <i class="fa-solid fa-water"></i>
+        <i class="fa-solid fa-city"></i>
+
+        <i class="fa-solid fa-mountain"></i>
+        <i class="fa-solid fa-road"></i>
+        <i class="fa-solid fa-tree"></i>
+        <i class="fa-solid fa-water"></i>
+        <i class="fa-solid fa-city"></i>
+        <i class="fa-solid fa-mountain"></i>
+        <i class="fa-solid fa-road"></i>
+        <i class="fa-solid fa-tree"></i>
     </div>
 
     <div class="menu-container">
         <div class="logo-frame">
-            <!-- Landkarten-Legende als Icons oben -->
             <div class="fantasy-landscape-icons">
                 <i class="fa-solid fa-mountain" title="Gebirge"></i>
                 <i class="fa-solid fa-tree" title="Wälder"></i>
+                <i class="fa-solid fa-road" title="Straßen"></i>
                 <i class="fa-solid fa-water" title="Flüsse"></i>
                 <i class="fa-solid fa-city" title="Städte"></i>
             </div>
