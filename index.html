@@ -1,1 +1,175 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&D 2024 - Heldenarchiv</title>
+    <style>
+        :root {
+            --bg-color: #0d0d0f;
+            --surface-color: #1a1a20;
+            --surface-border: #323240;
+            --primary-gold: #d4af37;
+            --primary-gold-hover: #e6c555;
+            --text-color: #e2e2e9;
+            --text-muted: #9494a0;
+            --accent-glow: rgba(212, 175, 55, 0.15);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .menu-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .logo-frame {
+            background-color: var(--surface-color);
+            border: 2px solid var(--surface-border);
+            border-radius: 12px;
+            padding: 24px 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 15px var(--accent-glow);
+            position: relative;
+        }
+
+        .logo-frame::before {
+            content: '';
+            position: absolute;
+            top: 4px; left: 4px; right: 4px; bottom: 4px;
+            border: 1px dashed rgba(212, 175, 55, 0.2);
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        h1 {
+            font-size: 1.4rem;
+            color: var(--primary-gold);
+            margin-top: 0;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .btn-rpg {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #252530, #1c1c24);
+            color: var(--primary-gold);
+            border: 1px solid var(--primary-gold);
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-rpg:hover {
+            background: var(--primary-gold);
+            color: #0d0d0f;
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-rpg.primary {
+            background: linear-gradient(135deg, #d4af37, #aa8c2c);
+            color: #0d0d0f;
+        }
+
+        .btn-rpg.primary:hover {
+            background: var(--primary-gold-hover);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+        }
+
+        /* Vorschau des gespeicherten Charakters */
+        .char-preview {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--surface-border);
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 20px;
+            text-align: left;
+            font-size: 0.85rem;
+            display: none;
+        }
+
+        .char-preview span {
+            color: var(--primary-gold);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="menu-container">
+        <div class="logo-frame">
+            <h1>Heldenarchiv</h1>
+            <div class="subtitle">D&D 2024 Regeln & Edition</div>
+
+            <!-- Dynamische Vorschau, falls ein Charakter im Speicher liegt -->
+            <div id="preview-box" class="char-preview">
+                <div>Letzter Held: <span id="prev-name">-</span></div>
+                <div>Klasse: <span id="prev-class">-</span> (Stufe <span id="prev-level">1</span>)</div>
+            </div>
+
+            <!-- Aktionen -->
+            <a href="creator.html" class="btn-rpg primary">Neuen Charakter erstellen</a>
+            <button id="btn-load" class="btn-rpg" onclick="loadCharacter()" style="display: none;">Abenteuer fortsetzen</button>
+        </div>
+    </div>
+
+    <script>
+        // Beim Laden prüfen, ob ein gespeicherter Charakter existiert
+        window.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('dnd_active_character');
+            if (saved) {
+                try {
+                    const char = JSON.parse(saved);
+                    document.getElementById('prev-name').innerText = char.name || "Unbenannt";
+                    document.getElementById('prev-class').innerText = char.class || "-";
+                    document.getElementById('prev-level').innerText = char.level || 1;
+                    
+                    document.getElementById('preview-box').style.display = 'block';
+                    document.getElementById('btn-load').style.display = 'block';
+                } catch (e) {
+                    console.error("Fehler beim Lesen des Charakters", e);
+                }
+            }
+        });
+
+        function loadCharacter() {
+            const saved = localStorage.getItem('dnd_active_character');
+            if (saved) {
+                window.location.href = 'manager.html';
+            } else {
+                alert("Kein aktiver Charakter gefunden.");
+            }
+        }
+    </script>
+</body>
+</html>
 
