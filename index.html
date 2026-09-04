@@ -4,16 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>D&D 2024 - Heldenarchiv</title>
+    <!-- FontAwesome für Icons eingebunden -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #0d0d0f;
-            --surface-color: #1a1a20;
-            --surface-border: #323240;
-            --primary-gold: #d4af37;
-            --primary-gold-hover: #e6c555;
-            --text-color: #e2e2e9;
-            --text-muted: #9494a0;
-            --accent-glow: rgba(212, 175, 55, 0.15);
+            --bg-color: #f4f0ea; /* Helles Pergament / Papier */
+            --surface-color: #ffffff;
+            --surface-border: #d4c5b9;
+            --primary-gold: #b8860b; /* Edles Gold/Bronze für helles Theme */
+            --primary-gold-hover: #996515;
+            --text-color: #2c221e;
+            --text-muted: #6b5b52;
+            --accent-glow: rgba(184, 134, 11, 0.15);
         }
 
         * { box-sizing: border-box; }
@@ -29,11 +31,174 @@
             align-items: center;
             min-height: 100vh;
             overflow: hidden;
+            /* Subtiler Papier-Hintergrund-Effekt */
+            background-image: radial-gradient(#e6dbcc 15%, transparent 16%), radial-gradient(#e6dbcc 15%, transparent 16%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
         }
 
         .menu-container {
             width: 100%;
             max-width: 400px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .logo-frame {
+            background-color: var(--surface-color);
+            border: 2px solid var(--surface-border);
+            border-radius: 12px;
+            padding: 28px 20px;
+            box-shadow: 0 8px 24px rgba(44, 34, 30, 0.1), 0 0 15px var(--accent-glow);
+            position: relative;
+        }
+
+        .logo-frame::before {
+            content: '';
+            position: absolute;
+            top: 4px; left: 4px; right: 4px; bottom: 4px;
+            border: 1px dashed rgba(184, 134, 11, 0.3);
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        /* Kleine Fantasy-Landschafts-Deko mit Icons oben */
+        .fantasy-landscape-icons {
+            font-size: 1.5rem;
+            color: var(--primary-gold);
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            color: var(--text-color);
+            margin-top: 0;
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-family: serif;
+        }
+
+        .subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            font-style: italic;
+        }
+
+        .btn-rpg {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            background: #faf7f2;
+            color: var(--text-color);
+            border: 1px solid var(--primary-gold);
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-rpg:hover {
+            background: var(--primary-gold);
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(184, 134, 11, 0.3);
+        }
+
+        .btn-rpg.primary {
+            background: var(--primary-gold);
+            color: #ffffff;
+        }
+
+        .btn-rpg.primary:hover {
+            background: var(--primary-gold-hover);
+        }
+
+        .char-preview {
+            background: #faf7f2;
+            border: 1px solid var(--surface-border);
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 20px;
+            text-align: left;
+            font-size: 0.85rem;
+            display: none;
+        }
+
+        .char-preview span {
+            color: var(--primary-gold);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="menu-container">
+        <div class="logo-frame">
+            <!-- Kleine Fantasy-Elemente als Icons oben (Berge, Burg, Sonne/Drache) -->
+            <div class="fantasy-landscape-icons">
+                <i class="fa-solid fa-mountain" title="Gebirge"></i>
+                <i class="fa-solid fa-chess-rook" title="Festung"></i>
+                <i class="fa-solid fa-dragon" title="Drache"></i>
+            </div>
+
+            <h1>Heldenarchiv</h1>
+            <div class="subtitle">D&D 2024 Regeln & Edition</div>
+
+            <div id="preview-box" class="char-preview">
+                <div><i class="fa-solid fa-user-shield"></i> Letzter Held: <span id="prev-name">-</span></div>
+                <div><i class="fa-solid fa-hat-wizard"></i> Klasse: <span id="prev-class">-</span> (Stufe <span id="prev-level">1</span>)</div>
+            </div>
+
+            <a href="creator.html" class="btn-rpg primary">
+                <i class="fa-solid fa-user-plus"></i> Neuen Charakter erstellen
+            </a>
+            <button id="btn-load" class="btn-rpg" onclick="loadCharacter()" style="display: none;">
+                <i class="fa-solid fa-scroll"></i> Abenteuer fortsetzen
+            </button>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('dnd_active_character');
+            if (saved) {
+                try {
+                    const char = JSON.parse(saved);
+                    document.getElementById('prev-name').innerText = char.name || "Unbenannt";
+                    document.getElementById('prev-class').innerText = char.class || "-";
+                    document.getElementById('prev-level').innerText = char.level || 1;
+                    
+                    document.getElementById('preview-box').style.display = 'block';
+                    document.getElementById('btn-load').style.display = 'flex';
+                } catch (e) {
+                    console.error("Fehler beim Lesen des Charakters", e);
+                }
+            }
+        });
+
+        function loadCharacter() {
+            const saved = localStorage.getItem('dnd_active_character');
+            if (saved) {
+                window.location.href = 'manager.html';
+            } else {
+                alert("Kein aktiver Charakter gefunden.");
+            }
+        }
+    </script>
+</body>
+</html>
             padding: 24px;
             text-align: center;
         }
