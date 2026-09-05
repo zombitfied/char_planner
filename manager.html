@@ -9,7 +9,7 @@
         :root {
             --bg-color: #f4f0ea;
             --surface-color: #ffffff;
-            --surface-border: #d4c5b9;
+            --surface-border: #7c7265;
             --primary-gold: #b8860b;
             --primary-gold-hover: #996515;
             --text-color: #2c221e;
@@ -35,12 +35,15 @@
         header {
             background-color: var(--surface-color);
             padding: 12px 16px;
-            border-bottom: 2px solid var(--surface-border);
+            border: 3px solid var(--surface-border);
+            border-radius: 0 0 14px 14px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 8px rgba(44, 34, 30, 0.05);
+            box-shadow: 0 6px 18px rgba(44, 34, 30, 0.12);
             z-index: 10;
+            filter: url(#rough-edge);
+            margin: 10px;
         }
 
         .header-title {
@@ -52,22 +55,27 @@
         }
 
         .btn-icon {
-            background: none;
-            border: 1px solid var(--surface-border);
+            background: #faf7f2;
+            border: 1.5px solid var(--surface-border);
             color: var(--text-muted);
-            padding: 6px 10px;
-            border-radius: 6px;
+            padding: 8px 12px;
+            border-radius: 10px 14px 12px 16px;
             cursor: pointer;
             text-decoration: none;
             font-size: 0.85rem;
             display: flex;
             align-items: center;
             gap: 6px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(44, 34, 30, 0.1);
+            filter: url(#rough-edge);
+            transition: all 0.2s;
         }
 
         .btn-icon:hover {
             color: var(--text-color);
             border-color: var(--primary-gold);
+            background: #f0ebe1;
         }
 
         .container {
@@ -82,11 +90,12 @@
 
         .card {
             background-color: var(--surface-color);
-            border: 1px solid var(--surface-border);
-            border-radius: 8px;
+            border: 3px solid var(--surface-border);
+            border-radius: 12px 16px 10px 14px;
             padding: 16px;
-            margin-bottom: 12px;
-            box-shadow: 0 4px 12px rgba(44, 34, 30, 0.05);
+            margin-bottom: 15px;
+            box-shadow: 0 6px 18px rgba(44, 34, 30, 0.12);
+            filter: url(#rough-edge);
         }
 
         .card h2 {
@@ -104,7 +113,7 @@
 
         .stat-box {
             background: #faf7f2;
-            border: 1px solid var(--surface-border);
+            border: 1.5px solid var(--surface-border);
             padding: 8px;
             border-radius: 6px;
             text-align: center;
@@ -113,19 +122,21 @@
         .stat-val { font-size: 1.1rem; font-weight: bold; color: var(--text-color); }
         .stat-mod { font-size: 0.8rem; color: var(--primary-gold); }
 
-        /* Unten angeordnete Tab-Leiste */
+        /* Unten angeordnete Tab-Leiste im Stein-Look */
         nav.tab-bar {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
             background-color: var(--surface-color);
-            border-top: 2px solid var(--surface-border);
+            border-top: 3px solid var(--surface-border);
+            border-radius: 16px 16px 0 0;
             display: flex;
             justify-content: space-around;
-            padding: 8px 0;
+            padding: 10px 0;
             z-index: 1000;
-            box-shadow: 0 -2px 8px rgba(44, 34, 30, 0.05);
+            box-shadow: 0 -6px 18px rgba(44, 34, 30, 0.12);
+            filter: url(#rough-edge);
         }
 
         .tab-button {
@@ -157,9 +168,17 @@
 </head>
 <body>
 
+    <!-- SVG-Filter für den grisselig-rauhen Stein-Kanten-Effekt -->
+    <svg style="display:none;" aria-hidden="true">
+        <filter id="rough-edge">
+            <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="3" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+    </svg>
+
     <header>
         <a href="index.html" class="btn-icon">
-            <i class="fa-solid fa-arrow-left"></i> Archiv
+            <i class="fa-solid fa-door-open"></i> zum Eingang
         </a>
         <h1 id="header-title" class="header-title">Charakter</h1>
         <a href="creator.html" class="btn-icon" title="Neuen erstellen">
@@ -333,4 +352,3 @@
     </script>
 </body>
 </html>
-
