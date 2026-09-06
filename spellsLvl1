@@ -210,6 +210,50 @@
   "Zügiger Rückzug": {
     "classes": ["Artificer", "Sorcerer", "Warlock", "Wizard"],
     "rule": "<b>Schule:</b> Verwandlungszauber (Konzentration) | <b>Zeitaufwand:</b> 1 Bonusaktion | <b>Reichweite:</b> Selbst | <b>Komponenten:</b> V, G<br>• Führe sofort und in den folgenden Runden als Bonusaktion die Aktion Sprinten aus."
+  },
+  "Absorbieren von Elementen": {
+    "classes": ["Artificer", "Druid", "Ranger", "Sorcerer", "Wizard"],
+    "rule": "<b>Schule:</b> Verwandlungszauber | <b>Zeitaufwand:</b> 1 Reaktion | <b>Reichweite:</b> Selbst | <b>Komponenten:</b> G<br>• Erhalte Resistenz gegen den auslösenden Elementarschaden und Bonusschaden beim nächsten Nahkampfangriff."
+  },
+  "Beseelung": {
+    "classes": ["Paladin"],
+    "rule": "<b>Schule:</b> Verwandlungszauber | <b>Zeitaufwand:</b> 1 Stunde | <b>Reichweite:</b> Berührung | <b>Komponenten:</b> V, G, M<br>• Beschwöre ein treues, magisches Reittier."
+  },
+  "Chromatischer Orb": {
+    "classes": ["Sorcerer", "Wizard"],
+    "rule": "<b>Schule:</b> Evokationszauber | <b>Zeitaufwand:</b> 1 Aktion | <b>Reichweite:</b> 90 Fuß | <b>Komponenten:</b> V, M<br>• Fernzauberangriff: 3d8 Elementarschaden deiner Wahl; springt bei hohem Wurf über."
+  },
+  "Donnerwelle": {
+    "classes": ["Bard", "Druid", "Sorcerer", "Wizard"],
+    "rule": "<b>Schule:</b> Evokationszauber | <b>Zeitaufwand:</b> 1 Aktion | <b>Reichweite:</b> Selbst (15-Fuß-Würfel) | <b>Komponenten:</b> V, G<br>• Welle aus Donnerschlag: KON-Rettungswurf, Lärm und Wegstoßen."
+  },
+  "Eisklinge": {
+    "classes": ["Druid", "Ranger", "Sorcerer", "Wizard"],
+    "rule": "<b>Schule:</b> Beschwörungszauber | <b>Zeitaufwand:</b> 1 Aktion | <b>Reichweite:</b> 60 Fuß | <b>Komponenten:</b> V, G, M<br>• Fernzauberangriff mit Eisspeer (1d10 Kälteschaden) und anschließender Explosion für Kälteschaden."
+  },
+  "Heilendes Wort": {
+    "classes": ["Bard", "Cleric", "Druid"],
+    "rule": "<b>Schule:</b> Bannzauber | <b>Zeitaufwand:</b> 1 Bonusaktion | <b>Reichweite:</b> 60 Fuß | <b>Komponenten:</b> V<br>• Heile Ziel 2d4 + Zaubermodifikator TP."
+  },
+  "Magierrüstung": {
+    "classes": ["Wizard"],
+    "rule": "<b>Schule:</b> Abjuration | <b>Zeitaufwand:</b> 1 Aktion | <b>Reichweite:</b> Berührung | <b>Komponenten:</b> V, G, M<br>• Die Grund-RK eines unberüsteten Ziels wird für 8 Stunden zu 13 + GES-Modifikator."
+  },
+  "Sanftes Schlummern": {
+    "classes": ["Cleric", "Wizard"],
+    "rule": "<b>Schule:</b> Nekromantie (Ritual) | <b>Zeitaufwand:</b> 1 Stunde | <b>Reichweite:</b> Berührung | <b>Komponenten:</b> V, G, M<br>• Schützt einen frisch verstorbenen Körper vor Verwesung und dem Werden zum Untoten."
+  },
+  "Zorn der Natur": {
+    "classes": ["Druid", "Ranger"],
+    "rule": "<b>Schule:</b> Verwandlungszauber | <b>Zeitaufwand:</b> 1 Bonusaktion | <b>Reichweite:</b> Selbst | <b>Komponenten:</b> V, G<br>• Deine Waffenangriffe verursachen zusätzlich Kälteschaden und verlangsamen das Ziel."
+  },
+  "Donnernder Schlag": {
+    "classes": ["Paladin", "Ranger"],
+    "rule": "<b>Schule:</b> Evokationszauber (Konzentration) | <b>Zeitaufwand:</b> 1 Bonusaktion | <b>Reichweite:</b> Selbst | <b>Komponenten:</b> V<br>• Der nächste Treffer verursacht zusätzlichen Donnerschaden und wirft das Ziel um."
+  },
+  "Zorniger Schlag": {
+    "classes": ["Paladin"],
+    "rule": "<b>Schule:</b> Evokationszauber (Konzentration) | <b>Zeitaufwand:</b> 1 Bonusaktion | <b>Reichweite:</b> Selbst | <b>Komponenten:</b> V<br>• Der nächste Treffer verursacht zusätzlichen Psychoschaden und versetzt das Ziel in Furcht."
   }
 }
 
