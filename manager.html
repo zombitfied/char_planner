@@ -284,7 +284,7 @@
         }
         .mini-btn {
             background: #faf7f2;
-            border: 1px solid var(--surface-border);
+            border: 1.5px solid var(--surface-border);
             border-radius: 4px;
             padding: 3px 8px;
             font-size: 0.75rem;
@@ -384,8 +384,12 @@
                 <div class="grid-combat">
                     <div id="sheet-hp-box" class="stat-box" onclick="openHpModal()" title="Trefferpunkte verwalten">
                         <div style="font-size: 0.75rem; color: var(--text-muted);">Trefferpunkte</div>
-                        <div id="sheet-temp-hp-container" style="font-size: 0.75rem; color: var(--primary-gold); font-weight: bold; display: none;">+<span id="sheet-temp-hp">0</span> temp</div>
-                        <div class="stat-val"><span id="sheet-hp">10</span>/<span id="sheet-max-hp">10</span></div>
+                        
+                        <!-- Dynamische HP Anzeige (Normal vs Temp HP) -->
+                        <div id="sheet-hp-display-container">
+                            <div class="stat-val"><span id="sheet-hp">10</span>/<span id="sheet-max-hp">10</span></div>
+                        </div>
+
                     </div>
                     <div class="stat-box" onclick="openAcModal()" title="Rüstungsklasse verwalten">
                         <div style="font-size: 0.75rem; color: var(--text-muted);">RK</div>
@@ -585,7 +589,7 @@
             <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin: 8px 0;">
                 <div style="font-size: 1rem; color: var(--text-color); font-weight: bold;">
                     Aktuell: <span id="modal-hp-display" style="font-size: 1.2rem; color: var(--primary-gold);">10/10</span>
-                    <span id="modal-temp-hp-indicator" style="font-size: 0.85rem; color: var(--primary-gold); display:none;">(+<span id="modal-temp-hp-val">0</span> temp)</span>
+                    <span id="modal-temp-hp-indicator" style="font-size: 0.85rem; color: #1e90ff; display:none;">(+<span id="modal-temp-hp-val">0</span> temp)</span>
                 </div>
                 <button class="btn-primary" onclick="confirmFullyHeal()" title="Komplett auffüllen" style="padding: 6px 10px; font-size: 0.9rem;"><i class="fa-solid fa-heart-pulse"></i></button>
             </div>
@@ -598,10 +602,10 @@
             </div>
 
             <!-- Temporäre Trefferpunkte mit Plus/Minus -->
-            <label style="font-size: 0.85rem; font-weight: bold; display: block; text-align: center; margin-bottom: 4px;">Temporäre Trefferpunkte</label>
+            <label style="font-size: 0.85rem; font-weight: bold; display: block; text-align: center; margin-bottom: 4px; color: #1e90ff;">Temporäre Trefferpunkte</label>
             <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px;">
                 <button class="mini-btn" onclick="modifyTempHp(-1)" style="padding: 6px 12px; font-size: 0.9rem;">-</button>
-                <span id="modal-temp-hp-number" style="font-size: 1.2rem; font-weight: bold; min-width: 30px; text-align: center; color: var(--primary-gold);">0</span>
+                <span id="modal-temp-hp-number" style="font-size: 1.2rem; font-weight: bold; min-width: 30px; text-align: center; color: #1e90ff;">0</span>
                 <button class="mini-btn" onclick="modifyTempHp(1)" style="padding: 6px 12px; font-size: 0.9rem;">+</button>
             </div>
 
@@ -743,19 +747,22 @@
             document.getElementById('sheet-level').innerText = totalLevel;
             document.getElementById('sheet-bg').innerText = activeChar.background || "-";
             
-            // HP & Temp HP
-            document.getElementById('sheet-hp').innerText = activeChar.hp;
-            document.getElementById('sheet-max-hp').innerText = activeChar.maxHp;
-            
+            // HP & Temp HP Anzeige auf dem Hauptsheet
+            const hpDisplayContainer = document.getElementById('sheet-hp-display-container');
             const hpBox = document.getElementById('sheet-hp-box');
-            const tempHpContainer = document.getElementById('sheet-temp-hp-container');
-            const tempHpSpan = document.getElementById('sheet-temp-hp');
+
             if (activeChar.tempHp > 0) {
-                tempHpSpan.innerText = activeChar.tempHp;
-                tempHpContainer.style.display = 'block';
+                // Wenn Temp HP vorhanden: Temp HP groß oben in Blau, normale HP kleiner darunter
+                hpDisplayContainer.innerHTML = `
+                    <div style="font-size: 1.2rem; font-weight: bold; color: #1e90ff; line-height: 1.2;">+${activeChar.tempHp}</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: bold;"><span id="sheet-hp">${activeChar.hp}</span>/<span id="sheet-max-hp">${activeChar.maxHp}</span></div>
+                `;
                 hpBox.classList.add('temp-hp-glow');
             } else {
-                tempHpContainer.style.display = 'none';
+                // Normale HP Anzeige groß, wenn keine Temp HP da sind
+                hpDisplayContainer.innerHTML = `
+                    <div class="stat-val"><span id="sheet-hp">${activeChar.hp}</span>/<span id="sheet-max-hp">${activeChar.maxHp}</span></div>
+                `;
                 hpBox.classList.remove('temp-hp-glow');
             }
 
