@@ -98,7 +98,7 @@
             border-radius: 8px 12px 10px 14px; 
             width: 100%; 
             text-transform: uppercase; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px (0,0,0,0.15);
             filter: url(#rough-edge);
         }
         .main-btn:hover { background: var(--accent-hover); }
@@ -434,6 +434,11 @@ function showSpellModalFromDropdown(selectElem) {
     }
 }
 
+// Allgemeine Detail-Anzeige für die Klicks im generierten Charakterblatt
+function showFeatureDetail(title, text) {
+    openModal(title, text, "fa-star");
+}
+
 function getClassIcon(className) {
     switch (className) {
         case "Artificer": return "fa-wrench";
@@ -659,10 +664,11 @@ function buildCharacter() {
 
     let skillTags = allSkills.map(s => `<span class="clickable-tag" onclick="openModal('${s}', '${skillDescriptions[s] || ''}')">${s}</span>`).join(' ');
 
+    // Klickbare Tags für Merkmale, Hintergrund und Rettungswürfe hinzugefügt
     document.getElementById('screen-out-features').innerHTML = `
         <li><b>Fertigkeiten:</b> ${skillTags}</li>
-        <li><b>Volksmerkmale:</b> ${subInfo.text}</li>
-        <li><b>Hintergrund-Talent:</b> ${backgrounds[bg].feat}</li>
+        <li><b>Volksmerkmale:</b> <span class="clickable-tag" onclick="showFeatureDetail('${subRace}', '${subInfo.text}')">${subRace} anzeigen</span></li>
+        <li><b>Hintergrund-Talent:</b> <span class="clickable-tag" onclick="showFeatureDetail('${bg}', '${backgrounds[bg].text}')">${bg} (${backgrounds[bg].feat})</span></li>
         <li><b>Klassen-Rettungswürfe:</b> ${classes[cls].saves.join(', ')}</li>
         <li><b>Rüstungs-Proficiency:</b> ${classes[cls].armor}</li>
     `;
