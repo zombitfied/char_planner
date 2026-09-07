@@ -311,6 +311,7 @@
 
 <script>
 const LOCAL_JSON_URL = "./compendium.json";
+const SPELLS_HTML_URL = "./spells-parsed.html";
 const SPELL_LISTS_HTML_URL = "./spelllists-parsed.html";
 
 const standardArray = [15, 14, 13, 12, 10, 8];
@@ -328,7 +329,7 @@ let speciesData = {};
 let classes = {};
 let backgrounds = {};
 let skillDescriptions = {};
-let spellCompendium = {};
+let spellCompendium = { cantrips: {}, level1: {} };
 let weaponsCompendium = {};
 let classSpellLists = {};
 
@@ -351,10 +352,20 @@ window.onload = async function() {
         classes = data.classes;
         backgrounds = data.backgrounds;
         skillDescriptions = data.skills || {};
-        spellCompendium = data.spellCompendium;
         weaponsCompendium = data.weapons || {};
 
-        // spelllists-parsed.html laden, um die Zauberlisten zuzuordnen
+        // 1. spells-parsed.html laden, um deutsche Beschreibungen / Regeln zu bekommen
+        try {
+            const spellResponse = await fetch(SPELLS_HTML_URL + "?t=" + new Date().getTime());
+            if (spellResponse.ok) {
+                const htmlText = await spellResponse.text();
+                parseSpellsHtml(htmlText);
+            }
+        } catch (spellErr) {
+            console.warn("Konnte spells-parsed.html nicht laden.", spellErr);
+        }
+
+        // 2. spelllists-parsed.html laden, um die deutschen Zuordnungen nach Klassen zu holen
         try {
             const listResponse = await fetch(SPELL_LISTS_HTML_URL + "?t=" + new Date().getTime());
             if (listResponse.ok) {
@@ -362,7 +373,7 @@ window.onload = async function() {
                 parseSpellListsHtml(listHtmlText);
             }
         } catch (listErr) {
-            console.warn("Konnte spelllists-parsed.html nicht laden, nutze Standard-JSON.", listErr);
+            console.warn("Konnte spelllists-parsed.html nicht laden.", listErr);
         }
 
         initApp();
@@ -372,7 +383,31 @@ window.onload = async function() {
     }
 };
 
-// Parst spelllists-parsed.html und baut classSpellLists auf
+// Parst spells-parsed.html für deutsche Zaubertickets & Stufe 1 Zauber
+function parseSpellsHtml(htmlText) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlText, 'text/html');
+    const spellDivs = doc.querySelectorAll('.spell');
+
+    spellDivs.forEach(div => {
+        const h5 = div.querySelector('h5');
+        if (!h5) return;
+        const spellName = h5.textContent.trim();
+        const htmlContent = div.innerHTML;
+        const textContent = div.textContent;
+
+        const isCantrip = textContent.includes('Zaubertrick');
+        const isLevel1 = textContent.includes('1. Grades');
+
+        if (isCantrip) {
+            spellCompendium.cantrips[spellName] = { rule: htmlContent };
+        } else if (isLevel1) {
+            spellCompendium.level1[spellName] = { rule: htmlContent };
+        }
+    });
+}
+
+// Parst spelllists-parsed.html und baut classSpellLists auf (deutsche Namen)
 function parseSpellListsHtml(htmlText) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlText, 'text/html');
@@ -644,11 +679,11 @@ function updateSpellsUI() {
         return;
     }
 
-    // Nutzung der geladenen spelllists-parsed.html, sonst Fallback auf compendium.json
+    // Priorisiere die deutschen Zauberlisten aus spelllists-parsed.html
     const classList = classSpellLists[className] || {};
     const allowedCantrips = (classList.cantrips && classList.cantrips.length > 0) 
         ? classList.cantrips 
-        : Object.keys(spellCompendium.cantrips || {}).filter(c => spellCompendium.cantrips[c].classes.map(i => i.trim()).includes(className));
+        : Object.keys(spellCompendium.cantrips || {});
 
     const maxCantrips = cls.cantripsKnown;
     document.getElementById('cantrip-label').innerText = `Wähle ${maxCantrips} Zaubertricks:`;
@@ -670,7 +705,7 @@ function updateSpellsUI() {
 
     const allowedLvl1 = (classList.level1 && classList.level1.length > 0)
         ? classList.level1
-        : Object.keys(spellCompendium.level1 || {}).filter(s => spellCompendium.level1[s].classes.map(i => i.trim()).includes(className));
+        : Object.keys(spellCompendium.level1 || {});
 
     const maxPrep = getPrepSpellsLimit(className);
     document.getElementById('prep-spells-label').innerText = `Wähle Stufe 1 Zauber (Limit: ${maxPrep}):`;
