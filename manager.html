@@ -262,7 +262,7 @@
         .clickable-badge {
             display: inline-block;
             background: #faf7f2;
-            border: 1px solid var(--surface-border);
+            border: 1.5px solid var(--surface-border);
             padding: 2px 8px;
             border-radius: 6px;
             cursor: pointer;
@@ -702,7 +702,17 @@
                 return;
             }
 
-            // Fallbacks
+            // Fallbacks & Kompatibilität für ältere Charaktere ohne rawStats
+            if (!activeChar.rawStats && activeChar.stats) {
+                activeChar.rawStats = { ...activeChar.stats };
+            }
+            if (!activeChar.speciesBonuses) {
+                activeChar.speciesBonuses = {};
+                if (activeChar.species && activeChar.species.toLowerCase().includes('gnome')) {
+                    activeChar.speciesBonuses.INT = 2;
+                }
+            }
+
             if (activeChar.xp === undefined) activeChar.xp = 0;
             if (activeChar.maxHp === undefined) activeChar.maxHp = 10;
             if (activeChar.hp === undefined) activeChar.hp = activeChar.maxHp;
@@ -715,16 +725,8 @@
             if (!activeChar.classesList) {
                 activeChar.classesList = [{ name: activeChar.class || "Abenteurer", level: activeChar.level || 1 }];
             }
-            if (!activeChar.stats) {
-                activeChar.stats = { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 };
-            }
             if (!activeChar.statTemps) {
                 activeChar.statTemps = { STR: 0, DEX: 0, CON: 0, INT: 0, WIS: 0, CHA: 0 };
-            }
-            if (!activeChar.speciesBonuses && activeChar.species && activeChar.species.toLowerCase().includes('gnome')) {
-                activeChar.speciesBonuses = { INT: 2 };
-            } else if (!activeChar.speciesBonuses) {
-                activeChar.speciesBonuses = {};
             }
 
             updateUI();
@@ -766,8 +768,11 @@
                 hpBox.classList.remove('temp-hp-glow');
             }
 
-            // AC & Temp AC
-            let dexTotal = activeChar.stats.DEX + (activeChar.speciesBonuses.DEX || 0) + (activeChar.statTemps.DEX || 0);
+            // AC & Temp AC (Berechnung mit rawStats & speciesBonuses)
+            let dexBase = activeChar.rawStats ? (activeChar.rawStats.DEX || 10) : 10;
+            let dexBonus = activeChar.speciesBonuses && activeChar.speciesBonuses.DEX ? activeChar.speciesBonuses.DEX : 0;
+            let dexTemp = activeChar.statTemps && activeChar.statTemps.DEX ? activeChar.statTemps.DEX : 0;
+            let dexTotal = dexBase + dexBonus + dexTemp;
             let dexMod = Math.floor((dexTotal - 10) / 2);
             let baseAc = 10 + dexMod; 
             let effectiveAc = baseAc + (activeChar.tempAc || 0);
@@ -797,12 +802,14 @@
                 document.getElementById(`death-fail-${i}`).checked = activeChar.deathSaves.failures[i];
             }
 
-            // Attribute
+            // Attribute (Mit rawStats und speciesBonuses berechnen)
             const statsGrid = document.getElementById('sheet-stats-grid');
-            if (statsGrid && activeChar.stats) {
+            const statKeys = activeChar.rawStats ? Object.keys(activeChar.rawStats) : ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
+            
+            if (statsGrid) {
                 statsGrid.innerHTML = '';
-                for (let s in activeChar.stats) {
-                    let baseVal = activeChar.stats[s];
+                for (let s of statKeys) {
+                    let baseVal = activeChar.rawStats ? activeChar.rawStats[s] : 10;
                     let speciesBonus = activeChar.speciesBonuses && activeChar.speciesBonuses[s] ? activeChar.speciesBonuses[s] : 0;
                     let tempVal = activeChar.statTemps && activeChar.statTemps[s] ? activeChar.statTemps[s] : 0;
                     let totalVal = baseVal + speciesBonus + tempVal;
@@ -898,7 +905,11 @@
             }
             let primaryClassName = activeChar.classesList[0].name;
             let dieSize = getHitDieSize(primaryClassName);
-            let conMod = Math.floor(((activeChar.stats.CON + (activeChar.speciesBonuses.CON || 0) + (activeChar.statTemps.CON || 0) - 10) / 2));
+            
+            let conBase = activeChar.rawStats ? (activeChar.rawStats.CON || 10) : 10;
+            let conBonus = activeChar.speciesBonuses && activeChar.speciesBonuses.CON ? activeChar.speciesBonuses.CON : 0;
+            let conTemp = activeChar.statTemps && activeChar.statTemps.CON ? activeChar.statTemps.CON : 0;
+            let conMod = Math.floor(((conBase + conBonus + conTemp - 10) / 2));
             
             let roll = Math.floor(Math.random() * dieSize) + 1;
             let healing = Math.max(1, roll + conMod);
@@ -1006,7 +1017,11 @@
 
         function finalizeLevelUpStep(className) {
             closeLevelUpModal();
-            let conMod = Math.floor(((activeChar.stats.CON + (activeChar.speciesBonuses.CON || 0) + (activeChar.statTemps.CON || 0) - 10) / 2));
+            let conBase = activeChar.rawStats ? (activeChar.rawStats.CON || 10) : 10;
+            let conBonus = activeChar.speciesBonuses && activeChar.speciesBonuses.CON ? activeChar.speciesBonuses.CON : 0;
+            let conTemp = activeChar.statTemps && activeChar.statTemps.CON ? activeChar.statTemps.CON : 0;
+            let conMod = Math.floor(((conBase + conBonus + conTemp - 10) / 2));
+            
             let container = document.getElementById('levelup-content');
             let dieSize = getHitDieSize(className);
 
@@ -1139,7 +1154,10 @@
         }
 
         function refreshAcModalDisplay() {
-            let dexTotal = activeChar.stats.DEX + (activeChar.speciesBonuses.DEX || 0) + (activeChar.statTemps.DEX || 0);
+            let dexBase = activeChar.rawStats ? (activeChar.rawStats.DEX || 10) : 10;
+            let dexBonus = activeChar.speciesBonuses && activeChar.speciesBonuses.DEX ? activeChar.speciesBonuses.DEX : 0;
+            let dexTemp = activeChar.statTemps && activeChar.statTemps.DEX ? activeChar.statTemps.DEX : 0;
+            let dexTotal = dexBase + dexBonus + dexTemp;
             let dexMod = Math.floor((dexTotal - 10) / 2);
             let baseAc = 10 + dexMod;
             let totalAc = baseAc + (activeChar.tempAc || 0);
@@ -1157,7 +1175,7 @@
         // --- STAT DETAIL MODAL ---
         function openStatModal(statKey) {
             selectedStatKey = statKey;
-            let baseVal = activeChar.stats[statKey];
+            let baseVal = activeChar.rawStats ? (activeChar.rawStats[statKey] || 10) : 10;
             let speciesBonus = activeChar.speciesBonuses && activeChar.speciesBonuses[statKey] ? activeChar.speciesBonuses[statKey] : 0;
             let tempVal = activeChar.statTemps && activeChar.statTemps[statKey] ? activeChar.statTemps[statKey] : 0;
             let totalVal = baseVal + speciesBonus + tempVal;
