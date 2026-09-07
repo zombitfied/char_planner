@@ -122,10 +122,7 @@
         .badge { background: #faf7f2; border: 1.5px solid var(--border); color: var(--text); padding: 6px 10px; border-radius: 4px; font-size: 0.85rem; display: inline-block; margin-right: 5px; margin-top: 5px; }
         .error { color: #d32f2f; font-size: 0.85rem; margin-top: 5px; display: none; }
         
-        .spell-grid { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; max-height: 250px; overflow-y: auto; background: #faf7f2; padding: 8px; border-radius: 6px; border: 1.5px solid var(--border); }
-        .spell-card { background: var(--card); border: 1.5px solid var(--border); border-radius: 6px; padding: 8px; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; }
-        .spell-header { display: flex; align-items: center; font-weight: bold; font-size: 0.9rem; color: var(--text); }
-        .spell-header input { width: auto; margin: 0 10px 0 0; cursor: pointer; }
+        .spell-container { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
         
         .clickable-tag { background: #faf7f2; color: var(--accent); padding: 3px 8px; border-radius: 4px; border: 1.5px solid var(--border); cursor: pointer; display: inline-block; margin: 2px; font-size: 0.85rem; }
         .clickable-tag:hover { background: #f0ebe1; border-color: var(--accent); }
@@ -246,7 +243,7 @@
     <!-- SCHRITT 4: FERTIGKEITEN -->
     <div class="step-card">
         <div class="step-title">Fertigkeiten wählen</div>
-        <div class="grid-2">
+        <div style="display: flex; flex-direction: column; gap: 10px;">
             <div>
                 <label for="skill1">Fertigkeit 1</label>
                 <div class="input-row">
@@ -270,10 +267,10 @@
         <div class="step-title">Klassen-Zauber wählen</div>
         
         <label id="cantrip-label">Zaubertricks wählen</label>
-        <div class="spell-grid" id="cantrips-group"></div>
+        <div class="spell-container" id="cantrips-group"></div>
 
         <label id="prep-spells-label" style="margin-top:15px;">Stufe 1 Zauber wählen:</label>
-        <div class="spell-grid" id="level1-group"></div>
+        <div class="spell-container" id="level1-group"></div>
     </div>
 
     <button class="main-btn" onclick="buildCharacter()">Charakterblatt generieren</button>
@@ -454,9 +451,15 @@ function showSkillModal(selectId) {
     openModal(sk, skillDescriptions[sk] || "Fertigkeits-Proficiency.", "fa-check");
 }
 
-function showSpellModal(category, spellName) {
-    const item = spellCompendium[category][spellName];
-    if (item) openModal(spellName, item.rule, "fa-wand-magic-sparkles");
+function showSpellModalFromDropdown(selectElem) {
+    const spellName = selectElem.value;
+    if (!spellName) return;
+    // Prüfen, ob es in cantrips oder level1 liegt
+    if (spellCompendium.cantrips && spellCompendium.cantrips[spellName]) {
+        openModal(spellName, spellCompendium.cantrips[spellName].rule, "fa-wand-magic-sparkles");
+    } else if (spellCompendium.level1 && spellCompendium.level1[spellName]) {
+        openModal(spellName, spellCompendium.level1[spellName].rule, "fa-wand-magic-sparkles");
+    }
 }
 
 function getClassIcon(className) {
@@ -577,16 +580,20 @@ function updateSpellsUI() {
     const maxCantrips = cls.cantripsKnown;
     document.getElementById('cantrip-label').innerText = `Wähle ${maxCantrips} Zaubertricks:`;
 
-    allowedCantrips.forEach(c => {
+    for (let i = 0; i < maxCantrips; i++) {
+        let optionsHtml = `<option value="">-- Zaubertrick ${i + 1} wählen --</option>`;
+        allowedCantrips.forEach(c => {
+            optionsHtml += `<option value="${c}">${c}</option>`;
+        });
+
         cantripGroup.innerHTML += `
-            <div class="spell-card">
-                <div class="spell-header">
-                    <input type="checkbox" name="cantrip" value="${c}" onchange="limitCheckboxes('cantrip', ${maxCantrips})">
-                    <span>${c}</span>
-                </div>
-                <button type="button" class="info-btn" onclick="showSpellModal('cantrips', '${c}')">ℹ</button>
+            <div class="input-row">
+                <select class="char-cantrip-select">
+                    ${optionsHtml}
+                </select>
+                <button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling)">ℹ</button>
             </div>`;
-    });
+    }
 
     const allowedLvl1 = Object.keys(spellCompendium.level1 || {}).filter(s => {
         const clsList = spellCompendium.level1[s].classes.map(item => item.trim());
@@ -596,23 +603,19 @@ function updateSpellsUI() {
     const maxPrep = getPrepSpellsLimit(className);
     document.getElementById('prep-spells-label').innerText = `Wähle Stufe 1 Zauber (Limit: ${maxPrep}):`;
 
-    allowedLvl1.forEach(s => {
-        lvl1Group.innerHTML += `
-            <div class="spell-card">
-                <div class="spell-header">
-                    <input type="checkbox" name="prepSpell" value="${s}" onchange="limitCheckboxes('prepSpell', ${maxPrep})">
-                    <span>${s}</span>
-                </div>
-                <button type="button" class="info-btn" onclick="showSpellModal('level1', '${s}')">ℹ</button>
-            </div>`;
-    });
-}
+    for (let i = 0; i < maxPrep; i++) {
+        let optionsHtml = `<option value="">-- Stufe 1 Zauber ${i + 1} wählen --</option>`;
+        allowedLvl1.forEach(s => {
+            optionsHtml += `<option value="${s}">${s}</option>`;
+        });
 
-function limitCheckboxes(name, max) {
-    const checked = document.querySelectorAll(`input[name="${name}"]:checked`);
-    if (checked.length > max) {
-        event.target.checked = false;
-        alert(`Limit von ${max} erreicht!`);
+        lvl1Group.innerHTML += `
+            <div class="input-row">
+                <select class="char-spell-select">
+                    ${optionsHtml}
+                </select>
+                <button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling)">ℹ</button>
+            </div>`;
     }
 }
 
@@ -667,7 +670,9 @@ function buildCharacter() {
     const hp = classes[cls].hp + mods.CON;
     const ac = 12 + mods.DEX;
 
-    let chosenCantrips = Array.from(document.querySelectorAll('input[name="cantrip"]:checked')).map(cb => cb.value);
+    let chosenCantrips = Array.from(document.querySelectorAll('.char-cantrip-select'))
+        .map(sel => sel.value)
+        .filter(val => val !== "");
     
     if (subRace === "Rock Gnome" && !chosenCantrips.includes("Prestidigitation")) chosenCantrips.unshift("Prestidigitation (Racial)");
     if (subRace === "High Elf" && !chosenCantrips.includes("Prestidigitation")) chosenCantrips.unshift("Prestidigitation (Racial)");
@@ -678,7 +683,9 @@ function buildCharacter() {
         chosenCantrips.unshift(`${classes[cls].autoCantrip} (Auto)`);
     }
 
-    let chosenSpells = Array.from(document.querySelectorAll('input[name="prepSpell"]:checked')).map(cb => cb.value);
+    let chosenSpells = Array.from(document.querySelectorAll('.char-spell-select'))
+        .map(sel => sel.value)
+        .filter(val => val !== "");
 
     const sk1 = document.getElementById('skill1').value;
     const sk2 = document.getElementById('skill2').value;
