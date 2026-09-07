@@ -34,16 +34,16 @@
 
         header {
             background-color: var(--surface-color);
-            padding: 12px 16px;
-            border: 3px solid var(--surface-border);
-            border-radius: 0 0 14px 14px;
+            padding: 10px 16px;
+            border-bottom: 3px solid var(--surface-border);
+            border-radius: 0 0 16px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 6px 18px rgba(44, 34, 30, 0.12);
+            box-shadow: 0 4px 12px rgba(44, 34, 30, 0.1);
             z-index: 10;
             filter: url(#rough-edge);
-            margin: 10px;
+            margin: 0 0 10px 0;
         }
 
         .header-title {
@@ -58,7 +58,7 @@
             background: #faf7f2;
             border: 1.5px solid var(--surface-border);
             color: var(--text-muted);
-            padding: 8px 12px;
+            padding: 6px 12px;
             border-radius: 10px 14px 12px 16px;
             cursor: pointer;
             text-decoration: none;
@@ -67,9 +67,10 @@
             align-items: center;
             gap: 6px;
             font-weight: bold;
-            box-shadow: 0 4px 12px rgba(44, 34, 30, 0.1);
+            box-shadow: 0 2px 8px rgba(44, 34, 30, 0.08);
             filter: url(#rough-edge);
             transition: all 0.2s;
+            white-space: nowrap;
         }
 
         .btn-icon:hover {
@@ -110,11 +111,12 @@
 
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .grid-combat { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
         .stat-box {
             background: #faf7f2;
             border: 1.5px solid var(--surface-border);
-            padding: 8px;
+            padding: 10px 8px;
             border-radius: 6px;
             text-align: center;
             cursor: pointer;
@@ -126,7 +128,7 @@
             background: #f0ebe1;
         }
 
-        .stat-val { font-size: 1.1rem; font-weight: bold; color: var(--text-color); }
+        .stat-val { font-size: 1.2rem; font-weight: bold; color: var(--text-color); }
         .stat-mod { font-size: 0.8rem; color: var(--primary-gold); }
 
         /* Unten angeordnete Tab-Leiste im Stein-Look */
@@ -190,7 +192,9 @@
             border-radius: 14px;
             padding: 20px;
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
+            max-height: 85vh;
+            overflow-y: auto;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             filter: url(#rough-edge);
         }
@@ -208,7 +212,7 @@
         .modal-input {
             width: 100%;
             padding: 10px;
-            margin: 10px 0 15px 0;
+            margin: 8px 0 12px 0;
             border: 1.5px solid var(--surface-border);
             border-radius: 8px;
             background: #faf7f2;
@@ -220,6 +224,7 @@
             display: flex;
             gap: 10px;
             justify-content: flex-end;
+            margin-top: 15px;
         }
 
         .btn-primary {
@@ -256,10 +261,58 @@
             cursor: not-allowed !important;
         }
 
-        .icon-title {
+        .clickable-badge {
+            display: inline-block;
+            background: #faf7f2;
+            border: 1px solid var(--surface-border);
+            padding: 2px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-gold);
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .clickable-badge:hover {
+            background: #f0ebe1;
+            border-color: var(--primary-gold);
+        }
+
+        .combat-btn-row {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            margin: 4px 0;
+            flex-wrap: wrap;
+        }
+        .mini-btn {
+            background: #faf7f2;
+            border: 1px solid var(--surface-border);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+        .mini-btn:hover {
+            background: var(--primary-gold);
+            color: white;
+            border-color: var(--primary-gold);
+        }
+
+        @keyframes diceShake {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(-15deg); }
+            50% { transform: rotate(15deg); }
+            75% { transform: rotate(-10deg); }
+            100% { transform: rotate(0deg); }
+        }
+        .dice-anim {
+            display: inline-block;
+            animation: diceShake 0.5s ease;
+            color: var(--primary-gold);
+            font-size: 1.5rem;
+            margin-right: 8px;
         }
     </style>
 </head>
@@ -275,7 +328,7 @@
 
     <header>
         <a href="index.html" class="btn-icon">
-            <i class="fa-solid fa-door-open"></i> zum Eingang
+            <i class="fa-solid fa-door-open"></i> Eingang
         </a>
         <h1 id="header-title" class="header-title">Charakter</h1>
         <button class="btn-icon" onclick="openXpModal()" title="Erfahrung & Stufe verwalten">
@@ -288,37 +341,64 @@
         <!-- TAB 1: SHEET -->
         <div id="tab-sheet" class="tab-pane active">
             <div class="card">
-                <div class="icon-title">
-                    <h2 id="sheet-name" style="margin:0; border:none; padding:0;">-</h2>
-                    <div id="sheet-icons" style="font-size: 1.2rem; display: flex; gap: 8px; color: var(--primary-gold);"></div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div>
+                        <h2 id="sheet-name" style="margin:0; border:none; padding:0; font-size: 1.2rem;">-</h2>
+                        <div style="font-size: 0.9rem; color: var(--text-muted); margin: 6px 0;">
+                            <span id="sheet-species" class="clickable-badge" onclick="openInfoModal('species')">-</span> | 
+                            <span id="sheet-class" class="clickable-badge" onclick="openInfoModal('class')">-</span> (Stufe <span id="sheet-level">1</span>)
+                        </div>
+                        <div><strong>Hintergrund:</strong> <span id="sheet-bg" class="clickable-badge" onclick="openInfoModal('background')">-</span></div>
+                    </div>
+                    <div id="sheet-icons" style="font-size: 1.5rem; display: flex; gap: 8px; color: var(--primary-gold);"></div>
                 </div>
-                <div style="font-size: 0.9rem; color: var(--text-muted); margin: 8px 0;">
-                    <span id="sheet-species">-</span> | <span id="sheet-class">-</span> (Stufe <span id="sheet-level">1</span>)
-                </div>
-                <div><strong>Hintergrund:</strong> <span id="sheet-bg">-</span></div>
             </div>
 
             <div class="card">
                 <h2>Kampfwerte</h2>
-                <div class="grid-3" style="text-align: center; margin-bottom: 10px;">
-                    <div class="stat-box" onclick="openHpModal()" title="Trefferpunkte verwalten">
+                <div class="grid-combat" style="margin-bottom: 10px;">
+                    <!-- Trefferpunkte Box -->
+                    <div class="stat-box">
                         <div style="font-size: 0.75rem; color: var(--text-muted);">Trefferpunkte</div>
                         <div id="sheet-temp-hp-container" style="font-size: 0.75rem; color: var(--primary-gold); font-weight: bold; display: none;">+<span id="sheet-temp-hp">0</span> temp</div>
-                        <div class="stat-val"><span id="sheet-hp">10</span>/<span id="sheet-max-hp">10</span></div>
+                        
+                        <div class="combat-btn-row">
+                            <button class="mini-btn" onclick="modifyHp(-5)">-5</button>
+                            <button class="mini-btn" onclick="modifyHp(-2)">-2</button>
+                            <button class="mini-btn" onclick="modifyHp(-1)">-1</button>
+                        </div>
+                        <div class="stat-val" style="cursor: pointer;" onclick="openHpModal()" title="Trefferpunkte im Detail bearbeiten">
+                            <span id="sheet-hp">10</span>/<span id="sheet-max-hp">10</span>
+                        </div>
+                        <div class="combat-btn-row">
+                            <button class="mini-btn" onclick="modifyHp(1)">+1</button>
+                            <button class="mini-btn" onclick="modifyHp(2)">+2</button>
+                            <button class="mini-btn" onclick="modifyHp(5)">+5</button>
+                        </div>
                     </div>
-                    <div class="stat-box" style="cursor: default;">
+
+                    <!-- Rüstungsklasse Box -->
+                    <div class="stat-box">
                         <div style="font-size: 0.75rem; color: var(--text-muted);">Rüstungsklasse</div>
-                        <div class="stat-val" id="sheet-ac">12</div>
-                    </div>
-                    <div class="stat-box" onclick="openXpModal()" title="Erfahrung verwalten">
-                        <div style="font-size: 0.75rem; color: var(--text-muted);">Erfahrung (EP)</div>
-                        <div class="stat-val" id="sheet-xp">0</div>
+                        <div id="sheet-temp-ac-container" style="font-size: 0.75rem; color: var(--primary-gold); font-weight: bold; display: none;">+<span id="sheet-temp-ac">0</span> temp</div>
+                        
+                        <div class="combat-btn-row">
+                            <button class="mini-btn" onclick="modifyAc(-2)">-2</button>
+                            <button class="mini-btn" onclick="modifyAc(-1)">-1</button>
+                        </div>
+                        <div class="stat-val" style="cursor: pointer;" onclick="openAcModal()" title="Rüstungsklasse anpassen">
+                            <span id="sheet-ac">12</span>
+                        </div>
+                        <div class="combat-btn-row">
+                            <button class="mini-btn" onclick="modifyAc(1)">+1</button>
+                            <button class="mini-btn" onclick="modifyAc(2)">+2</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="card">
-                <h2>Attribute</h2>
+                <h2>Attribute <span style="font-size:0.75rem; font-weight:normal; color:var(--text-muted); float:right; line-height:1.5rem;">(Antippen für Details)</span></h2>
                 <div class="grid-3" id="sheet-stats-grid">
                     <!-- Wird per JS befüllt -->
                 </div>
@@ -398,31 +478,47 @@
             
             <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
                 <input type="number" id="xp-input" class="modal-input" placeholder="EP hinzufügen..." style="margin:0; flex:1;">
-                <button class="btn-primary" onclick="addXp()" style="white-space: nowrap;"><i class="fa-solid fa-plus"></i> Hinzufügen</button>
+                <button class="btn-primary" onclick="addXp()" style="white-space: nowrap;"><i class="fa-solid fa-plus"></i></button>
                 <button class="btn-secondary" onclick="openXpOverride()" title="EP direkt setzen (Korrigieren)" style="padding: 10px 12px;"><i class="fa-solid fa-pen"></i></button>
             </div>
 
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px solid var(--surface-border); padding-top: 12px;">
-                <button id="levelup-btn" class="btn-primary btn-disabled" onclick="performLevelUp()" disabled>
-                    <i class="fa-solid fa-angles-up"></i> Stufenaufstieg
+                <button id="levelup-btn" class="btn-primary btn-disabled" onclick="openLevelUpModal()" disabled>
+                    <i class="fa-solid fa-angles-up"></i> Stufenaufstieg durchführen
                 </button>
                 <button class="btn-secondary" onclick="closeXpModal()">Schließen</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL: TREFFERPUNKTE -->
+    <!-- MODAL: LEVELUP AUSWAHL & HP METHODE -->
+    <div id="levelup-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3>Stufenaufstieg</h3>
+            <div id="levelup-content" style="font-size: 0.9rem; margin-bottom: 12px;">
+                <!-- Wird per JS befüllt -->
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-secondary" onclick="closeLevelUpModal()">Abbrechen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: TREFFERPUNKTE DETAIL -->
     <div id="hp-modal" class="modal-overlay">
         <div class="modal-card">
             <h3>Trefferpunkte verwalten</h3>
             <div style="font-size: 0.9rem; margin-bottom: 12px; color: var(--text-muted);">
-                Aktuell: <strong id="modal-hp-display" style="color: var(--text-color);">10/10</strong> (Temp: <span id="modal-temp-hp-display">0</span>)
+                Aktuell: <strong id="modal-hp-display" style="color: var(--text-color);">10/10</strong> (Max HP: <span id="modal-max-hp-display">10</span>)
             </div>
             
-            <label style="font-size: 0.85rem; font-weight: bold;">Trefferpunkte anpassen (+ Heilung / - Schaden):</label>
-            <input type="number" id="hp-change-input" class="modal-input" placeholder="z.B. -5 oder 8">
+            <label style="font-size: 0.85rem; font-weight: bold;">Trefferpunkte direkt setzen (Aktuell):</label>
+            <input type="number" id="hp-set-input" class="modal-input" placeholder="Aktuelle TP">
 
-            <label style="font-size: 0.85rem; font-weight: bold;">Temporäre Trefferpunkte (setzen):</label>
+            <label style="font-size: 0.85rem; font-weight: bold;">Maximal-TP anpassen (Basis):</label>
+            <input type="number" id="max-hp-set-input" class="modal-input" placeholder="Maximal-TP">
+
+            <label style="font-size: 0.85rem; font-weight: bold;">Temporäre Trefferpunkte:</label>
             <input type="number" id="temp-hp-input" class="modal-input" placeholder="z.B. 5">
 
             <div class="modal-buttons">
@@ -432,9 +528,62 @@
         </div>
     </div>
 
+    <!-- MODAL: RÜSTUNGSKLASSE DETAIL -->
+    <div id="ac-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3>Rüstungsklasse verwalten</h3>
+            <div style="font-size: 0.9rem; margin-bottom: 12px; color: var(--text-muted);">
+                Basis RK: <strong id="modal-base-ac" style="color: var(--text-color);">12</strong> | Temp Bonus: <strong id="modal-temp-ac-display">0</strong>
+            </div>
+            
+            <label style="font-size: 0.85rem; font-weight: bold;">Basis-RK (ohne temporäre Boni):</label>
+            <input type="number" id="base-ac-input" class="modal-input" placeholder="z.B. 12">
+
+            <label style="font-size: 0.85rem; font-weight: bold;">Temporärer RK-Bonus (z.B. durch Schild-Zauber):</label>
+            <input type="number" id="temp-ac-input" class="modal-input" placeholder="z.B. 5">
+
+            <div class="modal-buttons">
+                <button class="btn-primary" onclick="saveAcChanges()">Speichern</button>
+                <button class="btn-secondary" onclick="closeAcModal()">Abbrechen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ATTRIBUT DETAIL -->
+    <div id="stat-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3 id="stat-modal-title">Attribut</h3>
+            <div id="stat-modal-body" style="font-size: 0.9rem; margin-bottom: 15px;">
+                <!-- Aufschlüsselung -->
+            </div>
+
+            <label style="font-size: 0.85rem; font-weight: bold;">Temporärer Modifikator / Bonus auf Wert:</label>
+            <input type="number" id="stat-temp-input" class="modal-input" placeholder="z.B. +2 durch Zauber">
+
+            <div class="modal-buttons">
+                <button class="btn-primary" onclick="saveStatChanges()">Speichern</button>
+                <button class="btn-secondary" onclick="closeStatModal()">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: REGELN / INFO (Rasse, Klasse, Hintergrund) -->
+    <div id="info-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3 id="info-modal-title">Regeln & Infos</h3>
+            <div id="info-modal-body" style="font-size: 0.9rem; line-height: 1.5; color: var(--text-color); margin-bottom: 15px;">
+                <!-- Inhalt -->
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-secondary" onclick="closeInfoModal()">Schließen</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const xpThresholds = [0, 300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 64000, 85000, 100000, 120000, 140000, 165000, 195000, 225000, 265000, 305000, 355000];
         let activeChar = null;
+        let selectedStatKey = null;
 
         window.addEventListener('DOMContentLoaded', () => {
             const savedChar = localStorage.getItem('dnd_active_character');
@@ -452,21 +601,23 @@
                 return;
             }
 
-            // Fallbacks sicherstellen, falls Werte fehlen
+            // Fallbacks
             if (activeChar.xp === undefined) activeChar.xp = 0;
             if (activeChar.maxHp === undefined) activeChar.maxHp = 10;
             if (activeChar.hp === undefined) activeChar.hp = activeChar.maxHp;
             if (activeChar.tempHp === undefined) activeChar.tempHp = 0;
+            if (activeChar.tempAc === undefined) activeChar.tempAc = 0;
             if (!activeChar.classesList) {
                 activeChar.classesList = [{ name: activeChar.class || "Abenteurer", level: activeChar.level || 1 }];
             }
-
-            // Standard-Attribute falls leer
             if (!activeChar.stats) {
                 activeChar.stats = { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 };
             }
             if (!activeChar.mods) {
                 activeChar.mods = { STR: 0, DEX: 0, CON: 0, INT: 0, WIS: 0, CHA: 0 };
+            }
+            if (!activeChar.statTemps) {
+                activeChar.statTemps = { STR: 0, DEX: 0, CON: 0, INT: 0, WIS: 0, CHA: 0 };
             }
 
             updateUI();
@@ -485,7 +636,7 @@
             let classIcon = getClassIcon(activeChar.classesList[0].name);
             document.getElementById('sheet-icons').innerHTML = `<i class="${speciesIcon}" title="${activeChar.species || ''}"></i><i class="${classIcon}" title="${activeChar.classesList[0].name}"></i>`;
 
-            // Klassen-String
+            // Klassen-String & Level
             let classStr = activeChar.classesList.map(c => `${c.name} ${c.level}`).join(' / ');
             let totalLevel = activeChar.classesList.reduce((sum, c) => sum + c.level, 0);
 
@@ -506,20 +657,34 @@
                 tempHpContainer.style.display = 'none';
             }
 
-            document.getElementById('sheet-ac').innerText = activeChar.ac || 12;
-            document.getElementById('sheet-xp').innerText = activeChar.xp;
+            // AC & Temp AC
+            let effectiveAc = (activeChar.baseAc || activeChar.ac || 12) + (activeChar.tempAc || 0);
+            document.getElementById('sheet-ac').innerText = effectiveAc;
+            const tempAcContainer = document.getElementById('sheet-temp-ac-container');
+            const tempAcSpan = document.getElementById('sheet-temp-ac');
+            if (activeChar.tempAc > 0) {
+                tempAcSpan.innerText = activeChar.tempAc;
+                tempAcContainer.style.display = 'block';
+            } else {
+                tempAcContainer.style.display = 'none';
+            }
 
             // Attribute rendern
             const statsGrid = document.getElementById('sheet-stats-grid');
             if (statsGrid && activeChar.stats && activeChar.mods) {
                 statsGrid.innerHTML = '';
                 for (let s in activeChar.stats) {
-                    let mod = activeChar.mods[s] !== undefined ? activeChar.mods[s] : 0;
+                    let baseVal = activeChar.stats[s];
+                    let tempVal = activeChar.statTemps && activeChar.statTemps[s] ? activeChar.statTemps[s] : 0;
+                    let totalVal = baseVal + tempVal;
+                    let mod = Math.floor((totalVal - 10) / 2);
                     let modStr = mod >= 0 ? `+${mod}` : `${mod}`;
+                    let tempIndicator = tempVal !== 0 ? ` <span style="font-size:0.7rem; color:var(--primary-gold);">(${tempVal > 0 ? '+' + tempVal : tempVal})</span>` : '';
+
                     statsGrid.innerHTML += `
-                        <div class="stat-box" style="cursor:default;">
+                        <div class="stat-box" onclick="openStatModal('${s}')" title="${s} Details anzeigen">
                             <div style="font-size: 0.75rem; color: var(--text-muted);">${s}</div>
-                            <div class="stat-val">${activeChar.stats[s]}</div>
+                            <div class="stat-val">${totalVal}${tempIndicator}</div>
                             <div class="stat-mod">${modStr}</div>
                         </div>
                     `;
@@ -558,7 +723,18 @@
             event.currentTarget.classList.add('active');
         }
 
-        // --- XP & LEVELUP LOGIC ---
+        // --- SCHNELL-BUTTONS KAMPFWERTE ---
+        function modifyHp(amount) {
+            activeChar.hp = Math.max(0, Math.min(activeChar.maxHp, activeChar.hp + amount));
+            updateUI();
+        }
+
+        function modifyAc(amount) {
+            activeChar.tempAc = Math.max(0, (activeChar.tempAc || 0) + amount);
+            updateUI();
+        }
+
+        // --- XP & LEVELUP MODAL ---
         function openXpModal() {
             let totalLevel = activeChar.classesList.reduce((sum, c) => sum + c.level, 0);
             let nextLvl = totalLevel + 1;
@@ -602,54 +778,115 @@
             }
         }
 
-        function performLevelUp() {
+        // --- LEVELUP MODAL MIT KLASSENWAHL & HP METHODE ---
+        function openLevelUpModal() {
+            closeXpModal();
             let totalLevel = activeChar.classesList.reduce((sum, c) => sum + c.level, 0);
-            if (totalLevel >= 20) return;
+            let container = document.getElementById('levelup-content');
+            
+            let html = `<p style="margin-top:0;">Wähle die Klasse, die du aufstufen möchtest:</p>`;
+            html += `<div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;">`;
+            
+            activeChar.classesList.forEach((c, index) => {
+                html += `<button class="btn-secondary" style="text-align: left; padding: 10px;" onclick="chooseClassForLevelUp(${index})"><i class="fa-solid fa-shield"></i> <strong>${c.name}</strong> (Aktuell Stufe ${c.level}) aufstufen</button>`;
+            });
 
-            let chosenClass = activeChar.classesList[0].name;
-
+            // Ab Stufe 3 Multiclassing Option falls noch keine 2. Klasse
             if (totalLevel >= 2 && activeChar.classesList.length === 1) {
-                let addSecond = confirm(`Du erreichst Stufe 3! Möchtest du eine Zweitklasse wählen (Multiclassing)?\n\nKlicke auf "OK" für eine neue Klasse oder auf "Abbrechen", um deine Hauptklasse (${activeChar.classesList[0].name}) weiter aufzustufen.`);
-                if (addSecond) {
-                    let secondClassName = prompt("Gib den Namen der Zweitklasse ein (z.B. Fighter, Rogue, Wizard):");
-                    if (secondClassName && secondClassName.trim() !== "") {
-                        chosenClass = secondClassName.trim();
-                        activeChar.classesList.push({ name: chosenClass, level: 1 });
-                    } else {
-                        activeChar.classesList[0].level += 1;
-                    }
-                } else {
-                    activeChar.classesList[0].level += 1;
-                }
-            } else {
-                let classChoices = activeChar.classesList.map((c, i) => `${i + 1}: ${c.name} (Stufe ${c.level})`).join('\n');
-                let selection = prompt(`Welche Klasse möchtest du aufstufen?\n\n${classChoices}\n\nGib die Nummer ein:`);
-                let index = parseInt(selection) - 1;
-                if (!isNaN(index) && activeChar.classesList[index]) {
-                    activeChar.classesList[index].level += 1;
-                    chosenClass = activeChar.classesList[index].name;
-                } else {
-                    activeChar.classesList[0].level += 1;
-                }
+                html += `<button class="btn-secondary" style="text-align: left; padding: 10px; border-color: var(--primary-gold);" onclick="chooseNewMulticlass()"><i class="fa-solid fa-plus-circle"></i> Eine neue Zweitklasse wählen (Multiclassing)</button>`;
             }
 
-            activeChar.maxHp = (activeChar.maxHp || 10) + 6;
+            html += `</div>`;
+            container.innerHTML = html;
+            document.getElementById('levelup-modal').style.display = 'flex';
+        }
+
+        function closeLevelUpModal() {
+            document.getElementById('levelup-modal').style.display = 'none';
+        }
+
+        function chooseClassForLevelUp(index) {
+            let className = activeChar.classesList[index].name;
+            activeChar.classesList[index].level += 1;
+            finalizeLevelUpStep(className);
+        }
+
+        function chooseNewMulticlass() {
+            let newClass = prompt("Gib den Namen der Zweitklasse ein (z.B. Fighter, Rogue, Wizard):");
+            if (newClass && newClass.trim() !== "") {
+                let cleanName = newClass.trim();
+                activeChar.classesList.push({ name: cleanName, level: 1 });
+                finalizeLevelUpStep(cleanName);
+            }
+        }
+
+        function finalizeLevelUpStep(className) {
+            closeLevelUpModal();
+            
+            // HP Erhöhungsmethode abfragen mit Würfelanimation
+            let conMod = Math.floor(((activeChar.stats.CON || 10) - 10) / 2);
+            let container = document.getElementById('levelup-content');
+            
+            let dieSize = getHitDieSize(className);
+
+            container.innerHTML = `
+                <div style="text-align: center;">
+                    <div id="dice-container"><i class="fa-solid fa-dice-${getDiceIconName(dieSize)} dice-anim"></i></div>
+                    <p>Stufenaufstieg in <strong>${className}</strong> erfolgreich!</p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Wie möchtest du deine Trefferpunkte für diesen Aufstieg erhöhen?</p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
+                    <button class="btn-primary" onclick="applyHpGain('fixed', ${dieSize}, ${conMod})">Pauschaler Wert (Fixed Average: ${Math.floor(dieSize/2) + 1} + CON-Mod)</button>
+                    <button class="btn-secondary" onclick="applyHpGain('roll', ${dieSize}, ${conMod})">Würfeln (1d${dieSize} + CON-Mod)</button>
+                </div>
+            `;
+            document.getElementById('levelup-modal').style.display = 'flex';
+        }
+
+        function getHitDieSize(className) {
+            const c = className.toLowerCase();
+            if (c.includes('barbarian') || c.includes('barbar')) return 12;
+            if (c.includes('fighter') || c.includes('kämpfer') || c.includes('paladin') || c.includes('ranger') || c.includes('waldläufer')) return 10;
+            if (c.includes('cleric') || c.includes('kleriker') || c.includes('druid') || c.includes('druide') || c.includes('monk') || c.includes('mönch') || c.includes('rogue') || c.includes('schurke') || c.includes('warlock') || c.includes('hexenmeister') || c.includes('artificer')) return 8;
+            return 6; // Wizard, Sorcerer
+        }
+
+        function getDiceIconName(sides) {
+            if (sides === 6) return 'six';
+            if (sides === 8) return 'eight';
+            if (sides === 10) return 'd10'; // Fallback
+            if (sides === 12) return 'd12'; // Fallback
+            return 'six';
+        }
+
+        function applyHpGain(method, dieSize, conMod) {
+            let gainedHp = 0;
+            if (method === 'fixed') {
+                gainedHp = Math.floor(dieSize / 2) + 1 + conMod;
+            } else {
+                let roll = Math.floor(Math.random() * dieSize) + 1;
+                gainedHp = Math.max(1, roll + conMod);
+                alert(`Du hast eine ${roll} gewürfelt! (+${conMod} CON = +${gainedHp} TP)`);
+            }
+
+            activeChar.maxHp += Math.max(1, gainedHp);
             activeChar.hp = activeChar.maxHp;
 
             activeChar.class = activeChar.classesList.map(c => `${c.name} ${c.level}`).join(' / ');
             activeChar.level = activeChar.classesList.reduce((sum, c) => sum + c.level, 0);
 
-            alert(`Stufenaufstieg erfolgreich! Du bist nun Stufe ${activeChar.level}.`);
+            closeLevelUpModal();
             updateUI();
-            closeXpModal();
+            alert(`Stufenaufstieg komplett! Du bist nun Stufe ${activeChar.level}.`);
         }
 
-        // --- HP LOGIC ---
+        // --- HP DETAIL MODAL ---
         function openHpModal() {
             document.getElementById('modal-hp-display').innerText = `${activeChar.hp}/${activeChar.maxHp}`;
-            document.getElementById('modal-temp-hp-display').innerText = activeChar.tempHp || 0;
-            document.getElementById('hp-change-input').value = '';
-            document.getElementById('temp-hp-input').value = activeChar.tempHp || '';
+            document.getElementById('modal-max-hp-display').innerText = activeChar.maxHp;
+            document.getElementById('hp-set-input').value = activeChar.hp;
+            document.getElementById('max-hp-set-input').value = activeChar.maxHp;
+            document.getElementById('temp-hp-input').value = activeChar.tempHp || 0;
             document.getElementById('hp-modal').style.display = 'flex';
         }
 
@@ -658,19 +895,105 @@
         }
 
         function saveHpChanges() {
-            const hpChange = parseInt(document.getElementById('hp-change-input').value);
-            const tempChange = parseInt(document.getElementById('temp-hp-input').value);
+            const newHp = parseInt(document.getElementById('hp-set-input').value);
+            const newMax = parseInt(document.getElementById('max-hp-set-input').value);
+            const newTemp = parseInt(document.getElementById('temp-hp-input').value);
 
-            if (!isNaN(hpChange)) {
-                activeChar.hp = Math.max(0, Math.min(activeChar.maxHp, activeChar.hp + hpChange));
-            }
-
-            if (!isNaN(tempChange)) {
-                activeChar.tempHp = Math.max(0, tempChange);
-            }
+            if (!isNaN(newMax)) activeChar.maxHp = Math.max(1, newMax);
+            if (!isNaN(newHp)) activeChar.hp = Math.max(0, Math.min(activeChar.maxHp, newHp));
+            if (!isNaN(newTemp)) activeChar.tempHp = Math.max(0, newTemp);
 
             updateUI();
             closeHpModal();
+        }
+
+        // --- AC DETAIL MODAL ---
+        function openAcModal() {
+            let base = activeChar.baseAc || activeChar.ac || 12;
+            document.getElementById('modal-base-ac').innerText = base;
+            document.getElementById('modal-temp-ac-display').innerText = activeChar.tempAc || 0;
+            document.getElementById('base-ac-input').value = base;
+            document.getElementById('temp-ac-input').value = activeChar.tempAc || 0;
+            document.getElementById('ac-modal').style.display = 'flex';
+        }
+
+        function closeAcModal() {
+            document.getElementById('ac-modal').style.display = 'none';
+        }
+
+        function saveAcChanges() {
+            const newBase = parseInt(document.getElementById('base-ac-input').value);
+            const newTemp = parseInt(document.getElementById('temp-ac-input').value);
+
+            if (!isNaN(newBase)) activeChar.baseAc = newBase;
+            if (!isNaN(newTemp)) activeChar.tempAc = Math.max(0, newTemp);
+
+            updateUI();
+            closeAcModal();
+        }
+
+        // --- STAT DETAIL MODAL ---
+        function openStatModal(statKey) {
+            selectedStatKey = statKey;
+            let baseVal = activeChar.stats[statKey];
+            let tempVal = activeChar.statTemps && activeChar.statTemps[statKey] ? activeChar.statTemps[statKey] : 0;
+            let totalVal = baseVal + tempVal;
+            let mod = Math.floor((totalVal - 10) / 2);
+            let modStr = mod >= 0 ? `+${mod}` : `${mod}`;
+
+            document.getElementById('stat-modal-title').innerText = `Attribut: ${statKey}`;
+            
+            let html = `
+                <p><strong>Basiswert:</strong> ${baseVal}</p>
+                <p><strong>Temporärer Bonus:</strong> ${tempVal >= 0 ? '+' + tempVal : tempVal}</p>
+                <p><strong>Gesamtwert:</strong> ${totalVal}</p>
+                <hr style="border: 0; border-top: 1px solid var(--surface-border); margin: 10px 0;">
+                <p><strong>Modifikator:</strong> <span style="color:var(--primary-gold); font-size:1.1rem; font-weight:bold;">${modStr}</span> (Formel: (${totalVal} - 10) / 2 abgerundet)</p>
+            `;
+            document.getElementById('stat-modal-body').innerHTML = html;
+            document.getElementById('stat-temp-input').value = tempVal;
+            document.getElementById('stat-modal').style.display = 'flex';
+        }
+
+        function closeStatModal() {
+            document.getElementById('stat-modal').style.display = 'none';
+            selectedStatKey = null;
+        }
+
+        function saveStatChanges() {
+            if (!selectedStatKey) return;
+            const tempVal = parseInt(document.getElementById('stat-temp-input').value);
+            if (!isNaN(tempVal)) {
+                if (!activeChar.statTemps) activeChar.statTemps = { STR: 0, DEX: 0, CON: 0, INT: 0, WIS: 0, CHA: 0 };
+                activeChar.statTemps[selectedStatKey] = tempVal;
+            }
+            updateUI();
+            closeStatModal();
+        }
+
+        // --- INFO MODAL (Rasse, Klasse, Hintergrund) ---
+        function openInfoModal(type) {
+            let title = "";
+            let text = "";
+
+            if (type === 'species') {
+                title = `Spezies: ${activeChar.species || '-'}`;
+                text = `Hier siehst du die gewählte Spezies deines Charakters. Spezies-Merkmale wie Dunkelsicht, Geschwindigkeiten oder spezielle Resistenzen sind hier aktiv.`;
+            } else if (type === 'class') {
+                title = `Klasse: ${activeChar.class || '-'}`;
+                text = `Übersicht der gewählten Klassen und Stufen. Gewährt Zugriff auf spezifische Klassenmerkmale, Trefferwürfel und Zauberlisten nach D&D 2024 Regeln.`;
+            } else if (type === 'background') {
+                title = `Hintergrund: ${activeChar.background || '-'}`;
+                text = `Der Hintergrund bestimmt deine Herkunft, gewährt Attributsboni, Startfertigkeiten und ein prägendes Ursprungs-Talent.`;
+            }
+
+            document.getElementById('info-modal-title').innerText = title;
+            document.getElementById('info-modal-body').innerText = text;
+            document.getElementById('info-modal').style.display = 'flex';
+        }
+
+        function closeInfoModal() {
+            document.getElementById('info-modal').style.display = 'none';
         }
 
         // Helper für Icons
