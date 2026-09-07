@@ -271,16 +271,16 @@
         .combat-btn-row {
             display: flex;
             justify-content: center;
-            gap: 3px;
-            margin: 3px 0;
+            gap: 4px;
+            margin: 4px 0;
             flex-wrap: wrap;
         }
         .mini-btn {
             background: #faf7f2;
             border: 1px solid var(--surface-border);
             border-radius: 4px;
-            padding: 2px 5px;
-            font-size: 0.7rem;
+            padding: 3px 8px;
+            font-size: 0.75rem;
             font-weight: bold;
             cursor: pointer;
             color: var(--text-muted);
@@ -557,35 +557,54 @@
     <div id="hp-modal" class="modal-overlay">
         <div class="modal-card">
             <h3>Trefferpunkte verwalten</h3>
-            <div style="font-size: 0.9rem; margin-bottom: 10px; color: var(--text-muted); text-align: center;">
-                Aktuell: <strong id="modal-hp-display" style="color: var(--text-color); font-size: 1.1rem;">10/10</strong> 
-                <span id="modal-temp-hp-indicator" style="color: var(--primary-gold); display:none;">(+<span id="modal-temp-hp-val">0</span> temp)</span>
-            </div>
             
-            <!-- Schnell-Buttons Minus -->
+            <!-- Plus-Buttons oben -->
             <div class="combat-btn-row">
-                <button class="mini-btn" onclick="modalModifyHp(-5)">-5</button>
-                <button class="mini-btn" onclick="modalModifyHp(-2)">-2</button>
-                <button class="mini-btn" onclick="modalModifyHp(-1)">-1</button>
-            </div>
-
-            <div style="margin: 8px 0;">
-                <button class="btn-primary" style="width: 100%; font-size: 0.85rem; padding: 6px;" onclick="fullyHealHp()"><i class="fa-solid fa-heart-pulse"></i> Komplett auffüllen (Max TP)</button>
-            </div>
-
-            <!-- Schnell-Buttons Plus -->
-            <div class="combat-btn-row" style="margin-bottom: 15px;">
                 <button class="mini-btn" onclick="modalModifyHp(1)">+1</button>
                 <button class="mini-btn" onclick="modalModifyHp(2)">+2</button>
                 <button class="mini-btn" onclick="modalModifyHp(5)">+5</button>
             </div>
 
-            <label style="font-size: 0.85rem; font-weight: bold;">Temporäre Trefferpunkte (setzen):</label>
-            <input type="number" id="temp-hp-input" class="modal-input" placeholder="z.B. 5">
+            <!-- Anzeige & Komplett-Auffüllen-Button hinter der Anzeige -->
+            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin: 8px 0;">
+                <div style="font-size: 1rem; color: var(--text-color); font-weight: bold;">
+                    Aktuell: <span id="modal-hp-display" style="font-size: 1.2rem; color: var(--primary-gold);">10/10</span>
+                    <span id="modal-temp-hp-indicator" style="font-size: 0.85rem; color: var(--primary-gold); display:none;">(+<span id="modal-temp-hp-val">0</span> temp)</span>
+                </div>
+                <button class="btn-primary" onclick="confirmFullyHeal()" title="Komplett auffüllen" style="padding: 6px 10px; font-size: 0.9rem;"><i class="fa-solid fa-heart-pulse"></i></button>
+            </div>
+
+            <!-- Minus-Buttons darunter -->
+            <div class="combat-btn-row" style="margin-bottom: 15px;">
+                <button class="mini-btn" onclick="modalModifyHp(-1)">-1</button>
+                <button class="mini-btn" onclick="modalModifyHp(-2)">-2</button>
+                <button class="mini-btn" onclick="modalModifyHp(-5)">-5</button>
+            </div>
+
+            <!-- Temporäre Trefferpunkte mit Plus/Minus -->
+            <label style="font-size: 0.85rem; font-weight: bold; display: block; text-align: center; margin-bottom: 4px;">Temporäre Trefferpunkte</label>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px;">
+                <button class="mini-btn" onclick="modifyTempHp(-1)" style="padding: 6px 12px; font-size: 0.9rem;">-</button>
+                <span id="modal-temp-hp-number" style="font-size: 1.2rem; font-weight: bold; min-width: 30px; text-align: center; color: var(--primary-gold);">0</span>
+                <button class="mini-btn" onclick="modifyTempHp(1)" style="padding: 6px 12px; font-size: 0.9rem;">+</button>
+            </div>
 
             <div class="modal-buttons">
-                <button class="btn-primary" onclick="saveHpChanges()">Speichern</button>
-                <button class="btn-secondary" onclick="closeHpModal()">Schließen</button>
+                <button class="btn-primary" onclick="closeHpModal()">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: BESTÄTIGUNG VOLLSTÄNDIG AUFFÜLLEN -->
+    <div id="confirm-heal-modal" class="modal-overlay" style="z-index: 2100;">
+        <div class="modal-card" style="max-width: 320px;">
+            <h3>Heilung bestätigen</h3>
+            <p style="font-size: 0.9rem; line-height: 1.4; margin: 10px 0 20px 0;">
+                Hiermit werden alle Trefferpunkte wiederhergestellt. Möchtest du fortfahren?
+            </p>
+            <div class="modal-buttons">
+                <button class="btn-primary" onclick="executeFullyHeal()">Ja</button>
+                <button class="btn-secondary" onclick="closeConfirmHealModal()">Nein</button>
             </div>
         </div>
     </div>
@@ -594,16 +613,19 @@
     <div id="ac-modal" class="modal-overlay">
         <div class="modal-card">
             <h3>Rüstungsklasse verwalten</h3>
-            <div style="font-size: 0.9rem; margin-bottom: 12px; color: var(--text-muted);">
-                Gesamt RK: <strong id="modal-total-ac" style="color: var(--text-color);">12</strong> (Basis aus Attributen/Ausrüstung)
+            <div style="font-size: 0.9rem; margin-bottom: 12px; color: var(--text-muted); text-align: center;">
+                Gesamt RK: <strong id="modal-total-ac" style="color: var(--text-color); font-size: 1.1rem;">12</strong>
             </div>
             
-            <label style="font-size: 0.85rem; font-weight: bold;">Temporärer RK-Bonus (z.B. durch Schild-Zauber):</label>
-            <input type="number" id="temp-ac-input" class="modal-input" placeholder="z.B. 5">
+            <label style="font-size: 0.85rem; font-weight: bold; display: block; text-align: center; margin-bottom: 4px;">Temporärer RK-Bonus</label>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px;">
+                <button class="mini-btn" onclick="modifyTempAc(-1)" style="padding: 6px 12px; font-size: 0.9rem;">-</button>
+                <span id="modal-temp-ac-number" style="font-size: 1.2rem; font-weight: bold; min-width: 30px; text-align: center; color: var(--primary-gold);">0</span>
+                <button class="mini-btn" onclick="modifyTempAc(1)" style="padding: 6px 12px; font-size: 0.9rem;">+</button>
+            </div>
 
             <div class="modal-buttons">
-                <button class="btn-primary" onclick="saveAcChanges()">Speichern</button>
-                <button class="btn-secondary" onclick="closeAcModal()">Abbrechen</button>
+                <button class="btn-primary" onclick="closeAcModal()">Schließen</button>
             </div>
         </div>
     </div>
@@ -691,16 +713,13 @@
         function updateUI() {
             if (!activeChar) return;
 
-            // Name im Kasten
             document.getElementById('sheet-name').innerText = activeChar.name || "Unbenannter Held";
             document.getElementById('sheet-species').innerText = activeChar.species || "-";
             
-            // Icons
             let speciesIcon = getSpeciesIcon(activeChar.species);
             let classIcon = getClassIcon(activeChar.classesList[0].name);
             document.getElementById('sheet-icons').innerHTML = `<i class="${speciesIcon}" title="${activeChar.species || ''}"></i><i class="${classIcon}" title="${activeChar.classesList[0].name}"></i>`;
 
-            // Klassen-String, Level & Hintergrund in Zeile
             let classStr = activeChar.classesList.map(c => `${c.name} ${c.level}`).join(' / ');
             let totalLevel = activeChar.classesList.reduce((sum, c) => sum + c.level, 0);
 
@@ -721,7 +740,7 @@
                 tempHpContainer.style.display = 'none';
             }
 
-            // Automatische Rüstungsklasse (10 + DEX-Modifikator + temporärer Bonus)
+            // AC & Temp AC
             let dexTotal = activeChar.stats.DEX + (activeChar.speciesBonuses.DEX || 0) + (activeChar.statTemps.DEX || 0);
             let dexMod = Math.floor((dexTotal - 10) / 2);
             let baseAc = 10 + dexMod; 
@@ -737,7 +756,7 @@
                 tempAcContainer.style.display = 'none';
             }
 
-            // Trefferwürfel (Hit Dice)
+            // Trefferwürfel
             let primaryClassName = activeChar.classesList[0].name;
             let dieSize = getHitDieSize(primaryClassName);
             document.getElementById('sheet-hit-dice-type').innerText = `W${dieSize}`;
@@ -746,13 +765,13 @@
             document.getElementById('sheet-hit-dice-current').innerText = activeChar.hitDiceCurrent;
             document.getElementById('sheet-hit-dice-max').innerText = activeChar.hitDiceMax;
 
-            // Todesrettungswürfe Checkboxen synchen
+            // Todesrettungswürfe
             for (let i = 0; i < 3; i++) {
                 document.getElementById(`death-succ-${i}`).checked = activeChar.deathSaves.successes[i];
                 document.getElementById(`death-fail-${i}`).checked = activeChar.deathSaves.failures[i];
             }
 
-            // Attribute rendern mit korrekter Aufschlüsselung (Basis + Rasse + Temp)
+            // Attribute
             const statsGrid = document.getElementById('sheet-stats-grid');
             if (statsGrid && activeChar.stats) {
                 statsGrid.innerHTML = '';
@@ -774,7 +793,7 @@
                 }
             }
 
-            // Zauber rendern
+            // Zauber
             const spellsContainer = document.getElementById('sheet-spells-container');
             if (spellsContainer) {
                 let cantripsText = activeChar.cantrips && activeChar.cantrips.length > 0 ? activeChar.cantrips.join(', ') : 'Keine';
@@ -785,7 +804,7 @@
                 `;
             }
 
-            // Skills / Merkmale rendern
+            // Skills / Merkmale
             const featuresList = document.getElementById('sheet-features-list');
             if (featuresList && activeChar.skills) {
                 featuresList.innerHTML = `<li><strong>Fertigkeiten:</strong> ${activeChar.skills.join(', ')}</li>`;
@@ -806,7 +825,7 @@
             event.currentTarget.classList.add('active');
         }
 
-        // --- RAST LOGIK (Lange & Kurze Rast) ---
+        // --- RAST LOGIK ---
         function openRestModal() {
             document.getElementById('rest-modal').style.display = 'flex';
         }
@@ -823,21 +842,18 @@
 
         function performLongRest() {
             closeRestModal();
-            // HP voll auffüllen
             activeChar.hp = activeChar.maxHp;
             activeChar.tempHp = 0;
-            // Trefferwürfel um Hälfte des Maximums (mindestens 1) zurückerhalten
             let totalLevel = activeChar.classesList.reduce((sum, c) => sum + c.level, 0);
             let recoveredHd = Math.max(1, Math.floor(totalLevel / 2));
             activeChar.hitDiceCurrent = Math.min(totalLevel, (activeChar.hitDiceCurrent || 0) + recoveredHd);
-            // Todesrettungswürfe zurücksetzen
             activeChar.deathSaves = { successes: [false, false, false], failures: [false, false, false] };
             
             updateUI();
             alert("Lange Rast abgeschlossen! TP vollständig wiederhergestellt, Trefferwürfel regeneriert und Todesrettungswürfe zurückgesetzt.");
         }
 
-        // --- TREFFERWÜRFEL MODAL & LOGIK ---
+        // --- TREFFERWÜRFEL MODAL ---
         function openHitDiceModal() {
             let totalLevel = activeChar.classesList.reduce((sum, c) => sum + c.level, 0);
             if (activeChar.hitDiceCurrent === undefined) activeChar.hitDiceCurrent = totalLevel;
@@ -850,7 +866,6 @@
         }
 
         function spendHitDie() {
-            let totalLevel = activeChar.classesList.reduce((sum, c) => sum + c.level, 0);
             if (activeChar.hitDiceCurrent <= 0) {
                 alert("Du hast keine Trefferwürfel mehr übrig!");
                 return;
@@ -870,7 +885,7 @@
             alert(`Trefferwürfel (1W${dieSize}) gewürfelt: ${roll} + ${conMod} (CON) = ${healing} TP geheilt!`);
         }
 
-        // --- TODESRETTUNGSWÜRFE SPEICHERN ---
+        // --- TODESRETTUNGSWÜRFE ---
         function saveDeathSaves() {
             for (let i = 0; i < 3; i++) {
                 activeChar.deathSaves.successes[i] = document.getElementById(`death-succ-${i}`).checked;
@@ -923,7 +938,6 @@
             }
         }
 
-        // --- LEVELUP MODAL MIT KLASSENWAHL & HP METHODE ---
         function openLevelUpModal() {
             closeXpModal();
             let totalLevel = activeChar.classesList.reduce((sum, c) => sum + c.level, 0);
@@ -1021,9 +1035,20 @@
             alert(`Stufenaufstieg komplett! Du bist nun Stufe ${activeChar.level}.`);
         }
 
-        // --- HP DETAIL MODAL MIT SCHNELL-BUTTONS ---
+        // --- HP MODAL LOGIK ---
         function openHpModal() {
+            refreshHpModalDisplay();
+            document.getElementById('hp-modal').style.display = 'flex';
+        }
+
+        function closeHpModal() {
+            document.getElementById('hp-modal').style.display = 'none';
+        }
+
+        function refreshHpModalDisplay() {
             document.getElementById('modal-hp-display').innerText = `${activeChar.hp}/${activeChar.maxHp}`;
+            document.getElementById('modal-temp-hp-number').innerText = activeChar.tempHp || 0;
+            
             const tempIndicator = document.getElementById('modal-temp-hp-indicator');
             const tempValSpan = document.getElementById('modal-temp-hp-val');
             if (activeChar.tempHp > 0) {
@@ -1032,44 +1057,39 @@
             } else {
                 tempIndicator.style.display = 'none';
             }
-            document.getElementById('temp-hp-input').value = activeChar.tempHp || '';
-            document.getElementById('hp-modal').style.display = 'flex';
-        }
-
-        function closeHpModal() {
-            document.getElementById('hp-modal').style.display = 'none';
         }
 
         function modalModifyHp(amount) {
             activeChar.hp = Math.max(0, Math.min(activeChar.maxHp, activeChar.hp + amount));
-            document.getElementById('modal-hp-display').innerText = `${activeChar.hp}/${activeChar.maxHp}`;
+            refreshHpModalDisplay();
             updateUI();
         }
 
-        function fullyHealHp() {
+        function modifyTempHp(amount) {
+            activeChar.tempHp = Math.max(0, (activeChar.tempHp || 0) + amount);
+            refreshHpModalDisplay();
+            updateUI();
+        }
+
+        // Bestätigung für Komplett Auffüllen
+        function confirmFullyHeal() {
+            document.getElementById('confirm-heal-modal').style.display = 'flex';
+        }
+
+        function closeConfirmHealModal() {
+            document.getElementById('confirm-heal-modal').style.display = 'none';
+        }
+
+        function executeFullyHeal() {
             activeChar.hp = activeChar.maxHp;
-            document.getElementById('modal-hp-display').innerText = `${activeChar.hp}/${activeChar.maxHp}`;
+            refreshHpModalDisplay();
             updateUI();
+            closeConfirmHealModal();
         }
 
-        function saveHpChanges() {
-            const newTemp = parseInt(document.getElementById('temp-hp-input').value);
-            if (!isNaN(newTemp)) {
-                activeChar.tempHp = Math.max(0, newTemp);
-            }
-            updateUI();
-            closeHpModal();
-        }
-
-        // --- AC DETAIL MODAL ---
+        // --- AC MODAL LOGIK ---
         function openAcModal() {
-            let dexTotal = activeChar.stats.DEX + (activeChar.speciesBonuses.DEX || 0) + (activeChar.statTemps.DEX || 0);
-            let dexMod = Math.floor((dexTotal - 10) / 2);
-            let baseAc = 10 + dexMod;
-            let totalAc = baseAc + (activeChar.tempAc || 0);
-
-            document.getElementById('modal-total-ac').innerText = totalAc;
-            document.getElementById('temp-ac-input').value = activeChar.tempAc || 0;
+            refreshAcModalDisplay();
             document.getElementById('ac-modal').style.display = 'flex';
         }
 
@@ -1077,13 +1097,20 @@
             document.getElementById('ac-modal').style.display = 'none';
         }
 
-        function saveAcChanges() {
-            const newTemp = parseInt(document.getElementById('temp-ac-input').value);
-            if (!isNaN(newTemp)) {
-                activeChar.tempAc = Math.max(0, newTemp);
-            }
+        function refreshAcModalDisplay() {
+            let dexTotal = activeChar.stats.DEX + (activeChar.speciesBonuses.DEX || 0) + (activeChar.statTemps.DEX || 0);
+            let dexMod = Math.floor((dexTotal - 10) / 2);
+            let baseAc = 10 + dexMod;
+            let totalAc = baseAc + (activeChar.tempAc || 0);
+
+            document.getElementById('modal-total-ac').innerText = totalAc;
+            document.getElementById('modal-temp-ac-number').innerText = activeChar.tempAc || 0;
+        }
+
+        function modifyTempAc(amount) {
+            activeChar.tempAc = Math.max(0, (activeChar.tempAc || 0) + amount);
+            refreshAcModalDisplay();
             updateUI();
-            closeAcModal();
         }
 
         // --- STAT DETAIL MODAL ---
