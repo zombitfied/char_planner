@@ -112,11 +112,18 @@
             text-align: center;
             cursor: pointer;
             transition: all 0.2s;
+            position: relative;
         }
 
         .stat-box:hover {
             border-color: var(--primary-gold);
             background: #f0ebe1;
+        }
+
+        /* Blauer Glanz-Effekt für Temp HP */
+        .temp-hp-glow {
+            box-shadow: 0 0 12px 3px rgba(30, 144, 255, 0.6), inset 0 0 6px rgba(30, 144, 255, 0.4) !important;
+            border-color: #1e90ff !important;
         }
 
         .stat-val { font-size: 1.1rem; font-weight: bold; color: var(--text-color); }
@@ -290,6 +297,11 @@
             color: white;
             border-color: var(--primary-gold);
         }
+        .mini-btn.disabled {
+            opacity: 0.3;
+            cursor: not-allowed !important;
+            pointer-events: none;
+        }
 
         .death-saves-row {
             display: flex;
@@ -370,7 +382,7 @@
                 <h2>Kampfwerte</h2>
                 <!-- Zeile 1: Trefferpunkte & Rüstungsklasse -->
                 <div class="grid-combat">
-                    <div class="stat-box" onclick="openHpModal()" title="Trefferpunkte verwalten">
+                    <div id="sheet-hp-box" class="stat-box" onclick="openHpModal()" title="Trefferpunkte verwalten">
                         <div style="font-size: 0.75rem; color: var(--text-muted);">Trefferpunkte</div>
                         <div id="sheet-temp-hp-container" style="font-size: 0.75rem; color: var(--primary-gold); font-weight: bold; display: none;">+<span id="sheet-temp-hp">0</span> temp</div>
                         <div class="stat-val"><span id="sheet-hp">10</span>/<span id="sheet-max-hp">10</span></div>
@@ -558,11 +570,15 @@
         <div class="modal-card">
             <h3>Trefferpunkte verwalten</h3>
             
+            <div id="hp-lock-warning" style="font-size: 0.8rem; color: #1e90ff; font-weight: bold; text-align: center; margin-bottom: 8px; display: none;">
+                <i class="fa-solid fa-shield-halved"></i> Normale Trefferpunkte sind durch temporäre Trefferpunkte geschützt!
+            </div>
+
             <!-- Plus-Buttons oben -->
             <div class="combat-btn-row">
-                <button class="mini-btn" onclick="modalModifyHp(1)">+1</button>
-                <button class="mini-btn" onclick="modalModifyHp(2)">+2</button>
-                <button class="mini-btn" onclick="modalModifyHp(5)">+5</button>
+                <button id="btn-plus-1" class="mini-btn" onclick="modalModifyHp(1)">+1</button>
+                <button id="btn-plus-2" class="mini-btn" onclick="modalModifyHp(2)">+2</button>
+                <button id="btn-plus-5" class="mini-btn" onclick="modalModifyHp(5)">+5</button>
             </div>
 
             <!-- Anzeige & Komplett-Auffüllen-Button hinter der Anzeige -->
@@ -576,9 +592,9 @@
 
             <!-- Minus-Buttons darunter -->
             <div class="combat-btn-row" style="margin-bottom: 15px;">
-                <button class="mini-btn" onclick="modalModifyHp(-1)">-1</button>
-                <button class="mini-btn" onclick="modalModifyHp(-2)">-2</button>
-                <button class="mini-btn" onclick="modalModifyHp(-5)">-5</button>
+                <button id="btn-minus-1" class="mini-btn" onclick="modalModifyHp(-1)">-1</button>
+                <button id="btn-minus-2" class="mini-btn" onclick="modalModifyHp(-2)">-2</button>
+                <button id="btn-minus-5" class="mini-btn" onclick="modalModifyHp(-5)">-5</button>
             </div>
 
             <!-- Temporäre Trefferpunkte mit Plus/Minus -->
@@ -731,13 +747,16 @@
             document.getElementById('sheet-hp').innerText = activeChar.hp;
             document.getElementById('sheet-max-hp').innerText = activeChar.maxHp;
             
+            const hpBox = document.getElementById('sheet-hp-box');
             const tempHpContainer = document.getElementById('sheet-temp-hp-container');
             const tempHpSpan = document.getElementById('sheet-temp-hp');
             if (activeChar.tempHp > 0) {
                 tempHpSpan.innerText = activeChar.tempHp;
                 tempHpContainer.style.display = 'block';
+                hpBox.classList.add('temp-hp-glow');
             } else {
                 tempHpContainer.style.display = 'none';
+                hpBox.classList.remove('temp-hp-glow');
             }
 
             // AC & Temp AC
@@ -1051,15 +1070,30 @@
             
             const tempIndicator = document.getElementById('modal-temp-hp-indicator');
             const tempValSpan = document.getElementById('modal-temp-hp-val');
+            const warningEl = document.getElementById('hp-lock-warning');
+
             if (activeChar.tempHp > 0) {
                 tempValSpan.innerText = activeChar.tempHp;
                 tempIndicator.style.display = 'inline';
+                warningEl.style.display = 'block';
+
+                // Normale HP Bedienelemente ausgrauen / deaktivieren
+                ['btn-plus-1', 'btn-plus-2', 'btn-plus-5', 'btn-minus-1', 'btn-minus-2', 'btn-minus-5'].forEach(id => {
+                    document.getElementById(id).classList.add('disabled');
+                });
             } else {
                 tempIndicator.style.display = 'none';
+                warningEl.style.display = 'none';
+
+                // Normale HP Bedienelemente aktivieren
+                ['btn-plus-1', 'btn-plus-2', 'btn-plus-5', 'btn-minus-1', 'btn-minus-2', 'btn-minus-5'].forEach(id => {
+                    document.getElementById(id).classList.remove('disabled');
+                });
             }
         }
 
         function modalModifyHp(amount) {
+            if (activeChar.tempHp > 0) return; // Gesperrt solange Temp HP existieren
             activeChar.hp = Math.max(0, Math.min(activeChar.maxHp, activeChar.hp + amount));
             refreshHpModalDisplay();
             updateUI();
