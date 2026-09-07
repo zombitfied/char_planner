@@ -257,9 +257,9 @@
         }
 
         .icon-title {
-            display: inline-flex;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 8px;
         }
     </style>
 </head>
@@ -279,7 +279,7 @@
         </a>
         <h1 id="header-title" class="header-title">Charakter</h1>
         <button class="btn-icon" onclick="openXpModal()" title="Erfahrung & Stufe verwalten">
-            <i class="fa-solid fa-award"></i>
+            <i class="fa-solid fa-award"></i> EP/Lvl
         </button>
     </header>
 
@@ -288,8 +288,11 @@
         <!-- TAB 1: SHEET -->
         <div id="tab-sheet" class="tab-pane active">
             <div class="card">
-                <h2 id="sheet-name" class="icon-title">-</h2>
-                <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 8px;">
+                <div class="icon-title">
+                    <h2 id="sheet-name" style="margin:0; border:none; padding:0;">-</h2>
+                    <div id="sheet-icons" style="font-size: 1.2rem; display: flex; gap: 8px; color: var(--primary-gold);"></div>
+                </div>
+                <div style="font-size: 0.9rem; color: var(--text-muted); margin: 8px 0;">
                     <span id="sheet-species">-</span> | <span id="sheet-class">-</span> (Stufe <span id="sheet-level">1</span>)
                 </div>
                 <div><strong>Hintergrund:</strong> <span id="sheet-bg">-</span></div>
@@ -401,7 +404,7 @@
 
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px solid var(--surface-border); padding-top: 12px;">
                 <button id="levelup-btn" class="btn-primary btn-disabled" onclick="performLevelUp()" disabled>
-                    <i class="fa-solid fa-angles-up"></i> Stufenaufstieg durchführen
+                    <i class="fa-solid fa-angles-up"></i> Stufenaufstieg
                 </button>
                 <button class="btn-secondary" onclick="closeXpModal()">Schließen</button>
             </div>
@@ -441,29 +444,48 @@
                 return;
             }
 
-            activeChar = JSON.parse(savedChar);
+            try {
+                activeChar = JSON.parse(savedChar);
+            } catch (e) {
+                alert("Fehler beim Laden des Charakters.");
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Fallbacks sicherstellen, falls Werte fehlen
             if (activeChar.xp === undefined) activeChar.xp = 0;
-            if (activeChar.hp === undefined) activeChar.hp = activeChar.maxHp || 10;
+            if (activeChar.maxHp === undefined) activeChar.maxHp = 10;
+            if (activeChar.hp === undefined) activeChar.hp = activeChar.maxHp;
             if (activeChar.tempHp === undefined) activeChar.tempHp = 0;
             if (!activeChar.classesList) {
                 activeChar.classesList = [{ name: activeChar.class || "Abenteurer", level: activeChar.level || 1 }];
+            }
+
+            // Standard-Attribute falls leer
+            if (!activeChar.stats) {
+                activeChar.stats = { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 };
+            }
+            if (!activeChar.mods) {
+                activeChar.mods = { STR: 0, DEX: 0, CON: 0, INT: 0, WIS: 0, CHA: 0 };
             }
 
             updateUI();
         });
 
         function updateUI() {
+            if (!activeChar) return;
+
             // Header & Info
             document.getElementById('header-title').innerText = activeChar.name || "Helden-Sheet";
-            
-            // Icons für Rasse/Klasse holen falls vorhanden
-            let speciesIcon = getSpeciesIcon(activeChar.species);
-            let classIcon = getClassIcon(activeChar.classesList[0].name);
-
-            document.getElementById('sheet-name').innerHTML = `${activeChar.name || "Unbenannter Held"} <span style="float:right; font-size:1.1rem; display:flex; gap:6px;"><i class="${speciesIcon}" title="${activeChar.species}"></i><i class="${classIcon}" title="${activeChar.classesList[0].name}"></i></span>`;
+            document.getElementById('sheet-name').innerText = activeChar.name || "Unbenannter Held";
             document.getElementById('sheet-species').innerText = activeChar.species || "-";
             
-            // Klassen-String zusammenbauen (z.B. Artificer 2 / Fighter 1)
+            // Icons
+            let speciesIcon = getSpeciesIcon(activeChar.species);
+            let classIcon = getClassIcon(activeChar.classesList[0].name);
+            document.getElementById('sheet-icons').innerHTML = `<i class="${speciesIcon}" title="${activeChar.species || ''}"></i><i class="${classIcon}" title="${activeChar.classesList[0].name}"></i>`;
+
+            // Klassen-String
             let classStr = activeChar.classesList.map(c => `${c.name} ${c.level}`).join(' / ');
             let totalLevel = activeChar.classesList.reduce((sum, c) => sum + c.level, 0);
 
@@ -473,7 +495,7 @@
             
             // HP & Temp HP
             document.getElementById('sheet-hp').innerText = activeChar.hp;
-            document.getElementById('sheet-max-hp').innerText = activeChar.maxHp || 10;
+            document.getElementById('sheet-max-hp').innerText = activeChar.maxHp;
             
             const tempHpContainer = document.getElementById('sheet-temp-hp-container');
             const tempHpSpan = document.getElementById('sheet-temp-hp');
@@ -488,11 +510,11 @@
             document.getElementById('sheet-xp').innerText = activeChar.xp;
 
             // Attribute rendern
-            if (activeChar.stats && activeChar.mods) {
-                const statsGrid = document.getElementById('sheet-stats-grid');
+            const statsGrid = document.getElementById('sheet-stats-grid');
+            if (statsGrid && activeChar.stats && activeChar.mods) {
                 statsGrid.innerHTML = '';
                 for (let s in activeChar.stats) {
-                    let mod = activeChar.mods[s];
+                    let mod = activeChar.mods[s] !== undefined ? activeChar.mods[s] : 0;
                     let modStr = mod >= 0 ? `+${mod}` : `${mod}`;
                     statsGrid.innerHTML += `
                         <div class="stat-box" style="cursor:default;">
@@ -506,16 +528,18 @@
 
             // Zauber rendern
             const spellsContainer = document.getElementById('sheet-spells-container');
-            let cantripsText = activeChar.cantrips && activeChar.cantrips.length > 0 ? activeChar.cantrips.join(', ') : 'Keine';
-            let spellsText = activeChar.spells && activeChar.spells.length > 0 ? activeChar.spells.join(', ') : 'Keine';
-            spellsContainer.innerHTML = `
-                <p><strong>Cantrips:</strong> ${cantripsText}</p>
-                <p><strong>Vorbereitete Stufe 1 Zauber:</strong> ${spellsText}</p>
-            `;
+            if (spellsContainer) {
+                let cantripsText = activeChar.cantrips && activeChar.cantrips.length > 0 ? activeChar.cantrips.join(', ') : 'Keine';
+                let spellsText = activeChar.spells && activeChar.spells.length > 0 ? activeChar.spells.join(', ') : 'Keine';
+                spellsContainer.innerHTML = `
+                    <p><strong>Cantrips:</strong> ${cantripsText}</p>
+                    <p><strong>Vorbereitete Stufe 1 Zauber:</strong> ${spellsText}</p>
+                `;
+            }
 
             // Skills / Merkmale rendern
-            if (activeChar.skills) {
-                const featuresList = document.getElementById('sheet-features-list');
+            const featuresList = document.getElementById('sheet-features-list');
+            if (featuresList && activeChar.skills) {
                 featuresList.innerHTML = `<li><strong>Fertigkeiten:</strong> ${activeChar.skills.join(', ')}</li>`;
             }
 
@@ -584,25 +608,22 @@
 
             let chosenClass = activeChar.classesList[0].name;
 
-            // Ab Level 3 Multiclassing-Auswahl prüfen (wenn noch keine Zweitklasse gewählt wurde)
             if (totalLevel >= 2 && activeChar.classesList.length === 1) {
                 let addSecond = confirm(`Du erreichst Stufe 3! Möchtest du eine Zweitklasse wählen (Multiclassing)?\n\nKlicke auf "OK" für eine neue Klasse oder auf "Abbrechen", um deine Hauptklasse (${activeChar.classesList[0].name}) weiter aufzustufen.`);
                 if (addSecond) {
-                    let secondClassName gibts = prompt("Gib den Namen der Zweitklasse ein (z.B. Fighter, Rogue, Wizard):");
-                    if (secondClassName gibts && secondClassName gibts.trim() !== "") {
-                        chosenClass = secondClassName gibts.trim();
+                    let secondClassName = prompt("Gib den Namen der Zweitklasse ein (z.B. Fighter, Rogue, Wizard):");
+                    if (secondClassName && secondClassName.trim() !== "") {
+                        chosenClass = secondClassName.trim();
                         activeChar.classesList.push({ name: chosenClass, level: 1 });
                     } else {
-                        // Standardmäßig Hauptklasse erhöhen falls abgebrochen
                         activeChar.classesList[0].level += 1;
                     }
                 } else {
                     activeChar.classesList[0].level += 1;
                 }
             } else {
-                // Bereits Zweitklasse vorhanden oder unter Stufe 3 -> Abfrage welche Klasse aufgestuft wird
                 let classChoices = activeChar.classesList.map((c, i) => `${i + 1}: ${c.name} (Stufe ${c.level})`).join('\n');
-                let selection = prompt(`Welche Klasse möchtest du aufstufen?\n\n${classChoices}\n\nGib die Nummer (1 oder 2) ein:`);
+                let selection = prompt(`Welche Klasse möchtest du aufstufen?\n\n${classChoices}\n\nGib die Nummer ein:`);
                 let index = parseInt(selection) - 1;
                 if (!isNaN(index) && activeChar.classesList[index]) {
                     activeChar.classesList[index].level += 1;
@@ -612,11 +633,9 @@
                 }
             }
 
-            // HP anheben (pauschaler Durchschnitt pro Stufe als Komfortfunktion)
             activeChar.maxHp = (activeChar.maxHp || 10) + 6;
             activeChar.hp = activeChar.maxHp;
 
-            // Globalen String aktualisieren
             activeChar.class = activeChar.classesList.map(c => `${c.name} ${c.level}`).join(' / ');
             activeChar.level = activeChar.classesList.reduce((sum, c) => sum + c.level, 0);
 
@@ -654,7 +673,7 @@
             closeHpModal();
         }
 
-        // Helper für Icons (analog zum Creator)
+        // Helper für Icons
         function getSpeciesIcon(species) {
             if (!species) return 'fa-solid fa-user';
             const s = species.toLowerCase();
