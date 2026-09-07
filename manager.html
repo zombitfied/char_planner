@@ -46,14 +46,6 @@
             flex-shrink: 0;
         }
 
-        .header-title {
-            font-size: 1.1rem;
-            margin: 0;
-            color: var(--primary-gold);
-            font-family: serif;
-            text-transform: uppercase;
-        }
-
         .btn-icon {
             background: #faf7f2;
             border: 1.5px solid var(--surface-border);
@@ -82,7 +74,7 @@
             flex: 1;
             overflow-y: auto;
             padding: 16px;
-            padding-bottom: 140px; /* Genug Abstand zum Footer, damit nichts überdeckt wird */
+            padding-bottom: 140px;
             max-width: 600px;
             width: 100%;
             margin: 0 auto;
@@ -110,12 +102,12 @@
 
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .grid-combat { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .grid-combat { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
 
         .stat-box {
             background: #faf7f2;
             border: 1.5px solid var(--surface-border);
-            padding: 10px 8px;
+            padding: 8px 6px;
             border-radius: 6px;
             text-align: center;
             cursor: pointer;
@@ -127,7 +119,7 @@
             background: #f0ebe1;
         }
 
-        .stat-val { font-size: 1.2rem; font-weight: bold; color: var(--text-color); }
+        .stat-val { font-size: 1.1rem; font-weight: bold; color: var(--text-color); }
         .stat-mod { font-size: 0.8rem; color: var(--primary-gold); }
 
         /* Unten angeordnete Tab-Leiste im Stein-Look */
@@ -276,20 +268,43 @@
             border-color: var(--primary-gold);
         }
 
+        .combat-btn-row {
+            display: flex;
+            justify-content: center;
+            gap: 3px;
+            margin: 3px 0;
+            flex-wrap: wrap;
+        }
+        .mini-btn {
+            background: #faf7f2;
+            border: 1px solid var(--surface-border);
+            border-radius: 4px;
+            padding: 2px 5px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+        .mini-btn:hover {
+            background: var(--primary-gold);
+            color: white;
+            border-color: var(--primary-gold);
+        }
+
         .death-saves-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin: 6px 0;
-            font-size: 0.8rem;
+            margin: 4px 0;
+            font-size: 0.75rem;
         }
         .death-checkboxes {
             display: flex;
-            gap: 8px;
+            gap: 6px;
         }
         .death-checkboxes input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             accent-color: var(--primary-gold);
             cursor: pointer;
         }
@@ -324,7 +339,9 @@
         <a href="index.html" class="btn-icon">
             <i class="fa-solid fa-door-open"></i> Eingang
         </a>
-        <h1 class="header-title">Charakter</h1>
+        <button class="btn-icon" onclick="openRestModal()">
+            <i class="fa-solid fa-bed"></i> Rast
+        </button>
         <button class="btn-icon" onclick="openXpModal()" title="Erfahrung & Stufe verwalten">
             <i class="fa-solid fa-award"></i> EP/Lvl
         </button>
@@ -359,7 +376,7 @@
                         <div class="stat-val"><span id="sheet-hp">10</span>/<span id="sheet-max-hp">10</span></div>
                     </div>
                     <div class="stat-box" onclick="openAcModal()" title="Rüstungsklasse verwalten">
-                        <div style="font-size: 0.75rem; color: var(--text-muted);">Rüstungsklasse</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">RK</div>
                         <div id="sheet-temp-ac-container" style="font-size: 0.75rem; color: var(--primary-gold); font-weight: bold; display: none;">+<span id="sheet-temp-ac">0</span> temp</div>
                         <div class="stat-val"><span id="sheet-ac">12</span></div>
                     </div>
@@ -368,7 +385,7 @@
                 <!-- Zeile 2: Trefferwürfel & Todesrettungswürfe -->
                 <div class="grid-combat" style="margin-bottom: 0;">
                     <!-- Trefferwürfel Box -->
-                    <div class="stat-box" style="cursor: default;">
+                    <div class="stat-box" onclick="openHitDiceModal()" title="Trefferwürfel einsetzen / heilen">
                         <div style="font-size: 0.75rem; color: var(--text-muted);">Trefferwürfel</div>
                         <div class="stat-val" style="font-size: 1.05rem; margin-top: 4px;">
                             <span id="sheet-hit-dice-type">W8</span>: <span id="sheet-hit-dice-current">1</span>/<span id="sheet-hit-dice-max">1</span>
@@ -377,8 +394,8 @@
                     </div>
 
                     <!-- Todesrettungswürfe Box -->
-                    <div class="stat-box" style="cursor: default; text-align: left; padding: 8px 10px;">
-                        <div style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-bottom: 4px;">Todesrettung</div>
+                    <div class="stat-box" style="cursor: default; text-align: left; padding: 6px 8px;">
+                        <div style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-bottom: 2px;">Todesrettung</div>
                         <div class="death-saves-row">
                             <span>Erfolge</span>
                             <div class="death-checkboxes">
@@ -388,7 +405,7 @@
                             </div>
                         </div>
                         <div class="death-saves-row" style="margin-bottom: 0;">
-                            <span>Misserfolge</span>
+                            <span>Fehler</span>
                             <div class="death-checkboxes">
                                 <input type="checkbox" id="death-fail-0" onclick="saveDeathSaves()">
                                 <input type="checkbox" id="death-fail-1" onclick="saveDeathSaves()">
@@ -469,6 +486,36 @@
         </button>
     </nav>
 
+    <!-- MODAL: RAST AUSWAHL -->
+    <div id="rest-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3>Rast einlegen</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted);">Wähle die Art der Rast:</p>
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
+                <button class="btn-primary" onclick="performShortRest()"><i class="fa-solid fa-mug-hot"></i> Kurze Rast (Short Rest)</button>
+                <button class="btn-primary" onclick="performLongRest()"><i class="fa-solid fa-bed"></i> Lange Rast (Long Rest)</button>
+            </div>
+            <div class="modal-buttons" style="margin-top: 20px;">
+                <button class="btn-secondary" onclick="closeRestModal()">Abbrechen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: TREFFERWÜRFEL NUTZEN -->
+    <div id="hitdice-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3>Trefferwürfel einsetzen</h3>
+            <div style="font-size: 0.9rem; margin-bottom: 12px; color: var(--text-muted);">
+                Verfügbare Trefferwürfel: <strong id="modal-hd-display">1/1</strong>
+            </div>
+            <p style="font-size: 0.85rem;">Gib einen Würfel aus, um HP zu heilen (1 Würfel + Konstitutions-Modifikator).</p>
+            <div class="modal-buttons">
+                <button class="btn-primary" onclick="spendHitDie()"><i class="fa-solid fa-dice"></i> Trefferwürfel würfeln</button>
+                <button class="btn-secondary" onclick="closeHitDiceModal()">Schließen</button>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL: EP & LEVELUP -->
     <div id="xp-modal" class="modal-overlay">
         <div class="modal-card">
@@ -506,27 +553,39 @@
         </div>
     </div>
 
-    <!-- MODAL: TREFFERPUNKTE DETAIL -->
+    <!-- MODAL: TREFFERPUNKTE DETAIL MIT SCHNELL-BUTTONS -->
     <div id="hp-modal" class="modal-overlay">
         <div class="modal-card">
             <h3>Trefferpunkte verwalten</h3>
-            <div style="font-size: 0.9rem; margin-bottom: 12px; color: var(--text-muted);">
-                Aktuell: <strong id="modal-hp-display" style="color: var(--text-color);">10/10</strong> (Max HP: <span id="modal-max-hp-display">10</span>)
+            <div style="font-size: 0.9rem; margin-bottom: 10px; color: var(--text-muted); text-align: center;">
+                Aktuell: <strong id="modal-hp-display" style="color: var(--text-color); font-size: 1.1rem;">10/10</strong> 
+                <span id="modal-temp-hp-indicator" style="color: var(--primary-gold); display:none;">(+<span id="modal-temp-hp-val">0</span> temp)</span>
             </div>
             
-            <div style="margin-bottom: 12px;">
-                <button class="btn-primary" style="width: 100%; margin-bottom: 10px;" onclick="fullyHealHp()"><i class="fa-solid fa-heart-pulse"></i> Komplett auffüllen (Max TP)</button>
+            <!-- Schnell-Buttons Minus -->
+            <div class="combat-btn-row">
+                <button class="mini-btn" onclick="modalModifyHp(-5)">-5</button>
+                <button class="mini-btn" onclick="modalModifyHp(-2)">-2</button>
+                <button class="mini-btn" onclick="modalModifyHp(-1)">-1</button>
             </div>
 
-            <label style="font-size: 0.85rem; font-weight: bold;">Trefferpunkte anpassen (+ Heilung / - Schaden):</label>
-            <input type="number" id="hp-change-input" class="modal-input" placeholder="z.B. -5 oder 8">
+            <div style="margin: 8px 0;">
+                <button class="btn-primary" style="width: 100%; font-size: 0.85rem; padding: 6px;" onclick="fullyHealHp()"><i class="fa-solid fa-heart-pulse"></i> Komplett auffüllen (Max TP)</button>
+            </div>
 
-            <label style="font-size: 0.85rem; font-weight: bold;">Temporäre Trefferpunkte:</label>
+            <!-- Schnell-Buttons Plus -->
+            <div class="combat-btn-row" style="margin-bottom: 15px;">
+                <button class="mini-btn" onclick="modalModifyHp(1)">+1</button>
+                <button class="mini-btn" onclick="modalModifyHp(2)">+2</button>
+                <button class="mini-btn" onclick="modalModifyHp(5)">+5</button>
+            </div>
+
+            <label style="font-size: 0.85rem; font-weight: bold;">Temporäre Trefferpunkte (setzen):</label>
             <input type="number" id="temp-hp-input" class="modal-input" placeholder="z.B. 5">
 
             <div class="modal-buttons">
                 <button class="btn-primary" onclick="saveHpChanges()">Speichern</button>
-                <button class="btn-secondary" onclick="closeHpModal()">Abbrechen</button>
+                <button class="btn-secondary" onclick="closeHpModal()">Schließen</button>
             </div>
         </div>
     </div>
@@ -536,12 +595,9 @@
         <div class="modal-card">
             <h3>Rüstungsklasse verwalten</h3>
             <div style="font-size: 0.9rem; margin-bottom: 12px; color: var(--text-muted);">
-                Basis RK: <strong id="modal-base-ac" style="color: var(--text-color);">12</strong> | Temp Bonus: <strong id="modal-temp-ac-display">0</strong>
+                Gesamt RK: <strong id="modal-total-ac" style="color: var(--text-color);">12</strong> (Basis aus Attributen/Ausrüstung)
             </div>
             
-            <label style="font-size: 0.85rem; font-weight: bold;">Basis-RK (ohne temporäre Boni):</label>
-            <input type="number" id="base-ac-input" class="modal-input" placeholder="z.B. 12">
-
             <label style="font-size: 0.85rem; font-weight: bold;">Temporärer RK-Bonus (z.B. durch Schild-Zauber):</label>
             <input type="number" id="temp-ac-input" class="modal-input" placeholder="z.B. 5">
 
@@ -623,8 +679,6 @@
             if (!activeChar.statTemps) {
                 activeChar.statTemps = { STR: 0, DEX: 0, CON: 0, INT: 0, WIS: 0, CHA: 0 };
             }
-
-            // Rassenboni abbilden falls im Creator als Basis gespeichert (Beispiel Gnom +2 INT)
             if (!activeChar.speciesBonuses && activeChar.species && activeChar.species.toLowerCase().includes('gnome')) {
                 activeChar.speciesBonuses = { INT: 2 };
             } else if (!activeChar.speciesBonuses) {
@@ -637,7 +691,7 @@
         function updateUI() {
             if (!activeChar) return;
 
-            // Header & Info (Name nicht mehr im Header, sondern nur im Kasten)
+            // Name im Kasten
             document.getElementById('sheet-name').innerText = activeChar.name || "Unbenannter Held";
             document.getElementById('sheet-species').innerText = activeChar.species || "-";
             
@@ -667,9 +721,13 @@
                 tempHpContainer.style.display = 'none';
             }
 
-            // AC & Temp AC
-            let effectiveAc = (activeChar.baseAc || activeChar.ac || 12) + (activeChar.tempAc || 0);
+            // Automatische Rüstungsklasse (10 + DEX-Modifikator + temporärer Bonus)
+            let dexTotal = activeChar.stats.DEX + (activeChar.speciesBonuses.DEX || 0) + (activeChar.statTemps.DEX || 0);
+            let dexMod = Math.floor((dexTotal - 10) / 2);
+            let baseAc = 10 + dexMod; 
+            let effectiveAc = baseAc + (activeChar.tempAc || 0);
             document.getElementById('sheet-ac').innerText = effectiveAc;
+
             const tempAcContainer = document.getElementById('sheet-temp-ac-container');
             const tempAcSpan = document.getElementById('sheet-temp-ac');
             if (activeChar.tempAc > 0) {
@@ -746,6 +804,70 @@
             
             document.getElementById('tab-' + tabId).classList.add('active');
             event.currentTarget.classList.add('active');
+        }
+
+        // --- RAST LOGIK (Lange & Kurze Rast) ---
+        function openRestModal() {
+            document.getElementById('rest-modal').style.display = 'flex';
+        }
+
+        function closeRestModal() {
+            document.getElementById('rest-modal').style.display = 'none';
+        }
+
+        function performShortRest() {
+            closeRestModal();
+            alert("Kurze Rast eingelegt: Du kannst Trefferwürfel einsetzen, um TP zu heilen.");
+            openHitDiceModal();
+        }
+
+        function performLongRest() {
+            closeRestModal();
+            // HP voll auffüllen
+            activeChar.hp = activeChar.maxHp;
+            activeChar.tempHp = 0;
+            // Trefferwürfel um Hälfte des Maximums (mindestens 1) zurückerhalten
+            let totalLevel = activeChar.classesList.reduce((sum, c) => sum + c.level, 0);
+            let recoveredHd = Math.max(1, Math.floor(totalLevel / 2));
+            activeChar.hitDiceCurrent = Math.min(totalLevel, (activeChar.hitDiceCurrent || 0) + recoveredHd);
+            // Todesrettungswürfe zurücksetzen
+            activeChar.deathSaves = { successes: [false, false, false], failures: [false, false, false] };
+            
+            updateUI();
+            alert("Lange Rast abgeschlossen! TP vollständig wiederhergestellt, Trefferwürfel regeneriert und Todesrettungswürfe zurückgesetzt.");
+        }
+
+        // --- TREFFERWÜRFEL MODAL & LOGIK ---
+        function openHitDiceModal() {
+            let totalLevel = activeChar.classesList.reduce((sum, c) => sum + c.level, 0);
+            if (activeChar.hitDiceCurrent === undefined) activeChar.hitDiceCurrent = totalLevel;
+            document.getElementById('modal-hd-display').innerText = `${activeChar.hitDiceCurrent}/${totalLevel}`;
+            document.getElementById('hitdice-modal').style.display = 'flex';
+        }
+
+        function closeHitDiceModal() {
+            document.getElementById('hitdice-modal').style.display = 'none';
+        }
+
+        function spendHitDie() {
+            let totalLevel = activeChar.classesList.reduce((sum, c) => sum + c.level, 0);
+            if (activeChar.hitDiceCurrent <= 0) {
+                alert("Du hast keine Trefferwürfel mehr übrig!");
+                return;
+            }
+            let primaryClassName = activeChar.classesList[0].name;
+            let dieSize = getHitDieSize(primaryClassName);
+            let conMod = Math.floor(((activeChar.stats.CON + (activeChar.speciesBonuses.CON || 0) + (activeChar.statTemps.CON || 0) - 10) / 2));
+            
+            let roll = Math.floor(Math.random() * dieSize) + 1;
+            let healing = Math.max(1, roll + conMod);
+
+            activeChar.hitDiceCurrent -= 1;
+            activeChar.hp = Math.min(activeChar.maxHp, activeChar.hp + healing);
+
+            updateUI();
+            closeHitDiceModal();
+            alert(`Trefferwürfel (1W${dieSize}) gewürfelt: ${roll} + ${conMod} (CON) = ${healing} TP geheilt!`);
         }
 
         // --- TODESRETTUNGSWÜRFE SPEICHERN ---
@@ -844,7 +966,7 @@
 
         function finalizeLevelUpStep(className) {
             closeLevelUpModal();
-            let conMod = Math.floor(((activeChar.stats.CON || 10) - 10) / 2);
+            let conMod = Math.floor(((activeChar.stats.CON + (activeChar.speciesBonuses.CON || 0) + (activeChar.statTemps.CON || 0) - 10) / 2));
             let container = document.getElementById('levelup-content');
             let dieSize = getHitDieSize(className);
 
@@ -899,17 +1021,29 @@
             alert(`Stufenaufstieg komplett! Du bist nun Stufe ${activeChar.level}.`);
         }
 
-        // --- HP DETAIL MODAL ---
+        // --- HP DETAIL MODAL MIT SCHNELL-BUTTONS ---
         function openHpModal() {
             document.getElementById('modal-hp-display').innerText = `${activeChar.hp}/${activeChar.maxHp}`;
-            document.getElementById('modal-max-hp-display').innerText = activeChar.maxHp;
-            document.getElementById('hp-change-input').value = '';
-            document.getElementById('temp-hp-input').value = activeChar.tempHp || 0;
+            const tempIndicator = document.getElementById('modal-temp-hp-indicator');
+            const tempValSpan = document.getElementById('modal-temp-hp-val');
+            if (activeChar.tempHp > 0) {
+                tempValSpan.innerText = activeChar.tempHp;
+                tempIndicator.style.display = 'inline';
+            } else {
+                tempIndicator.style.display = 'none';
+            }
+            document.getElementById('temp-hp-input').value = activeChar.tempHp || '';
             document.getElementById('hp-modal').style.display = 'flex';
         }
 
         function closeHpModal() {
             document.getElementById('hp-modal').style.display = 'none';
+        }
+
+        function modalModifyHp(amount) {
+            activeChar.hp = Math.max(0, Math.min(activeChar.maxHp, activeChar.hp + amount));
+            document.getElementById('modal-hp-display').innerText = `${activeChar.hp}/${activeChar.maxHp}`;
+            updateUI();
         }
 
         function fullyHealHp() {
@@ -919,26 +1053,22 @@
         }
 
         function saveHpChanges() {
-            const hpChange = parseInt(document.getElementById('hp-change-input').value);
             const newTemp = parseInt(document.getElementById('temp-hp-input').value);
-
-            if (!isNaN(hpChange)) {
-                activeChar.hp = Math.max(0, Math.min(activeChar.maxHp, activeChar.hp + hpChange));
-            }
             if (!isNaN(newTemp)) {
                 activeChar.tempHp = Math.max(0, newTemp);
             }
-
             updateUI();
             closeHpModal();
         }
 
         // --- AC DETAIL MODAL ---
         function openAcModal() {
-            let base = activeChar.baseAc || activeChar.ac || 12;
-            document.getElementById('modal-base-ac').innerText = base;
-            document.getElementById('modal-temp-ac-display').innerText = activeChar.tempAc || 0;
-            document.getElementById('base-ac-input').value = base;
+            let dexTotal = activeChar.stats.DEX + (activeChar.speciesBonuses.DEX || 0) + (activeChar.statTemps.DEX || 0);
+            let dexMod = Math.floor((dexTotal - 10) / 2);
+            let baseAc = 10 + dexMod;
+            let totalAc = baseAc + (activeChar.tempAc || 0);
+
+            document.getElementById('modal-total-ac').innerText = totalAc;
             document.getElementById('temp-ac-input').value = activeChar.tempAc || 0;
             document.getElementById('ac-modal').style.display = 'flex';
         }
@@ -948,17 +1078,15 @@
         }
 
         function saveAcChanges() {
-            const newBase = parseInt(document.getElementById('base-ac-input').value);
             const newTemp = parseInt(document.getElementById('temp-ac-input').value);
-
-            if (!isNaN(newBase)) activeChar.baseAc = newBase;
-            if (!isNaN(newTemp)) activeChar.tempAc = Math.max(0, newTemp);
-
+            if (!isNaN(newTemp)) {
+                activeChar.tempAc = Math.max(0, newTemp);
+            }
             updateUI();
             closeAcModal();
         }
 
-        // --- STAT DETAIL MODAL (Aufschlüsselung Basis + Rasse + Temp) ---
+        // --- STAT DETAIL MODAL ---
         function openStatModal(statKey) {
             selectedStatKey = statKey;
             let baseVal = activeChar.stats[statKey];
@@ -999,7 +1127,7 @@
             closeStatModal();
         }
 
-        // --- INFO MODAL (Rasse, Klasse, Hintergrund) ---
+        // --- INFO MODAL ---
         function openInfoModal(type) {
             let title = "";
             let text = "";
