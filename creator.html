@@ -282,6 +282,7 @@
 <script>
 const LOCAL_JSON_URL = "./compendium.json";
 const SPELLS_HTML_URL = "./spells-parsed.html";
+const SPELL_LISTS_HTML_URL = "./spelllists-parsed.html";
 const standardArray = [15, 14, 13, 12, 10, 8];
 
 const attributeDescriptions = {
@@ -299,6 +300,7 @@ let backgrounds = {};
 let skillDescriptions = {};
 let spellCompendium = {};
 let weaponsCompendium = {};
+let classSpellLists = {}; // Struktur: { "Barde": { cantrips: [...], level1: [...], level2: [...] }, ... }
 
 let lastBuiltCharacter = null;
 let isSaved = false;
@@ -316,6 +318,7 @@ window.onload = async function() {
         spellCompendium = data.spellCompendium || { cantrips: {}, level1: {} };
         weaponsCompendium = data.weapons || {};
 
+        // spells-parsed.html laden
         try {
             const spellResponse = await fetch(SPELLS_HTML_URL + "?t=" + new Date().getTime());
             if (spellResponse.ok) {
@@ -323,7 +326,18 @@ window.onload = async function() {
                 parseSpellsHtml(htmlText);
             }
         } catch (spellErr) {
-            console.warn("Konnte spells-parsed.html nicht laden, nutze Fallback aus JSON.", spellErr);
+            console.warn("Konnte spells-parsed.html nicht laden.", spellErr);
+        }
+
+        // spelllists-parsed.html laden
+        try {
+            const listResponse = await fetch(SPELL_LISTS_HTML_URL + "?t=" + new Date().getTime());
+            if (listResponse.ok) {
+                const listHtmlText = await listResponse.text();
+                parseSpellListsHtml(listHtmlText);
+            }
+        } catch (listErr) {
+            console.warn("Konnte spelllists-parsed.html nicht laden.", listErr);
         }
 
         initApp();
@@ -362,6 +376,84 @@ function parseSpellsHtml(htmlText) {
             } else {
                 spellCompendium.level1[spellName].rule = htmlContent;
             }
+        }
+    });
+}
+
+// Parst spelllists-parsed.html und baut classSpellLists auf
+function parseSpellListsHtml(htmlText) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlText, 'text/html');
+    
+    // Finde alle Klassen-Überschriften (z.B. <h4>Zauber des Barden</h4>)
+    const h4Elements = doc.querySelectorAll('h4');
+    
+    h4Elements.forEach(h4 => {
+        const titleText = h4.textContent.trim();
+        // Klasse aus Titel extrahieren (z.B. "Zauber des Barden" -> "Bard" oder direkt deutscher Name)
+        let className = titleText.replace('Zauber des ', '').replace('Zauber der ', '').trim();
+        
+        // Mapping deutscher Klassennamen auf englische System-Keys falls nötig (abhängig von classes Keys)
+        const mapping = {
+            "Barden": "Bard",
+            "Druiden": "Druid",
+            "Hexenmeisters": "Warlock",
+            "Klerikers": "Cleric",
+            "Magiers": "Wizard",
+            "Paladins": "Paladin",
+            "Waldläufers": "Ranger",
+            "Zauberers": "Wizard"
+        };
+        
+        // Wenn direkter Match in classes vorhanden, behalten, sonst mappen
+        if (!classes[className] && mapping[className]) {
+            className = mapping[className];
+        }
+
+        if (!classSpellLists[className]) {
+            classSpellLists[className] = { cantrips: [], level1: [], level2: [], level3: [], level4: [], level5: [], level6: [], level7: [], level8: [], level9: [] };
+        }
+
+        // Geschwister-Elemente durchgehen bis zum nächsten h4
+        let nextElem = h4.nextElementSibling;
+        let currentLevelKey = null;
+
+        while (nextElem && nextElem.tagName !== 'H4') {
+            if (nextElem.tagName === 'H5') {
+                const h5Text = nextElem.textContent.toLowerCase();
+                if (h5Text.includes('zaubertrick') || h5Text.includes('0. grad')) {
+                    currentLevelKey = 'cantrips';
+                } else if (h5Text.includes('1. grad')) {
+                    currentLevelKey = 'level1';
+                } else if (h5Text.includes('2. grad')) {
+                    currentLevelKey = 'level2';
+                } else if (h5Text.includes('3. grad')) {
+                    currentLevelKey = 'level3';
+                } else if (h5Text.includes('4. grad')) {
+                    currentLevelKey = 'level4';
+                } else if (h5Text.includes('5. grad')) {
+                    currentLevelKey = 'level5';
+                } else if (h5Text.includes('6. grad')) {
+                    currentLevelKey = 'level6';
+                } else if (h5Text.includes('7. grad')) {
+                    currentLevelKey = 'level7';
+                } else if (h5Text.includes('8. grad')) {
+                    currentLevelKey = 'level8';
+                } else if (h5Text.includes('9. grad')) {
+                    currentLevelKey = 'level9';
+                } else {
+                    currentLevelKey = null;
+                }
+            } else if (nextElem.tagName === 'UL' && currentLevelKey) {
+                const links = nextElem.querySelectorAll('a');
+                links.forEach(a => {
+                    const spellName = a.textContent.trim();
+                    if (spellName && !classSpellLists[className][currentLevelKey].includes(spellName)) {
+                        classSpellLists[className][currentLevelKey].push(spellName);
+                    }
+                });
+            }
+            nextElem = nextElem.nextElementSibling;
         }
     });
 }
@@ -563,10 +655,10 @@ function updateSpellsUI() {
         return;
     }
 
-    const allowedCantrips = Object.keys(spellCompendium.cantrips || {}).filter(c => {
-        const item = spellCompendium.cantrips[c];
-        return !item.classes || item.classes.length === 0 || item.classes.map(i => i.trim()).includes(className);
-    });
+    // Nutzung der klassenspezifischen Zauberliste aus spelllists-parsed.html falls vorhanden, ansonsten Fallback
+    const classList = classSpellLists[className] || {};
+    const allowedCantrips = classList.cantrips && classList.cantrips.length > 0 ? classList.cantrips : Object.keys(spellCompendium.cantrips || {});
+    const allowedLvl1 = classList.level1 && classList.level1.length > 0 ? classList.level1 : Object.keys(spellCompendium.level1 || {});
 
     const maxCantrips = cls.cantripsKnown;
     document.getElementById('cantrip-label').innerText = `Wähle ${maxCantrips} Zaubertricks:`;
@@ -581,11 +673,6 @@ function updateSpellsUI() {
                 <button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling)">ℹ</button>
             </div>`;
     }
-
-    const allowedLvl1 = Object.keys(spellCompendium.level1 || {}).filter(s => {
-        const item = spellCompendium.level1[s];
-        return !item.classes || item.classes.length === 0 || item.classes.map(i => i.trim()).includes(className);
-    });
 
     const maxPrep = cls.prepSpellsLvl1 || 2;
     document.getElementById('prep-spells-label').innerText = `Wähle Stufe 1 Zauber (Limit: ${maxPrep}):`;
