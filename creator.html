@@ -636,7 +636,8 @@ function buildCharacter() {
 
     const subInfo = speciesData[mainRace].subraces[subRace];
 
-    let stats = {
+    // 1. Reine Basiswerte (rawStats) getrennt erfassen
+    let rawStats = {
         STR: parseInt(document.getElementById('str-val').value),
         DEX: parseInt(document.getElementById('dex-val').value),
         CON: parseInt(document.getElementById('con-val').value),
@@ -645,7 +646,19 @@ function buildCharacter() {
         CHA: parseInt(document.getElementById('cha-val').value)
     };
 
-    for (let s in subInfo.bonus) stats[s] += subInfo.bonus[s];
+    // 2. Rassenboni als separates Objekt aus den Subraces-Daten übernehmen
+    let speciesBonuses = {};
+    if (subInfo.bonus) {
+        for (let s in subInfo.bonus) {
+            speciesBonuses[s] = subInfo.bonus[s];
+        }
+    }
+
+    // 3. Finale Stats für die Anzeige / Berechnung zusammenrechnen (Basis + Rasse)
+    let stats = { ...rawStats };
+    for (let s in speciesBonuses) {
+        stats[s] += speciesBonuses[s];
+    }
 
     let mods = {};
     for (let s in stats) mods[s] = getMod(stats[s]);
@@ -671,6 +684,7 @@ function buildCharacter() {
     const sk2 = document.getElementById('skill2').value;
     const allSkills = [...backgrounds[bg].skills, sk1, sk2];
 
+    // Charakter-Objekt mit getrennten rawStats und speciesBonuses fürs JSON
     lastBuiltCharacter = {
         id: 'char_' + Date.now(),
         name: name,
@@ -682,7 +696,9 @@ function buildCharacter() {
         hp: hp,
         maxHp: hp,
         ac: ac,
-        stats: stats,
+        rawStats: rawStats,         // Sauberer Basiswert
+        speciesBonuses: speciesBonuses, // Sauberer Rassenbonus
+        stats: stats,               // Gesamtwert (zur Kompatibilität)
         mods: mods,
         skills: allSkills,
         cantrips: chosenCantrips,
