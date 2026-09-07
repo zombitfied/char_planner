@@ -454,7 +454,6 @@ function showSkillModal(selectId) {
 function showSpellModalFromDropdown(selectElem) {
     const spellName = selectElem.value;
     if (!spellName) return;
-    // Prüfen, ob es in cantrips oder level1 liegt
     if (spellCompendium.cantrips && spellCompendium.cantrips[spellName]) {
         openModal(spellName, spellCompendium.cantrips[spellName].rule, "fa-wand-magic-sparkles");
     } else if (spellCompendium.level1 && spellCompendium.level1[spellName]) {
@@ -657,7 +656,7 @@ function buildCharacter() {
         }
     }
 
-    // 3. Finale Stats für die Anzeige / Berechnung zusammenrechnen (Basis + Rasse)
+    // 3. Finale Stats und Mods zur Laufzeit berechnen
     let stats = { ...rawStats };
     for (let s in speciesBonuses) {
         stats[s] += speciesBonuses[s];
@@ -667,8 +666,9 @@ function buildCharacter() {
     for (let s in stats) mods[s] = getMod(stats[s]);
     currentCalculatedMods = mods;
 
+    // HP und RK dynamisch berechnen (keine festen Werte mehr speichern)
     const hp = classes[cls].hp + mods.CON;
-    const ac = 12 + mods.DEX;
+    const ac = 10 + mods.DEX;
 
     let chosenCantrips = Array.from(document.querySelectorAll('.char-cantrip-select'))
         .map(sel => sel.value)
@@ -691,7 +691,7 @@ function buildCharacter() {
     const sk2 = document.getElementById('skill2').value;
     const allSkills = [...backgrounds[bg].skills, sk1, sk2];
 
-    // Charakter-Objekt mit getrennten rawStats und speciesBonuses fürs JSON
+    // Charakter-Objekt speichert nur noch die reinen Rohdaten
     lastBuiltCharacter = {
         id: 'char_' + Date.now(),
         name: name,
@@ -700,13 +700,8 @@ function buildCharacter() {
         background: bg,
         level: 1,
         xp: 0,
-        hp: hp,
-        maxHp: hp,
-        ac: ac,
         rawStats: rawStats,         // Sauberer Basiswert
         speciesBonuses: speciesBonuses, // Sauberer Rassenbonus
-        stats: stats,               // Gesamtwert (zur Kompatibilität)
-        mods: mods,
         skills: allSkills,
         cantrips: chosenCantrips,
         spells: chosenSpells,
