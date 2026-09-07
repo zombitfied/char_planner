@@ -83,7 +83,6 @@
         .info-btn:hover { background: #f0ebe1; }
 
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        /* Spezielles Grid für Volk & Abstammung: Volk kompakter, Abstammung breiter */
         .grid-race { display: grid; grid-template-columns: 1fr 1.8fr; gap: 10px; }
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         
@@ -142,7 +141,6 @@
         }
         .modal-title { font-size: 1.2rem; color: var(--accent); font-weight: bold; margin-bottom: 12px; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 10px; }
         
-        /* Wappen-Kasten im Modal für das Icon */
         .modal-icon-box {
             display: inline-flex;
             align-items: center;
@@ -164,7 +162,6 @@
 </head>
 <body>
 
-<!-- SVG-Filter für den grisselig-rauhen Stein-Kanten-Effekt -->
 <svg style="display:none;" aria-hidden="true">
     <filter id="rough-edge">
         <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="3" result="noise" />
@@ -181,7 +178,6 @@
 
     <div class="page-title">Held/in erstellen</div>
 
-    <!-- SCHRITT 1: IDENTITÄT & VOLK -->
     <div class="step-card">
         <div class="step-title">Identität & Volk</div>
         <div>
@@ -205,7 +201,6 @@
         </div>
     </div>
 
-    <!-- SCHRITT 2: KLASSE & HINTERGRUND -->
     <div class="step-card">
         <div class="step-title">Klasse und Hintergrund</div>
         <div class="grid-2">
@@ -226,7 +221,6 @@
         </div>
     </div>
 
-    <!-- SCHRITT 3: ATTRIBUTSWERTE -->
     <div class="step-card">
         <div class="step-title">Start-Attribute zuweisen</div>
         <div class="grid-3">
@@ -240,7 +234,6 @@
         <div id="array-error" class="error">Wähle 15, 14, 13, 12, 10, 8 ohne Dopplungen!</div>
     </div>
 
-    <!-- SCHRITT 4: FERTIGKEITEN -->
     <div class="step-card">
         <div class="step-title">Fertigkeiten wählen</div>
         <div style="display: flex; flex-direction: column; gap: 10px;">
@@ -262,10 +255,8 @@
         <div id="skill-error" class="error">Wähle 2 verschiedene Fertigkeiten, die sich nicht mit deinem Hintergrund überschneiden!</div>
     </div>
 
-    <!-- SCHRITT 5: ZAUBER -->
     <div class="step-card" id="spells-step-card">
         <div class="step-title">Klassen-Zauber wählen</div>
-        
         <label id="cantrip-label">Zaubertricks wählen</label>
         <div class="spell-container" id="cantrips-group"></div>
 
@@ -275,7 +266,6 @@
 
     <button class="main-btn" onclick="buildCharacter()">Charakterblatt generieren</button>
 
-    <!-- AUSGABE / CHARAKTERBLATT -->
     <div id="sheet" class="sheet">
         <h2 id="screen-out-name" style="margin-top:0; color:var(--accent);"></h2>
         <div id="screen-out-meta" style="font-size:0.9rem; color:var(--text-muted); text-align:center; margin-bottom:10px;"></div>
@@ -311,7 +301,6 @@
     </div>
 </div>
 
-<!-- MODAL POPUP -->
 <div class="modal-overlay" id="rule-modal" onclick="closeModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-title" id="modal-title">Regeldetails</div>
@@ -321,7 +310,6 @@
 
 <script>
 const LOCAL_JSON_URL = "./compendium.json";
-
 const standardArray = [15, 14, 13, 12, 10, 8];
 
 const attributeDescriptions = {
@@ -340,26 +328,14 @@ let skillDescriptions = {};
 let spellCompendium = {};
 let weaponsCompendium = {};
 
-let currentCalculatedMods = { STR:0, DEX:0, CON:0, INT:0, WIS:0, CHA:0 };
 let lastBuiltCharacter = null;
 let isSaved = false;
 
 window.onload = async function() {
     try {
-        const cacheBusterUrl = LOCAL_JSON_URL + "?t=" + new Date().getTime();
-        const response = await fetch(cacheBusterUrl);
-        
-        if (!response.ok) {
-            throw new Error(`HTTP Fehlerstatus: ${response.status}`);
-        }
-        
-        const rawText = await response.text();
-        let data;
-        try {
-            data = JSON.parse(rawText);
-        } catch (jsonErr) {
-            throw new Error("JSON Syntax-Fehler! Bitte compendium.json prüfen.");
-        }
+        const response = await fetch(LOCAL_JSON_URL + "?t=" + new Date().getTime());
+        if (!response.ok) throw new Error(`HTTP Fehlerstatus: ${response.status}`);
+        const data = await response.json();
 
         speciesData = data.speciesData;
         classes = data.classes;
@@ -371,7 +347,6 @@ window.onload = async function() {
         initApp();
     } catch (err) {
         alert("Ladefehler: " + err.message);
-        console.error("JSON Load Details:", err);
     }
 };
 
@@ -380,8 +355,7 @@ function initApp() {
     populateSelect('class-select', Object.keys(classes));
     populateSelect('bg-select', Object.keys(backgrounds));
 
-    const arraySelects = document.querySelectorAll('.array-select');
-    arraySelects.forEach((sel, idx) => {
+    document.querySelectorAll('.array-select').forEach((sel, idx) => {
         sel.innerHTML = '<option value="">--</option>';
         standardArray.forEach(val => sel.innerHTML += `<option value="${val}">${val}</option>`);
         sel.selectedIndex = idx + 1;
@@ -430,8 +404,7 @@ function closeModal() {
 function showRaceModal() {
     const mainRace = document.getElementById('main-race').value;
     const subRace = document.getElementById('sub-race').value;
-    const info = speciesData[mainRace].subraces[subRace];
-    openModal(subRace, info.text, "fa-child");
+    openModal(subRace, speciesData[mainRace].subraces[subRace].text, "fa-child");
 }
 
 function showClassModal() {
@@ -483,9 +456,7 @@ function getClassIcon(className) {
 function updateClassIconDisplay() {
     const c = document.getElementById('class-select').value;
     const iconElem = document.getElementById('class-icon-indicator');
-    if (iconElem) {
-        iconElem.className = `fa-solid ${getClassIcon(c)}`;
-    }
+    if (iconElem) iconElem.className = `fa-solid ${getClassIcon(c)}`;
 }
 
 function onMainRaceChange() {
@@ -505,7 +476,6 @@ function onMainRaceChange() {
 function onClassChange() {
     const c = document.getElementById('class-select').value;
     const cls = classes[c];
-    
     updateClassIconDisplay();
 
     const s1 = document.getElementById('skill1');
@@ -550,14 +520,9 @@ function validateSkills() {
     return isValid;
 }
 
-function getPrepSpellsLimit(className) {
-    return classes[className]?.prepSpellsLvl1 || 2;
-}
-
 function updateSpellsUI() {
     const className = document.getElementById('class-select').value;
     const cls = classes[className];
-
     if (!cls) return;
 
     const cantripGroup = document.getElementById('cantrips-group');
@@ -572,8 +537,7 @@ function updateSpellsUI() {
     }
 
     const allowedCantrips = Object.keys(spellCompendium.cantrips || {}).filter(c => {
-        const clsList = spellCompendium.cantrips[c].classes.map(item => item.trim());
-        return clsList.includes(className);
+        return spellCompendium.cantrips[c].classes.map(item => item.trim()).includes(className);
     });
 
     const maxCantrips = cls.cantripsKnown;
@@ -581,48 +545,32 @@ function updateSpellsUI() {
 
     for (let i = 0; i < maxCantrips; i++) {
         let optionsHtml = `<option value="">-- Zaubertrick ${i + 1} wählen --</option>`;
-        allowedCantrips.forEach(c => {
-            optionsHtml += `<option value="${c}">${c}</option>`;
-        });
+        allowedCantrips.forEach(c => optionsHtml += `<option value="${c}">${c}</option>`);
 
         cantripGroup.innerHTML += `
             <div class="input-row">
-                <select class="char-cantrip-select">
-                    ${optionsHtml}
-                </select>
+                <select class="char-cantrip-select">${optionsHtml}</select>
                 <button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling)">ℹ</button>
             </div>`;
     }
 
     const allowedLvl1 = Object.keys(spellCompendium.level1 || {}).filter(s => {
-        const clsList = spellCompendium.level1[s].classes.map(item => item.trim());
-        return clsList.includes(className);
+        return spellCompendium.level1[s].classes.map(item => item.trim()).includes(className);
     });
 
-    const maxPrep = getPrepSpellsLimit(className);
+    const maxPrep = cls.prepSpellsLvl1 || 2;
     document.getElementById('prep-spells-label').innerText = `Wähle Stufe 1 Zauber (Limit: ${maxPrep}):`;
 
     for (let i = 0; i < maxPrep; i++) {
         let optionsHtml = `<option value="">-- Stufe 1 Zauber ${i + 1} wählen --</option>`;
-        allowedLvl1.forEach(s => {
-            optionsHtml += `<option value="${s}">${s}</option>`;
-        });
+        allowedLvl1.forEach(s => optionsHtml += `<option value="${s}">${s}</option>`);
 
         lvl1Group.innerHTML += `
             <div class="input-row">
-                <select class="char-spell-select">
-                    ${optionsHtml}
-                </select>
+                <select class="char-spell-select">${optionsHtml}</select>
                 <button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling)">ℹ</button>
             </div>`;
     }
-}
-
-function getWeaponData(wName) {
-    for (let cat in weaponsCompendium) {
-        if (weaponsCompendium[cat][wName]) return weaponsCompendium[cat][wName];
-    }
-    return { "damage": "1d6", "type": "Slashing", "properties": [] };
 }
 
 function buildCharacter() {
@@ -635,10 +583,8 @@ function buildCharacter() {
     const subRace = document.getElementById('sub-race').value;
     const cls = document.getElementById('class-select').value;
     const bg = document.getElementById('bg-select').value;
-
     const subInfo = speciesData[mainRace].subraces[subRace];
 
-    // 1. Reine Basiswerte (rawStats) getrennt erfassen
     let rawStats = {
         STR: parseInt(document.getElementById('str-val').value),
         DEX: parseInt(document.getElementById('dex-val').value),
@@ -648,50 +594,33 @@ function buildCharacter() {
         CHA: parseInt(document.getElementById('cha-val').value)
     };
 
-    // 2. Rassenboni als separates Objekt aus den Subraces-Daten übernehmen
     let speciesBonuses = {};
     if (subInfo.bonus) {
-        for (let s in subInfo.bonus) {
-            speciesBonuses[s] = subInfo.bonus[s];
-        }
+        for (let s in subInfo.bonus) speciesBonuses[s] = subInfo.bonus[s];
     }
 
-    // 3. Finale Stats und Mods zur Laufzeit berechnen
     let stats = { ...rawStats };
-    for (let s in speciesBonuses) {
-        stats[s] += speciesBonuses[s];
-    }
+    for (let s in speciesBonuses) stats[s] += speciesBonuses[s];
 
     let mods = {};
     for (let s in stats) mods[s] = getMod(stats[s]);
-    currentCalculatedMods = mods;
 
-    // HP und RK dynamisch berechnen (keine festen Werte mehr speichern)
     const hp = classes[cls].hp + mods.CON;
     const ac = 10 + mods.DEX;
 
-    let chosenCantrips = Array.from(document.querySelectorAll('.char-cantrip-select'))
-        .map(sel => sel.value)
-        .filter(val => val !== "");
-    
+    let chosenCantrips = Array.from(document.querySelectorAll('.char-cantrip-select')).map(sel => sel.value).filter(val => val !== "");
     if (subRace === "Rock Gnome" && !chosenCantrips.includes("Prestidigitation")) chosenCantrips.unshift("Prestidigitation (Racial)");
     if (subRace === "High Elf" && !chosenCantrips.includes("Prestidigitation")) chosenCantrips.unshift("Prestidigitation (Racial)");
     if (subRace === "Wood Elf" && !chosenCantrips.includes("Druidcraft")) chosenCantrips.unshift("Druidcraft (Racial)");
     if (subRace === "Drow" && !chosenCantrips.includes("Dancing Lights")) chosenCantrips.unshift("Dancing Lights (Racial)");
+    if (classes[cls].autoCantrip) chosenCantrips.unshift(`${classes[cls].autoCantrip} (Auto)`);
 
-    if (classes[cls].autoCantrip) {
-        chosenCantrips.unshift(`${classes[cls].autoCantrip} (Auto)`);
-    }
-
-    let chosenSpells = Array.from(document.querySelectorAll('.char-spell-select'))
-        .map(sel => sel.value)
-        .filter(val => val !== "");
+    let chosenSpells = Array.from(document.querySelectorAll('.char-spell-select')).map(sel => sel.value).filter(val => val !== "");
 
     const sk1 = document.getElementById('skill1').value;
     const sk2 = document.getElementById('skill2').value;
     const allSkills = [...backgrounds[bg].skills, sk1, sk2];
 
-    // Charakter-Objekt speichert nur noch die reinen Rohdaten
     lastBuiltCharacter = {
         id: 'char_' + Date.now(),
         name: name,
@@ -700,8 +629,8 @@ function buildCharacter() {
         background: bg,
         level: 1,
         xp: 0,
-        rawStats: rawStats,         // Sauberer Basiswert
-        speciesBonuses: speciesBonuses, // Sauberer Rassenbonus
+        rawStats: rawStats,
+        speciesBonuses: speciesBonuses,
         skills: allSkills,
         cantrips: chosenCantrips,
         spells: chosenSpells,
@@ -728,9 +657,7 @@ function buildCharacter() {
             </div>`;
     }
 
-    let skillTags = allSkills.map(s => 
-        `<span class="clickable-tag" onclick="openModal('${s}', '${skillDescriptions[s] || ''}')">${s}</span>`
-    ).join(' ');
+    let skillTags = allSkills.map(s => `<span class="clickable-tag" onclick="openModal('${s}', '${skillDescriptions[s] || ''}')">${s}</span>`).join(' ');
 
     document.getElementById('screen-out-features').innerHTML = `
         <li><b>Fertigkeiten:</b> ${skillTags}</li>
@@ -770,7 +697,6 @@ function saveCharacterToStorage(charObj) {
     if (savedList) {
         try { characters = JSON.parse(savedList); } catch(e) {}
     }
-    
     characters.push(charObj);
     localStorage.setItem('dnd_character_list', JSON.stringify(characters));
     localStorage.setItem('dnd_active_character', JSON.stringify(charObj));
@@ -780,7 +706,6 @@ function manualSaveCharacter() {
     if (!lastBuiltCharacter) return;
     lastBuiltCharacter.lastAccess = new Date().toISOString();
     saveCharacterToStorage(lastBuiltCharacter);
-    
     isSaved = true;
     const advBtn = document.getElementById('btn-adventure');
     if (advBtn) {
@@ -789,18 +714,14 @@ function manualSaveCharacter() {
         advBtn.style.color = '#fff';
         advBtn.style.cursor = 'pointer';
     }
-
-    alert("Held erfolgreich gespeichert!");
+    
+    // Eigenes Modal statt Browser-Alert im passenden Design
+    openModal("Erfolg", "Held erfolgreich gespeichert!", "fa-floppy-disk");
 }
 
 function startAdventure() {
-    if (!isSaved) {
-        alert("Bitte speichere den Helden zuerst ab!");
-        return;
-    }
-    if (lastBuiltCharacter) {
-        localStorage.setItem('dnd_active_character', JSON.stringify(lastBuiltCharacter));
-    }
+    if (!isSaved) return alert("Bitte speichere den Helden zuerst ab!");
+    if (lastBuiltCharacter) localStorage.setItem('dnd_active_character', JSON.stringify(lastBuiltCharacter));
     window.location.href = 'manager.html';
 }
 
@@ -808,13 +729,11 @@ function renderEquipmentSectionInSheet(className) {
     const container = document.getElementById('sheet-equipment-controls');
     const cls = classes[className];
     const fixedEq = cls.equipment[0].fixed;
-
     const simpleWeapons = [...Object.keys(weaponsCompendium["Simple Melee"] || {}), ...Object.keys(weaponsCompendium["Simple Ranged"] || {})];
-    const martialWeapons = [...Object.keys(weaponsCompendium["Martial Melee"] || {}), ...Object.keys(weaponsCompendium["Martial Ranged"] || {})];
+    const martialWeapons = [...Object.keys(weaponsCompendium["Martial Melee"] || {}), ...Object.keys(weaponsCompendedium["Martial Ranged"] || {})];
     const allWeapons = [...simpleWeapons, ...martialWeapons];
 
     let html = `<div style="font-size:0.85rem; margin-bottom:8px;"><b>Feste Startausrüstung:</b> ${fixedEq}</div>`;
-
     if (["Fighter", "Paladin", "Ranger", "Barbarian", "Rogue", "Monk", "Bard"].includes(className)) {
         html += `
             <div class="grid-2">
@@ -834,10 +753,8 @@ function renderEquipmentSectionInSheet(className) {
     } else {
         html += `<div style="font-size:0.85rem; color:var(--text-muted); margin-top:4px;">Diese Klasse nutzt die oben definierte feste Startausrüstung.</div>`;
     }
-
     container.innerHTML = html;
 }
 </script>
-
 </body>
 </html>
