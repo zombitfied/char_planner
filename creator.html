@@ -264,7 +264,7 @@
         <div class="spell-container" id="level1-group"></div>
     </div>
 
-    <button class="main-btn" onclick="buildCharacter()">Charakterblatt generieren</button>
+    <button class="main-btn" onclick="buildCharacter()">Held erstellen</button>
 
     <div id="sheet" class="sheet">
         <h2 id="screen-out-name" style="margin-top:0; color:var(--accent);"></h2>
@@ -714,8 +714,6 @@ function manualSaveCharacter() {
         advBtn.style.color = '#fff';
         advBtn.style.cursor = 'pointer';
     }
-    
-    // Eigenes Modal statt Browser-Alert im passenden Design
     openModal("Erfolg", "Held erfolgreich gespeichert!", "fa-floppy-disk");
 }
 
@@ -730,7 +728,7 @@ function renderEquipmentSectionInSheet(className) {
     const cls = classes[className];
     const fixedEq = cls.equipment[0].fixed;
     const simpleWeapons = [...Object.keys(weaponsCompendium["Simple Melee"] || {}), ...Object.keys(weaponsCompendium["Simple Ranged"] || {})];
-    const martialWeapons = [...Object.keys(weaponsCompendium["Martial Melee"] || {}), ...Object.keys(weaponsCompendedium["Martial Ranged"] || {})];
+    const martialWeapons = [...Object.keys(weaponsCompendium["Martial Melee"] || {}), ...Object.keys(weaponsCompendium["Martial Ranged"] || {})];
     const allWeapons = [...simpleWeapons, ...martialWeapons];
 
     let html = `<div style="font-size:0.85rem; margin-bottom:8px;"><b>Feste Startausrüstung:</b> ${fixedEq}</div>`;
