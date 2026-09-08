@@ -66,6 +66,8 @@
       }
     },
     "Gnom": {
+      "spezial-attribut": {
+        "spellcasting": { "INT", "WIS", "CHA" }, 
       "subraces": {
         "Felsgnom": { 
           "bonus": { "CON": 1, "INT": 2 }, 
@@ -77,6 +79,7 @@
           "speed": 30, 
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Klein | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Dunkelsicht:</b> 60 Fuß.<br>• <b>Gnomische List:</b> Vorteil bei INT-, WEIS- und CHA-Rettungswürfen gegen Magie.<br>• <b>Gnomische Linie (Waldgnom):</b> Du erlernst <i>Geringe Illusion</i> und kannst <i>Mit Tieren sprechen</i> wirken (Übungsbonus-mal pro lange Rast)." 
         }
+      }
       }
     },
     "Goliath": {
