@@ -435,7 +435,6 @@ window.onload = async function() {
         skillDescriptions = data.skills || {};
         weaponsCompendium = data.weapons || {};
 
-        // Hintergrund-Daten aus externer backgrounds.json laden
         try {
             const bgResponse = await fetch(BACKGROUNDS_JSON_URL + "?t=" + new Date().getTime());
             if (bgResponse.ok) {
