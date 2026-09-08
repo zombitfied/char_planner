@@ -3,7 +3,6 @@
     "Aasimar": {
       "subraces": {
         "Aasimar": { 
-          "bonus": { "CHA": 2, "WIS": 1 }, 
           "speed": 30, 
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel oder Klein | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Dunkelsicht:</b> 60 Fuß.<br>• <b>Himmlische Resistenz:</b> Resistenz gegen Nekrotisch- und Strahlungsschaden.<br>• <b>Heilende Hände:</b> Berühre als Aktion eine Kreatur, um W4 in Höhe deines Übungsbonus wiederherzustellen. (1/lange Rast).<br>• <b>Lichtträger:</b> Du beherrschst den Zaubertrick <i>Licht</i>.<br>• <b>Himmlische Offenbarung (Stufe 3):</b> Transformiere dich für 1 Min. (Himmlische Schwingen, Strahlende Seele oder Nekrotisches Leichentuch)." 
         }
@@ -12,7 +11,6 @@
     "Changeling": {
       "subraces": {
         "Changeling": {
-          "bonus": { "DEX": 1, "CHA": 2 },
           "speed": 30,
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel oder Klein | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Gestaltwandler:</b> Du kannst eine Aktion nutzen, um dein Aussehen und deine Stimme zu verändern. Du bestimmst die Einzelheiten der Veränderungen.<br>• <b>Instinkte der Wechselbälger:</b> Du erhältst Fertigkeitsfertigkeit in zwei Fertigkeiten deiner Wahl aus Täuschen, Einschüchtern, Einblick und Auftreten."
         }
@@ -21,17 +19,14 @@
     "Drachenblütiger": {
       "subraces": {
         "Chromatischer Drachenblütiger": { 
-          "bonus": { "STR": 2, "CHA": 1 }, 
           "speed": 30, 
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Dunkelsicht:</b> 60 Fuß.<br>• <b>Drakonische Abstammung:</b> Wähle Säure, Kälte, Feuer, Blitz oder Gift.<br>• <b>Atemwaffe:</b> Ersetze 1 Angriff durch einen Kegel von 15 Fuß oder eine Linie von 30 Fuß. GES-Rettungswurf (SG 8 + KON-Modifikator + Übungsbonus). Verursacht 1W10 Schaden. Verwendung: Übungsbonus-mal pro lange Rast.<br>• <b>Schadensresistenz:</b> Resistenz gegen das gewählte Element." 
         },
         "Metallischer Drachenblütiger": { 
-          "bonus": { "STR": 2, "CHA": 1 }, 
           "speed": 30, 
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Dunkelsicht:</b> 60 Fuß.<br>• <b>Drakonische Abstammung:</b> Wähle Säure, Kälte, Feuer, Blitz oder Gift.<br>• <b>Atemwaffe:</b> Kegel von 15 Fuß, der 1W10 Schaden verursacht (GES-Rettungswurf). Verwendung: Übungsbonus-mal pro lange Rast.<br>• <b>Schadensresistenz:</b> Resistenz gegen das gewählte Element." 
         },
         "Edelstein-Drachenblütiger": { 
-          "bonus": { "INT": 2, "CHA": 1 }, 
           "speed": 30, 
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Dunkelsicht:</b> 60 Fuß.<br>• <b>Drakonische Abstammung:</b> Wähle Kraft, Nekrotisch, Psychisch, Strahlung oder Welle.<br>• <b>Atemwaffe:</b> Kegel von 15 Fuß, der 1W10 Schaden verursacht (GES-Rettungswurf). Verwendung: Übungsbonus-mal pro lange Rast.<br>• <b>Psionische Botschaft:</b> Telepathie bis zu 30 Fuß." 
         }
@@ -40,7 +35,6 @@
     "Zwerg": {
       "subraces": {
         "Zwerg": { 
-          "bonus": { "CON": 2, "WIS": 1 }, 
           "speed": 30, 
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Zwergische Zähigkeit:</b> Trefferpunktemaximum erhöht sich um 1 auf Stufe 1 und um +1 pro zusätzlicher Stufe.<br>• <b>Dunkelsicht:</b> 120 Fuß.<br>• <b>Giftresistenz:</b> Vorteil bei Rettungswürfen gegen Gift sowie Giftresistenz.<br>• <b>Steingespür:</b> Bonusaktion für Erderschütterungssinn (Tremorsense) 60 Fuß auf Stein für 10 Min. Verwendung: Übungsbonus-mal pro lange Rast." 
         }
@@ -49,17 +43,14 @@
     "Elf": {
       "subraces": {
         "Hochelf": { 
-          "bonus": { "DEX": 2, "INT": 1 }, 
           "speed": 30, 
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Dunkelsicht:</b> 60 Fuß.<br>• <b>Feenabstammung:</b> Vorteil gegen Bezauberung; immun gegen magischen Schlaf.<br>• <b>Feine Sinne:</b> Geübtheit in Wahrnehmung.<br>• <b>Elfenlinie (Hochelf):</b> Du erlernst 1 Magier-Zaubertrick (z. B. <i>Fingerfertigkeit</i>). Stufe 3: <i>Magie entdecken</i>. Stufe 5: <i>Nebelschritt</i>." 
         },
         "Waldelf": { 
-          "bonus": { "DEX": 2, "WIS": 1 }, 
           "speed": 35, 
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel | <b>Bewegungsrate:</b> 35 Fuß.<br>• <b>Dunkelsicht:</b> 60 Fuß.<br>• <b>Feenabstammung & Feine Sinne:</b> Vorteil gegen Bezauberung, Schlafimmunität, Wahrnehmungsgeübtheit.<br>• <b>Elfenlinie (Waldelf):</b> Du erlernst <i>Druidenhandwerk</i>. Stufe 3: <i>Langschritt</i>. Stufe 5: <i>Spurenlos</i>." 
         },
         "Drow": { 
-          "bonus": { "DEX": 2, "CHA": 1 }, 
           "speed": 30, 
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Überlegene Dunkelsicht:</b> 120 Fuß.<br>• <b>Feenabstammung & Feine Sinne:</b> Vorteil gegen Bezauberung, Schlafimmunität, Wahrnehmungsgeübtheit.<br>• <b>Elfenlinie (Drow):</b> Du erlernst <i>Tanzende Lichter</i>. Stufe 3: <i>Feenfeuer</i>. Stufe 5: <i>Dunkelheit</i>." 
         }
@@ -68,12 +59,10 @@
     "Gnom": {
       "subraces": {
         "Felsgnom": { 
-          "bonus": { "CON": 1, "INT": 2 }, 
           "speed": 30, 
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Klein | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Dunkelsicht:</b> 60 Fuß.<br>• <b>Gnomische List:</b> Vorteil bei INT-, WEIS- und CHA-Rettungswürfen gegen Magie.<br>• <b>Gnomische Linie (Felsgnom):</b> Du erlernst <i>Fingerfertigkeit</i> und kannst winzige Uhrwerk-Vorrichtungen erschaffen." 
         },
         "Waldgnom": { 
-          "bonus": { "DEX": 1, "INT": 2 }, 
           "speed": 30, 
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Klein | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Dunkelsicht:</b> 60 Fuß.<br>• <b>Gnomische List:</b> Vorteil bei INT-, WEIS- und CHA-Rettungswürfen gegen Magie.<br>• <b>Gnomische Linie (Waldgnom):</b> Du erlernst <i>Geringe Illusion</i> und kannst <i>Mit Tieren sprechen</i> wirken (Übungsbonus-mal pro lange Rast)." 
         }
@@ -85,32 +74,26 @@
     "Goliath": {
       "subraces": {
         "Wolkenriesen-Abstammung": { 
-          "bonus": { "STR": 2, "CON": 1 }, 
           "speed": 35, 
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel | <b>Bewegungsrate:</b> 35 Fuß.<br>• <b>Wolkenhüpfer:</b> Bonusaktion zum Teleportieren bis zu 30 Fuß. Verwendung: Übungsbonus-mal pro lange Rast.<br>• <b>Kraftvoller Körperbau:</b> Erhöhte Tragekapazität." 
         },
         "Feuerriesen-Abstammung": { 
-          "bonus": { "STR": 2, "CON": 1 }, 
           "speed": 35, 
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel | <b>Bewegungsrate:</b> 35 Fuß.<br>• <b>Feuerbrand:</b> Verursache +1W10 Feuerschaden bei Treffer. Verwendung: Übungsbonus-mal pro lange Rast.<br>• <b>Kraftvoller Körperbau:</b> Erhöhte Tragekapazität." 
         },
         "Frostriesen-Abstammung": { 
-          "bonus": { "STR": 2, "CON": 1 }, 
           "speed": 35, 
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel | <b>Bewegungsrate:</b> 35 Fuß.<br>• <b>Frostkälte:</b> Verursache +1W6 Kälteschaden bei Treffer & -10 Fuß Bewegungsrate. Verwendung: Übungsbonus-mal pro lange Rast.<br>• <b>Kraftvoller Körperbau:</b> Erhöhte Tragekapazität." 
         },
         "Hügelriesen-Abstammung": { 
-          "bonus": { "STR": 2, "CON": 1 }, 
           "speed": 35, 
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel | <b>Bewegungsrate:</b> 35 Fuß.<br>• <b>Hügelsturz:</b> Wirf das Ziel bei Treffer zu Boden (liegend). Verwendung: Übungsbonus-mal pro lange Rast.<br>• <b>Kraftvoller Körperbau:</b> Erhöhte Tragekapazität." 
         },
         "Steinriesen-Abstammung": { 
-          "bonus": { "STR": 2, "CON": 1 }, 
           "speed": 35, 
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel | <b>Bewegungsrate:</b> 35 Fuß.<br>• <b>Stein-Zähigkeit:</b> Reaktion zur Schadensreduktion um 1W12 + KON-Modifikator. Verwendung: Übungsbonus-mal pro lange Rast.<br>• <b>Kraftvoller Körperbau:</b> Erhöhte Tragekapazität." 
         },
         "Sturmriesen-Abstammung": { 
-          "bonus": { "STR": 2, "CON": 1 }, 
           "speed": 35, 
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel | <b>Bewegungsrate:</b> 35 Fuß.<br>• <b>Sturmdonner:</b> Reaktion bei Schaden: Verursache 1W8 Donnerschaden. Verwendung: Übungsbonus-mal pro lange Rast.<br>• <b>Kraftvoller Körperbau:</b> Erhöhte Tragekapazität." 
         }
@@ -119,7 +102,6 @@
     "Halbling": {
       "subraces": {
         "Halbling": { 
-          "bonus": { "DEX": 2, "CHA": 1 }, 
           "speed": 30, 
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Klein | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Glücklich:</b> Wiederhole eine natürliche 1 bei W20-Würfen.<br>• <b>Mutig:</b> Vorteil bei Rettungswürfen gegen Furcht.<br>• <b>Halbling-Gewandtheit:</b> Bewege dich durch den Raum größerer Kreaturen.<br>• <b>Von Natur aus heimlich:</b> Verstecke dich hinter mittelgroßen oder größeren Kreaturen." 
         }
@@ -128,7 +110,6 @@
     "Mensch": {
       "subraces": {
         "Mensch": { 
-          "bonus": { "STR": 1, "DEX": 1, "CON": 1, "INT": 1, "WIS": 1, "CHA": 1 }, 
           "speed": 30, 
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel oder Klein | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Einfallsreich:</b> Erhalte Heroische Inspiration nach jeder langen Rast.<br>• <b>Geschickt:</b> Erhalte Geübtheit in 1 Fertigkeit deiner Wahl.<br>• <b>Vielseitig:</b> Erhalte 1 Ursprungstalent deiner Wahl." 
         }
@@ -137,7 +118,6 @@
     "Kalashtar": {
       "subraces": {
         "Kalashtar": {
-          "bonus": { "WIS": 2, "CHA": 1 },
           "speed": 30,
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Doppelter Geist:</b> Du hast Vorteil bei Weisheits-Rettungswürfen.<br>• <b>Mentale Disziplin:</b> Du hast Resistenz gegen psychischen Schaden.<br>• <b>Gedankenverbindung:</b> Du kannst telepathisch mit jeder Kreatur sprechen, die du innerhalb von 10 Fuß sehen kannst."
         }
@@ -146,7 +126,6 @@
     "Ork": {
       "subraces": {
         "Ork": { 
-          "bonus": { "STR": 2, "CON": 1 }, 
           "speed": 30, 
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Dunkelsicht:</b> 120 Fuß.<br>• <b>Adrenalinrausch:</b> Bonusaktion Sprint + Temporäre TP in Höhe des Übungsbonus. Verwendung: Übungsbonus-mal pro lange Rast.<br>• <b>Unnachgiebige Zähigkeit:</b> Falle einmal pro lange Rast auf 1 TP statt auf 0 TP." 
         }
@@ -155,22 +134,18 @@
     "Shifter": {
       "subraces": {
         "Beasthide": {
-          "bonus": { "CON": 2, "STR": 1 },
           "speed": 30,
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Dunkelsicht:</b> 60 Fuß.<br>• <b>Gestaltwandel:</b> Bonusaktion zum Transformieren, wodurch temporäre Trefferpunkte und ein Rüstungsklassenbonus gewährt werden."
         },
         "Longtooth": {
-          "bonus": { "STR": 2, "DEX": 1 },
           "speed": 30,
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Dunkelsicht:</b> 60 Fuß.<br>• <b>Gestaltwandel:</b> Bonusaktion zum Transformieren, die einen wilden Bissangriff ermöglicht."
         },
         "Swiftstride": {
-          "bonus": { "DEX": 2, "CHA": 1 },
           "speed": 35,
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel | <b>Bewegungsrate:</b> 35 Fuß.<br>• <b>Dunkelsicht:</b> 60 Fuß.<br>• <b>Gestaltwandel:</b> Bonusaktion zum Transformieren, erhöht die Geschwindigkeit und erlaubt Reaktivbewegung."
         },
         "Wildhunt": {
-          "bonus": { "WIS": 2, "DEX": 1 },
           "speed": 30,
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Dunkelsicht:</b> 60 Fuß.<br>• <b>Gestaltwandel:</b> Bonusaktion zum Transformieren, verhindert, dass Gegner Vorteil gegen dich erhalten."
         }
@@ -179,17 +154,14 @@
     "Tiefling": {
       "subraces": {
         "Abyssischer Tiefling": { 
-          "bonus": { "CHA": 2, "CON": 1 }, 
           "speed": 30, 
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel oder Klein | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Dunkelsicht:</b> 60 Fuß.<br>• <b>Fiendisches Vermächtnis (Abyssischer Tiefling):</b> Giftresistenz. Du erlernst <i>Giftspray</i>. Stufe 3: <i>Krankheitstrahl</i>. Stufe 5: <i>Person festhalten</i>." 
         },
         "Chthonischer Tiefling": { 
-          "bonus": { "CHA": 2, "CON": 1 }, 
           "speed": 30, 
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel oder Klein | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Dunkelsicht:</b> 60 Fuß.<br>• <b>Fiendisches Vermächtnis (Chthonischer Tiefling):</b> Nekrotische Resistenz. Du erlernst <i>Kälteberührung</i>. Stufe 3: <i>Künstliches Leben</i>. Stufe 5: <i>Entkräftungsstrahl</i>." 
         },
         "Fiendischer Tiefling": { 
-          "bonus": { "CHA": 2, "DEX": 1 }, 
           "speed": 30, 
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel oder Klein | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Dunkelsicht:</b> 60 Fuß.<br>• <b>Fiendisches Vermächtnis (Fiendischer Tiefling):</b> Feuerresistenz. Du erlernst <i>Feuerpfeil</i>. Stufe 3: <i>Höllischer Retaliation / Höllischer Zorn</i>. Stufe 5: <i>Dunkelheit</i>." 
         }
@@ -198,7 +170,6 @@
     "Kriegsgeschmiedeter": {
       "subraces": {
         "Kriegsgeschmiedeter": {
-          "bonus": { "CON": 2, "STR": 1 },
           "speed": 30,
           "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Mittel | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Konstruierte Zähigkeit:</b> Vorteil bei Rettungswürfen gegen Gift, Resistenz gegen Giftschaden, immun gegen Krankheiten, kein Bedürfnis zu essen, zu trinken oder zu atmen, und Magie kann dich nicht in Schlaf versetzen.<br>• <b>Wachsame Rast:</b> Du musst nicht schlafen und bleibst während langer Rasten bei Bewusstsein.<br>• <b>Integrierter Schutz:</b> +1 auf Rüstungsklasse."
         }
