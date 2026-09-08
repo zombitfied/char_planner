@@ -304,23 +304,6 @@
       "Pistol": { "damage": "1d10", "type": "Piercing", "properties": ["Ammunition", "Loading"] }
     }
   },
-  "backgrounds": {
-    "Acolyte": { "skills": ["Einblick", "Religion"], "feat": "Magisches Gespür (Kleriker)", "text": "<b>Ursprungstalent:</b> Magisches Gespür (Kleriker) — Erhalte 2 Kleriker-Zaubertricks und 1 Kleriker-Zauber der Stufe 1." },
-    "Artisan": { "skills": ["Handwerk", "Überzeugen"], "feat": "Handwerker", "text": "<b>Ursprungstalent:</b> Handwerker — Erhalte Werkzeug-Fertigkeiten und 20 % Rabatt auf nichtmagische Gegenstände." },
-    "Charlatan": { "skills": ["Täuschen", "Fingerfertigkeit"], "feat": "Geübt", "text": "<b>Ursprungstalent:</b> Geübt — Erhalte Geübtheit in 3 Fertigkeiten oder Werkzeugen deiner Wahl." },
-    "Criminal": { "skills": ["Täuschen", "Heimlichkeit"], "feat": "Wachsam", "text": "<b>Ursprungstalent:</b> Wachsam — Erhalte +Übungsbonus auf Initiative und tausche Initiative mit willigen Verbündeten." },
-    "Entertainer": { "skills": ["Akrobatik", "Bühnenkunst"], "feat": "Musiker", "text": "<b>Ursprungstalent:</b> Musiker — Gewähre Verbündeten nach einer Rast Heroische Inspiration." },
-    "Farmer": { "skills": ["Tierumgang", "Naturkunde"], "feat": "Zäh", "text": "<b>Ursprungstalent:</b> Zäh — Erhöhe das Trefferpunktemaximum um +2 pro Charakterstufe." },
-    "Guard": { "skills": ["Athletik", "Wahrnehmung"], "feat": "Wachsam", "text": "<b>Ursprungstalent:</b> Wachsam — Erhalte +Übungsbonus auf Initiative und tausche Initiative mit Verbündeten." },
-    "Guide": { "skills": ["Überleben", "Heimlichkeit"], "feat": "Magisches Gespür (Druide)", "text": "<b>Ursprungstalent:</b> Magisches Gespür (Druide) — Erhalte 2 Druiden-Zaubertricks und 1 Druiden-Zauber der Stufe 1." },
-    "Hermit": { "skills": ["Heilkunde", "Religion"], "feat": "Heiler", "text": "<b>Ursprungstalent:</b> Heiler — Wiederhole 1er bei Heilungswürfeln und nutze ein Heilerset." },
-    "Merchant": { "skills": ["Tierumgang", "Überzeugen"], "feat": "Glückspilz", "text": "<b>Ursprungstalent:</b> Glückspilz — Erhalte Glückspunkte in Höhe des Übungsbonus." },
-    "Noble": { "skills": ["Geschichte", "Überzeugen"], "feat": "Geübt", "text": "<b>Ursprungstalent:</b> Geübt — Erhalte Geübtheit in 3 Fertigkeiten oder Werkzeugen." },
-    "Sage": { "skills": ["Arkankunde", "Geschichte"], "feat": "Magisches Gespür (Magier)", "text": "<b>Ursprungstalent:</b> Magisches Gespür (Magier) — Erhalte 2 Magier-Zaubertricks und 1 Magier-Zauber der Stufe 1." },
-    "Sailor": { "skills": ["Athletik", "Wahrnehmung"], "feat": "Wirtsschläger / Tavernenklopper", "text": "<b>Ursprungstalent:</b> Wirtsschläger — Wiederhole 1er bei unbewaffnetem Schaden, stoße Gegner 5 Fuß bei unbewaffnetem Angriff zurück." },
-    "Soldier": { "skills": ["Athletics", "Intimidation"], "feat": "Brutaler Angreifer", "text": "<b>Ursprungstalent:</b> Brutaler Angreifer — Wirf Waffenschadenswürfel einmal pro Zug doppelt." },
-    "Wayfarer": { "skills": ["Insight", "Stealth"], "feat": "Lucky", "text": "<b>Ursprungstalent:</b> Glückspilz — Erhalte Glückspunkte in Höhe des Übungsbonus für Wiederholungen." }
-  },
   "skills": {
     "Akrobatik": "<b>Akrobatik (Geschicklichkeit):</b> Hilft dir, die Balance zu halten, über schmale Vorsprünge zu laufen oder Saltos zu schlagen.",
     "Tierumgang": "<b>Tierumgang (Weisheit):</b> Ermöglicht es dir, Tiere zu beruhigen, ihre Reaktionen einzuschätzen oder Reittiere zu lenken.",
