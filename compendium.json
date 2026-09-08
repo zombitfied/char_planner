@@ -67,7 +67,7 @@
     },
     "Gnom": {
       "spezial-attribut": {
-        "spellcasting": { "INT", "WIS", "CHA" }, 
+        "spellcasting": [ "INT", "WIS", "CHA" ], 
       "subraces": {
         "Felsgnom": { 
           "bonus": { "CON": 1, "INT": 2 }, 
