@@ -133,14 +133,14 @@
         .stat-val { font-size: 1.2rem; font-weight: bold; color: var(--text); }
         .stat-mod { font-size: 0.85rem; color: var(--accent); }
         
-        /* Hellblauer Glitzereffekt für das Zauberwirkungs-Attribut */
-        @keyframes glitter-glow {
-            0% { background-color: #e0f7fa; border-color: #00bcd4; box-shadow: 0 0 5px rgba(0, 188, 212, 0.4); }
-            50% { background-color: #b2ebf2; border-color: #00acc1; box-shadow: 0 0 12px rgba(0, 172, 193, 0.8); }
-            100% { background-color: #e0f7fa; border-color: #00bcd4; box-shadow: 0 0 5px rgba(0, 188, 212, 0.4); }
+        /* Dezentere, langsamere Glitzer-/Pulsier-Animation */
+        @keyframes glitter-glow-soft {
+            0% { background-color: #faf7f2; border-color: var(--border); box-shadow: none; }
+            50% { background-color: #f0f9fa; border-color: #80deea; box-shadow: 0 0 8px rgba(0, 188, 212, 0.25); }
+            100% { background-color: #faf7f2; border-color: var(--border); box-shadow: none; }
         }
         .glitter-box {
-            animation: glitter-glow 2s infinite ease-in-out;
+            animation: glitter-glow-soft 4s infinite ease-in-out;
         }
 
         .badge { background: #faf7f2; border: 1.5px solid var(--border); color: var(--text); padding: 6px 10px; border-radius: 4px; font-size: 0.85rem; display: inline-block; margin-right: 5px; margin-top: 5px; cursor: pointer; transition: background 0.2s; }
@@ -912,7 +912,6 @@ function buildCharacter() {
     document.getElementById('screen-out-prof').innerText = `Übungsbonus: +2`;
     document.getElementById('screen-out-speed').innerText = `Bewegungsrate: ${subInfo.speed || 30} ft`;
 
-    // Ermitteln, welches Attribut hervorgehoben werden soll (z.B. "INT" aus "Intelligenz (INT)")
     let targetAttrCode = null;
     if (specialAttrVal) {
         if (specialAttrVal.includes("INT")) targetAttrCode = "INT";
