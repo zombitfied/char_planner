@@ -435,6 +435,7 @@ window.onload = async function() {
         skillDescriptions = data.skills || {};
         weaponsCompendium = data.weapons || {};
 
+        // Hintergrund-Daten aus externer backgrounds.json laden
         try {
             const bgResponse = await fetch(BACKGROUNDS_JSON_URL + "?t=" + new Date().getTime());
             if (bgResponse.ok) {
@@ -653,7 +654,8 @@ async function showClassModal() {
 function showBgModal() {
     const b = document.getElementById('bg-select').value;
     const bg = backgrounds[b];
-    openModal(b, `<b>Fertigkeiten:</b> ${bg.skills.join(', ')}<br><b>Ursprungstalent:</b> ${bg.feat}<br><br>${bg.text}`, "fa-book");
+    if (!bg) return;
+    openModal(b, `<b>Attributswerte:</b> ${bg.attributes.join(', ')}<br><b>Talent:</b> ${bg.feat}<br><b>Fertigkeiten:</b> ${bg.skills.join(', ')}<br><br>${bg.text}`, "fa-book");
 }
 
 function showSkillModal(selectId) {
