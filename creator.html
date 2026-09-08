@@ -24,6 +24,9 @@
             background-image: radial-gradient(#e6dbcc 15%, transparent 16%);
             background-size: 20px 20px;
         }
+        body.modal-open {
+            overflow: hidden;
+        }
         .container { max-width: 750px; margin: 0 auto; }
         
         .top-nav { margin-bottom: 20px; }
@@ -133,7 +136,6 @@
         .stat-val { font-size: 1.2rem; font-weight: bold; color: var(--text); }
         .stat-mod { font-size: 0.85rem; color: var(--accent); }
         
-        /* Dezentere, langsamere Glitzer-/Pulsier-Animation */
         @keyframes glitter-glow-soft {
             0% { background-color: #faf7f2; border-color: var(--border); box-shadow: none; }
             50% { background-color: #f0f9fa; border-color: #80deea; box-shadow: 0 0 8px rgba(0, 188, 212, 0.25); }
@@ -150,7 +152,7 @@
         
         .spell-container { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
         
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(44,34,30,0.6); backdrop-filter: blur(2px); z-index: 1000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(44,34,30,0.6); backdrop-filter: blur(2px); z-index: 1000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; overflow: hidden; }
         .modal-content { 
             background: var(--card); 
             border: 3px solid var(--border); 
@@ -162,8 +164,12 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
             text-align: center;
             filter: url(#rough-edge);
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
         }
-        .modal-title { font-size: 1.2rem; color: var(--accent); font-weight: bold; margin-bottom: 12px; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .modal-title { font-size: 1.2rem; color: var(--accent); font-weight: bold; margin-bottom: 4px; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 10px; flex-shrink: 0; }
+        .modal-subtitle { font-size: 0.95rem; color: var(--accent); font-weight: bold; margin-bottom: 12px; text-transform: uppercase; flex-shrink: 0; }
         
         .modal-icon-box {
             display: inline-flex;
@@ -178,7 +184,7 @@
             font-size: 1rem;
         }
 
-        .modal-body { font-size: 0.9rem; line-height: 1.5; color: var(--text-muted); text-align: left; max-height: 300px; overflow-y: auto; }
+        .modal-body { font-size: 0.9rem; line-height: 1.5; color: var(--text-muted); text-align: left; overflow-y: auto; flex-grow: 1; padding-right: 5px; }
 
         ul { margin: 5px 0; padding-left: 20px; font-size: 0.9rem; color: var(--text-muted); }
         li { margin-bottom: 4px; }
@@ -346,6 +352,7 @@
 <div class="modal-overlay" id="rule-modal" onclick="closeModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-title" id="modal-title">Regeldetails</div>
+        <div id="modal-subtitle-container"></div>
         <div class="modal-body" id="modal-body">Beschreibungstext...</div>
     </div>
 </div>
@@ -535,19 +542,30 @@ function populateSelect(id, items) {
     items.forEach(i => sel.innerHTML += `<option value="${i}">${i}</option>`);
 }
 
-function openModal(title, text, iconClass = null) {
+function openModal(title, text, iconClass = null, subtitle = null) {
     const titleElem = document.getElementById('modal-title');
+    const subContainer = document.getElementById('modal-subtitle-container');
+    
     if (iconClass) {
         titleElem.innerHTML = `<span class="modal-icon-box"><i class="fa-solid ${iconClass}"></i></span> ${title}`;
     } else {
         titleElem.innerText = title;
     }
+
+    if (subtitle) {
+        subContainer.innerHTML = `<div class="modal-subtitle">${subtitle}</div>`;
+    } else {
+        subContainer.innerHTML = '';
+    }
+
     document.getElementById('modal-body').innerHTML = text;
     document.getElementById('rule-modal').style.display = 'flex';
+    document.body.classList.add('modal-open');
 }
 
 function closeModal() {
     document.getElementById('rule-modal').style.display = 'none';
+    document.body.classList.remove('modal-open');
 }
 
 function showRaceModal() {
@@ -570,12 +588,26 @@ function showBgModal() {
 }
 
 function showSkillModal(selectId) {
-    const sk = document.getElementById(selectId).value;
-    openModal(sk, skillDescriptions[sk] || "Fertigkeits-Proficiency.", "fa-check");
+    const sk = document.getElementById('skill1').value; // korrigiert für direktes Abfangen
+    const selectedSkill = document.getElementById(selectId).value;
+    const desc = skillDescriptions[selectedSkill] || "Keine Beschreibung verfügbar.";
+    openModal(selectedSkill, desc, "fa-check");
 }
 
 function showSpellModalFromDropdown(selectElem) {
     showSpellModalByName(selectElem.value);
+}
+
+function arabicToRoman(num) {
+    const lookup = {M:1000,CM:900,D:500,CD:400,C:100,XC:90,L:50,XL:40,X:10,IX:9,V:5,IV:4,I:1};
+    let roman = "";
+    for (let i in lookup ) {
+        while ( num >= lookup[i] ) {
+            roman += i;
+            num -= lookup[i];
+        }
+    }
+    return roman;
 }
 
 function showSpellModalByName(spellName) {
@@ -587,8 +619,57 @@ function showSpellModalByName(spellName) {
                    (spellCompendium.cantrips && spellCompendium.cantrips[spellName]) || 
                    (spellCompendium.level1 && spellCompendium.level1[spellName]);
 
-    let ruleText = spellObj ? spellObj.rule : "Keine detaillierte Beschreibung verfügbar.";
-    openModal(cleanName, ruleText, "fa-wand-magic-sparkles");
+    if (!spellObj) {
+        openModal(cleanName, "Keine detaillierte Beschreibung verfügbar.", "fa-wand-magic-sparkles");
+        return;
+    }
+
+    let tempDiv = document.createElement('div');
+    tempDiv.innerHTML = spellObj.rule;
+
+    // 1. Titel bereinigen (Dopplung entfernen)
+    const h5 = tempDiv.querySelector('h5');
+    if (h5) h5.remove();
+
+    // 2. Grad ermitteln & Römische Zahl vergeben
+    let fullText = tempDiv.textContent.toLowerCase();
+    let gradePrefix = "[?] ";
+    let isCantrip = false;
+    
+    if (fullText.includes('zaubertrick')) {
+        gradePrefix = "[✨] ";
+        isCantrip = true;
+    } else {
+        // Versuche den Grad als Zahl zu finden
+        let match = fullText.match(/(\d+)\.\s*grades?/);
+        if (match && match[1]) {
+            let romanGrade = arabicToRoman(parseInt(match[1]));
+            gradePrefix = `[${romanGrade}] `;
+        } else {
+            gradePrefix = "[I] "; // Fallback Grad 1
+        }
+    }
+
+    // 3. Schule extrahieren (z.B. "Zaubertrick der Beschwörung" oder "1. Grades Beschwörung")
+    let schoolText = "";
+    let paragraphs = tempDiv.querySelectorAll('p, div');
+    for (let p of paragraphs) {
+        let pText = p.textContent.trim();
+        if (pText.includes('Zaubertrick der') || pText.includes('Zaubertrick des') || pText.includes('Grades')) {
+            schoolText = pText;
+            p.remove(); // aus dem Haupttext entfernen damit es nicht doppelt steht
+            break;
+        }
+    }
+
+    // 4. Zeitaufwand, Reichweite, Komponenten, Wirkungsdauer fett markieren
+    let htmlContent = tempDiv.innerHTML;
+    ['Zeitaufwand:', 'Reichweite:', 'Komponenten:', 'Wirkungsdauer:'].forEach(keyword => {
+        let regex = new RegExp(`(${keyword})`, 'gi');
+        htmlContent = htmlContent.replace(regex, '<b>$1</b>');
+    });
+
+    openModal(gradePrefix + cleanName, htmlContent, "fa-wand-magic-sparkles", schoolText);
 }
 
 function showCalcModal(type) {
