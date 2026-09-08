@@ -916,7 +916,11 @@ function buildCharacter() {
     if (subRace === "Drow" && !chosenCantrips.includes("Dancing Lights")) chosenCantrips.unshift("Dancing Lights (Racial)");
 
     if (classes[cls].autoCantrip) {
-        chosenCantrips.unshift(`${classes[cls].autoCantrip} (Auto)`);
+        let autoList = Array.isArray(classes[cls].autoCantrip) ? classes[cls].autoCantrip : [classes[cls].autoCantrip];
+        autoList.reverse().forEach(ac => {
+            let entry = `${ac} (Auto)`;
+            if (!chosenCantrips.includes(entry)) chosenCantrips.unshift(entry);
+        });
     }
 
     let chosenSpells = Array.from(document.querySelectorAll('.char-spell-select'))
