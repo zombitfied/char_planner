@@ -82,26 +82,18 @@
         .info-btn { width: 38px; height: 38px; flex-shrink: 0; padding: 0; background: #faf7f2; color: var(--accent); border: 1.5px solid var(--border); border-radius: 6px; font-weight: bold; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; filter: url(#rough-edge); }
         .info-btn:hover { background: #f0ebe1; }
 
-        .spell-btn {
-            background: #faf7f2;
-            color: var(--accent);
-            border: 1.5px solid var(--border);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            cursor: pointer;
-            display: inline-flex;
+        .spell-row {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 6px;
-            margin: 3px;
-            text-align: left;
-            filter: url(#rough-edge);
-            transition: all 0.2s;
-        }
-        .spell-btn:hover {
-            background: #f0ebe1;
-            border-color: var(--accent);
+            background: #faf7f2;
+            border: 1.5px solid var(--border);
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--text);
         }
 
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -852,22 +844,32 @@ function buildCharacter() {
 
     renderEquipmentSectionInSheet(cls);
 
-    let cantripTags = chosenCantrips.map(c => {
+    let cantripRows = chosenCantrips.map(c => {
         let cleanName = c.replace(/ \((Racial|Auto|.*)\)/, '').trim();
-        return `<button type="button" class="spell-btn" onclick="showSpellModalByName('${cleanName.replace(/'/g, "\\'")}')"><i class="fa-solid fa-wand-magic-sparkles"></i> ${c}</button>`;
-    }).join(' ');
+        return `
+            <div class="spell-row">
+                <span><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--accent); margin-right:6px;"></i> ${c}</span>
+                <button type="button" class="info-btn" style="width:32px; height:32px;" onclick="showSpellModalByName('${cleanName.replace(/'/g, "\\'")}')">ℹ</button>
+            </div>
+        `;
+    }).join('');
 
-    let spellTags = chosenSpells.map(s => {
+    let spellRows = chosenSpells.map(s => {
         let cleanName = s.replace(/ \((Racial|Auto|.*)\)/, '').trim();
-        return `<button type="button" class="spell-btn" onclick="showSpellModalByName('${cleanName.replace(/'/g, "\\'")}')"><i class="fa-solid fa-wand-magic-sparkles"></i> ${s}</button>`;
-    }).join(' ');
+        return `
+            <div class="spell-row">
+                <span><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--accent); margin-right:6px;"></i> ${s}</span>
+                <button type="button" class="info-btn" style="width:32px; height:32px;" onclick="showSpellModalByName('${cleanName.replace(/'/g, "\\'")}')">ℹ</button>
+            </div>
+        `;
+    }).join('');
 
     document.getElementById('screen-out-spells').innerHTML = `
-        <div style="margin-bottom: 8px;"><strong>Zaubertricks:</strong></div>
-        <div style="margin-bottom: 12px;">${cantripTags || '<span style="color:var(--text-muted); font-size:0.85rem;">Keine</span>'}</div>
+        <div style="margin-bottom: 6px; font-weight:bold; font-size:0.85rem; color:var(--text-muted);">Zaubertricks:</div>
+        <div style="margin-bottom: 12px;">${cantripRows || '<span style="font-size:0.85rem; color:var(--text-muted);">Keine</span>'}</div>
         
-        <div style="margin-bottom: 8px;"><strong>Vorbereitete Stufe 1 Zauber:</strong></div>
-        <div style="margin-bottom: 12px;">${spellTags || '<span style="color:var(--text-muted); font-size:0.85rem;">Keine ausgewählt</span>'}</div>
+        <div style="margin-bottom: 6px; font-weight:bold; font-size:0.85rem; color:var(--text-muted);">Vorbereitete Stufe 1 Zauber:</div>
+        <div style="margin-bottom: 12px;">${spellRows || '<span style="font-size:0.85rem; color:var(--text-muted);">Keine ausgewählt</span>'}</div>
         
         <div style="font-size: 0.85rem; color: var(--text-muted);"><strong>Stufe 1 Zauberplätze:</strong> ${classes[cls].casterType !== "NONE" ? '2 / Lange Rast' : '0'}</div>
     `;
