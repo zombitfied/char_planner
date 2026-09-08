@@ -829,7 +829,7 @@ function updateSpellsUI() {
                 <select class="char-cantrip-select">
                     ${optionsHtml}
                 </select>
-                <button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling)">✨ i</button>
+                <button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling)">✨</button>
             </div>`;
     }
 
@@ -851,7 +851,7 @@ function updateSpellsUI() {
                 <select class="char-spell-select">
                     ${optionsHtml}
                 </select>
-                <button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling)">I i</button>
+                <button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling)">I</button>
             </div>`;
     }
 }
@@ -1009,7 +1009,7 @@ function buildCharacter() {
         return `
             <div class="spell-row">
                 <span><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--accent); margin-right:6px;"></i> ${c}</span>
-                <button type="button" class="info-btn" style="width:38px; height:38px;" onclick="showSpellModalByName('${cleanName.replace(/'/g, "\\'")}')">✨ i</button>
+                <button type="button" class="info-btn" style="width:38px; height:38px;" onclick="showSpellModalByName('${cleanName.replace(/'/g, "\\'")}')">✨</button>
             </div>
         `;
     }).join('');
@@ -1019,7 +1019,7 @@ function buildCharacter() {
         return `
             <div class="spell-row">
                 <span><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--accent); margin-right:6px;"></i> ${s}</span>
-                <button type="button" class="info-btn" style="width:38px; height:38px;" onclick="showSpellModalByName('${cleanName.replace(/'/g, "\\'")}')">I i</button>
+                <button type="button" class="info-btn" style="width:38px; height:38px;" onclick="showSpellModalByName('${cleanName.replace(/'/g, "\\'")}')">I</button>
             </div>
         `;
     }).join('');
