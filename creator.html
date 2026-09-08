@@ -82,7 +82,7 @@
         select, button, input { width: 100%; padding: 10px; border-radius: 6px; border: 1.5px solid var(--border); background: #faf7f2; color: var(--text); font-size: 0.95rem; box-sizing: border-box; }
         select:focus, input:focus { outline: none; border-color: var(--accent); }
         
-        .info-btn { width: 38px; height: 38px; flex-shrink: 0; padding: 0; background: #faf7f2; color: var(--accent); border: 1.5px solid var(--border); border-radius: 6px; font-weight: bold; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; filter: url(#rough-edge); }
+        .info-btn { width: 38px; height: 38px; flex-shrink: 0; padding: 0; background: #faf7f2; color: var(--accent); border: 1.5px solid var(--border); border-radius: 6px; font-weight: bold; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; filter: url(#rough-edge); white-space: nowrap; }
         .info-btn:hover { background: #f0ebe1; }
 
         .spell-row {
@@ -157,34 +157,34 @@
             background: var(--card); 
             border: 3px solid var(--border); 
             border-radius: 12px 16px 10px 14px; 
-            max-width: 500px; 
-            width: 90%; 
-            padding: 20px; 
+            max-width: 450px; 
+            width: 85%; 
+            padding: 15px; 
             color: var(--text); 
             box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
             text-align: center;
             filter: url(#rough-edge);
-            max-height: 75vh;
+            max-height: 55vh;
             display: flex;
             flex-direction: column;
         }
-        .modal-title { font-size: 1.2rem; color: var(--accent); font-weight: bold; margin-bottom: 4px; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 10px; flex-shrink: 0; }
-        .modal-subtitle { font-size: 0.95rem; color: var(--accent); font-weight: bold; margin-bottom: 12px; text-transform: uppercase; flex-shrink: 0; }
+        .modal-title { font-size: 1.1rem; color: var(--accent); font-weight: bold; margin-bottom: 4px; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 10px; flex-shrink: 0; }
+        .modal-subtitle { font-size: 0.85rem; color: var(--accent); font-weight: bold; margin-bottom: 8px; text-transform: uppercase; flex-shrink: 0; }
         
         .modal-icon-box {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             background: #faf7f2;
             border: 2px solid var(--border);
             border-radius: 6px;
             color: var(--accent);
-            font-size: 1rem;
+            font-size: 0.85rem;
         }
 
-        .modal-body { font-size: 0.9rem; line-height: 1.5; color: var(--text-muted); text-align: left; overflow-y: auto; flex-grow: 1; padding-right: 5px; }
+        .modal-body { font-size: 0.85rem; line-height: 1.4; color: var(--text-muted); text-align: left; overflow-y: auto; flex-grow: 1; padding-right: 5px; }
 
         ul { margin: 5px 0; padding-left: 20px; font-size: 0.9rem; color: var(--text-muted); }
         li { margin-bottom: 4px; }
@@ -593,23 +593,13 @@ function showSkillModal(selectId) {
     openModal(selectedSkill, desc, "fa-check");
 }
 
-function showSpellModalFromDropdown(selectElem) {
-    showSpellModalByName(selectElem.value);
+function showSpellModalFromDropdown(selectElem, prefixTag) {
+    const spellName = selectElem.value;
+    if (!spellName) return;
+    showSpellModalByName(spellName, prefixTag);
 }
 
-function arabicToRoman(num) {
-    const lookup = {M:1000,CM:900,D:500,CD:400,C:100,XC:90,L:50,XL:40,X:10,IX:9,V:5,IV:4,I:1};
-    let roman = "";
-    for (let i in lookup ) {
-        while ( num >= lookup[i] ) {
-            roman += i;
-            num -= lookup[i];
-        }
-    }
-    return roman;
-}
-
-function showSpellModalByName(spellName) {
+function showSpellModalByName(spellName, prefixTag = "") {
     if (!spellName) return;
     let cleanName = spellName.replace(/ \((Racial|Auto|.*)\)/, '').trim();
 
@@ -619,7 +609,7 @@ function showSpellModalByName(spellName) {
                    (spellCompendium.level1 && spellCompendium.level1[spellName]);
 
     if (!spellObj) {
-        openModal(cleanName, "Keine detaillierte Beschreibung verfügbar.", "fa-wand-magic-sparkles");
+        openModal(prefixTag + " " + cleanName, "Keine detaillierte Beschreibung verfügbar.", "fa-wand-magic-sparkles");
         return;
     }
 
@@ -646,8 +636,7 @@ function showSpellModalByName(spellName) {
         htmlContent = htmlContent.replace(regex, '<b>$1</b>');
     });
 
-    // Name ohne Präfix im Modal, nur der saubere Name oben
-    openModal(cleanName, htmlContent, "fa-wand-magic-sparkles", schoolText);
+    openModal(prefixTag + " " + cleanName, htmlContent, "fa-wand-magic-sparkles", schoolText);
 }
 
 function showCalcModal(type) {
@@ -832,7 +821,7 @@ function updateSpellsUI() {
     for (let i = 0; i < maxCantrips; i++) {
         let optionsHtml = `<option value="">-- Zaubertrick ${i + 1} wählen --</option>`;
         allowedCantrips.forEach(c => {
-            optionsHtml += `<option value="${c}">[✨] ${c}</option>`;
+            optionsHtml += `<option value="${c}">${c}</option>`;
         });
 
         cantripGroup.innerHTML += `
@@ -840,7 +829,7 @@ function updateSpellsUI() {
                 <select class="char-cantrip-select">
                     ${optionsHtml}
                 </select>
-                <button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling)">ℹ</button>
+                <button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling, '[✨]')">[✨] i</button>
             </div>`;
     }
 
@@ -854,7 +843,7 @@ function updateSpellsUI() {
     for (let i = 0; i < maxPrep; i++) {
         let optionsHtml = `<option value="">-- Stufe 1 Zauber ${i + 1} wählen --</option>`;
         allowedLvl1.forEach(s => {
-            optionsHtml += `<option value="${s}">[I] ${s}</option>`;
+            optionsHtml += `<option value="${s}">${s}</option>`;
         });
 
         lvl1Group.innerHTML += `
@@ -862,7 +851,7 @@ function updateSpellsUI() {
                 <select class="char-spell-select">
                     ${optionsHtml}
                 </select>
-                <button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling)">ℹ</button>
+                <button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling, '[I]')">[I] i</button>
             </div>`;
     }
 }
@@ -1019,8 +1008,8 @@ function buildCharacter() {
         let cleanName = c.replace(/ \((Racial|Auto|.*)\)/, '').trim();
         return `
             <div class="spell-row">
-                <span><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--accent); margin-right:6px;"></i> [✨] ${c}</span>
-                <button type="button" class="info-btn" style="width:32px; height:32px;" onclick="showSpellModalByName('${cleanName.replace(/'/g, "\\'")}')">ℹ</button>
+                <span><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--accent); margin-right:6px;"></i> ${c}</span>
+                <button type="button" class="info-btn" style="width:38px; height:38px;" onclick="showSpellModalByName('${cleanName.replace(/'/g, "\\'")}', '[✨]')">[✨] i</button>
             </div>
         `;
     }).join('');
@@ -1029,8 +1018,8 @@ function buildCharacter() {
         let cleanName = s.replace(/ \((Racial|Auto|.*)\)/, '').trim();
         return `
             <div class="spell-row">
-                <span><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--accent); margin-right:6px;"></i> [I] ${s}</span>
-                <button type="button" class="info-btn" style="width:32px; height:32px;" onclick="showSpellModalByName('${cleanName.replace(/'/g, "\\'")}')">ℹ</button>
+                <span><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--accent); margin-right:6px;"></i> ${s}</span>
+                <button type="button" class="info-btn" style="width:38px; height:38px;" onclick="showSpellModalByName('${cleanName.replace(/'/g, "\\'")}', '[I]')">[I] i</button>
             </div>
         `;
     }).join('');
