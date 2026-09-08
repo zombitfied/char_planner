@@ -82,6 +82,28 @@
         .info-btn { width: 38px; height: 38px; flex-shrink: 0; padding: 0; background: #faf7f2; color: var(--accent); border: 1.5px solid var(--border); border-radius: 6px; font-weight: bold; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; filter: url(#rough-edge); }
         .info-btn:hover { background: #f0ebe1; }
 
+        .spell-btn {
+            background: #faf7f2;
+            color: var(--accent);
+            border: 1.5px solid var(--border);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin: 3px;
+            text-align: left;
+            filter: url(#rough-edge);
+            transition: all 0.2s;
+        }
+        .spell-btn:hover {
+            background: #f0ebe1;
+            border-color: var(--accent);
+        }
+
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .grid-race { display: grid; grid-template-columns: 1fr 1.8fr; gap: 10px; }
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
@@ -832,18 +854,22 @@ function buildCharacter() {
 
     let cantripTags = chosenCantrips.map(c => {
         let cleanName = c.replace(/ \((Racial|Auto|.*)\)/, '').trim();
-        return `<span class="clickable-tag" onclick="showSpellModalByName('${cleanName.replace(/'/g, "\\'")}')">${c}</span>`;
+        return `<button type="button" class="spell-btn" onclick="showSpellModalByName('${cleanName.replace(/'/g, "\\'")}')"><i class="fa-solid fa-wand-magic-sparkles"></i> ${c}</button>`;
     }).join(' ');
 
     let spellTags = chosenSpells.map(s => {
         let cleanName = s.replace(/ \((Racial|Auto|.*)\)/, '').trim();
-        return `<span class="clickable-tag" onclick="showSpellModalByName('${cleanName.replace(/'/g, "\\'")}')">${s}</span>`;
+        return `<button type="button" class="spell-btn" onclick="showSpellModalByName('${cleanName.replace(/'/g, "\\'")}')"><i class="fa-solid fa-wand-magic-sparkles"></i> ${s}</button>`;
     }).join(' ');
 
     document.getElementById('screen-out-spells').innerHTML = `
-        <b>Zaubertricks:</b> ${cantripTags || 'Keine'}<br><br>
-        <b>Vorbereitete Stufe 1 Zauber:</b> ${spellTags || 'Keine ausgewählt'}<br><br>
-        <b>Stufe 1 Zauberplätze:</b> ${classes[cls].casterType !== "NONE" ? '2 / Lange Rast' : '0'}
+        <div style="margin-bottom: 8px;"><strong>Zaubertricks:</strong></div>
+        <div style="margin-bottom: 12px;">${cantripTags || '<span style="color:var(--text-muted); font-size:0.85rem;">Keine</span>'}</div>
+        
+        <div style="margin-bottom: 8px;"><strong>Vorbereitete Stufe 1 Zauber:</strong></div>
+        <div style="margin-bottom: 12px;">${spellTags || '<span style="color:var(--text-muted); font-size:0.85rem;">Keine ausgewählt</span>'}</div>
+        
+        <div style="font-size: 0.85rem; color: var(--text-muted);"><strong>Stufe 1 Zauberplätze:</strong> ${classes[cls].casterType !== "NONE" ? '2 / Lange Rast' : '0'}</div>
     `;
 
     const sheetElem = document.getElementById('sheet');
