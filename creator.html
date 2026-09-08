@@ -359,6 +359,7 @@
 
 <script>
 const LOCAL_JSON_URL = "./compendium.json";
+const BACKGROUNDS_JSON_URL = "./backgrounds.json";
 const SPELLS_HTML_URL = "./spells-parsed.html";
 const SPELL_LISTS_HTML_URL = "./spelllists-parsed.html";
 
@@ -431,9 +432,21 @@ window.onload = async function() {
 
         speciesData = data.speciesData;
         classes = data.classes;
-        backgrounds = data.backgrounds;
         skillDescriptions = data.skills || {};
         weaponsCompendium = data.weapons || {};
+
+        try {
+            const bgResponse = await fetch(BACKGROUNDS_JSON_URL + "?t=" + new Date().getTime());
+            if (bgResponse.ok) {
+                const bgData = await bgResponse.json();
+                backgrounds = bgData.backgrounds || bgData;
+            } else {
+                throw new Error("backgrounds.json nicht gefunden");
+            }
+        } catch (bgErr) {
+            console.warn("Konnte backgrounds.json nicht laden, nutze Fallback.", bgErr);
+            backgrounds = data.backgrounds || {};
+        }
 
         try {
             const spellResponse = await fetch(SPELLS_HTML_URL + "?t=" + new Date().getTime());
@@ -839,7 +852,9 @@ function validateSkills() {
     const sk1 = document.getElementById('skill1').value;
     const sk2 = document.getElementById('skill2').value;
     const bg = document.getElementById('bg-select').value;
-    const bgSkills = backgrounds[bg].skills;
+    const bgObj = backgrounds[bg];
+    if (!bgObj) return true;
+    const bgSkills = bgObj.skills || [];
 
     const isValid = (sk1 !== sk2) && !bgSkills.includes(sk1) && !bgSkills.includes(sk2);
     document.getElementById('skill-error').style.display = isValid ? 'none' : 'block';
@@ -986,7 +1001,8 @@ function buildCharacter() {
 
     const sk1 = document.getElementById('skill1').value;
     const sk2 = document.getElementById('skill2').value;
-    const allSkills = [...backgrounds[bg].skills, sk1, sk2];
+    const bgObj = backgrounds[bg] || { skills: [], feat: "" };
+    const allSkills = [...(bgObj.skills || []), sk1, sk2];
 
     lastBuiltCharacter = {
         id: 'char_' + Date.now(),
@@ -1059,7 +1075,7 @@ function buildCharacter() {
     document.getElementById('screen-out-features').innerHTML = `
         <li><b>Fertigkeiten:</b> ${skillTags}</li>
         <li><b>Volksmerkmale:</b><br>${formattedText}</li>
-        <li><b>Hintergrund-Talent:</b> ${backgrounds[bg].feat}</li>
+        <li><b>Hintergrund-Talent:</b> ${bgObj.feat || ''}</li>
         <li><b>Klassen-Rettungswürfe:</b> ${classes[cls].saves.join(', ')}</li>
         <li><b>Rüstungs-Proficiency:</b> ${classes[cls].armor}</li>
     `;
