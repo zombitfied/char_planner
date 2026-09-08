@@ -663,17 +663,16 @@ function onMainRaceChange() {
 
 function updateSubraceOptions() {
     const mainRace = document.getElementById('main-race').value;
-    const subRace = document.getElementById('sub-race').value;
-    const subInfo = speciesData[mainRace]?.subraces[subRace];
+    const raceData = speciesData[mainRace];
     const specialContainer = document.getElementById('special-attr-container');
     const specialSelect = document.getElementById('special-attr-select');
     const specialLabel = document.getElementById('special-attr-label');
 
-    if (subInfo && subInfo.specialAttribute) {
-        const sa = subInfo.specialAttribute;
-        specialLabel.innerText = sa.label || "Spezial-Attribut wählen:";
+    if (raceData && raceData["spezial-attribut"] && raceData["spezial-attribut"].spellcasting) {
+        const options = raceData["spezial-attribut"].spellcasting;
+        specialLabel.innerText = "Zauberwirkungs-Attribut wählen:";
         specialSelect.innerHTML = '';
-        sa.options.forEach(opt => {
+        options.forEach(opt => {
             specialSelect.innerHTML += `<option value="${opt}">${opt}</option>`;
         });
         specialContainer.style.display = 'block';
@@ -818,7 +817,8 @@ function buildCharacter() {
     const bg = document.getElementById('bg-select').value;
 
     const subInfo = speciesData[mainRace].subraces[subRace];
-    const specialAttrVal = document.getElementById('special-attr-select').value;
+    const specialAttrContainer = document.getElementById('special-attr-container');
+    const specialAttrVal = (specialAttrContainer.style.display !== 'none') ? document.getElementById('special-attr-select').value : null;
 
     let rawStats = {
         STR: parseInt(document.getElementById('str-val').value),
@@ -888,7 +888,7 @@ function buildCharacter() {
         skills: allSkills,
         cantrips: chosenCantrips,
         spells: chosenSpells,
-        specialAttribute: specialAttrVal ? { label: subInfo.specialAttribute?.label, value: specialAttrVal } : null,
+        specialAttribute: specialAttrVal ? { label: "Zauberwirkungs-Attribut", value: specialAttrVal } : null,
         lastAccess: new Date().toISOString()
     };
 
@@ -1033,7 +1033,7 @@ function renderEquipmentSectionInSheet(className) {
                 <div>
                     <label style="font-size:0.75rem;">Sekundärwaffe wählen:</label>
                     <select id="sheet-weapon-2">
-                        ${allWapons.map(w => `<option value="${w}">${w}</option>`).join('')}
+                        ${allWeapons.map(w => `<option value="${w}">${w}</option>`).join('')}
                     </select>
                 </div>
             </div>`;
