@@ -1,0 +1,330 @@
+"backgrounds": {
+  "Adeliger": {
+    "attributes": ["STR", "INT", "CHA"],
+    "feat": "Begabt",
+    "skills": ["Geschichte", "Überzeugen"],
+    "tools": {
+      "choiceA": {
+        "text": "Spielset deiner Wahl",
+        "options": ["Satz Spielkarten", "Satz Würfel"]
+      }
+    },
+    "equipment": {
+      "choiceA": {
+        "text": "Spielset deiner Wahl",
+        "options": ["Satz Spielkarten", "Satz Würfel"],
+        "additionalItems": ["Feine Kleidung", "Parfüm", "29 GM"]
+      },
+      "choiceB": ["50 GM"]
+    },
+    "text": "Du bist in einer Burg aufgewachsen, umgeben von Reichtum, Macht und Privilegien. Deine Familie ist von niederem Adel und hat dir erstklassige Bildung angedeihen lassen, die du zum Teil genossen und zum Teil verabscheut hast. Deine Zeit in der Burg – vor allem die vielen Stunden, die du deine Familie am Hof beobachtet hast – hat dich vieles über das Herrschen gelehrt."
+  },
+  "Akolyth": {
+    "attributes": ["INT", "WIS", "CHA"],
+    "feat": "Eingeweihter der Magie (Kleriker)",
+    "skills": ["Motiv erkennen", "Religion"],
+    "tools": ["Kalligrafiewerkzeuge"],
+    "equipment": {
+      "choiceA": [
+        "Kalligrafiewerkzeuge",
+        "Buch (Gebete)",
+        "Heiliges Symbol",
+        { "name": "Pergament", "qty": 10, "unit": "Blatt" },
+        "Robe",
+        "8 GM"
+      ],
+      "choiceB": ["50 GM"]
+    },
+    "text": "Du hast dich dem Dienst in einem Tempel verschrieben, der sich in einer Stadt oder verborgen in einem heiligen Hain befinden kann. Dort hast du Riten zu Ehren eines Gottes oder eines Pantheons ausgeführt. Du hast unter einem Priester gedient und Religion studiert. Dank der Unterweisung des Priesters und deines eigenen Einsatzes hast du außerdem gelernt, im Dienst an deinem Ort der Anbetung und an den Gläubigen dort ein gewisses Maß an göttlichen Energien zu kanalisieren."
+  },
+  "Bauer": {
+    "attributes": ["STR", "CON", "WIS"],
+    "feat": "Zäh",
+    "skills": ["Mit Tieren umgehen", "Naturkunde"],
+    "tools": ["Schreinerwerkzeuge"],
+    "equipment": {
+      "choiceA": ["Sichel", "Schreinerwerkzeuge", "Heilerausrüstung", "Eisentopf", "Schaufel", "Reisekleidung", "30 GM"],
+      "choiceB": ["50 GM"]
+    },
+    "text": "Du bist auf dem Land aufgewachsen. Jahrelang hast du Tiere versorgt und den Boden kultiviert, und dafür bist du mit Geduld und guter Gesundheit belohnt worden. Du schätzt die Gaben der Natur und hast zugleich gesunden Respekt vor ihrem Zorn."
+  },
+  "Einsiedler": {
+    "attributes": ["CON", "WIS", "CHA"],
+    "feat": "Heiler",
+    "skills": ["Heilkunde", "Religion"],
+    "tools": ["Kräuterkundeausrüstung"],
+    "equipment": {
+      "choiceA": [
+        "Kampfstab",
+        "Kräuterkundeausrüstung",
+        "Schlafsack",
+        "Buch (Philosophie)",
+        "Lampe",
+        { "name": "Öl", "qty": 3, "unit": "Flasche" },
+        "Reisekleidung",
+        "16 GM"
+      ],
+      "choiceB": ["50 GM"]
+    },
+    "text": "Du hast deine jungen Jahre abgeschieden in einer Hütte oder einem Kloster fern aller Ansiedlungen verbracht. Deine einzige Gesellschaft bestand aus den Kreaturen des Waldes und gelegentlichen Besuchern, die Vorräte und Nachrichten brachten. In deiner Abgeschiedenheit hast du zahllose Stunden damit verbracht, über die Mysterien der Schöpfung nachzusinnen."
+  },
+  "Händler": {
+    "attributes": ["CON", "INT", "CHA"],
+    "feat": "Glückspilz",
+    "skills": ["Mit Tieren umgehen", "Überzeugen"],
+    "tools": ["Navigationswerkzeuge"],
+    "equipment": {
+      "choiceA": [
+        "Navigationswerkzeuge",
+        { "name": "Beutel", "qty": 2, "unit": "Stück" },
+        "Reisekleidung",
+        "22 GM"
+      ],
+      "choiceB": ["50 GM"]
+    },
+    "text": "Du warst bei einem Händler, einem Karawanenmeister oder Ladenbesitzer in der Lehre und hast die Grundlagen des Handels erlernt. Du bist viel gereist und hast dir deinen Lebensunterhalt mit dem An- und Verkauf von Rohstoffen für Handwerker sowie von deren fertigen Werken verdient. Vielleicht hast du Waren transportiert (per Schiff, Wagen oder Karawane) oder bei fahrenden Händlern erworben und in deinem eigenen Laden verkauft."
+  },
+  "Handwerker": {
+    "attributes": ["STR", "DEX", "INT"],
+    "feat": "Handwerker",
+    "skills": ["Nachforschungen", "Überzeugen"],
+    "tools": {
+      "choiceA": {
+        "text": "Wähle eine Art von Handwerkszeug",
+        "options": [
+          "Alchemistenausrüstung", "Brauereizubehör", "Fälscherausrüstung", "Glasbläserwerkzeuge", 
+          "Holzschnitzwerkzeuge", "Juwelierwerkzeuge", "Kalligrafiewerkzeuge", "Kartografenwerkzeuge", 
+          "Kochutensilien", "Ledererwerkzeuge", "Malereizubehör", "Maurerwerkzeuge", 
+          "Schmiedewerkzeuge", "Schreinerwerkzeuge", "Schusterwerkzeuge", "Töpferwerkzeuge", 
+          "Tüftlerwerkzeuge", "Verkleidungsausrüstung", "Weberwerkzeuge"
+        ]
+      }
+    },
+    "equipment": {
+      "choiceA": {
+        "text": "Wähle eine Art von Handwerkszeug",
+        "options": [
+          "Alchemistenausrüstung", "Brauereizubehör", "Fälscherausrüstung", "Glasbläserwerkzeuge", 
+          "Holzschnitzwerkzeuge", "Juwelierwerkzeuge", "Kalligrafiewerkzeuge", "Kartografenwerkzeuge", 
+          "Kochutensilien", "Ledererwerkzeuge", "Malereizubehör", "Maurerwerkzeuge", 
+          "Schmiedewerkzeuge", "Schreinerwerkzeuge", "Schusterwerkzeuge", "Töpferwerkzeuge", 
+          "Tüftlerwerkzeuge", "Verkleidungsausrüstung", "Weberwerkzeuge"
+        ],
+        "additionalItems": [
+          { "name": "Beutel", "qty": 2, "unit": "Stück" },
+          "Reisekleidung",
+          "32 GM"
+        ]
+      },
+      "choiceB": ["50 GM"]
+    },
+    "text": "Du hast in einem Handwerksbetrieb für ein paar Kupferstücke am Tag Böden gewischt und Tische geschrubbt, sowie du groß genug warst, um einen Eimer zu tragen. In deiner Lehre hast du gelernt, grundlegende handwerkliche Arbeiten auszuführen und schwierige Kunden zu besänftigen. Außerdem hast du ein gutes Auge fürs Detail entwickelt."
+  },
+  "Krimineller": {
+    "attributes": ["DEX", "CON", "INT"],
+    "feat": "Wachsam",
+    "skills": ["Fingerfertigkeit", "Heimlichkeit"],
+    "tools": ["Diebeswerkzeug"],
+    "equipment": {
+      "choiceA": [
+        { "name": "Dolch", "qty": 2, "unit": "Stück" },
+        "Diebeswerkzeug",
+        "Brechstange",
+        { "name": "Beutel", "qty": 2, "unit": "Stück" },
+        "Reisekleidung",
+        "16 GM"
+      ],
+      "choiceB": ["50 GM"]
+    },
+    "text": "Du hast dich in dunklen Gassen durchgeschlagen und mit Taschendiebstählen und Einbrüchen über Wasser gehalten. Vielleicht hat du einer kleinen Bande von gleichgesinnten Halunken angehört, die aufeinander aufpassten. Oder vielleicht warst du ein Einzelgänger und hast dich gegen die örtliche Diebesgilde oder noch fürchterlichere Gesetzesbrecher behauptet."
+  },
+  "Reisender": {
+    "attributes": ["DEX", "WIS", "CHA"],
+    "feat": "Glückspilz",
+    "skills": ["Motiv erkennen", "Heimlichkeit"],
+    "tools": ["Diebeswerkzeug"],
+    "equipment": {
+      "choiceA": {
+        "text": "Spielset deiner Wahl",
+        "options": ["Satz Spielkarten", "Satz Würfel"],
+        "additionalItems": [
+          { "name": "Dolch", "qty": 2, "unit": "Stück" },
+          "Diebeswerkzeug",
+          "Schlafsack",
+          { "name": "Beutel", "qty": 2, "unit": "Stück" },
+          "Reisekleidung",
+          "16 GM"
+        ]
+      },
+      "choiceB": ["50 GM"]
+    },
+    "text": "Du bist auf der Straße in Gesellschaft ähnlich glückloser Außenseiter aufgewachsen, manche von ihnen Freunde, manche von ihnen Rivalen. Du hast geschlafen, wo es sich angeboten hat, und so manche merkwürdige Arbeit getan, um etwas zu essen zu kriegen. Wenn der Hunger unerträglich wurde, blieb dir nur Diebstahl. Dennoch hast du weder deinen Stolz noch die Hoffnung verloren. Das Schicksal ist noch nicht fertig mit dir."
+  },
+  "Scharlatan": {
+    "attributes": ["DEX", "CON", "CHA"],
+    "feat": "Begabt",
+    "skills": ["Fingerfertigkeit", "Täuschen"],
+    "tools": ["Fälscherausrüstung"],
+    "equipment": {
+      "choiceA": ["Fälscherausrüstung", "Kostüm", "Feine Kleidung", "15 GM"],
+      "choiceB": ["50 GM"]
+    },
+    "text": "Sowie du alt genug warst, um ein Bier zu bestellen, hattest du im Nu in jeder Taverne in Reichweite deinen Lieblingsplatz. Während deiner Tavernentouren hast du gelernt, jene Pechvögel auszunehmen, die auf der Suche nach einer schönen Lüge waren – vielleicht hast du ihnen mit gefälschten Zaubertränken oder Stammbäumen das Geld aus der Tasche gezogen."
+  },
+  "Schreiber": {
+    "attributes": ["DEX", "INT", "WIS"],
+    "feat": "Begabt",
+    "skills": ["Nachforschungen", "Wahrnehmung"],
+    "tools": ["Kalligrafiewerkzeuge"],
+    "equipment": {
+      "choiceA": [
+        "Kalligrafiewerkzeuge",
+        "Feine Kleidung",
+        "Lampe",
+        { "name": "Öl", "qty": 3, "unit": "Flasche" },
+        { "name": "Pergament", "qty": 12, "unit": "Blatt" },
+        "23 GM"
+      ],
+      "choiceB": ["50 GM"]
+    },
+    "text": "Du hast deine prägenden Jahre in einem Skriptorium verbracht, einem Kloster zur Bewahrung von Wissen oder einer staatlichen Behörde, wo du gelernt hast, in klarer Schrift fügliche Texte zu verfassen. Vielleicht hast du an Literatur kopiert. Möglicherweise hast du Erfahrung als Autor von Gedichten, Prosa oder wissenschaftlichen Arbeiten. Du achtest auf Details, damit du keine Fehler in die Dokumente einschleppst, die du erstellst oder kopierst."
+  },
+  "Seemann": {
+    "attributes": ["STR", "DEX", "WIS"],
+    "feat": "Kneipenschläger",
+    "skills": ["Akrobatik", "Wahrnehmung"],
+    "tools": ["Navigationswerkzeuge"],
+    "equipment": {
+      "choiceA": ["Dolch", "Navigationswerkzeuge", "Seil", "Reisekleidung", "20 GM"],
+      "choiceB": ["50 GM"]
+    },
+    "text": "Du hast als Seemann gelebt, den Wind im Rücken und das Deck schwankend unter deinen Füßen. In zahllosen Häfen hast du an Tavernentheken gehockt. Du hast mächtige Stürme überstanden und Geschichten mit Leuten ausgetauscht, die unter den Wellen wohnen."
+  },
+  "Soldat": {
+    "attributes": ["STR", "DEX", "CON"],
+    "feat": "Wilder Angreifer",
+    "skills": ["Athletik", "Einschüchtern"],
+    "tools": {
+      "choiceA": {
+        "text": "Spielset deiner Wahl",
+        "options": ["Satz Spielkarten", "Satz Würfel"]
+      }
+    },
+    "equipment": {
+      "choiceA": {
+        "text": "Spielset deiner Wahl",
+        "options": ["Satz Spielkarten", "Satz Würfel"],
+        "additionalItems": [
+          "Speer",
+          "Kurzbogen",
+          { "name": "Pfeile", "qty": 20, "unit": "Stück" },
+          "Heilerausrüstung",
+          "Köcher",
+          "Reisekleidung",
+          "14 GM"
+        ]
+      },
+      "choiceB": ["50 GM"]
+    },
+    "text": "Du hast deine Ausbildung für den Krieg begonnen, sowie du erwachsen warst. Erinnerungen an dein Leben vor den Waffen sind rar. Der Kampf liegt dir im Blut. Manchmal ertappst du dich dabei, wie du reflexhaft die Kampfübungen deiner Grundausbildung wiederholst. Schließlich hast du deine Ausbildung auf dem Schlachtfeld genutzt und das Reich beschützt, indem du Krieg geführt hast."
+  },
+  "Unterhaltungskünstler": {
+    "attributes": ["STR", "DEX", "CHA"],
+    "feat": "Musiker",
+    "skills": ["Akrobatik", "Auftreten"],
+    "tools": {
+      "choiceA": {
+        "text": "Musikinstrument deiner Wahl",
+        "options": [
+          "Dudelsack", "Flöte", "Gambe", "Hackbrett", "Horn", 
+          "Laute", "Leier", "Panflöte", "Schalmei", "Trommel"
+        ]
+      }
+    },
+    "equipment": {
+      "choiceA": {
+        "text": "Musikinstrument deiner Wahl",
+        "options": [
+          "Dudelsack", "Flöte", "Gambe", "Hackbrett", "Horn", 
+          "Laute", "Leier", "Panflöte", "Schalmei", "Trommel"
+        ],
+        "additionalItems": [
+          { "name": "Kostüm", "qty": 2, "unit": "Stück" },
+          "Spiegel",
+          "Parfüm",
+          "Reisekleidung",
+          "11 GM"
+        ]
+      },
+      "choiceB": ["50 GM"]
+    },
+    "text": "Du hast einen Großteil deiner Jugend auf Jahrmärkten und in Zirkussen verbracht, warst als Gelegenheitsarbeiter für Musiker und Akrobaten tätig und hast dafür Unterricht erhalten. Vielleicht hast du Seiltanz gelernt, oder wie man in bestimmter Weise Laute spielt oder in tadelloser Diktion Gedichte vorträgt. Bis heute liebst du den Applaus und stehst gerne auf der Bühne."
+  },
+  "Wache": {
+    "attributes": ["STR", "INT", "WIS"],
+    "feat": "Wachsam",
+    "skills": ["Athletik", "Wahrnehmung"],
+    "tools": {
+      "choiceA": {
+        "text": "Spielset deiner Wahl",
+        "options": ["Satz Spielkarten", "Satz Würfel"]
+      }
+    },
+    "equipment": {
+      "choiceA": {
+        "text": "Spielset deiner Wahl",
+        "options": ["Satz Spielkarten", "Satz Würfel"],
+        "additionalItems": [
+          "Speer",
+          "Leichte Armbrust",
+          { "name": "Bolzen", "qty": 20, "unit": "Stück" },
+          "Abdeckbare Laterne",
+          "Handschellen",
+          "Köcher",
+          "Reisekleidung",
+          "12 GM"
+        ]
+      },
+      "choiceB": ["50 GM"]
+    },
+    "text": "Deine Füße schmerzen, wenn du nur an die zahllosen Stunden denkst, die du auf deinem Posten im Wachturm verbracht hast. Du hast gelernt, mit dem einem Auge nach Plünderern außerhalb der Mauern Ausschau zu halten, die womöglich aus dem nahen Wald hervorbrechen, und mit dem anderen nach Beutelschneidern und Tunichtguten innerhalb der Festung zu suchen."
+  },
+  "Wegfinder": {
+    "attributes": ["DEX", "CON", "WIS"],
+    "feat": "Eingeweihter der Magie (Druide)",
+    "skills": ["Heimlichkeit", "Überlebenskunst"],
+    "tools": ["Kartografenwerkzeuge"],
+    "equipment": {
+      "choiceA": [
+        "Kurzbogen",
+        { "name": "Pfeile", "qty": 20, "unit": "Stück" },
+        "Kartografenwerkzeuge",
+        "Schlafsack",
+        "Köcher",
+        "Zelt",
+        "Reisekleidung",
+        "3 GM"
+      ],
+      "choiceB": ["50 GM"]
+    },
+    "text": "Du bist in der freien Natur aufgewachsen, weit weg von besiedelten Gebieten. Dein Zuhause war stets dort, wo du deinen Schlafsack ausgerollt hast. Es gibt viele Wunder in der Wildnis: merkwürdige Monster, unberührte Wälder und Flüsse, überwucherte Ruinen und gigantischer Hallen, in denen einst die Riesen wandelten. Bei deinen Erkundungen hast du gelernt, auf dich aufzupassen. Bisweilen hast du freundlichen Naturpriestern den Weg gewiesen, die dir im Gegenzug beigebracht haben, wie man die Magie der Wildnis kanalisiert."
+  },
+  "Weiser": {
+    "attributes": ["CON", "INT", "WIS"],
+    "feat": "Eingeweihter der Magie (Magier)",
+    "skills": ["Arkankunde", "Geschichte"],
+    "tools": ["Kalligrafiewerkzeuge"],
+    "equipment": {
+      "choiceA": [
+        "Kampfstab",
+        "Kalligrafiewerkzeuge",
+        "Buch (Geschichte)",
+        { "name": "Pergament", "qty": 8, "unit": "Blatt" },
+        "Robe",
+        "8 GM"
+      ],
+      "choiceB": ["50 GM"]
+    },
+    "text": "Du hast deine jungen Jahre damit verbracht, zu Herrenhäusern und Klöstern zu reisen und dir mit verschiedenen Gelegenheitsarbeiten und Dienstleistungen Zugang zu den Bibliotheken zu erarbeiten. Lange Abende hast du mit dem Studium von Büchern und Schriftrollen verbracht und dir Wissen über das Multiversum und die Grundlagen der Magie angeeignet. Und dein Geist verlangt nach mehr."
+  }
+}
