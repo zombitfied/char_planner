@@ -209,7 +209,7 @@
     "Artificer": { 
       "hp": 8, "primary": "INT", "saves": ["CON", "INT"], "armor": "Leichte Rüstung, Mittlere Rüstung, Schilde", "cantripsKnown": 2, "prepSpellsLvl1": 2, "casterType": "INT", 
       "text": "<b>Stufe-1-Merkmale:</b><br>• <b>Magische Bastelei:</b> Versetze winzige nichtmagische Gegenstände mit geringen magischen Eigenschaften.<br>• <b>Zauberwirken:</b> Bereite INT-Modifikator + 1 Zauber der Stufe 1 täglich vor. Fokus: Diebeswerkzeug oder Handwerkszeug.",
-      "skills": ["Arkankunde", "Geschichte", "Untersuchung", "Heilkunde", "Naturkunde", "Wahrnehmung", "Fingerfertigkeit"], "autoCantrip": "Ausbessern","Taschenspielerei",
+      "skills": ["Arkankunde", "Geschichte", "Untersuchung", "Heilkunde", "Naturkunde", "Wahrnehmung", "Fingerfertigkeit"], "autoCantrip": ["Ausbessern", "Taschenspielerei"],
       "equipment": [{ "fixed": "Spangepanzerung, Dolch, Kampfstab, Diebeswerkzeug, Handwerkszeug, Dungeonausrüstung, 16 GM" }]
     },
     "Barbar": {
