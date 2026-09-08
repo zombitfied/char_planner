@@ -832,12 +832,12 @@ function buildCharacter() {
 
     let cantripTags = chosenCantrips.map(c => {
         let cleanName = c.replace(/ \((Racial|Auto|.*)\)/, '').trim();
-        return `<span class="clickable-tag" onclick="showSpellModalByName('${cleanName}')">${c}</span>`;
+        return `<span class="clickable-tag" onclick="showSpellModalByName('${cleanName.replace(/'/g, "\\'")}')">${c}</span>`;
     }).join(' ');
 
     let spellTags = chosenSpells.map(s => {
         let cleanName = s.replace(/ \((Racial|Auto|.*)\)/, '').trim();
-        return `<span class="clickable-tag" onclick="showSpellModalByName('${cleanName}')">${s}</span>`;
+        return `<span class="clickable-tag" onclick="showSpellModalByName('${cleanName.replace(/'/g, "\\'")}')">${s}</span>`;
     }).join(' ');
 
     document.getElementById('screen-out-spells').innerHTML = `
