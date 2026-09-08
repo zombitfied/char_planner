@@ -373,6 +373,39 @@ const attributeDescriptions = {
     "CHA": "<b>Charisma:</b> Täuschen, Einschüchtern, Auftreten, Überzeugen."
 };
 
+const classMapDEtoEN = {
+    "Krieger": "Fighter",
+    "Magier": "Wizard",
+    "Kleriker": "Cleric",
+    "Schurke": "Rogue",
+    "Barbar": "Barbarian",
+    "Barde": "Bard",
+    "Druide": "Druid",
+    "Mönch": "Monk",
+    "Paladin": "Paladin",
+    "Waldläufer": "Ranger",
+    "Hexenmeister": "Warlock",
+    "Zauberer": "Sorcerer",
+    "Artifizier": "Artificer"
+};
+const classMapENtoDE = Object.fromEntries(Object.entries(classMapDEtoEN).map(([k,v]) => [v,k]));
+
+const classFileMap = {
+    "Artificer": "artifizier.html",
+    "Barbarian": "barbar.html",
+    "Bard": "barde.html",
+    "Cleric": "kleriker.html",
+    "Druid": "druide.html",
+    "Fighter": "kaempfer.html",
+    "Monk": "moench.html",
+    "Paladin": "paladin.html",
+    "Ranger": "waldlaeufer.html",
+    "Rogue": "schurke.html",
+    "Sorcerer": "zauberer.html",
+    "Warlock": "hexenmeister.html",
+    "Wizard": "magier.html"
+};
+
 let speciesData = {};
 let classes = {};
 let backgrounds = {};
@@ -539,7 +572,13 @@ function markAsUnsaved() {
 function populateSelect(id, items) {
     const sel = document.getElementById(id);
     sel.innerHTML = '';
-    items.forEach(i => sel.innerHTML += `<option value="${i}">${i}</option>`);
+    items.forEach(i => {
+        let label = i;
+        if (id === 'class-select' && classMapENtoDE[i]) {
+            label = classMapENtoDE[i];
+        }
+        sel.innerHTML += `<option value="${i}">${label}</option>`;
+    });
 }
 
 function openModal(title, text, iconClass = null, subtitle = null) {
@@ -575,10 +614,27 @@ function showRaceModal() {
     openModal(subRace, info.text, "fa-child");
 }
 
-function showClassModal() {
+async function showClassModal() {
     const c = document.getElementById('class-select').value;
-    const cls = classes[c];
-    openModal(c, `<b>Trefferwürfel:</b> d${cls.hp}<br><b>Hauptattribut:</b> ${cls.primary}<br><b>Rettungswürfe:</b> ${cls.saves.join(', ')}<br><b>Rüstung:</b> ${cls.armor}<br><br>${cls.text}`, getClassIcon(c));
+    const displayClassName = classMapENtoDE[c] || c;
+    const fileName = classFileMap[c];
+
+    if (!fileName) {
+        const cls = classes[c];
+        openModal(displayClassName, `<b>Trefferwürfel:</b> d${cls.hp}<br><b>Hauptattribut:</b> ${cls.primary}<br><b>Rettungswürfe:</b> ${cls.saves.join(', ')}<br><b>Rüstung:</b> ${cls.armor}<br><br>${cls.text}`, getClassIcon(c));
+        return;
+    }
+
+    try {
+        const response = await fetch(`klassen/${fileName}?t=` + new Date().getTime());
+        if (!response.ok) throw new Error("Datei nicht gefunden");
+        
+        const htmlContent = await response.text();
+        openModal(displayClassName, htmlContent, getClassIcon(c));
+    } catch (err) {
+        const cls = classes[c];
+        openModal(displayClassName, `<b>Trefferwürfel:</b> d${cls.hp}<br><b>Hauptattribut:</b> ${cls.primary}<br><b>Rettungswürfe:</b> ${cls.saves.join(', ')}<br><b>Rüstung:</b> ${cls.armor}<br><br>${cls.text}`, getClassIcon(c));
+    }
 }
 
 function showBgModal() {
@@ -647,8 +703,9 @@ function showCalcModal(type) {
 
     if (type === 'HP') {
         let clsHp = classes[c.class]?.hp || 8;
+        let displayClass = classMapENtoDE[c.class] || c.class;
         text = `<b>Berechnung der Trefferpunkte (HP):</b><br>
-                Basis (Klasse ${c.class}): ${clsHp}<br>
+                Basis (Klasse ${displayClass}): ${clsHp}<br>
                 + Konstitutions-Modifikator (${c.mods.CON >= 0 ? '+' : ''}${c.mods.CON}): ${c.mods.CON}<br>
                 <hr style="border:0; border-top:1px solid var(--border); margin:8px 0;">
                 <b>Total:</b> ${c.hp} HP`;
@@ -956,8 +1013,9 @@ function buildCharacter() {
 
     markAsUnsaved();
 
+    const displayClassName = classMapENtoDE[cls] || cls;
     document.getElementById('screen-out-name').innerHTML = `<i class="fa-solid ${getClassIcon(cls)}"></i> ${name}`;
-    document.getElementById('screen-out-meta').innerText = `${subRace} | ${cls} Stufe 1 | ${bg}`;
+    document.getElementById('screen-out-meta').innerText = `${subRace} | ${displayClassName} Stufe 1 | ${bg}`;
     document.getElementById('screen-out-hp').innerText = `HP: ${hp}`;
     document.getElementById('screen-out-ac').innerText = `RK: ${ac}`;
     document.getElementById('screen-out-init').innerText = `Initiative: ${mods.DEX >= 0 ? '+' : ''}${mods.DEX}`;
