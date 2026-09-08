@@ -120,7 +120,6 @@
             background: #f0ebe1;
         }
 
-        /* Blauer Glanz-Effekt für Temp HP */
         .temp-hp-glow {
             box-shadow: 0 0 12px 3px rgba(30, 144, 255, 0.6), inset 0 0 6px rgba(30, 144, 255, 0.4) !important;
             border-color: #1e90ff !important;
@@ -129,7 +128,6 @@
         .stat-val { font-size: 1.1rem; font-weight: bold; color: var(--text-color); }
         .stat-mod { font-size: 0.8rem; color: var(--primary-gold); }
 
-        /* Unten angeordnete Tab-Leiste im Stein-Look */
         nav.tab-bar {
             position: fixed;
             bottom: 0;
@@ -172,7 +170,6 @@
         .tab-pane { display: none; }
         .tab-pane.active { display: block; }
 
-        /* Modals */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -275,6 +272,22 @@
             border-color: var(--primary-gold);
         }
 
+        .clickable-tag { 
+            background: #faf7f2; 
+            color: var(--primary-gold); 
+            padding: 3px 8px; 
+            border-radius: 4px; 
+            border: 1.5px solid var(--surface-border); 
+            cursor: pointer; 
+            display: inline-block; 
+            margin: 2px; 
+            font-size: 0.85rem; 
+        }
+        .clickable-tag:hover { 
+            background: #f0ebe1; 
+            border-color: var(--primary-gold); 
+        }
+
         .combat-btn-row {
             display: flex;
             justify-content: center;
@@ -339,7 +352,6 @@
 </head>
 <body>
 
-    <!-- SVG-Filter für den grisselig-rauhen Stein-Kanten-Effekt -->
     <svg style="display:none;" aria-hidden="true">
         <filter id="rough-edge">
             <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="3" result="noise" />
@@ -380,16 +392,12 @@
 
             <div class="card">
                 <h2>Kampfwerte</h2>
-                <!-- Zeile 1: Trefferpunkte & Rüstungsklasse -->
                 <div class="grid-combat">
                     <div id="sheet-hp-box" class="stat-box" onclick="openHpModal()" title="Trefferpunkte verwalten">
                         <div style="font-size: 0.75rem; color: var(--text-muted);">Trefferpunkte</div>
-                        
-                        <!-- Dynamische HP Anzeige (Normal vs Temp HP) -->
                         <div id="sheet-hp-display-container">
                             <div class="stat-val"><span id="sheet-hp">10</span>/<span id="sheet-max-hp">10</span></div>
                         </div>
-
                     </div>
                     <div class="stat-box" onclick="openAcModal()" title="Rüstungsklasse verwalten">
                         <div style="font-size: 0.75rem; color: var(--text-muted);">RK</div>
@@ -398,9 +406,7 @@
                     </div>
                 </div>
 
-                <!-- Zeile 2: Trefferwürfel & Todesrettungswürfe -->
                 <div class="grid-combat" style="margin-bottom: 0;">
-                    <!-- Trefferwürfel Box -->
                     <div class="stat-box" onclick="openHitDiceModal()" title="Trefferwürfel einsetzen / heilen">
                         <div style="font-size: 0.75rem; color: var(--text-muted);">Trefferwürfel</div>
                         <div class="stat-val" style="font-size: 1.05rem; margin-top: 4px;">
@@ -409,7 +415,6 @@
                         <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">Verfügbar / Gesamt</div>
                     </div>
 
-                    <!-- Todesrettungswürfe Box -->
                     <div class="stat-box" style="cursor: default; text-align: left; padding: 6px 8px;">
                         <div style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-bottom: 2px;">Todesrettung</div>
                         <div class="death-saves-row">
@@ -434,9 +439,7 @@
 
             <div class="card">
                 <h2>Attribute <span style="font-size:0.75rem; font-weight:normal; color:var(--text-muted); float:right; line-height:1.5rem;">(Antippen für Details)</span></h2>
-                <div class="grid-3" id="sheet-stats-grid">
-                    <!-- Wird per JS befüllt -->
-                </div>
+                <div class="grid-3" id="sheet-stats-grid"></div>
             </div>
         </div>
 
@@ -452,9 +455,7 @@
         <div id="tab-spells" class="tab-pane">
             <div class="card">
                 <h2>Zauber & Cantrips</h2>
-                <div id="sheet-spells-container" style="font-size: 0.9rem;">
-                    <!-- Wird per JS befüllt -->
-                </div>
+                <div id="sheet-spells-container" style="font-size: 0.9rem;"></div>
             </div>
         </div>
 
@@ -462,9 +463,7 @@
         <div id="tab-abilities" class="tab-pane">
             <div class="card">
                 <h2>Fähigkeiten & Talente</h2>
-                <ul id="sheet-features-list" style="padding-left: 15px; font-size: 0.85rem;">
-                    <!-- Wird per JS befüllt -->
-                </ul>
+                <ul id="sheet-features-list" style="padding-left: 15px; font-size: 0.85rem;"></ul>
             </div>
         </div>
 
@@ -478,27 +477,21 @@
 
     </div>
 
-    <!-- Unten angeordnete Tab-Leiste -->
     <nav class="tab-bar">
         <button class="tab-button active" onclick="switchTab('sheet', event)">
-            <i class="fa-solid fa-shield-halved"></i>
-            Sheet
+            <i class="fa-solid fa-shield-halved"></i> Sheet
         </button>
         <button class="tab-button" onclick="switchTab('inventory', event)">
-            <i class="fa-solid fa-backpack"></i>
-            Inventar
+            <i class="fa-solid fa-backpack"></i> Inventar
         </button>
         <button class="tab-button" onclick="switchTab('spells', event)">
-            <i class="fa-solid fa-wand-sparkles"></i>
-            Zauber
+            <i class="fa-solid fa-wand-sparkles"></i> Zauber
         </button>
         <button class="tab-button" onclick="switchTab('abilities', event)">
-            <i class="fa-solid fa-star"></i>
-            Merkmale
+            <i class="fa-solid fa-star"></i> Merkmale
         </button>
         <button class="tab-button" onclick="switchTab('journal', event)">
-            <i class="fa-solid fa-book-open"></i>
-            Journal
+            <i class="fa-solid fa-book-open"></i> Journal
         </button>
     </nav>
 
@@ -560,16 +553,14 @@
     <div id="levelup-modal" class="modal-overlay">
         <div class="modal-card">
             <h3>Stufenaufstieg</h3>
-            <div id="levelup-content" style="font-size: 0.9rem; margin-bottom: 12px;">
-                <!-- Wird per JS befüllt -->
-            </div>
+            <div id="levelup-content" style="font-size: 0.9rem; margin-bottom: 12px;"></div>
             <div class="modal-buttons">
                 <button class="btn-secondary" onclick="closeLevelUpModal()">Abbrechen</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL: TREFFERPUNKTE DETAIL MIT SCHNELL-BUTTONS -->
+    <!-- MODAL: TREFFERPUNKTE DETAIL -->
     <div id="hp-modal" class="modal-overlay">
         <div class="modal-card">
             <h3>Trefferpunkte verwalten</h3>
@@ -578,14 +569,12 @@
                 <i class="fa-solid fa-shield-halved"></i> Normale Trefferpunkte sind durch temporäre Trefferpunkte geschützt!
             </div>
 
-            <!-- Plus-Buttons oben -->
             <div class="combat-btn-row">
                 <button id="btn-plus-1" class="mini-btn" onclick="modalModifyHp(1)">+1</button>
                 <button id="btn-plus-2" class="mini-btn" onclick="modalModifyHp(2)">+2</button>
                 <button id="btn-plus-5" class="mini-btn" onclick="modalModifyHp(5)">+5</button>
             </div>
 
-            <!-- Anzeige & Komplett-Auffüllen-Button hinter der Anzeige -->
             <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin: 8px 0;">
                 <div style="font-size: 1rem; color: var(--text-color); font-weight: bold;">
                     Aktuell: <span id="modal-hp-display" style="font-size: 1.2rem; color: var(--primary-gold);">10/10</span>
@@ -594,14 +583,12 @@
                 <button class="btn-primary" onclick="confirmFullyHeal()" title="Komplett auffüllen" style="padding: 6px 10px; font-size: 0.9rem;"><i class="fa-solid fa-heart-pulse"></i></button>
             </div>
 
-            <!-- Minus-Buttons darunter -->
             <div class="combat-btn-row" style="margin-bottom: 15px;">
                 <button id="btn-minus-1" class="mini-btn" onclick="modalModifyHp(-1)">-1</button>
                 <button id="btn-minus-2" class="mini-btn" onclick="modalModifyHp(-2)">-2</button>
                 <button id="btn-minus-5" class="mini-btn" onclick="modalModifyHp(-5)">-5</button>
             </div>
 
-            <!-- Temporäre Trefferpunkte mit Plus/Minus -->
             <label style="font-size: 0.85rem; font-weight: bold; display: block; text-align: center; margin-bottom: 4px; color: #1e90ff;">Temporäre Trefferpunkte</label>
             <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px;">
                 <button class="mini-btn" onclick="modifyTempHp(-1)" style="padding: 6px 12px; font-size: 0.9rem;">-</button>
@@ -654,9 +641,7 @@
     <div id="stat-modal" class="modal-overlay">
         <div class="modal-card">
             <h3 id="stat-modal-title">Attribut</h3>
-            <div id="stat-modal-body" style="font-size: 0.9rem; margin-bottom: 15px;">
-                <!-- Aufschlüsselung -->
-            </div>
+            <div id="stat-modal-body" style="font-size: 0.9rem; margin-bottom: 15px;"></div>
 
             <label style="font-size: 0.85rem; font-weight: bold;">Temporärer Bonus / Ausrüstung (zusätzlich):</label>
             <input type="number" id="stat-temp-input" class="modal-input" placeholder="z.B. +2 durch Item oder Zauber">
@@ -668,25 +653,58 @@
         </div>
     </div>
 
-    <!-- MODAL: REGELN / INFO (Rasse, Klasse, Hintergrund) -->
+    <!-- MODAL: REGELN / INFO -->
     <div id="info-modal" class="modal-overlay">
         <div class="modal-card">
             <h3 id="info-modal-title">Regeln & Infos</h3>
-            <div id="info-modal-body" style="font-size: 0.9rem; line-height: 1.5; color: var(--text-color); margin-bottom: 15px;">
-                <!-- Inhalt -->
-            </div>
+            <div id="info-modal-body" style="font-size: 0.9rem; line-height: 1.5; color: var(--text-color); margin-bottom: 15px;"></div>
             <div class="modal-buttons">
                 <button class="btn-secondary" onclick="closeInfoModal()">Schließen</button>
             </div>
         </div>
     </div>
 
+    <!-- UNIVERSALES MODAL FÜR ZAUBERBESCHREIBUNGEN -->
+    <div id="rule-modal" class="modal-overlay" onclick="closeRuleModal()">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--surface-border); padding-bottom: 8px; margin-bottom: 12px;">
+                <h3 id="modal-spell-title" style="margin: 0; border: none; padding: 0;">Zauberdetails</h3>
+                <button class="mini-btn" onclick="closeRuleModal()" style="padding: 4px 8px;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="modal-spell-body" style="font-size: 0.9rem; line-height: 1.5; color: var(--text-muted); text-align: left; max-height: 60vh; overflow-y: auto;"></div>
+        </div>
+    </div>
+
     <script>
         const xpThresholds = [0, 300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 64000, 85000, 100000, 120000, 140000, 165000, 195000, 225000, 265000, 305000, 355000];
+        const SPELLS_HTML_URL = "./spells-parsed.html";
+        const SPELL_LISTS_HTML_URL = "./spelllists-parsed.html";
+
         let activeChar = null;
         let selectedStatKey = null;
+        let spellCompendium = { cantrips: {}, level1: {} };
+        let classSpellLists = {};
 
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', async () => {
+            // Zauber- und Listen-Dateien im Hintergrund laden & parsen
+            try {
+                const spellResponse = await fetch(SPELLS_HTML_URL + "?t=" + new Date().getTime());
+                if (spellResponse.ok) {
+                    parseSpellsHtml(await spellResponse.text());
+                }
+            } catch (e) {
+                console.warn("Konnte spells-parsed.html nicht laden:", e);
+            }
+
+            try {
+                const listResponse = await fetch(SPELL_LISTS_HTML_URL + "?t=" + new Date().getTime());
+                if (listResponse.ok) {
+                    parseSpellListsHtml(await listResponse.text());
+                }
+            } catch (e) {
+                console.warn("Konnte spelllists-parsed.html nicht laden:", e);
+            }
+
             const savedChar = localStorage.getItem('dnd_active_character');
             if (!savedChar) {
                 alert("Kein aktiver Charakter gefunden! Bitte erstelle oder wähle einen Helden.");
@@ -702,7 +720,6 @@
                 return;
             }
 
-            // Fallbacks & Kompatibilität für ältere Charaktere ohne rawStats
             if (!activeChar.rawStats && activeChar.stats) {
                 activeChar.rawStats = { ...activeChar.stats };
             }
@@ -732,6 +749,86 @@
             updateUI();
         });
 
+        // Parser für spells-parsed.html
+        function parseSpellsHtml(htmlText) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlText, 'text/html');
+            const spellDivs = doc.querySelectorAll('.spell');
+
+            spellDivs.forEach(div => {
+                const h5 = div.querySelector('h5');
+                if (!h5) return;
+                const spellName = h5.textContent.trim();
+                const htmlContent = div.innerHTML;
+                const textContent = div.textContent;
+
+                const isCantrip = textContent.includes('Zaubertrick');
+                const isLevel1 = textContent.includes('1. Grades');
+
+                if (isCantrip) {
+                    spellCompendium.cantrips[spellName] = { rule: htmlContent };
+                } else if (isLevel1) {
+                    spellCompendium.level1[spellName] = { rule: htmlContent };
+                }
+            });
+        }
+
+        // Parser für spelllists-parsed.html
+        function parseSpellListsHtml(htmlText) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlText, 'text/html');
+            const h4Elements = doc.querySelectorAll('h4');
+            
+            h4Elements.forEach(h4 => {
+                const titleText = h4.textContent.trim();
+                let className = titleText.replace('Zauber des ', '').replace('Zauber der ', '').trim();
+                
+                const mapping = {
+                    "Barden": "Bard",
+                    "Druiden": "Druid",
+                    "Hexenmeisters": "Warlock",
+                    "Klerikers": "Cleric",
+                    "Magiers": "Wizard",
+                    "Paladins": "Paladin",
+                    "Waldläufers": "Ranger",
+                    "Zauberers": "Wizard"
+                };
+                
+                if (mapping[className]) {
+                    className = mapping[className];
+                }
+
+                if (!classSpellLists[className]) {
+                    classSpellLists[className] = { cantrips: [], level1: [] };
+                }
+
+                let nextElem = h4.nextElementSibling;
+                let currentLevelKey = null;
+
+                while (nextElem && nextElem.tagName !== 'H4') {
+                    if (nextElem.tagName === 'H5') {
+                        const h5Text = nextElem.textContent.toLowerCase();
+                        if (h5Text.includes('zaubertrick') || h5Text.includes('0. grad')) {
+                            currentLevelKey = 'cantrips';
+                        } else if (h5Text.includes('1. grad')) {
+                            currentLevelKey = 'level1';
+                        } else {
+                            currentLevelKey = null;
+                        }
+                    } else if (nextElem.tagName === 'UL' && currentLevelKey) {
+                        const links = nextElem.querySelectorAll('a');
+                        links.forEach(a => {
+                            let spellName = a.textContent.trim();
+                            if (spellName && !classSpellLists[className][currentLevelKey].includes(spellName)) {
+                                classSpellLists[className][currentLevelKey].push(spellName);
+                            }
+                        });
+                    }
+                    nextElem = nextElem.nextElementSibling;
+                }
+            });
+        }
+
         function updateUI() {
             if (!activeChar) return;
 
@@ -749,26 +846,22 @@
             document.getElementById('sheet-level').innerText = totalLevel;
             document.getElementById('sheet-bg').innerText = activeChar.background || "-";
             
-            // HP & Temp HP Anzeige auf dem Hauptsheet
             const hpDisplayContainer = document.getElementById('sheet-hp-display-container');
             const hpBox = document.getElementById('sheet-hp-box');
 
             if (activeChar.tempHp > 0) {
-                // Wenn Temp HP vorhanden: Temp HP groß oben in Blau, normale HP kleiner darunter
                 hpDisplayContainer.innerHTML = `
                     <div style="font-size: 1.2rem; font-weight: bold; color: #1e90ff; line-height: 1.2;">+${activeChar.tempHp}</div>
                     <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: bold;"><span id="sheet-hp">${activeChar.hp}</span>/<span id="sheet-max-hp">${activeChar.maxHp}</span></div>
                 `;
                 hpBox.classList.add('temp-hp-glow');
             } else {
-                // Normale HP Anzeige groß, wenn keine Temp HP da sind
                 hpDisplayContainer.innerHTML = `
                     <div class="stat-val"><span id="sheet-hp">${activeChar.hp}</span>/<span id="sheet-max-hp">${activeChar.maxHp}</span></div>
                 `;
                 hpBox.classList.remove('temp-hp-glow');
             }
 
-            // AC & Temp AC (Berechnung mit rawStats & speciesBonuses)
             let dexBase = activeChar.rawStats ? (activeChar.rawStats.DEX || 10) : 10;
             let dexBonus = activeChar.speciesBonuses && activeChar.speciesBonuses.DEX ? activeChar.speciesBonuses.DEX : 0;
             let dexTemp = activeChar.statTemps && activeChar.statTemps.DEX ? activeChar.statTemps.DEX : 0;
@@ -787,7 +880,6 @@
                 tempAcContainer.style.display = 'none';
             }
 
-            // Trefferwürfel
             let primaryClassName = activeChar.classesList[0].name;
             let dieSize = getHitDieSize(primaryClassName);
             document.getElementById('sheet-hit-dice-type').innerText = `W${dieSize}`;
@@ -796,13 +888,11 @@
             document.getElementById('sheet-hit-dice-current').innerText = activeChar.hitDiceCurrent;
             document.getElementById('sheet-hit-dice-max').innerText = activeChar.hitDiceMax;
 
-            // Todesrettungswürfe
             for (let i = 0; i < 3; i++) {
                 document.getElementById(`death-succ-${i}`).checked = activeChar.deathSaves.successes[i];
                 document.getElementById(`death-fail-${i}`).checked = activeChar.deathSaves.failures[i];
             }
 
-            // Attribute (Mit rawStats und speciesBonuses berechnen)
             const statsGrid = document.getElementById('sheet-stats-grid');
             const statKeys = activeChar.rawStats ? Object.keys(activeChar.rawStats) : ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
             
@@ -826,24 +916,46 @@
                 }
             }
 
-            // Zauber
+            // Zauber-Anzeige im Tab mit klickbaren Badges für Regeldetails
             const spellsContainer = document.getElementById('sheet-spells-container');
             if (spellsContainer) {
-                let cantripsText = activeChar.cantrips && activeChar.cantrips.length > 0 ? activeChar.cantrips.join(', ') : 'Keine';
-                let spellsText = activeChar.spells && activeChar.spells.length > 0 ? activeChar.spells.join(', ') : 'Keine';
+                let cantripTags = activeChar.cantrips && activeChar.cantrips.length > 0 
+                    ? activeChar.cantrips.map(c => `<span class="clickable-tag" onclick="showSpellDetails('${c}')">${c}</span>`).join(' ') 
+                    : 'Keine';
+                
+                let spellTags = activeChar.spells && activeChar.spells.length > 0 
+                    ? activeChar.spells.map(s => `<span class="clickable-tag" onclick="showSpellDetails('${s}')">${s}</span>`).join(' ') 
+                    : 'Keine';
+
                 spellsContainer.innerHTML = `
-                    <p><strong>Cantrips:</strong> ${cantripsText}</p>
-                    <p><strong>Vorbereitete Stufe 1 Zauber:</strong> ${spellsText}</p>
+                    <p><strong>Cantrips:</strong><br>${cantripTags}</p>
+                    <p style="margin-top: 15px;"><strong>Vorbereitete Stufe 1 Zauber:</strong><br>${spellTags}</p>
                 `;
             }
 
-            // Skills / Merkmale
             const featuresList = document.getElementById('sheet-features-list');
             if (featuresList && activeChar.skills) {
                 featuresList.innerHTML = `<li><strong>Fertigkeiten:</strong> ${activeChar.skills.join(', ')}</li>`;
             }
 
             saveActiveChar();
+        }
+
+        function showSpellDetails(spellName) {
+            let cleanName = spellName.replace(/ \((Racial|Auto|.*)\)/, '').trim();
+            let spellObj = (spellCompendium.cantrips && spellCompendium.cantrips[cleanName]) || 
+                           (spellCompendium.level1 && spellCompendium.level1[cleanName]) ||
+                           (spellCompendium.cantrips && spellCompendium.cantrips[spellName]) || 
+                           (spellCompendium.level1 && spellCompendium.level1[spellName]);
+
+            let ruleText = spellObj ? spellObj.rule : "Keine detaillierte Beschreibung verfügbar.";
+            document.getElementById('modal-spell-title').innerText = cleanName;
+            document.getElementById('modal-spell-body').innerHTML = ruleText;
+            document.getElementById('rule-modal').style.display = 'flex';
+        }
+
+        function closeRuleModal() {
+            document.getElementById('rule-modal').style.display = 'none';
         }
 
         function saveActiveChar() {
@@ -858,14 +970,8 @@
             event.currentTarget.classList.add('active');
         }
 
-        // --- RAST LOGIK ---
-        function openRestModal() {
-            document.getElementById('rest-modal').style.display = 'flex';
-        }
-
-        function closeRestModal() {
-            document.getElementById('rest-modal').style.display = 'none';
-        }
+        function openRestModal() { document.getElementById('rest-modal').style.display = 'flex'; }
+        function closeRestModal() { document.getElementById('rest-modal').style.display = 'none'; }
 
         function performShortRest() {
             closeRestModal();
@@ -886,7 +992,6 @@
             alert("Lange Rast abgeschlossen! TP vollständig wiederhergestellt, Trefferwürfel regeneriert und Todesrettungswürfe zurückgesetzt.");
         }
 
-        // --- TREFFERWÜRFEL MODAL ---
         function openHitDiceModal() {
             let totalLevel = activeChar.classesList.reduce((sum, c) => sum + c.level, 0);
             if (activeChar.hitDiceCurrent === undefined) activeChar.hitDiceCurrent = totalLevel;
@@ -894,9 +999,7 @@
             document.getElementById('hitdice-modal').style.display = 'flex';
         }
 
-        function closeHitDiceModal() {
-            document.getElementById('hitdice-modal').style.display = 'none';
-        }
+        function closeHitDiceModal() { document.getElementById('hitdice-modal').style.display = 'none'; }
 
         function spendHitDie() {
             if (activeChar.hitDiceCurrent <= 0) {
@@ -922,7 +1025,6 @@
             alert(`Trefferwürfel (1W${dieSize}) gewürfelt: ${roll} + ${conMod} (CON) = ${healing} TP geheilt!`);
         }
 
-        // --- TODESRETTUNGSWÜRFE ---
         function saveDeathSaves() {
             for (let i = 0; i < 3; i++) {
                 activeChar.deathSaves.successes[i] = document.getElementById(`death-succ-${i}`).checked;
@@ -931,7 +1033,6 @@
             saveActiveChar();
         }
 
-        // --- XP & LEVELUP MODAL ---
         function openXpModal() {
             let totalLevel = activeChar.classesList.reduce((sum, c) => sum + c.level, 0);
             let nextLvl = totalLevel + 1;
@@ -954,9 +1055,7 @@
             document.getElementById('xp-modal').style.display = 'flex';
         }
 
-        function closeXpModal() {
-            document.getElementById('xp-modal').style.display = 'none';
-        }
+        function closeXpModal() { document.getElementById('xp-modal').style.display = 'none'; }
 
         function addXp() {
             const inputVal = parseInt(document.getElementById('xp-input').value);
@@ -996,9 +1095,7 @@
             document.getElementById('levelup-modal').style.display = 'flex';
         }
 
-        function closeLevelUpModal() {
-            document.getElementById('levelup-modal').style.display = 'none';
-        }
+        function closeLevelUpModal() { document.getElementById('levelup-modal').style.display = 'none'; }
 
         function chooseClassForLevelUp(index) {
             let className = activeChar.classesList[index].name;
@@ -1076,15 +1173,12 @@
             alert(`Stufenaufstieg komplett! Du bist nun Stufe ${activeChar.level}.`);
         }
 
-        // --- HP MODAL LOGIK ---
         function openHpModal() {
             refreshHpModalDisplay();
             document.getElementById('hp-modal').style.display = 'flex';
         }
 
-        function closeHpModal() {
-            document.getElementById('hp-modal').style.display = 'none';
-        }
+        function closeHpModal() { document.getElementById('hp-modal').style.display = 'none'; }
 
         function refreshHpModalDisplay() {
             document.getElementById('modal-hp-display').innerText = `${activeChar.hp}/${activeChar.maxHp}`;
@@ -1099,7 +1193,6 @@
                 tempIndicator.style.display = 'inline';
                 warningEl.style.display = 'block';
 
-                // Normale HP Bedienelemente ausgrauen / deaktivieren
                 ['btn-plus-1', 'btn-plus-2', 'btn-plus-5', 'btn-minus-1', 'btn-minus-2', 'btn-minus-5'].forEach(id => {
                     document.getElementById(id).classList.add('disabled');
                 });
@@ -1107,7 +1200,6 @@
                 tempIndicator.style.display = 'none';
                 warningEl.style.display = 'none';
 
-                // Normale HP Bedienelemente aktivieren
                 ['btn-plus-1', 'btn-plus-2', 'btn-plus-5', 'btn-minus-1', 'btn-minus-2', 'btn-minus-5'].forEach(id => {
                     document.getElementById(id).classList.remove('disabled');
                 });
@@ -1115,7 +1207,7 @@
         }
 
         function modalModifyHp(amount) {
-            if (activeChar.tempHp > 0) return; // Gesperrt solange Temp HP existieren
+            if (activeChar.tempHp > 0) return;
             activeChar.hp = Math.max(0, Math.min(activeChar.maxHp, activeChar.hp + amount));
             refreshHpModalDisplay();
             updateUI();
@@ -1127,14 +1219,8 @@
             updateUI();
         }
 
-        // Bestätigung für Komplett Auffüllen
-        function confirmFullyHeal() {
-            document.getElementById('confirm-heal-modal').style.display = 'flex';
-        }
-
-        function closeConfirmHealModal() {
-            document.getElementById('confirm-heal-modal').style.display = 'none';
-        }
+        function confirmFullyHeal() { document.getElementById('confirm-heal-modal').style.display = 'flex'; }
+        function closeConfirmHealModal() { document.getElementById('confirm-heal-modal').style.display = 'none'; }
 
         function executeFullyHeal() {
             activeChar.hp = activeChar.maxHp;
@@ -1143,15 +1229,12 @@
             closeConfirmHealModal();
         }
 
-        // --- AC MODAL LOGIK ---
         function openAcModal() {
             refreshAcModalDisplay();
             document.getElementById('ac-modal').style.display = 'flex';
         }
 
-        function closeAcModal() {
-            document.getElementById('ac-modal').style.display = 'none';
-        }
+        function closeAcModal() { document.getElementById('ac-modal').style.display = 'none'; }
 
         function refreshAcModalDisplay() {
             let dexBase = activeChar.rawStats ? (activeChar.rawStats.DEX || 10) : 10;
@@ -1172,7 +1255,6 @@
             updateUI();
         }
 
-        // --- STAT DETAIL MODAL ---
         function openStatModal(statKey) {
             selectedStatKey = statKey;
             let baseVal = activeChar.rawStats ? (activeChar.rawStats[statKey] || 10) : 10;
@@ -1190,7 +1272,7 @@
                 <p><strong>Temporärer Bonus (Ausrüstung/Zauber):</strong> ${tempVal >= 0 ? '+' + tempVal : tempVal}</p>
                 <hr style="border: 0; border-top: 1px solid var(--surface-border); margin: 10px 0;">
                 <p><strong>Gesamtwert:</strong> ${totalVal}</p>
-                <p><strong>Modifikator:</strong> <span style="color:var(--primary-gold); font-size:1.1rem; font-weight:bold;">${modStr}</span> (Formel: (${totalVal} - 10) / 2 abgerundet)</p>
+                <p><strong>Modifikator:</strong> <span style="color:var(--primary-gold); font-size:1.1rem; font-weight:bold;">${modStr}</span></p>
             `;
             document.getElementById('stat-modal-body').innerHTML = html;
             document.getElementById('stat-temp-input').value = tempVal;
@@ -1213,20 +1295,19 @@
             closeStatModal();
         }
 
-        // --- INFO MODAL ---
         function openInfoModal(type) {
             let title = "";
             let text = "";
 
             if (type === 'species') {
                 title = `Spezies: ${activeChar.species || '-'}`;
-                text = `Spezies-Merkmale, Geschwindigkeiten und Attributsboni (z.B. +2 auf Intelligenz bei Gnomen) sind hier aktiv.`;
+                text = `Spezies-Merkmale, Geschwindigkeiten und Attributsboni sind hier aktiv.`;
             } else if (type === 'class') {
                 title = `Klasse: ${activeChar.class || '-'}`;
-                text = `Übersicht der gewählten Klassen und Stufen nach D&D 2024 Regeln. Bestimmt Trefferwürfel und Fähigkeiten.`;
+                text = `Übersicht der gewählten Klassen und Stufen nach D&D 2024 Regeln.`;
             } else if (type === 'background') {
                 title = `Hintergrund: ${activeChar.background || '-'}`;
-                text = `Der gewählte Hintergrund prägt die Herkunft des Charakters und gewährt Startfertigkeiten sowie ein Ursprungs-Talent.`;
+                text = `Der gewählte Hintergrund prägt die Herkunft des Charakters.`;
             }
 
             document.getElementById('info-modal-title').innerText = title;
@@ -1234,11 +1315,8 @@
             document.getElementById('info-modal').style.display = 'flex';
         }
 
-        function closeInfoModal() {
-            document.getElementById('info-modal').style.display = 'none';
-        }
+        function closeInfoModal() { document.getElementById('info-modal').style.display = 'none'; }
 
-        // Helper für Icons
         function getSpeciesIcon(species) {
             if (!species) return 'fa-solid fa-user';
             const s = species.toLowerCase();
