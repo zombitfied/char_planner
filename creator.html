@@ -132,14 +132,14 @@
         .stat-box:hover { background: #f0ebe1; }
         .stat-val { font-size: 1.2rem; font-weight: bold; color: var(--text); }
         .stat-mod { font-size: 0.85rem; color: var(--accent); }
-        .badge { background: #faf7f2; border: 1.5px solid var(--border); color: var(--text); padding: 6px 10px; border-radius: 4px; font-size: 0.85rem; display: inline-block; margin-right: 5px; margin-top: 5px; }
+        
+        .badge { background: #faf7f2; border: 1.5px solid var(--border); color: var(--text); padding: 6px 10px; border-radius: 4px; font-size: 0.85rem; display: inline-block; margin-right: 5px; margin-top: 5px; cursor: pointer; transition: background 0.2s; }
+        .badge:hover { background: #f0ebe1; border-color: var(--accent); }
+        
         .error { color: #d32f2f; font-size: 0.85rem; margin-top: 5px; display: none; }
         
         .spell-container { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
         
-        .clickable-tag { background: #faf7f2; color: var(--accent); padding: 3px 8px; border-radius: 4px; border: 1.5px solid var(--border); cursor: pointer; display: inline-block; margin: 2px; font-size: 0.85rem; }
-        .clickable-tag:hover { background: #f0ebe1; border-color: var(--accent); }
-
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(44,34,30,0.6); backdrop-filter: blur(2px); z-index: 1000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
         .modal-content { 
             background: var(--card); 
@@ -172,6 +172,19 @@
 
         ul { margin: 5px 0; padding-left: 20px; font-size: 0.9rem; color: var(--text-muted); }
         li { margin-bottom: 4px; }
+        
+        .special-attribute-box {
+            background: #faf7f2;
+            border: 1.5px dashed var(--accent);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+        }
+        .special-attribute-box label {
+            color: var(--accent);
+            margin-top: 0;
+        }
     </style>
 </head>
 <body>
@@ -208,10 +221,14 @@
             <div id="subrace-container" style="display: none;">
                 <label for="sub-race">Abstammung</label>
                 <div class="input-row">
-                    <select id="sub-race" onchange="updateSpellsUI()"></select>
+                    <select id="sub-race" onchange="updateSubraceOptions()"></select>
                     <button type="button" class="info-btn" onclick="showRaceModal()">ℹ</button>
                 </div>
             </div>
+        </div>
+        <div id="special-attr-container" class="special-attribute-box">
+            <label id="special-attr-label">Spezial-Attribut wählen:</label>
+            <select id="special-attr-select"></select>
         </div>
     </div>
 
@@ -286,11 +303,11 @@
         <div id="screen-out-meta" style="font-size:0.9rem; color:var(--text-muted); text-align:center; margin-bottom:10px;"></div>
         
         <div style="margin-bottom: 12px;">
-            <span class="badge" id="screen-out-hp"></span>
-            <span class="badge" id="screen-out-ac"></span>
-            <span class="badge" id="screen-out-init"></span>
-            <span class="badge">Übungsbonus: +2</span>
-            <span class="badge" id="screen-out-speed">Bewegungsrate: 30 ft</span>
+            <span class="badge" id="screen-out-hp" onclick="showCalcModal('HP')"></span>
+            <span class="badge" id="screen-out-ac" onclick="showCalcModal('RK')"></span>
+            <span class="badge" id="screen-out-init" onclick="showCalcModal('Initiative')"></span>
+            <span class="badge" id="screen-out-prof" onclick="showCalcModal('Übungsbonus')">Übungsbonus: +2</span>
+            <span class="badge" id="screen-out-speed" onclick="showCalcModal('Bewegungsrate')"></span>
         </div>
 
         <h3 style="color:var(--accent);">Attributswerte & Modifikatoren</h3>
@@ -564,6 +581,45 @@ function showSpellModalByName(spellName) {
     openModal(cleanName, ruleText, "fa-wand-magic-sparkles");
 }
 
+function showCalcModal(type) {
+    if (!lastBuiltCharacter) return;
+    const c = lastBuiltCharacter;
+    let title = type;
+    let text = "";
+
+    if (type === 'HP') {
+        let clsHp = classes[c.class]?.hp || 8;
+        text = `<b>Berechnung der Trefferpunkte (HP):</b><br>
+                Basis (Klasse ${c.class}): ${clsHp}<br>
+                + Konstitutions-Modifikator (${c.mods.CON >= 0 ? '+' : ''}${c.mods.CON}): ${c.mods.CON}<br>
+                <hr style="border:0; border-top:1px solid var(--border); margin:8px 0;">
+                <b>Total:</b> ${c.hp} HP`;
+    } else if (type === 'RK') {
+        text = `<b>Berechnung der Rüstungsklasse (RK):</b><br>
+                Basiswert (ungerüstet): 10<br>
+                + Geschicklichkeits-Modifikator (${c.mods.DEX >= 0 ? '+' : ''}${c.mods.DEX}): ${c.mods.DEX}<br>
+                <hr style="border:0; border-top:1px solid var(--border); margin:8px 0;">
+                <b>Total:</b> ${c.ac} RK`;
+    } else if (type === 'Initiative') {
+        text = `<b>Berechnung der Initiative:</b><br>
+                Geschicklichkeits-Modifikator: ${c.mods.DEX >= 0 ? '+' : ''}${c.mods.DEX}<br>
+                <hr style="border:0; border-top:1px solid var(--border); margin:8px 0;">
+                <b>Total:</b> ${c.mods.DEX >= 0 ? '+' : ''}${c.mods.DEX}`;
+    } else if (type === 'Übungsbonus') {
+        text = `<b>Übungsbonus (Proficiency Bonus):</b><br>
+                Der Übungsbonus richtet sich nach der Charakterstufe (Stufe 1–4 = +2). Er wird auf Fertigkeiten, Rettungswürfe und Angriffe addiert, bei denen der Charakter geübt ist.<br>
+                <hr style="border:0; border-top:1px solid var(--border); margin:8px 0;">
+                <b>Total:</b> +2`;
+    } else if (type === 'Bewegungsrate') {
+        text = `<b>Bewegungsrate:</b><br>
+                Wird durch das gewählte Volk bzw. die Abstammung bestimmt.<br>
+                <hr style="border:0; border-top:1px solid var(--border); margin:8px 0;">
+                <b>Total:</b> ${c.speed || 30} Fuß`;
+    }
+
+    openModal(title, text, "fa-calculator");
+}
+
 function getClassIcon(className) {
     switch (className) {
         case "Artificer": return "fa-wrench";
@@ -602,6 +658,29 @@ function onMainRaceChange() {
         subSelect.innerHTML += `<option value="${subKey}">${subKey}</option>`;
     }
     subContainer.style.display = 'block';
+    updateSubraceOptions();
+}
+
+function updateSubraceOptions() {
+    const mainRace = document.getElementById('main-race').value;
+    const subRace = document.getElementById('sub-race').value;
+    const subInfo = speciesData[mainRace]?.subraces[subRace];
+    const specialContainer = document.getElementById('special-attr-container');
+    const specialSelect = document.getElementById('special-attr-select');
+    const specialLabel = document.getElementById('special-attr-label');
+
+    if (subInfo && subInfo.specialAttribute) {
+        const sa = subInfo.specialAttribute;
+        specialLabel.innerText = sa.label || "Spezial-Attribut wählen:";
+        specialSelect.innerHTML = '';
+        sa.options.forEach(opt => {
+            specialSelect.innerHTML += `<option value="${opt}">${opt}</option>`;
+        });
+        specialContainer.style.display = 'block';
+    } else {
+        specialContainer.style.display = 'none';
+    }
+
     updateSpellsUI();
 }
 
@@ -739,6 +818,7 @@ function buildCharacter() {
     const bg = document.getElementById('bg-select').value;
 
     const subInfo = speciesData[mainRace].subraces[subRace];
+    const specialAttrVal = document.getElementById('special-attr-select').value;
 
     let rawStats = {
         STR: parseInt(document.getElementById('str-val').value),
@@ -766,7 +846,7 @@ function buildCharacter() {
     currentCalculatedMods = mods;
 
     const hp = classes[cls].hp + mods.CON;
-    const ac = 12 + mods.DEX;
+    const ac = 10 + mods.DEX;
 
     let chosenCantrips = Array.from(document.querySelectorAll('.char-cantrip-select'))
         .map(sel => sel.value)
@@ -800,6 +880,7 @@ function buildCharacter() {
         hp: hp,
         maxHp: hp,
         ac: ac,
+        speed: subInfo.speed || 30,
         rawStats: rawStats,
         speciesBonuses: speciesBonuses,
         stats: stats,
@@ -807,6 +888,7 @@ function buildCharacter() {
         skills: allSkills,
         cantrips: chosenCantrips,
         spells: chosenSpells,
+        specialAttribute: specialAttrVal ? { label: subInfo.specialAttribute?.label, value: specialAttrVal } : null,
         lastAccess: new Date().toISOString()
     };
 
@@ -815,9 +897,10 @@ function buildCharacter() {
     document.getElementById('screen-out-name').innerHTML = `<i class="fa-solid ${getClassIcon(cls)}"></i> ${name}`;
     document.getElementById('screen-out-meta').innerText = `${subRace} | ${cls} Stufe 1 | ${bg}`;
     document.getElementById('screen-out-hp').innerText = `HP: ${hp}`;
-    document.getElementById('screen-out-ac').innerText = `AC: ${ac}`;
+    document.getElementById('screen-out-ac').innerText = `RK: ${ac}`;
     document.getElementById('screen-out-init').innerText = `Initiative: ${mods.DEX >= 0 ? '+' : ''}${mods.DEX}`;
-    document.getElementById('screen-out-speed').innerText = `Bewegungsrate: ${subInfo.speed} ft`;
+    document.getElementById('screen-out-prof').innerText = `Übungsbonus: +2`;
+    document.getElementById('screen-out-speed').innerText = `Bewegungsrate: ${subInfo.speed || 30} ft`;
 
     const screenStatsDiv = document.getElementById('screen-out-stats');
     screenStatsDiv.innerHTML = '';
@@ -834,9 +917,17 @@ function buildCharacter() {
         `<span class="clickable-tag" onclick="openModal('${s}', '${skillDescriptions[s] || ''}')">${s}</span>`
     ).join(' ');
 
+    let formattedText = subInfo.text
+        .replace(/ \| /g, '<br>')
+        .replace(/\. /g, '.<br>');
+
+    if (specialAttrVal) {
+        formattedText += `<br><b>Zauberwirkungs-Attribut:</b> ${specialAttrVal}`;
+    }
+
     document.getElementById('screen-out-features').innerHTML = `
         <li><b>Fertigkeiten:</b> ${skillTags}</li>
-        <li><b>Volksmerkmale:</b> ${subInfo.text}</li>
+        <li><b>Volksmerkmale:</b><br>${formattedText}</li>
         <li><b>Hintergrund-Talent:</b> ${backgrounds[bg].feat}</li>
         <li><b>Klassen-Rettungswürfe:</b> ${classes[cls].saves.join(', ')}</li>
         <li><b>Rüstungs-Proficiency:</b> ${classes[cls].armor}</li>
@@ -942,7 +1033,7 @@ function renderEquipmentSectionInSheet(className) {
                 <div>
                     <label style="font-size:0.75rem;">Sekundärwaffe wählen:</label>
                     <select id="sheet-weapon-2">
-                        ${allWeapons.map(w => `<option value="${w}">${w}</option>`).join('')}
+                        ${allWapons.map(w => `<option value="${w}">${w}</option>`).join('')}
                     </select>
                 </div>
             </div>`;
