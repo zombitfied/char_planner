@@ -354,23 +354,19 @@ window.onload = async function() {
         skillDescriptions = data.skills || {};
         weaponsCompendium = data.weapons || {};
 
-        // 1. spells-parsed.html laden, um deutsche Beschreibungen / Regeln zu bekommen
         try {
             const spellResponse = await fetch(SPELLS_HTML_URL + "?t=" + new Date().getTime());
             if (spellResponse.ok) {
-                const htmlText = await spellResponse.text();
-                parseSpellsHtml(htmlText);
+                parseSpellsHtml(await spellResponse.text());
             }
         } catch (spellErr) {
             console.warn("Konnte spells-parsed.html nicht laden.", spellErr);
         }
 
-        // 2. spelllists-parsed.html laden, um die deutschen Zuordnungen nach Klassen zu holen
         try {
             const listResponse = await fetch(SPELL_LISTS_HTML_URL + "?t=" + new Date().getTime());
             if (listResponse.ok) {
-                const listHtmlText = await listResponse.text();
-                parseSpellListsHtml(listHtmlText);
+                parseSpellListsHtml(await listResponse.text());
             }
         } catch (listErr) {
             console.warn("Konnte spelllists-parsed.html nicht laden.", listErr);
@@ -383,7 +379,6 @@ window.onload = async function() {
     }
 };
 
-// Parst spells-parsed.html für deutsche Zaubertickets & Stufe 1 Zauber
 function parseSpellsHtml(htmlText) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlText, 'text/html');
@@ -407,7 +402,6 @@ function parseSpellsHtml(htmlText) {
     });
 }
 
-// Parst spelllists-parsed.html und baut classSpellLists auf (deutsche Namen)
 function parseSpellListsHtml(htmlText) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlText, 'text/html');
@@ -428,12 +422,12 @@ function parseSpellListsHtml(htmlText) {
             "Zauberers": "Wizard"
         };
         
-        if (!classes[className] && mapping[className]) {
+        if (mapping[className]) {
             className = mapping[className];
         }
 
         if (!classSpellLists[className]) {
-            classSpellLists[className] = { cantrips: [], level1: [], level2: [], level3: [], level4: [], level5: [], level6: [], level7: [], level8: [], level9: [] };
+            classSpellLists[className] = { cantrips: [], level1: [] };
         }
 
         let nextElem = h4.nextElementSibling;
@@ -446,22 +440,6 @@ function parseSpellListsHtml(htmlText) {
                     currentLevelKey = 'cantrips';
                 } else if (h5Text.includes('1. grad')) {
                     currentLevelKey = 'level1';
-                } else if (h5Text.includes('2. grad')) {
-                    currentLevelKey = 'level2';
-                } else if (h5Text.includes('3. grad')) {
-                    currentLevelKey = 'level3';
-                } else if (h5Text.includes('4. grad')) {
-                    currentLevelKey = 'level4';
-                } else if (h5Text.includes('5. grad')) {
-                    currentLevelKey = 'level5';
-                } else if (h5Text.includes('6. grad')) {
-                    currentLevelKey = 'level6';
-                } else if (h5Text.includes('7. grad')) {
-                    currentLevelKey = 'level7';
-                } else if (h5Text.includes('8. grad')) {
-                    currentLevelKey = 'level8';
-                } else if (h5Text.includes('9. grad')) {
-                    currentLevelKey = 'level9';
                 } else {
                     currentLevelKey = null;
                 }
@@ -556,7 +534,10 @@ function showSkillModal(selectId) {
 }
 
 function showSpellModalFromDropdown(selectElem) {
-    const spellName = selectElem.value;
+    showSpellModalByName(selectElem.value);
+}
+
+function showSpellModalByName(spellName) {
     if (!spellName) return;
     let cleanName = spellName.replace(/ \((Racial|Auto|.*)\)/, '').trim();
 
@@ -679,7 +660,6 @@ function updateSpellsUI() {
         return;
     }
 
-    // Priorisiere die deutschen Zauberlisten aus spelllists-parsed.html
     const classList = classSpellLists[className] || {};
     const allowedCantrips = (classList.cantrips && classList.cantrips.length > 0) 
         ? classList.cantrips 
@@ -851,14 +831,13 @@ function buildCharacter() {
     renderEquipmentSectionInSheet(cls);
 
     let cantripTags = chosenCantrips.map(c => {
-        let cleanName = c.replace(/ \(.*\)/, '');
-        let rule = (spellCompendium.cantrips && spellCompendium.cantrips[cleanName]) ? spellCompendium.cantrips[cleanName].rule : 'Zaubertrick.';
-        return `<span class="clickable-tag" onclick="openModal('${cleanName}', '${rule}')">${c}</span>`;
+        let cleanName = c.replace(/ \((Racial|Auto|.*)\)/, '').trim();
+        return `<span class="clickable-tag" onclick="showSpellModalByName('${cleanName.replace(/'/g, "\\'")}')">${c}</span>`;
     }).join(' ');
 
     let spellTags = chosenSpells.map(s => {
-        let rule = (spellCompendium.level1 && spellCompendium.level1[s]) ? spellCompendium.level1[s].rule : 'Stufe 1 Zauber.';
-        return `<span class="clickable-tag" onclick="openModal('${s}', '${rule}')">${s}</span>`;
+        let cleanName = s.replace(/ \((Racial|Auto|.*)\)/, '').trim();
+        return `<span class="clickable-tag" onclick="showSpellModalByName('${cleanName.replace(/'/g, "\\'")}')">${s}</span>`;
     }).join(' ');
 
     document.getElementById('screen-out-spells').innerHTML = `
