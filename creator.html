@@ -629,21 +629,6 @@ function showSpellModalByName(spellName) {
     const h5 = tempDiv.querySelector('h5');
     if (h5) h5.remove();
 
-    let fullText = tempDiv.textContent.toLowerCase();
-    let gradePrefix = "[?] ";
-    
-    if (fullText.includes('zaubertrick')) {
-        gradePrefix = "[✨] ";
-    } else {
-        let match = fullText.match(/(\d+)\.\s*grades?/);
-        if (match && match[1]) {
-            let romanGrade = arabicToRoman(parseInt(match[1]));
-            gradePrefix = `[${romanGrade}] `;
-        } else {
-            gradePrefix = "[I] ";
-        }
-    }
-
     let schoolText = "";
     let paragraphs = tempDiv.querySelectorAll('p, div');
     for (let p of paragraphs) {
@@ -661,7 +646,8 @@ function showSpellModalByName(spellName) {
         htmlContent = htmlContent.replace(regex, '<b>$1</b>');
     });
 
-    openModal(gradePrefix + cleanName, htmlContent, "fa-wand-magic-sparkles", schoolText);
+    // Name ohne Präfix im Modal, nur der saubere Name oben
+    openModal(cleanName, htmlContent, "fa-wand-magic-sparkles", schoolText);
 }
 
 function showCalcModal(type) {
@@ -846,7 +832,7 @@ function updateSpellsUI() {
     for (let i = 0; i < maxCantrips; i++) {
         let optionsHtml = `<option value="">-- Zaubertrick ${i + 1} wählen --</option>`;
         allowedCantrips.forEach(c => {
-            optionsHtml += `<option value="${c}">${c}</option>`;
+            optionsHtml += `<option value="${c}">[✨] ${c}</option>`;
         });
 
         cantripGroup.innerHTML += `
@@ -868,7 +854,7 @@ function updateSpellsUI() {
     for (let i = 0; i < maxPrep; i++) {
         let optionsHtml = `<option value="">-- Stufe 1 Zauber ${i + 1} wählen --</option>`;
         allowedLvl1.forEach(s => {
-            optionsHtml += `<option value="${s}">${s}</option>`;
+            optionsHtml += `<option value="${s}">[I] ${s}</option>`;
         });
 
         lvl1Group.innerHTML += `
@@ -1033,7 +1019,7 @@ function buildCharacter() {
         let cleanName = c.replace(/ \((Racial|Auto|.*)\)/, '').trim();
         return `
             <div class="spell-row">
-                <span><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--accent); margin-right:6px;"></i> ${c}</span>
+                <span><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--accent); margin-right:6px;"></i> [✨] ${c}</span>
                 <button type="button" class="info-btn" style="width:32px; height:32px;" onclick="showSpellModalByName('${cleanName.replace(/'/g, "\\'")}')">ℹ</button>
             </div>
         `;
@@ -1043,7 +1029,7 @@ function buildCharacter() {
         let cleanName = s.replace(/ \((Racial|Auto|.*)\)/, '').trim();
         return `
             <div class="spell-row">
-                <span><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--accent); margin-right:6px;"></i> ${s}</span>
+                <span><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--accent); margin-right:6px;"></i> [I] ${s}</span>
                 <button type="button" class="info-btn" style="width:32px; height:32px;" onclick="showSpellModalByName('${cleanName.replace(/'/g, "\\'")}')">ℹ</button>
             </div>
         `;
