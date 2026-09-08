@@ -158,13 +158,13 @@
             border: 3px solid var(--border); 
             border-radius: 12px 16px 10px 14px; 
             max-width: 500px; 
-            width: 100%; 
+            width: 90%; 
             padding: 20px; 
             color: var(--text); 
             box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
             text-align: center;
             filter: url(#rough-edge);
-            max-height: 85vh;
+            max-height: 75vh;
             display: flex;
             flex-direction: column;
         }
@@ -588,7 +588,6 @@ function showBgModal() {
 }
 
 function showSkillModal(selectId) {
-    const sk = document.getElementById('skill1').value; // korrigiert für direktes Abfangen
     const selectedSkill = document.getElementById(selectId).value;
     const desc = skillDescriptions[selectedSkill] || "Keine Beschreibung verfügbar.";
     openModal(selectedSkill, desc, "fa-check");
@@ -627,42 +626,35 @@ function showSpellModalByName(spellName) {
     let tempDiv = document.createElement('div');
     tempDiv.innerHTML = spellObj.rule;
 
-    // 1. Titel bereinigen (Dopplung entfernen)
     const h5 = tempDiv.querySelector('h5');
     if (h5) h5.remove();
 
-    // 2. Grad ermitteln & Römische Zahl vergeben
     let fullText = tempDiv.textContent.toLowerCase();
     let gradePrefix = "[?] ";
-    let isCantrip = false;
     
     if (fullText.includes('zaubertrick')) {
         gradePrefix = "[✨] ";
-        isCantrip = true;
     } else {
-        // Versuche den Grad als Zahl zu finden
         let match = fullText.match(/(\d+)\.\s*grades?/);
         if (match && match[1]) {
             let romanGrade = arabicToRoman(parseInt(match[1]));
             gradePrefix = `[${romanGrade}] `;
         } else {
-            gradePrefix = "[I] "; // Fallback Grad 1
+            gradePrefix = "[I] ";
         }
     }
 
-    // 3. Schule extrahieren (z.B. "Zaubertrick der Beschwörung" oder "1. Grades Beschwörung")
     let schoolText = "";
     let paragraphs = tempDiv.querySelectorAll('p, div');
     for (let p of paragraphs) {
         let pText = p.textContent.trim();
         if (pText.includes('Zaubertrick der') || pText.includes('Zaubertrick des') || pText.includes('Grades')) {
             schoolText = pText;
-            p.remove(); // aus dem Haupttext entfernen damit es nicht doppelt steht
+            p.remove();
             break;
         }
     }
 
-    // 4. Zeitaufwand, Reichweite, Komponenten, Wirkungsdauer fett markieren
     let htmlContent = tempDiv.innerHTML;
     ['Zeitaufwand:', 'Reichweite:', 'Komponenten:', 'Wirkungsdauer:'].forEach(keyword => {
         let regex = new RegExp(`(${keyword})`, 'gi');
