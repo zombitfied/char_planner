@@ -250,6 +250,7 @@ window.onerror = function(msg, url, line) {
     debugLog(`FEHLER: ${msg} (Zeile ${line})`, "red");
 };
 
+const COMPENDIUM_JSON_URL = "./compendium.json";
 const BACKGROUNDS_JSON_URL = "./backgrounds.json";
 const SPELLS_HTML_URL = "./spells-parsed.html";
 const SPELL_LISTS_HTML_URL = "./spelllists-parsed.html";
@@ -313,23 +314,25 @@ let isSaved = false;
 window.onload = async function() {
     try {
         console.log("Lade Basisdaten...");
-        const response = await fetch("./compendium.json?t=" + new Date().getTime());
-        if (!response.ok) throw new Error(`HTTP Fehlerstatus: ${response.status}`);
         
-        const data = await response.json();
-        speciesData = data.speciesData;
-        skillDescriptions = data.skills || {};
+        // compendium.json für Rassen und Skills laden
+        const compResponse = await fetch(COMPENDIUM_JSON_URL + "?t=" + new Date().getTime());
+        if (!compResponse.ok) throw new Error(`HTTP Fehlerstatus compendium.json: ${compResponse.status}`);
+        const compData = await compResponse.json();
+        speciesData = compData.speciesData;
+        skillDescriptions = compData.skills || {};
 
+        // backgrounds.json für Hintergründe laden
         try {
             const bgResponse = await fetch(BACKGROUNDS_JSON_URL + "?t=" + new Date().getTime());
             if (bgResponse.ok) {
                 const bgData = await bgResponse.json();
                 backgrounds = bgData.backgrounds ? bgData.backgrounds : bgData;
             } else {
-                backgrounds = data.backgrounds || {};
+                backgrounds = compData.backgrounds || {};
             }
         } catch (e) {
-            backgrounds = data.backgrounds || {};
+            backgrounds = compData.backgrounds || {};
         }
 
         try {
@@ -872,7 +875,7 @@ function buildCharacter() {
         <li><b>Volksmerkmale:</b><br>${subInfo.text}</li>
         <li><b>Talent:</b> ${backgrounds[bg]?.feat || ''}</li>
         <li><b>Werkzeuge:</b> ${toolsStr}</li>
-        <li><b>Hintergrund-Ausrüstung:</b> ${eqStr}</li>
+        <li><b>Hintergrund-Ausrüstung:</b> ${typeof backgrounds[bg]?.equipment === 'string' ? backgrounds[bg].equipment : eqStr}</li>
     `;
 
     renderEquipmentSectionInSheet(clsName, bgCustomData);
@@ -891,17 +894,16 @@ function buildCharacter() {
     }
 }
 
-// Rekursive Funktion, um Hintergrund-JSON-Strukturen sauber in reine Item-Namen aufzulösen
 function flattenEquipment(item) {
     let result = [];
     if (!item) return result;
 
     if (typeof item === 'string') {
         let cleaned = item.trim();
-        if (cleaned && !cleaned.startsWith('[object') && !cleaned.includes('{') && !cleaned.endsWith('GM') && !cleaned.endsWith('SM') && !cleaned.endsWith('KM')) {
+        if (cleaned && !cleaned.toLowerCase().startsWith('wähle') && !cleaned.startsWith('[object') && !cleaned.includes('{') && !cleaned.endsWith('GM') && !cleaned.endsWith('SM') && !cleaned.endsWith('KM')) {
             cleaned.split(/,| und /).forEach(p => {
                 let sub = p.trim();
-                if (sub) result.push(sub);
+                if (sub && sub.length > 2 && !sub.toLowerCase().startsWith('wähle')) result.push(sub);
             });
         }
     } else if (Array.isArray(item)) {
