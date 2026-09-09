@@ -422,7 +422,7 @@ const classMapDEtoEN = {
     "Waldläufer": "Ranger",
     "Hexenmeister": "Warlock",
     "Zauberer": "Sorcerer",
-    "Artifizier": "Artifizier"
+    "Artifizier": "Artificer"
 };
 const classMapENtoDE = Object.fromEntries(Object.entries(classMapDEtoEN).map(([k,v]) => [v,k]));
 
@@ -956,7 +956,6 @@ function updateBgToolAndEquipmentUI() {
 
     let hasChoices = false;
 
-    // Werkzeug-Wahl prüfen
     if (bgObj.tools && bgObj.tools.choiceA && bgObj.tools.choiceA.options) {
         toolLabel.innerText = bgObj.tools.choiceA.text || "Werkzeug wählen:";
         toolSelect.innerHTML = '';
@@ -969,7 +968,6 @@ function updateBgToolAndEquipmentUI() {
         toolWrapper.style.display = 'none';
     }
 
-    // Ausrüstungs-Wahl prüfen (ob Option A und Option B existieren)
     if (bgObj.equipment && bgObj.equipment.choiceA && bgObj.equipment.choiceB) {
         eqWrapper.style.display = 'block';
         hasChoices = true;
@@ -1413,7 +1411,7 @@ function renderEquipmentSectionInSheet(className) {
     const fixedEq = cls.equipment[0].fixed;
 
     const simpleWeapons = [...Object.keys(weaponsCompendium["Simple Melee"] || {}), ...Object.keys(weaponsCompendium["Simple Ranged"] || {})];
-    const martialWeapons = [...Object.keys(weaponsCompendium["Martial Melee"] || {}), ...Object.keys(weaponsCompnewItem["Martial Ranged"] || {})];
+    const martialWeapons = [...Object.keys(weaponsCompendium["Martial Melee"] || {}), ...Object.keys(weaponsCompendium["Martial Ranged"] || {})];
     const allWeapons = [...simpleWeapons, ...martialWeapons];
 
     let html = `<div style="font-size:0.85rem; margin-bottom:8px;"><b>Feste Startausrüstung:</b> ${fixedEq}</div>`;
