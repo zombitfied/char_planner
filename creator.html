@@ -668,20 +668,19 @@ async function showClassModal() {
     const fileName = classFileMap[c];
 
     if (!fileName) {
-        const cls = classes[c];
-        openModal(displayClassName, `<b>Trefferwürfel:</b> d${cls.hp}<br><b>Hauptattribut:</b> ${cls.primary}<br><b>Rettungswürfe:</b> ${cls.saves.join(', ')}<br><b>Rüstung:</b> ${cls.armor}<br><br>${cls.text}`, getClassIcon(c));
+        openModal(displayClassName, `<b>Fehler:</b> Keine Klassendatei für ${displayClassName} hinterlegt.`, getClassIcon(c));
         return;
     }
 
     try {
         const response = await fetch(`/char_planner/klassen/${fileName}?t=` + new Date().getTime());
-        if (!response.ok) throw new Error("Datei nicht gefunden");
+        if (!response.ok) throw new Error(`HTTP Fehler: ${response.status}`);
         
         const htmlContent = await response.text();
         openModal(displayClassName, htmlContent, getClassIcon(c));
     } catch (err) {
-        const cls = classes[c];
-        openModal(displayClassName, `<b>Trefferwürfel:</b> d${cls.hp}<br><b>Hauptattribut:</b> ${cls.primary}<br><b>Rettungswürfe:</b> ${cls.saves.join(', ')}<br><b>Rüstung:</b> ${cls.armor}<br><br>${cls.text}`, getClassIcon(c));
+        console.error("Klassen-HTML konnte nicht geladen werden:", fileName, err);
+        openModal(displayClassName, `<b style="color:var(--error);">Konnte Datei "klassen/${fileName}" nicht laden!</b><br>Bitte prüfe, ob die Datei im GitHub-Ordner 'klassen' existiert.`, getClassIcon(c));
     }
 }
 
@@ -1428,7 +1427,7 @@ function renderEquipmentSectionInSheet(className) {
                 <div>
                     <label style="font-size:0.75rem;">Sekundärwaffe wählen:</label>
                     <select id="sheet-weapon-2">
-                        ${allWapons.map(w => `<option value="${w}">${w}</option>`).join('')}
+                        ${allWeapons.map(w => `<option value="${w}">${w}</option>`).join('')}
                     </select>
                 </div>
             </div>`;
