@@ -305,7 +305,7 @@ let speciesData = {};
 let backgrounds = {};
 let skillDescriptions = {};
 let spellCompendium = { cantrips: {}, level1: {} };
-let equipmentCompendium = {}; // NEU: Speichert Beschreibungen aus ausruestung.html
+let equipmentCompendium = {};
 let classSpellLists = {};
 
 let currentCalculatedMods = { STR:0, DEX:0, CON:0, INT:0, WIS:0, CHA:0 };
@@ -344,7 +344,6 @@ window.onload = async function() {
             if (listResponse.ok) parseSpellListsHtml(await listResponse.text());
         } catch (e) {}
 
-        // NEU: Ausruestung.html laden und parsen für klickbare Items
         try {
             const eqResponse = await fetch(AUSRUESTUNG_HTML_URL + "?t=" + new Date().getTime());
             if (eqResponse.ok) parseEquipmentHtml(await eqResponse.text());
@@ -371,29 +370,37 @@ function parseSpellsHtml(htmlText) {
     });
 }
 
-// NEU: Ausrüstung aus ausruestung.html parsen (sucht nach trait-name / Ausrüstungsbeschreibungen)
 function parseEquipmentHtml(htmlText) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlText, 'text/html');
+    
     doc.querySelectorAll('p').forEach(p => {
         const traitSpan = p.querySelector('.trait-name');
         if (traitSpan) {
             let itemName = traitSpan.textContent.replace(':', '').trim();
-            // Text ohne den Namen
-            let desc = p.innerHTML;
-            equipmentCompendium[itemName.toLowerCase()] = desc;
+            equipmentCompendium[itemName.toLowerCase()] = p.innerHTML;
         }
     });
-    // Auch Tabellenzeilen einlesen (Waffen, Rüstungen etc.)
-    doc.querySelectorAll('tr').forEach(tr => {
-        const tds = tr.querySelectorAll('td');
-        if (tds.length >= 2) {
-            let name = tds[0].textContent.trim();
-            if (name && !name.includes("Leichte Rüstung") && !name.includes("Mittelschwere Rüstung")) {
-                equipmentCompendium[name.toLowerCase()] = `<b>${name}</b><br>Kosten: ${tds[1]?.textContent || '-'}<br>Gewicht: ${tds[tds.length-1]?.textContent || '-'}`;
+
+    doc.querySelectorAll('table').forEach(table => {
+        table.querySelectorAll('tr').forEach(tr => {
+            const tds = tr.querySelectorAll('td');
+            if (tds.length >= 2) {
+                let name = tds[0].textContent.trim();
+                if (name && !tds[0].hasAttribute('colspan')) {
+                    let details = [];
+                    for (let i = 1; i < tds.length; i++) {
+                        let headerText = table.querySelector('th')?.cells[i]?.textContent || `Spalte ${i+1}`;
+                        let val = tds[i].textContent.trim();
+                        if (val) details.push(`<b>${headerText}:</b> ${val}`);
+                    }
+                    equipmentCompendium[name.toLowerCase()] = `<b>${name}</b><br>` + (details.join('<br>') || "Standard-Gegenstand");
+                }
             }
-        }
+        });
     });
+    
+    debugLog(`Equipment Kompendium geladen: ${Object.keys(equipmentCompendium).length} Einträge.`, "cyan");
 }
 
 function parseSpellListsHtml(htmlText) {
@@ -552,12 +559,10 @@ function showSpellModalByName(spellName) {
     openModal(clean, html, "fa-wand-magic-sparkles", school);
 }
 
-// NEU: Klick-Handler für Ausrüstungsgegenstände in der Liste
 function showEquipmentModal(itemName) {
-    let cleanName = itemName.trim().replace(/\s*\([^)]*\)/g, ''); // Klammern entfernen für Suche
+    let cleanName = itemName.trim().replace(/\s*\([^)]*\)/g, '');
     let desc = equipmentCompendium[cleanName.toLowerCase()] || equipmentCompendium[itemName.toLowerCase()];
     if (!desc) {
-        // Suche Teilübereinstimmungen
         let foundKey = Object.keys(equipmentCompendium).find(k => k.includes(cleanName.toLowerCase()) || cleanName.toLowerCase().includes(k));
         if (foundKey) desc = equipmentCompendium[foundKey];
     }
@@ -921,7 +926,6 @@ function buildCharacter() {
         <li><b>Hintergrund-Ausrüstung:</b> ${eqStr}</li>
     `;
 
-    // Ausrüstungskasten unten füllen mit klickbaren Badges/Elementen
     renderEquipmentSectionInSheet(clsName, bgCustomData);
 
     document.getElementById('screen-out-spells').innerHTML = `
@@ -938,15 +942,13 @@ function buildCharacter() {
     }
 }
 
-// NEU: Klickbare Ausrüstungsliste im Kasten unten generieren
 function renderEquipmentSectionInSheet(clsName, bgCustomData) {
     const container = document.getElementById('sheet-equipment-controls');
     if (!container) return;
 
-    // Typische klassenabhängige Startausrüstung als Vorschlag für die Liste
     let classItems = [];
     if (clsName === "Artifizier") classItems = ["Dolch", "Schuppenpanzer", "Tüftlerwerkzeuge", "Materialkomponentenbeutel"];
-    else if (clsName === "Barbar") classItems = ["Zweihandaxt", "Wurfspeer (4)", "Entdeckerausrüstung"];
+    else if (clsName === "Barbar") classItems = ["Zweihandaxt", "Wurfspeer", "Entdeckerausrüstung"];
     else if (clsName === "Barde") classItems = ["Rapier", "Laute", "Diplomatenausrüstung", "Leder"];
     else if (clsName === "Kleriker") classItems = ["Streitkolben", "Kettenhemd", "Heiliges Symbol", "Entdeckerausrüstung"];
     else if (clsName === "Kämpfer") classItems = ["Langschwert", "Plattenpanzer", "Schild", "Gewölbeforscherausrüstung"];
