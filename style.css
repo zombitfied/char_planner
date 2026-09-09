@@ -267,7 +267,7 @@ select:focus, input:focus {
 
 /* Grauer Haupt-Button (exakt wie der goldene, nur mit grauem Hintergrund & 3px Rahmen) */
 .btn-gray-main {
-    background: var(--btn-back-bg);
+    background: #e2ded8;
     color: var(--text);
     font-weight: bold;
     border: 3px solid var(--border);
