@@ -674,7 +674,7 @@ async function showClassModal() {
     }
 
     try {
-        const response = await fetch(`klassen/${fileName}?t=` + new Date().getTime());
+        const response = await fetch(`/char_planner/klassen/${fileName}?t=` + new Date().getTime());
         if (!response.ok) throw new Error("Datei nicht gefunden");
         
         const htmlContent = await response.text();
@@ -1428,7 +1428,7 @@ function renderEquipmentSectionInSheet(className) {
                 <div>
                     <label style="font-size:0.75rem;">Sekundärwaffe wählen:</label>
                     <select id="sheet-weapon-2">
-                        ${allWeapons.map(w => `<option value="${w}">${w}</option>`).join('')}
+                        ${allWapons.map(w => `<option value="${w}">${w}</option>`).join('')}
                     </select>
                 </div>
             </div>`;
