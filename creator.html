@@ -1446,6 +1446,21 @@ function renderEquipmentSectionInSheet(clsKey) {
 
     container.innerHTML = html;
 }
+    // Temporärer visueller Konsolen-Logger für das Smartphone
+const debugBox = document.createElement('div');
+debugBox.style.cssText = "position:fixed; bottom:0; left:0; width:100%; max-height:150px; background:black; color:lime; font-size:10px; overflow-y:scroll; z-index:99999; padding:5px; opacity:0.8;";
+document.body.appendChild(debugBox);
+
+window.onerror = function(msg, url, line) {
+    debugBox.innerHTML += `<br>[FEHLER] ${msg} (Zeile ${line})`;
+};
+
+const oldLog = console.log;
+console.log = function(...args) {
+    debugBox.innerHTML += `<br>[LOG] ${args.join(' ')}`;
+    oldLog.apply(console, args);
+};
+
 </script>
 
 </body>
