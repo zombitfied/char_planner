@@ -239,7 +239,7 @@ select:focus, input:focus {
     opacity: 0.8; 
 }
 
-/* Neuer goldener Haupt-Button für das Startmenü (sitzt exakt im Layout wie die unteren) */
+/* Goldener Haupt-Button für das Startmenü */
 .btn-gold-main {
     background: var(--accent);
     color: #fff;
@@ -263,6 +263,34 @@ select:focus, input:focus {
 }
 .btn-gold-main:hover { 
     background: var(--accent-hover); 
+}
+
+/* Grauer Haupt-Button (wie der goldene, nur in Grau) */
+.btn-gray-main {
+    background: var(--btn-back-bg);
+    color: var(--text);
+    font-weight: bold;
+    border: 3px solid var(--border);
+    margin-bottom: 12px;
+    padding: 12px 16px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    border-radius: 6px;
+    width: 100%;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-sizing: border-box;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: all 0.2s;
+}
+.btn-gray-main:hover { 
+    background: var(--card); 
+    border-color: var(--accent);
+    color: var(--accent);
 }
 
 .btn-menu-main {
