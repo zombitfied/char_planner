@@ -1,4 +1,4 @@
-/* =================================================================ating
+/* =================================================================
    ZENTRALE DESIGN-VARIABLEN & THEMES
    =================================================================== */
 
@@ -123,6 +123,11 @@ body.modal-open {
 /* =================================================================
    KARTEN & FORMULARE
    =================================================================== */
+.logo-frame {
+    position: relative;
+    overflow: hidden; 
+}
+
 .step-card { 
     background: var(--card); 
     border: 3px solid var(--border); 
@@ -226,6 +231,51 @@ select:focus, input:focus {
 }
 .main-btn:active { 
     opacity: 0.8; 
+}
+
+.btn-theme-toggle {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    background: var(--btn-back-bg);
+    color: var(--accent);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    filter: none !important; 
+}
+.btn-theme-toggle:hover {
+    border-color: var(--accent);
+    background: var(--card);
+}
+
+.theme-option-btn {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 8px;
+    background: var(--btn-back-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-weight: bold;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s;
+}
+.theme-option-btn:hover {
+    border-color: var(--accent);
+    background: var(--card);
 }
 
 /* =================================================================
