@@ -429,8 +429,9 @@ const attrNamesDE = {
     "CHA": "Charisma"
 };
 
+// Exaktes Mapping passend zu den englischen Schlüsseln in compendium.json
 const classMapDEtoEN = {
-    "Kämpfer": "Fighter",
+    "Krieger": "Fighter",
     "Magier": "Wizard",
     "Kleriker": "Cleric",
     "Schurke": "Rogue",
@@ -452,7 +453,7 @@ const classFileMap = {
     "Barde": "barde.html",
     "Kleriker": "kleriker.html",
     "Druide": "druide.html",
-    "Kämpfer": "kaempfer.html",
+    "Krieger": "kaempfer.html",
     "Mönch": "moench.html",
     "Paladin": "paladin.html",
     "Waldläufer": "waldlaeufer.html",
@@ -476,6 +477,7 @@ let isSaved = false;
 
 window.onload = async function() {
     try {
+        console.log("Starte Laden der JSON-Daten...");
         const cacheBusterUrl = LOCAL_JSON_URL + "?t=" + new Date().getTime();
         const response = await fetch(cacheBusterUrl);
         
@@ -489,6 +491,7 @@ window.onload = async function() {
         classes = data.classes;
         skillDescriptions = data.skills || {};
         weaponsCompendium = data.weapons || {};
+        console.log("Klassen aus JSON geladen:", Object.keys(classes));
 
         try {
             const bgResponse = await fetch(BACKGROUNDS_JSON_URL + "?t=" + new Date().getTime());
@@ -624,6 +627,7 @@ function initApp() {
 
     document.addEventListener('input', markAsUnsaved);
     document.addEventListener('change', markAsUnsaved);
+    console.log("App erfolgreich initialisiert.");
 }
 
 function markAsUnsaved() {
@@ -685,6 +689,7 @@ function showRaceModal() {
 async function showClassModal() {
     const c = document.getElementById('class-select').value;
     const fileName = classFileMap[c];
+    console.log("Öffne Klassen-Modal für:", c, "Datei:", fileName);
 
     if (!fileName) {
         openModal(c, `<b>Fehler:</b> Keine Klassendatei für ${c} hinterlegt.`, getClassIconByName(c));
@@ -874,6 +879,7 @@ function onClassChange() {
     const deClass = document.getElementById('class-select').value;
     const engClass = classMapDEtoEN[deClass] || deClass;
     const cls = classes[engClass];
+    console.log("Klasse geändert zu:", deClass, "Englisch:", engClass, "Daten gefunden:", !!cls);
     
     updateClassIconDisplay();
 
@@ -886,7 +892,13 @@ function onClassChange() {
             s2.innerHTML += `<option value="${sk}">${sk}</option>`;
         });
         s1.selectedIndex = 0;
-        s2.selectedIndex = 1;
+        if (cls.skills.length > 1) {
+            s2.selectedIndex = 1;
+        } else {
+            s2.selectedIndex = 0;
+        }
+    } else {
+        console.warn("Keine Fertigkeiten für Klasse gefunden:", engClass);
     }
 
     validateSkills();
@@ -1466,17 +1478,17 @@ function renderEquipmentSectionInSheet(clsKey) {
     container.innerHTML = html;
 }
 
-// --- INTEGRIERTE DEBUG-KONSOLE MIT EIN/AUS-SCHALTER ---
+// --- VERBesserte DEBUG-KONSOLE (TRACKT AUCH AKTIONEN & LOGS) ---
 const debugBox = document.createElement('div');
 debugBox.id = "custom-debug-console";
-debugBox.style.cssText = "position:fixed; bottom:0; left:0; width:100%; max-height:150px; background:black; color:lime; font-size:10px; overflow-y:scroll; z-index:99999; padding:5px; opacity:0.9; display:none;";
+debugBox.style.cssText = "position:fixed; bottom:0; left:0; width:100%; max-height:180px; background:black; color:lime; font-size:10px; overflow-y:scroll; z-index:99999; padding:5px; opacity:0.95; display:none;";
 document.body.appendChild(debugBox);
 
 function toggleDebugConsole() {
     if (debugBox.style.display === 'none') {
         debugBox.style.display = 'block';
         if (!debugBox.innerHTML.trim()) {
-            debugBox.innerHTML = '<span style="color:cyan;">[LOG]</span> Konsole geöffnet und bereit.';
+            debugBox.innerHTML = '<span style="color:cyan;">[LOG]</span> Konsole geöffnet und aktiv.';
         }
     } else {
         debugBox.style.display = 'none';
@@ -1491,6 +1503,12 @@ const oldLog = console.log;
 console.log = function(...args) {
     debugBox.innerHTML += `<br><span style="color:cyan;">[LOG]</span> ${args.join(' ')}`;
     oldLog.apply(console, args);
+};
+
+const oldWarn = console.warn;
+console.warn = function(...args) {
+    debugBox.innerHTML += `<br><span style="color:orange;">[WARN]</span> ${args.join(' ')}`;
+    oldWarn.apply(console, args);
 };
 </script>
 
