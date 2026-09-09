@@ -266,9 +266,10 @@ select:focus, input:focus {
 }
 
 /* Grauer Haupt-Button (exakt wie der goldene, nur mit grauem Hintergrund & 3px Rahmen) */
+/* Grauer Haupt-Button im kräftigen Anthrazit-Look mit weißer Schrift */
 .btn-gray-main {
-    background: #e2ded8;
-    color: var(--text);
+    background: #5a626d;
+    color: #ffffff;
     font-weight: bold;
     border: 3px solid var(--border);
     margin-bottom: 12px;
@@ -284,13 +285,13 @@ select:focus, input:focus {
     justify-content: center;
     gap: 10px;
     box-sizing: border-box;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     transition: all 0.2s;
 }
 .btn-gray-main:hover { 
-    background: var(--card); 
+    background: #484f59; 
     border-color: var(--accent);
-    color: var(--accent);
+    color: #ffffff;
 }
 
 .btn-menu-main {
