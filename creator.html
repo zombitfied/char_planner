@@ -5,20 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>D&D 5e / 2024 Charakter erstellen</title>
     
-    <!-- Theme vor dem Rendern setzen, um Farblitzen zu verhindern -->
     <script>
         const savedTheme = localStorage.getItem('dnd_theme') || 'standard';
         document.documentElement.setAttribute('data-theme', savedTheme);
     </script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Zentrales Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- Fixer Pinsel-Button oben rechts in der Bildschirmecke -->
 <button class="btn-theme-toggle" onclick="openThemeModal()" title="Design wählen">
     <i class="fa-solid fa-paintbrush"></i>
 </button>
@@ -193,7 +189,6 @@
     </div>
 </div>
 
-<!-- MODAL: Design / Theme Auswahl -->
 <div id="theme-modal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-title">
@@ -224,7 +219,6 @@
 </div>
 
 <script>
-// --- THEME STEUERUNG ---
 function openThemeModal() {
     const current = localStorage.getItem('dnd_theme') || 'standard';
     document.getElementById('check-standard').style.display = current === 'standard' ? 'inline' : 'none';
@@ -238,7 +232,6 @@ function setTheme(themeName) {
     closeThemeModal();
 }
 
-// --- DEBUG-KONSOLE ---
 const debugBox = document.createElement('div');
 debugBox.style.cssText = "position:fixed; bottom:0; left:0; width:100%; height:120px; background:black; color:lime; font-size:10px; overflow-y:scroll; z-index:99999; padding:5px; display:none; box-sizing:border-box;";
 document.body.appendChild(debugBox);
@@ -257,43 +250,10 @@ window.onerror = function(msg, url, line) {
     debugLog(`FEHLER: ${msg} (Zeile ${line})`, "red");
 };
 
-const oldLog = console.log;
-console.log = function(...args) {
-    debugLog(`LOG: ${args.join(' ')}`, "cyan");
-    oldLog.apply(console, args);
-};
-
-const oldWarn = console.warn;
-console.warn = function(...args) {
-    debugLog(`WARN: ${args.join(' ')}`, "orange");
-    oldWarn.apply(console, args);
-};
-
-document.addEventListener('DOMContentLoaded', () => {
-    debugLog("DOM geladen - Event-Tracking aktiv.");
-    
-    document.addEventListener('change', (e) => {
-        if (e.target && e.target.id) {
-            debugLog(`Geändert: #${e.target.id} auf "${e.target.value}"`, "yellow");
-        } else if (e.target && e.target.className) {
-            debugLog(`Geändert: .${e.target.className} auf "${e.target.value}"`, "yellow");
-        }
-    });
-
-    document.addEventListener('click', (e) => {
-        if (e.target && (e.target.tagName === 'BUTTON' || e.target.tagName === 'A' || e.target.classList.contains('stat-box'))) {
-            let name = e.target.innerText || e.target.id || e.target.className;
-            debugLog(`Klick auf: [${e.target.tagName}] ${name.trim().substring(0, 20)}`, "magenta");
-        }
-    });
-});
-
-debugLog("Konsole initialisiert und bereit.");
-
-
 const BACKGROUNDS_JSON_URL = "./backgrounds.json";
 const SPELLS_HTML_URL = "./spells-parsed.html";
 const SPELL_LISTS_HTML_URL = "./spelllists-parsed.html";
+const AUSRUESTUNG_HTML_URL = "./ausruestung (1).html";
 
 const standardArray = [15, 14, 13, 12, 10, 8];
 
@@ -312,19 +272,10 @@ const attrNamesDE = {
 };
 
 const classFileMap = {
-    "Artifizier": "artifizier.html",
-    "Barbar": "barbar.html",
-    "Barde": "barde.html",
-    "Kleriker": "kleriker.html",
-    "Druide": "druide.html",
-    "Kämpfer": "kaempfer.html",
-    "Mönch": "moench.html",
-    "Paladin": "paladin.html",
-    "Waldläufer": "waldlaeufer.html",
-    "Schurke": "schurke.html",
-    "Zauberer": "zauberer.html",
-    "Hexenmeister": "hexenmeister.html",
-    "Magier": "magier.html"
+    "Artifizier": "artifizier.html", "Barbar": "barbar.html", "Barde": "barde.html",
+    "Kleriker": "kleriker.html", "Druide": "druide.html", "Kämpfer": "kaempfer.html",
+    "Mönch": "moench.html", "Paladin": "paladin.html", "Waldläufer": "waldlaeufer.html",
+    "Schurke": "schurke.html", "Zauberer": "zauberer.html", "Hexenmeister": "hexenmeister.html", "Magier": "magier.html"
 };
 
 const classSkillsData = {
@@ -344,26 +295,17 @@ const classSkillsData = {
 };
 
 const classHpData = {
-    "Artifizier": { die: 8, base: 8 },
-    "Barbar": { die: 12, base: 12 },
-    "Barde": { die: 8, base: 8 },
-    "Kleriker": { die: 8, base: 8 },
-    "Druide": { die: 8, base: 8 },
-    "Kämpfer": { die: 10, base: 10 },
-    "Mönch": { die: 8, base: 8 },
-    "Paladin": { die: 10, base: 10 },
-    "Waldläufer": { die: 10, base: 10 },
-    "Schurke": { die: 8, base: 8 },
-    "Zauberer": { die: 6, base: 6 },
-    "Hexenmeister": { die: 8, base: 8 },
-    "Magier": { die: 6, base: 6 }
+    "Artifizier": { die: 8, base: 8 }, "Barbar": { die: 12, base: 12 }, "Barde": { die: 8, base: 8 },
+    "Kleriker": { die: 8, base: 8 }, "Druide": { die: 8, base: 8 }, "Kämpfer": { die: 10, base: 10 },
+    "Mönch": { die: 8, base: 8 }, "Paladin": { die: 10, base: 10 }, "Waldläufer": { die: 10, base: 10 },
+    "Schurke": { die: 8, base: 8 }, "Zauberer": { die: 6, base: 6 }, "Hexenmeister": { die: 8, base: 8 }, "Magier": { die: 6, base: 6 }
 };
 
 let speciesData = {};
 let backgrounds = {};
 let skillDescriptions = {};
 let spellCompendium = { cantrips: {}, level1: {} };
-let weaponsCompendium = {};
+let equipmentCompendium = {}; // NEU: Speichert Beschreibungen aus ausruestung.html
 let classSpellLists = {};
 
 let currentCalculatedMods = { STR:0, DEX:0, CON:0, INT:0, WIS:0, CHA:0 };
@@ -379,7 +321,6 @@ window.onload = async function() {
         const data = await response.json();
         speciesData = data.speciesData;
         skillDescriptions = data.skills || {};
-        weaponsCompendium = data.weapons || {};
 
         try {
             const bgResponse = await fetch(BACKGROUNDS_JSON_URL + "?t=" + new Date().getTime());
@@ -403,6 +344,14 @@ window.onload = async function() {
             if (listResponse.ok) parseSpellListsHtml(await listResponse.text());
         } catch (e) {}
 
+        // NEU: Ausruestung.html laden und parsen für klickbare Items
+        try {
+            const eqResponse = await fetch(AUSRUESTUNG_HTML_URL + "?t=" + new Date().getTime());
+            if (eqResponse.ok) parseEquipmentHtml(await eqResponse.text());
+        } catch (e) {
+            debugLog("Konnte ausruestung (1).html nicht laden: " + e.message, "orange");
+        }
+
         initApp();
     } catch (err) {
         alert("Ladefehler: " + err.message);
@@ -419,6 +368,31 @@ function parseSpellsHtml(htmlText) {
         const name = h5.textContent.trim();
         if (div.textContent.includes('Zaubertrick')) spellCompendium.cantrips[name] = { rule: div.innerHTML };
         else if (div.textContent.includes('1. Grades')) spellCompendium.level1[name] = { rule: div.innerHTML };
+    });
+}
+
+// NEU: Ausrüstung aus ausruestung.html parsen (sucht nach trait-name / Ausrüstungsbeschreibungen)
+function parseEquipmentHtml(htmlText) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlText, 'text/html');
+    doc.querySelectorAll('p').forEach(p => {
+        const traitSpan = p.querySelector('.trait-name');
+        if (traitSpan) {
+            let itemName = traitSpan.textContent.replace(':', '').trim();
+            // Text ohne den Namen
+            let desc = p.innerHTML;
+            equipmentCompendium[itemName.toLowerCase()] = desc;
+        }
+    });
+    // Auch Tabellenzeilen einlesen (Waffen, Rüstungen etc.)
+    doc.querySelectorAll('tr').forEach(tr => {
+        const tds = tr.querySelectorAll('td');
+        if (tds.length >= 2) {
+            let name = tds[0].textContent.trim();
+            if (name && !name.includes("Leichte Rüstung") && !name.includes("Mittelschwere Rüstung")) {
+                equipmentCompendium[name.toLowerCase()] = `<b>${name}</b><br>Kosten: ${tds[1]?.textContent || '-'}<br>Gewicht: ${tds[tds.length-1]?.textContent || '-'}`;
+            }
+        }
     });
 }
 
@@ -576,6 +550,23 @@ function showSpellModalByName(spellName) {
     });
 
     openModal(clean, html, "fa-wand-magic-sparkles", school);
+}
+
+// NEU: Klick-Handler für Ausrüstungsgegenstände in der Liste
+function showEquipmentModal(itemName) {
+    let cleanName = itemName.trim().replace(/\s*\([^)]*\)/g, ''); // Klammern entfernen für Suche
+    let desc = equipmentCompendium[cleanName.toLowerCase()] || equipmentCompendium[itemName.toLowerCase()];
+    if (!desc) {
+        // Suche Teilübereinstimmungen
+        let foundKey = Object.keys(equipmentCompendium).find(k => k.includes(cleanName.toLowerCase()) || cleanName.toLowerCase().includes(k));
+        if (foundKey) desc = equipmentCompendium[foundKey];
+    }
+    
+    if (desc) {
+        openModal(itemName, desc, "fa-shield-halved");
+    } else {
+        openModal(itemName, `Keine detaillierten Regel- oder Shop-Informationen für "${itemName}" im Kompendium gefunden.`, "fa-shield-halved");
+    }
 }
 
 function showCalcModal(type) {
@@ -919,15 +910,19 @@ function buildCharacter() {
             <div class="stat-mod">${mods[s] >= 0 ? '+' : ''}${mods[s]}</div>
         </div>`).join('');
 
+    let toolsStr = Array.isArray(bgCustomData.tools) ? bgCustomData.tools.join(', ') : (bgCustomData.tools || 'Keine');
+    let eqStr = Array.isArray(bgCustomData.equipment) ? bgCustomData.equipment.join(', ') : (bgCustomData.equipment || 'Keine');
+
     document.getElementById('screen-out-features').innerHTML = `
         <li><b>Fertigkeiten:</b> ${allSkills.join(', ')}</li>
         <li><b>Volksmerkmale:</b><br>${subInfo.text}</li>
         <li><b>Talent:</b> ${backgrounds[bg]?.feat || ''}</li>
-        <li><b>Werkzeuge:</b> ${bgCustomData.tools.join(', ') || 'Keine'}</li>
-        <li><b>Ausrüstung:</b> ${bgCustomData.equipment.join(', ')}</li>
+        <li><b>Werkzeuge:</b> <span style="color:var(--accent); cursor:pointer; text-decoration:underline;" onclick="showEquipmentModal('${toolsStr}')">${toolsStr}</span></li>
+        <li><b>Hintergrund-Ausrüstung:</b> ${eqStr}</li>
     `;
 
-    renderEquipmentSectionInSheet(clsName);
+    // Ausrüstungskasten unten füllen mit klickbaren Badges/Elementen
+    renderEquipmentSectionInSheet(clsName, bgCustomData);
 
     document.getElementById('screen-out-spells').innerHTML = `
         <div style="font-weight:bold; font-size:0.85rem; color:var(--text-muted);">Zaubertricks:</div>
@@ -941,6 +936,31 @@ function buildCharacter() {
         sheet.style.display = 'block';
         sheet.scrollIntoView({ behavior: 'smooth' });
     }
+}
+
+// NEU: Klickbare Ausrüstungsliste im Kasten unten generieren
+function renderEquipmentSectionInSheet(clsName, bgCustomData) {
+    const container = document.getElementById('sheet-equipment-controls');
+    if (!container) return;
+
+    // Typische klassenabhängige Startausrüstung als Vorschlag für die Liste
+    let classItems = [];
+    if (clsName === "Artifizier") classItems = ["Dolch", "Schuppenpanzer", "Tüftlerwerkzeuge", "Materialkomponentenbeutel"];
+    else if (clsName === "Barbar") classItems = ["Zweihandaxt", "Wurfspeer (4)", "Entdeckerausrüstung"];
+    else if (clsName === "Barde") classItems = ["Rapier", "Laute", "Diplomatenausrüstung", "Leder"];
+    else if (clsName === "Kleriker") classItems = ["Streitkolben", "Kettenhemd", "Heiliges Symbol", "Entdeckerausrüstung"];
+    else if (clsName === "Kämpfer") classItems = ["Langschwert", "Plattenpanzer", "Schild", "Gewölbeforscherausrüstung"];
+    else classItems = ["Dolch", "Entdeckerausrüstung"];
+
+    let bgEquipList = Array.isArray(bgCustomData.equipment) ? bgCustomData.equipment : [bgCustomData.equipment];
+    let allCombined = [...classItems, ...bgEquipList, ...(bgCustomData.tools || [])].filter(Boolean);
+
+    let badgesHtml = allCombined.map(item => `<span class="badge" onclick="showEquipmentModal('${item}')"><i class="fa-solid fa-box-open" style="color:var(--accent); margin-right:4px;"></i>${item}</span>`).join(' ');
+
+    container.innerHTML = `
+        <div style="font-size:0.85rem; margin-bottom: 8px;"><b>Klasse (${clsName}) & Hintergrund Ausrüstung:</b> (Klicke auf einen Gegenstand für Regeldetails)</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">${badgesHtml}</div>
+    `;
 }
 
 function manualSaveCharacter() {
@@ -963,13 +983,6 @@ function manualSaveCharacter() {
 function startAdventure() {
     if (!isSaved) return alert("Bitte zuerst speichern!");
     window.location.href = 'manager.html';
-}
-
-function renderEquipmentSectionInSheet(clsName) {
-    const container = document.getElementById('sheet-equipment-controls');
-    if (container) {
-        container.innerHTML = `<div style="font-size:0.85rem;"><b>Feste Startausrüstung:</b> Gemäß Klassenvorgabe in der HTML-Datei.</div>`;
-    }
 }
 </script>
 </body>
