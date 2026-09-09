@@ -426,20 +426,21 @@ const classMapDEtoEN = {
 };
 const classMapENtoDE = Object.fromEntries(Object.entries(classMapDEtoEN).map(([k,v]) => [v,k]));
 
+// Direkte deutsche Schlüssel, damit es exakt mit dem Dropdown übereinstimmt und fehlerfrei zieht
 const classFileMap = {
-    "Artificer": "artifizier.html",
-    "Barbarian": "barbar.html",
-    "Bard": "barde.html",
-    "Cleric": "kleriker.html",
-    "Druid": "druide.html",
-    "Fighter": "kaempfer.html",
-    "Monk": "moench.html",
+    "Artifizier": "artifizier.html",
+    "Barbar": "barbar.html",
+    "Barde": "barde.html",
+    "Kleriker": "kleriker.html",
+    "Druide": "druide.html",
+    "Krieger": "kaempfer.html",
+    "Mönch": "moench.html",
     "Paladin": "paladin.html",
-    "Ranger": "waldlaeufer.html",
-    "Rogue": "schurke.html",
-    "Sorcerer": "zauberer.html",
-    "Warlock": "hexenmeister.html",
-    "Wizard": "magier.html"
+    "Waldläufer": "waldlaeufer.html",
+    "Schurke": "schurke.html",
+    "Zauberer": "zauberer.html",
+    "Hexenmeister": "hexenmeister.html",
+    "Magier": "magier.html"
 };
 
 let speciesData = {};
@@ -625,7 +626,7 @@ function populateSelect(id, items) {
         if (id === 'class-select' && classMapENtoDE[i]) {
             label = classMapENtoDE[i];
         }
-        sel.innerHTML += `<option value="${i}">${label}</option>`;
+        sel.innerHTML += `<option value="${label}">${label}</option>`;
     });
 }
 
@@ -664,11 +665,10 @@ function showRaceModal() {
 
 async function showClassModal() {
     const c = document.getElementById('class-select').value;
-    const displayClassName = classMapENtoDE[c] || c;
     const fileName = classFileMap[c];
 
     if (!fileName) {
-        openModal(displayClassName, `<b>Fehler:</b> Keine Klassendatei für ${displayClassName} hinterlegt.`, getClassIcon(c));
+        openModal(c, `<b>Fehler:</b> Keine Klassendatei für ${c} hinterlegt.`, getClassIconByName(c));
         return;
     }
 
@@ -677,10 +677,10 @@ async function showClassModal() {
         if (!response.ok) throw new Error(`HTTP Fehler: ${response.status}`);
         
         const htmlContent = await response.text();
-        openModal(displayClassName, htmlContent, getClassIcon(c));
+        openModal(c, htmlContent, getClassIconByName(c));
     } catch (err) {
         console.error("Klassen-HTML konnte nicht geladen werden:", fileName, err);
-        openModal(displayClassName, `<b style="color:var(--error);">Konnte Datei "klassen/${fileName}" nicht laden!</b><br>Bitte prüfe, ob die Datei im GitHub-Ordner 'klassen' existiert.`, getClassIcon(c));
+        openModal(c, `<b style="color:var(--error);">Konnte Datei "klassen/${fileName}" nicht laden!</b><br>Bitte prüfe, ob die Datei im GitHub-Ordner 'klassen' existiert.`, getClassIconByName(c));
     }
 }
 
@@ -750,10 +750,10 @@ function showCalcModal(type) {
     let text = "";
 
     if (type === 'HP') {
-        let clsHp = classes[c.class]?.hp || 8;
-        let displayClass = classMapENtoDE[c.class] || c.class;
+        let engClass = classMapDEtoEN[c.class] || c.class;
+        let clsHp = classes[engClass]?.hp || 8;
         text = `<b>Berechnung der Trefferpunkte (HP):</b><br>
-                Basis (Klasse ${displayClass}): ${clsHp}<br>
+                Basis (Klasse ${c.class}): ${clsHp}<br>
                 + Konstitutions-Modifikator (${c.mods.CON >= 0 ? '+' : ''}${c.mods.CON}): ${c.mods.CON}<br>
                 <hr style="border:0; border-top:1px solid var(--border); margin:8px 0;">
                 <b>Total:</b> ${c.hp} HP`;
@@ -784,7 +784,8 @@ function showCalcModal(type) {
 }
 
 function getClassIcon(className) {
-    switch (className) {
+    const engClass = classMapDEtoEN[className] || className;
+    switch (engClass) {
         case "Artificer": return "fa-wrench";
         case "Barbarian": return "fa-hammer";
         case "Bard": return "fa-guitar";
@@ -800,6 +801,10 @@ function getClassIcon(className) {
         case "Wizard": return "fa-hat-wizard";
         default: return "fa-user";
     }
+}
+
+function getClassIconByName(className) {
+    return getClassIcon(className);
 }
 
 function updateClassIconDisplay() {
@@ -847,20 +852,23 @@ function updateSubraceOptions() {
 }
 
 function onClassChange() {
-    const c = document.getElementById('class-select').value;
-    const cls = classes[c];
+    const deClass = document.getElementById('class-select').value;
+    const engClass = classMapDEtoEN[deClass] || deClass;
+    const cls = classes[engClass];
     
     updateClassIconDisplay();
 
     const s1 = document.getElementById('skill1');
     const s2 = document.getElementById('skill2');
     s1.innerHTML = ''; s2.innerHTML = '';
-    cls.skills.forEach(sk => {
-        s1.innerHTML += `<option value="${sk}">${sk}</option>`;
-        s2.innerHTML += `<option value="${sk}">${sk}</option>`;
-    });
-    s1.selectedIndex = 0;
-    s2.selectedIndex = 1;
+    if (cls && cls.skills) {
+        cls.skills.forEach(sk => {
+            s1.innerHTML += `<option value="${sk}">${sk}</option>`;
+            s2.innerHTML += `<option value="${sk}">${sk}</option>`;
+        });
+        s1.selectedIndex = 0;
+        s2.selectedIndex = 1;
+    }
 
     validateSkills();
     updateSpellsUI();
@@ -1100,12 +1108,13 @@ function validateSkills() {
     return isValid;
 }
 
-function getPrepSpellsLimit(className) {
-    return classes[className]?.prepSpellsLvl1 || 2;
+function getPrepSpellsLimit(engClassName) {
+    return classes[engClassName]?.prepSpellsLvl1 || 2;
 }
 
 function updateSpellsUI() {
-    const className = document.getElementById('class-select').value;
+    const deClass = document.getElementById('class-select').value;
+    const className = classMapDEtoEN[deClass] || deClass;
     const cls = classes[className];
 
     if (!cls) return;
@@ -1182,7 +1191,8 @@ function buildCharacter() {
     const name = document.getElementById('char-name').value || "Unbenannter Held";
     const mainRace = document.getElementById('main-race').value;
     const subRace = document.getElementById('sub-race').value;
-    const cls = document.getElementById('class-select').value;
+    const deClass = document.getElementById('class-select').value;
+    const cls = classMapDEtoEN[deClass] || deClass;
     const bg = document.getElementById('bg-select').value;
 
     const subInfo = speciesData[mainRace].subraces[subRace];
@@ -1250,7 +1260,7 @@ function buildCharacter() {
     lastBuiltCharacter = {
         id: 'char_' + Date.now(),
         name: name,
-        class: cls,
+        class: deClass,
         species: subRace,
         background: bg,
         level: 1,
@@ -1274,9 +1284,8 @@ function buildCharacter() {
 
     markAsUnsaved();
 
-    const displayClassName = classMapENtoDE[cls] || cls;
-    document.getElementById('screen-out-name').innerHTML = `<i class="fa-solid ${getClassIcon(cls)}"></i> ${name}`;
-    document.getElementById('screen-out-meta').innerText = `${subRace} | ${displayClassName} Stufe 1 | ${bg}`;
+    document.getElementById('screen-out-name').innerHTML = `<i class="fa-solid ${getClassIcon(deClass)}"></i> ${name}`;
+    document.getElementById('screen-out-meta').innerText = `${subRace} | ${deClass} Stufe 1 | ${bg}`;
     document.getElementById('screen-out-hp').innerText = `HP: ${hp}`;
     document.getElementById('screen-out-ac').innerText = `RK: ${ac}`;
     document.getElementById('screen-out-init').innerText = `Initiative: ${mods.DEX >= 0 ? '+' : ''}${mods.DEX}`;
@@ -1404,9 +1413,9 @@ function startAdventure() {
     window.location.href = 'manager.html';
 }
 
-function renderEquipmentSectionInSheet(className) {
+function renderEquipmentSectionInSheet(clsKey) {
     const container = document.getElementById('sheet-equipment-controls');
-    const cls = classes[className];
+    const cls = classes[clsKey];
     const fixedEq = cls.equipment[0].fixed;
 
     const simpleWeapons = [...Object.keys(weaponsCompendium["Simple Melee"] || {}), ...Object.keys(weaponsCompendium["Simple Ranged"] || {})];
@@ -1415,13 +1424,13 @@ function renderEquipmentSectionInSheet(className) {
 
     let html = `<div style="font-size:0.85rem; margin-bottom:8px;"><b>Feste Startausrüstung:</b> ${fixedEq}</div>`;
 
-    if (["Fighter", "Paladin", "Ranger", "Barbarian", "Rogue", "Monk", "Bard"].includes(className)) {
+    if (["Fighter", "Paladin", "Ranger", "Barbarian", "Rogue", "Monk", "Bard"].includes(clsKey)) {
         html += `
             <div class="grid-2">
                 <div>
                     <label style="font-size:0.75rem;">Primärwaffe wählen:</label>
                     <select id="sheet-weapon-1">
-                        ${(["Fighter", "Paladin", "Ranger", "Barbarian"].includes(className) ? martialWeapons : simpleWeapons).map(w => `<option value="${w}">${w}</option>`).join('')}
+                        ${(["Fighter", "Paladin", "Ranger", "Barbarian"].includes(clsKey) ? martialWeapons : simpleWeapons).map(w => `<option value="${w}">${w}</option>`).join('')}
                     </select>
                 </div>
                 <div>
