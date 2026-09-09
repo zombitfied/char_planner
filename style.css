@@ -435,3 +435,75 @@ select:focus, input:focus {
     flex-grow: 1; 
     padding-right: 5px; 
 }
+
+/* =================================================================
+   SPEZIFISCHE KOMPONENTEN FÜR DEN CHARACTER CREATOR / SHEET
+   =================================================================== */
+
+.stat-box { 
+    background: var(--btn-back-bg); 
+    border: 1.5px solid var(--border); 
+    padding: 8px; 
+    border-radius: 6px; 
+    text-align: center; 
+    cursor: pointer; 
+    transition: background 0.2s; 
+}
+.stat-box:hover { 
+    background: var(--card); 
+    border-color: var(--accent);
+}
+.stat-val { 
+    font-size: 1.2rem; 
+    font-weight: bold; 
+    color: var(--text); 
+}
+.stat-mod { 
+    font-size: 0.85rem; 
+    color: var(--accent); 
+}
+
+.badge { 
+    background: var(--btn-back-bg); 
+    border: 1.5px solid var(--border); 
+    color: var(--text); 
+    padding: 6px 10px; 
+    border-radius: 4px; 
+    font-size: 0.85rem; 
+    display: inline-block; 
+    margin-right: 5px; 
+    margin-top: 5px; 
+    cursor: pointer; 
+    transition: background 0.2s; 
+}
+.badge:hover { 
+    background: var(--card); 
+    border-color: var(--accent); 
+}
+
+.error { 
+    color: #d32f2f; 
+    font-size: 0.85rem; 
+    margin-top: 5px; 
+    display: none; 
+}
+
+.spell-container { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 8px; 
+    margin-top: 8px; 
+}
+
+.special-attribute-box {
+    background: var(--btn-back-bg); 
+    border: 1.5px dashed var(--accent); 
+    padding: 10px; 
+    border-radius: 8px; 
+    margin-top: 10px; 
+    display: none;
+}
+.special-attribute-box label { 
+    color: var(--accent); 
+    margin-top: 0; 
+}
