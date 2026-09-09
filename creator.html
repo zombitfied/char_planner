@@ -253,7 +253,6 @@ window.onerror = function(msg, url, line) {
 const BACKGROUNDS_JSON_URL = "./backgrounds.json";
 const SPELLS_HTML_URL = "./spells-parsed.html";
 const SPELL_LISTS_HTML_URL = "./spelllists-parsed.html";
-const AUSRUESTUNG_HTML_URL = "./ausruestung (1).html";
 
 const standardArray = [15, 14, 13, 12, 10, 8];
 
@@ -305,7 +304,6 @@ let speciesData = {};
 let backgrounds = {};
 let skillDescriptions = {};
 let spellCompendium = { cantrips: {}, level1: {} };
-let equipmentCompendium = {};
 let classSpellLists = {};
 
 let currentCalculatedMods = { STR:0, DEX:0, CON:0, INT:0, WIS:0, CHA:0 };
@@ -344,13 +342,6 @@ window.onload = async function() {
             if (listResponse.ok) parseSpellListsHtml(await listResponse.text());
         } catch (e) {}
 
-        try {
-            const eqResponse = await fetch(AUSRUESTUNG_HTML_URL + "?t=" + new Date().getTime());
-            if (eqResponse.ok) parseEquipmentHtml(await eqResponse.text());
-        } catch (e) {
-            debugLog("Konnte ausruestung (1).html nicht laden: " + e.message, "orange");
-        }
-
         initApp();
     } catch (err) {
         alert("Ladefehler: " + err.message);
@@ -368,41 +359,6 @@ function parseSpellsHtml(htmlText) {
         if (div.textContent.includes('Zaubertrick')) spellCompendium.cantrips[name] = { rule: div.innerHTML };
         else if (div.textContent.includes('1. Grades')) spellCompendium.level1[name] = { rule: div.innerHTML };
     });
-}
-
-function parseEquipmentHtml(htmlText) {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(htmlText, 'text/html');
-    
-    // 1. Absätze mit .trait-name einlesen (z.B. Ausrüstungspakete, Beschreibungen)
-    doc.querySelectorAll('p').forEach(p => {
-        const traitSpan = p.querySelector('.trait-name');
-        if (traitSpan) {
-            let itemName = traitSpan.textContent.replace(':', '').trim();
-            equipmentCompendium[itemName.toLowerCase()] = p.innerHTML;
-        }
-    });
-
-    // 2. Alle Tabellen in der ausruestung.html durchgehen (Waffen, Rüstungen, Werkzeuge etc.)
-    doc.querySelectorAll('table').forEach(table => {
-        table.querySelectorAll('tr').forEach(tr => {
-            const tds = tr.querySelectorAll('td');
-            if (tds.length >= 2) {
-                let name = tds[0].textContent.trim();
-                if (name && !tds[0].hasAttribute('colspan')) {
-                    let details = [];
-                    for (let i = 1; i < tds.length; i++) {
-                        let headerText = table.querySelector('th')?.cells[i]?.textContent || `Spalte ${i+1}`;
-                        let val = tds[i].textContent.trim();
-                        if (val) details.push(`<b>${headerText}:</b> ${val}`);
-                    }
-                    equipmentCompendium[name.toLowerCase()] = `<b>${name}</b><br>` + (details.join('<br>') || "Standard-Gegenstand");
-                }
-            }
-        });
-    });
-    
-    debugLog(`Equipment Kompendium geladen: ${Object.keys(equipmentCompendium).length} Einträge.`, "cyan");
 }
 
 function parseSpellListsHtml(htmlText) {
@@ -562,18 +518,7 @@ function showSpellModalByName(spellName) {
 }
 
 function showEquipmentModal(itemName) {
-    let cleanName = itemName.trim().replace(/\s*\([^)]*\)/g, '');
-    let desc = equipmentCompendium[cleanName.toLowerCase()] || equipmentCompendium[itemName.toLowerCase()];
-    if (!desc) {
-        let foundKey = Object.keys(equipmentCompendium).find(k => k.includes(cleanName.toLowerCase()) || cleanName.toLowerCase().includes(k));
-        if (foundKey) desc = equipmentCompendium[foundKey];
-    }
-    
-    if (desc) {
-        openModal(itemName, desc, "fa-shield-halved");
-    } else {
-        openModal(itemName, `Keine detaillierten Regel- oder Shop-Informationen für "${itemName}" im Kompendium gefunden.`, "fa-shield-halved");
-    }
+    openModal(itemName, `Keine Detailbeschreibung hinterlegt.`, "fa-shield-halved");
 }
 
 function showCalcModal(type) {
@@ -917,14 +862,16 @@ function buildCharacter() {
             <div class="stat-mod">${mods[s] >= 0 ? '+' : ''}${mods[s]}</div>
         </div>`).join('');
 
-    let toolsStr = Array.isArray(bgCustomData.tools) ? bgCustomData.tools.join(', ') : (typeof bgCustomData.tools === 'object' ? JSON.stringify(bgCustomData.tools) : (bgCustomData.tools || 'Keine'));
-    let eqStr = Array.isArray(bgCustomData.equipment) ? bgCustomData.equipment.join(', ') : (typeof bgCustomData.equipment === 'object' ? JSON.stringify(bgCustomData.equipment) : (bgCustomData.equipment || 'Keine'));
+    let flattenedTools = flattenEquipment(bgCustomData.tools);
+    let flattenedEq = flattenEquipment(bgCustomData.equipment);
+    let toolsStr = flattenedTools.join(', ') || 'Keine';
+    let eqStr = flattenedEq.join(', ') || 'Keine';
 
     document.getElementById('screen-out-features').innerHTML = `
         <li><b>Fertigkeiten:</b> ${allSkills.join(', ')}</li>
         <li><b>Volksmerkmale:</b><br>${subInfo.text}</li>
         <li><b>Talent:</b> ${backgrounds[bg]?.feat || ''}</li>
-        <li><b>Werkzeuge:</b> <span style="color:var(--accent); cursor:pointer; text-decoration:underline;" onclick="showEquipmentModal('${toolsStr}')">${toolsStr}</span></li>
+        <li><b>Werkzeuge:</b> ${toolsStr}</li>
         <li><b>Hintergrund-Ausrüstung:</b> ${eqStr}</li>
     `;
 
@@ -944,73 +891,78 @@ function buildCharacter() {
     }
 }
 
-function expandEquipmentEntries(entries) {
-    let expanded = [];
-    entries.forEach(entry => {
-        if (!entry) return;
-        let str = typeof entry === 'string' ? entry.trim() : JSON.stringify(entry);
-        str = str.replace(/\.$/, '');
-        let parts = str.split(/,| und /);
-        parts.forEach(p => {
-            let cleaned = p.trim();
-            if (cleaned) expanded.push(cleaned);
-        });
-    });
-    return expanded;
+// Rekursive Funktion, um Hintergrund-JSON-Strukturen sauber in reine Item-Namen aufzulösen
+function flattenEquipment(item) {
+    let result = [];
+    if (!item) return result;
+
+    if (typeof item === 'string') {
+        let cleaned = item.trim();
+        if (cleaned && !cleaned.startsWith('[object') && !cleaned.includes('{') && !cleaned.endsWith('GM') && !cleaned.endsWith('SM') && !cleaned.endsWith('KM')) {
+            cleaned.split(/,| und /).forEach(p => {
+                let sub = p.trim();
+                if (sub) result.push(sub);
+            });
+        }
+    } else if (Array.isArray(item)) {
+        item.forEach(sub => result.push(...flattenEquipment(sub)));
+    } else if (typeof item === 'object') {
+        for (let key in item) {
+            result.push(...flattenEquipment(item[key]));
+        }
+    }
+    return result;
 }
 
 function accumulateItems(itemList) {
     let map = {};
     itemList.forEach(raw => {
-        if (!raw) return;
-        let str = typeof raw === 'string' ? raw.trim() : JSON.stringify(raw);
-        if (str.startsWith('[object') || str === 'Keine') return;
+        let flattened = flattenEquipment(raw);
+        flattened.forEach(str => {
+            let qty = "1";
+            let name = str;
 
-        let qty = "1";
-        let name = str;
-
-        let numMatch = str.match(/^(\d+)\s*(?:x\s*)?(.*)$/);
-        if (numMatch) {
-            qty = numMatch[1];
-            name = numMatch[2].trim();
-        } else {
-            let lower = str.toLowerCase();
-            if (lower.startsWith('ein ') || lower.startsWith('eine ') || lower.startsWith('einen ')) {
-                qty = "1";
-                name = str.replace(/^(ein|eine|einen)\s+/i, '').trim();
-            } else if (lower.startsWith('zwei ')) {
-                qty = "2";
-                name = str.replace(/^zwei\s+/i, '').trim();
-            } else if (lower.startsWith('drei ')) {
-                qty = "3";
-                name = str.replace(/^drei\s+/i, '').trim();
-            } else if (lower.startsWith('vier ')) {
-                qty = "4";
-                name = str.replace(/^vier\s+/i, '').trim();
-            } else if (lower.startsWith('fünf ')) {
-                qty = "5";
-                name = str.replace(/^fünf\s+/i, '').trim();
-            } else if (lower.startsWith('zehn ')) {
-                qty = "10";
-                name = str.replace(/^zehn\s+/i, '').trim();
-            }
-        }
-
-        name = name.replace(/[.,;]$/, '').trim();
-        if (!name) return;
-
-        let key = name.toLowerCase();
-        if (map[key]) {
-            let q1 = parseInt(map[key].qty);
-            let q2 = parseInt(qty);
-            if (!isNaN(q1) && !isNaN(q2)) {
-                map[key].qty = (q1 + q2).toString();
+            let numMatch = str.match(/^(\d+)\s*(?:x\s*)?(.*)$/);
+            if (numMatch) {
+                qty = numMatch[1];
+                name = numMatch[2].trim();
             } else {
-                map[key].qty = `${map[key].qty}, ${qty}`;
+                let lower = str.toLowerCase();
+                if (lower.startsWith('ein ') || lower.startsWith('eine ') || lower.startsWith('einen ')) {
+                    qty = "1";
+                    name = str.replace(/^(ein|eine|einen)\s+/i, '').trim();
+                } else if (lower.startsWith('zwei ')) {
+                    qty = "2";
+                    name = str.replace(/^zwei\s+/i, '').trim();
+                } else if (lower.startsWith('drei ')) {
+                    qty = "3";
+                    name = str.replace(/^drei\s+/i, '').trim();
+                } else if (lower.startsWith('vier ')) {
+                    qty = "4";
+                    name = str.replace(/^vier\s+/i, '').trim();
+                } else if (lower.startsWith('fünf ')) {
+                    qty = "5";
+                    name = str.replace(/^fünf\s+/i, '').trim();
+                } else if (lower.startsWith('zehn ')) {
+                    qty = "10";
+                    name = str.replace(/^zehn\s+/i, '').trim();
+                }
             }
-        } else {
-            map[key] = { originalName: name, qty: qty };
-        }
+
+            name = name.replace(/[.,;]$/, '').trim();
+            if (!name || name.length < 2) return;
+
+            let key = name.toLowerCase();
+            if (map[key]) {
+                let q1 = parseInt(map[key].qty);
+                let q2 = parseInt(qty);
+                if (!isNaN(q1) && !isNaN(q2)) {
+                    map[key].qty = (q1 + q2).toString();
+                }
+            } else {
+                map[key] = { originalName: name, qty: qty };
+            }
+        });
     });
     return Object.values(map);
 }
@@ -1027,17 +979,13 @@ function renderEquipmentSectionInSheet(clsName, bgCustomData) {
     else if (clsName === "Kämpfer") classItems = ["1 Langschwert", "1 Plattenpanzer", "1 Schild", "1 Gewölbeforscherausrüstung"];
     else classItems = ["1 Dolch", "1 Entdeckerausrüstung"];
 
-    let bgEquipList = Array.isArray(bgCustomData.equipment) ? bgCustomData.equipment : [bgCustomData.equipment];
-    let toolsList = Array.isArray(bgCustomData.tools) ? bgCustomData.tools : [bgCustomData.tools];
-
-    let rawList = [...classItems, ...bgEquipList, ...toolsList];
-    let expanded = expandEquipmentEntries(rawList);
-    let accumulated = accumulateItems(expanded);
+    let rawList = [...classItems, bgCustomData.equipment, bgCustomData.tools];
+    let accumulated = accumulateItems(rawList);
 
     let rowsHtml = accumulated.map(item => `
         <div style="display: flex; justify-content: space-between; align-items: center; background: var(--card); border: 1.5px solid var(--border); padding: 6px 10px; border-radius: 6px; margin-bottom: 6px;">
-            <span onclick="showEquipmentModal('${item.originalName}')" style="color: var(--accent); cursor: pointer; font-weight: bold; text-decoration: underline;">
-                <i class="fa-solid fa-box-open" style="margin-right: 6px;"></i>${item.originalName}
+            <span style="color: var(--text); font-weight: bold;">
+                <i class="fa-solid fa-box-open" style="color: var(--accent); margin-right: 6px;"></i>${item.originalName}
             </span>
             <span style="background: var(--btn-back-bg); border: 1px solid var(--border); padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; color: var(--text);">
                 Anzahl: ${item.qty}
@@ -1046,7 +994,7 @@ function renderEquipmentSectionInSheet(clsName, bgCustomData) {
     `).join('');
 
     container.innerHTML = `
-        <div style="font-size:0.85rem; margin-bottom: 8px; color: var(--text-muted);"><b>Ausrüstungsliste (kumuliert):</b> (Klicke auf den Namen für Regeldetails)</div>
+        <div style="font-size:0.85rem; margin-bottom: 8px; color: var(--text-muted);"><b>Ausrüstungsliste (kumuliert):</b></div>
         <div style="display: flex; flex-direction: column;">${rowsHtml}</div>
     `;
 }
