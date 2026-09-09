@@ -5,19 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gewölbe und Flugechsen</title>
     
-    <!-- Theme vor dem Rendern setzen, um Farblitzen zu verhindern -->
     <script>
         const savedTheme = localStorage.getItem('dnd_theme') || 'standard';
         document.documentElement.setAttribute('data-theme', savedTheme);
     </script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Zentrales Stylesheet -->
     <link rel="stylesheet" href="style.css">
 
     <style>
-        /* Spezifisch für die Startseite (Layout-Anpassungen, die nicht global sind) */
         body {
             display: flex;
             justify-content: center;
@@ -25,7 +21,6 @@
             min-height: 100dvh;
             padding: 16px;
         }
-
         .menu-container {
             width: 100%;
             max-width: 400px;
@@ -34,125 +29,10 @@
             justify-content: center;
             align-items: center;
         }
-
-        .logo-frame {
-            background-color: var(--card);
-            border: 4px solid var(--border);
-            border-radius: 16px 10px 18px 12px;
-            padding: 32px 24px;
-            position: relative;
-            width: 100%;
-            box-shadow: 0 10px 25px rgba(44, 34, 30, 0.25), inset 0 0 20px rgba(78, 69, 60, 0.15);
-            filter: url(#rough-edge) drop-shadow(2px 3px 6px rgba(44,34,30,0.25));
-        }
-
-        /* Theme-Button oben rechts im Logo-Frame */
-        .btn-theme-toggle {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            width: 36px;
-            height: 36px;
-            background: var(--btn-back-bg);
-            color: var(--accent);
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 0.95rem;
-            transition: all 0.2s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .btn-theme-toggle:hover {
-            border-color: var(--accent);
-            background: var(--card);
-        }
-
-        .fantasy-landscape-icons {
-            font-size: 1.5rem;
-            color: var(--accent);
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-        }
-
-        h1 {
-            font-size: 1.35rem;
-            color: var(--text);
-            margin: 0 0 4px 0;
-            text-transform: uppercase;
-            font-family: serif;
-            letter-spacing: 0.5px;
-        }
-
-        .subtitle {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 24px;
-            font-style: italic;
-        }
-
-        .btn-rpg {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            background: var(--btn-back-bg);
-            color: var(--text);
-            border: 1.5px solid var(--border);
-            border-radius: 6px;
-            padding: 12px 16px;
-            font-size: 0.95rem;
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            text-decoration: none;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
-        }
-
-        .btn-rpg:hover {
-            background: var(--accent);
-            color: #ffffff;
-            border-color: var(--accent);
-        }
-
-        .btn-rpg.primary {
-            background: var(--accent);
-            color: #ffffff;
-            border-color: var(--accent-hover);
-        }
-
-        /* Theme-Auswahl Optionen im Modal */
-        .theme-option-btn {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 8px;
-            background: var(--btn-back-bg);
-            border: 1.5px solid var(--border);
-            border-radius: 6px;
-            color: var(--text);
-            font-weight: bold;
-            cursor: pointer;
-            text-align: left;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: all 0.2s;
-        }
-        .theme-option-btn:hover {
-            border-color: var(--accent);
-            background: var(--card);
-        }
     </style>
 </head>
 <body>
 
-    <!-- SVG-Filter für den grisselig-rauhen Kanten-Effekt -->
     <svg style="display:none;" aria-hidden="true">
         <filter id="rough-edge">
             <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="3" result="noise" />
@@ -162,27 +42,26 @@
 
     <div class="menu-container">
         <div class="logo-frame">
-            <!-- Pinsel-Button oben rechts -->
             <button class="btn-theme-toggle" onclick="openThemeModal()" title="Design wählen">
                 <i class="fa-solid fa-paintbrush"></i>
             </button>
 
-            <div class="fantasy-landscape-icons">
+            <div class="fantasy-landscape-icons" style="font-size: 1.5rem; color: var(--accent); margin-bottom: 12px; display: flex; justify-content: center; gap: 16px;">
                 <i class="fa-solid fa-mountain"></i>
                 <i class="fa-solid fa-chess-rook"></i>
                 <i class="fa-solid fa-dragon"></i>
             </div>
 
-            <h1>Gewölbe und Flugechsen</h1>
-            <div class="subtitle">D&D 2024 Regeln & Edition</div>
+            <h1 style="font-size: 1.35rem; color: var(--text); margin: 0 0 4px 0; text-transform: uppercase; font-family: serif; letter-spacing: 0.5px;">Gewölbe und Flugechsen</h1>
+            <div class="subtitle" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 24px; font-style: italic;">D&D 2024 Regeln & Edition</div>
 
-            <a href="creator.html" class="btn-rpg primary">
+            <a href="creator.html" class="main-btn" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 12px;">
                 <i class="fa-solid fa-user-plus"></i> Neuen Charakter erstellen
             </a>
-            <button class="btn-rpg" onclick="openCharacterModal()">
+            <button class="main-btn" onclick="openCharacterModal()" style="background: var(--btn-back-bg); color: var(--text); border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 12px;">
                 <i class="fa-solid fa-scroll"></i> Abenteuer fortsetzen
             </button>
-            <button class="btn-rpg" onclick="openGraveyardModal()" style="border-color: var(--border); color: var(--text-muted);">
+            <button class="main-btn" onclick="openGraveyardModal()" style="background: var(--btn-back-bg); color: var(--text-muted); border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 0;">
                 <i class="fa-solid fa-monument"></i> Heldenfriedhof
             </button>
         </div>
@@ -190,13 +69,13 @@
 
     <!-- MODAL: Design / Theme Auswahl -->
     <div id="theme-modal" class="modal-overlay">
-        <div class="modal-card">
-            <div class="modal-header">
-                <h2>Design wählen</h2>
-                <button class="close-btn" onclick="closeThemeModal()"><i class="fa-solid fa-xmark"></i></button>
+        <div class="modal-content">
+            <div class="modal-title">
+                <span>Design wählen</span>
+                <button class="close-btn" onclick="closeThemeModal()" style="background:none; border:none; color:var(--text-muted); cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
-            <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 14px;">
+            <div class="modal-body" style="overflow: visible;">
                 <button class="theme-option-btn" onclick="setTheme('standard')">
                     <span><i class="fa-solid fa-scroll" style="color: var(--accent); margin-right: 8px;"></i> Standard (Pergament)</span>
                     <i class="fa-solid fa-check" id="check-standard" style="display:none; color: var(--accent);"></i>
@@ -207,137 +86,86 @@
                 </button>
             </div>
 
-            <button class="btn-rpg" onclick="closeThemeModal()" style="margin-bottom: 0;">Schließen</button>
+            <button class="main-btn" onclick="closeThemeModal()" style="margin-top: 10px;">Schließen</button>
         </div>
     </div>
 
     <!-- MODAL: Charakter-Auswahl -->
     <div id="char-modal" class="modal-overlay">
-        <div class="modal-card">
-            <div class="modal-header">
-                <h2>Wähle deinen Helden</h2>
-                <button class="close-btn" onclick="closeCharacterModal()"><i class="fa-solid fa-xmark"></i></button>
+        <div class="modal-content">
+            <div class="modal-title">
+                <span>Wähle deinen Helden</span>
+                <button class="close-btn" onclick="closeCharacterModal()" style="background:none; border:none; color:var(--text-muted); cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
-            <div id="character-list-container" class="character-list" style="overflow-y: auto; max-height: 50vh; display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px;">
-                <!-- Wird per JavaScript befüllt -->
-            </div>
+            <div id="character-list-container" class="modal-body" style="max-height: 40vh; display: flex; flex-direction: column; gap: 10px;"></div>
 
-            <button class="btn-rpg" onclick="closeCharacterModal()" style="margin-bottom: 0;">Abbrechen</button>
+            <button class="main-btn" onclick="closeCharacterModal()" style="margin-top: 10px; background: var(--btn-back-bg); color: var(--text); border: 1.5px solid var(--border);">Abbrechen</button>
         </div>
     </div>
 
-    <!-- MODAL: Heldenfriedhof (Archiv) -->
+    <!-- MODAL: Heldenfriedhof -->
     <div id="graveyard-modal" class="modal-overlay">
-        <div class="modal-card">
-            <div class="modal-header">
-                <h2><i class="fa-solid fa-monument"></i> Heldenfriedhof</h2>
-                <button class="close-btn" onclick="closeGraveyardModal()"><i class="fa-solid fa-xmark"></i></button>
+        <div class="modal-content">
+            <div class="modal-title">
+                <span><i class="fa-solid fa-monument"></i> Heldenfriedhof</span>
+                <button class="close-btn" onclick="closeGraveyardModal()" style="background:none; border:none; color:var(--text-muted); cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
-            <div id="graveyard-list-container" class="character-list" style="overflow-y: auto; max-height: 50vh; display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px;">
-                <!-- Wird per JavaScript befüllt -->
-            </div>
+            <div id="graveyard-list-container" class="modal-body" style="max-height: 40vh; display: flex; flex-direction: column; gap: 10px;"></div>
 
-            <button class="btn-rpg" onclick="closeGraveyardModal()" style="margin-bottom: 0;">Schließen</button>
+            <button class="main-btn" onclick="closeGraveyardModal()" style="margin-top: 10px; background: var(--btn-back-bg); color: var(--text); border: 1.5px solid var(--border);">Schließen</button>
         </div>
     </div>
 
     <script>
-        // --- THEME STEUERUNG ---
         function openThemeModal() {
             const current = localStorage.getItem('dnd_theme') || 'standard';
             document.getElementById('check-standard').style.display = current === 'standard' ? 'inline' : 'none';
             document.getElementById('check-dungeon').style.display = current === 'dungeon' ? 'inline' : 'none';
             document.getElementById('theme-modal').style.display = 'flex';
         }
-
-        function closeThemeModal() {
-            document.getElementById('theme-modal').style.display = 'none';
-        }
-
+        function closeThemeModal() { document.getElementById('theme-modal').style.display = 'none'; }
         function setTheme(themeName) {
             localStorage.setItem('dnd_theme', themeName);
             document.documentElement.setAttribute('data-theme', themeName);
             closeThemeModal();
         }
 
-        // --- CHARAKTER LOGIK ---
         function getStoredCharacters() {
             let characters = [];
             const savedList = localStorage.getItem('dnd_character_list');
             const singleSaved = localStorage.getItem('dnd_active_character');
-
-            if (savedList) {
-                try { characters = JSON.parse(savedList); } catch(e) {}
-            } else if (singleSaved) {
-                try { characters = [JSON.parse(singleSaved)]; } catch(e) {}
-            }
-
-            let updated = false;
-            characters.forEach((char, index) => {
-                if (!char.id) {
-                    char.id = 'char_legacy_' + index + '_' + Date.now();
-                    updated = true;
-                }
-            });
-            if (updated) {
-                saveStoredCharacters(characters);
-            }
-
+            if (savedList) { try { characters = JSON.parse(savedList); } catch(e) {} }
+            else if (singleSaved) { try { characters = [JSON.parse(singleSaved)]; } catch(e) {} }
             return characters;
         }
-
-        function saveStoredCharacters(characters) {
-            localStorage.setItem('dnd_character_list', JSON.stringify(characters));
-        }
+        function saveStoredCharacters(characters) { localStorage.setItem('dnd_character_list', JSON.stringify(characters)); }
 
         function openCharacterModal() {
             const container = document.getElementById('character-list-container');
             container.innerHTML = '';
-
             const characters = getStoredCharacters().filter(c => !c.archived);
-
             if (characters.length === 0) {
-                container.innerHTML = `
-                    <div style="font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-bottom: 8px;">Keine aktiven Helden gefunden...</div>
-                `;
+                container.innerHTML = `<div style="font-size: 0.85rem; color: var(--text-muted); text-align: center;">Keine aktiven Helden gefunden...</div>`;
             } else {
                 characters.forEach((char) => {
                     const item = document.createElement('div');
-                    item.className = 'char-item';
-                    item.style.cssText = "background: var(--btn-back-bg); border: 1.5px solid var(--border); border-radius: 6px; padding: 12px; display: flex; justify-content: space-between; align-items: center;";
-                    
-                    const lastAccess = char.lastAccess ? new Date(char.lastAccess).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : "Unbekannt";
-
+                    item.style.cssText = "background: var(--btn-back-bg); border: 1.5px solid var(--border); border-radius: 6px; padding: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer;";
+                    item.onclick = () => selectCharacter(char.id);
                     item.innerHTML = `
-                        <div class="char-info" onclick="selectCharacter('${char.id}')" style="flex: 1; cursor: pointer;">
-                            <div style="font-weight: bold; color: var(--text); font-size: 1rem; display: flex; justify-content: space-between;">
-                                <span><i class="fa-solid fa-shield-halved"></i> ${char.name || "Unbenannter Held"}</span>
-                                <span style="color: var(--accent);">Stufe ${char.level || 1}</span>
-                            </div>
-                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; display: flex; justify-content: space-between;">
-                                <span><i class="fa-solid fa-hat-wizard"></i> ${char.class || "-"} (${char.species || "-"})</span>
-                                <span><i class="fa-solid fa-clock"></i> ${lastAccess}</span>
-                            </div>
+                        <div>
+                            <div style="font-weight: bold; color: var(--text);">${char.name || "Held"} (Stufe ${char.level || 1})</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">${char.class || "-"} | ${char.species || "-"}</div>
                         </div>
-                        <div style="display: flex; gap: 8px; margin-left: 10px;">
-                            <button class="icon-action-btn" onclick="archiveCharacter(event, '${char.id}')" title="Ins Archiv verschieben" style="background: none; border: 1.5px solid var(--border); border-radius: 4px; padding: 6px 8px; cursor: pointer; color: var(--text-muted);">
-                                <i class="fa-solid fa-monument"></i>
-                            </button>
-                        </div>
+                        <button onclick="archiveCharacter(event, '${char.id}')" style="background:none; border:1.5px solid var(--border); border-radius:4px; padding:6px; color:var(--text-muted); cursor:pointer;"><i class="fa-solid fa-monument"></i></button>
                     `;
                     container.appendChild(item);
                 });
             }
-
             document.getElementById('char-modal').style.display = 'flex';
         }
-
-        function closeCharacterModal() {
-            document.getElementById('char-modal').style.display = 'none';
-        }
-
+        function closeCharacterModal() { document.getElementById('char-modal').style.display = 'none'; }
         function selectCharacter(id) {
             let characters = getStoredCharacters();
             const index = characters.findIndex(c => c.id === id);
@@ -348,93 +176,48 @@
             }
             window.location.href = 'manager.html';
         }
-
         function archiveCharacter(event, id) {
             event.stopPropagation();
             let characters = getStoredCharacters();
             const index = characters.findIndex(c => c.id === id);
-            if (index >= 0) {
-                characters[index].archived = true;
-                saveStoredCharacters(characters);
-                openCharacterModal();
-            }
+            if (index >= 0) { characters[index].archived = true; saveStoredCharacters(characters); openCharacterModal(); }
         }
 
         function openGraveyardModal() {
             const container = document.getElementById('graveyard-list-container');
             container.innerHTML = '';
-
             const characters = getStoredCharacters().filter(c => c.archived);
-
             if (characters.length === 0) {
-                container.innerHTML = `
-                    <div style="font-size: 0.85rem; color: var(--text-muted); text-align: center; padding: 20px;">Der Friedhof ist leer. Noch ruht kein Held in Frieden...</div>
-                `;
+                container.innerHTML = `<div style="font-size: 0.85rem; color: var(--text-muted); text-align: center;">Der Friedhof ist leer.</div>`;
             } else {
                 characters.forEach((char) => {
                     const item = document.createElement('div');
-                    item.className = 'char-item';
-                    item.style.cssText = "background: var(--btn-back-bg); border: 1.5px solid var(--border); border-radius: 6px; padding: 12px; display: flex; justify-content: space-between; align-items: center;";
-                    
-                    const lastAccess = char.lastAccess ? new Date(char.lastAccess).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }) : "Unbekannt";
-
+                    item.style.cssText = "background: var(--btn-back-bg); border: 1.5px solid var(--border); border-radius: 6px; padding: 10px; display: flex; justify-content: space-between; align-items: center;";
                     item.innerHTML = `
-                        <div class="char-info" onclick="selectArchivedCharacter('${char.id}')" style="flex: 1; cursor: pointer;">
-                            <div style="font-weight: bold; color: var(--text); font-size: 1rem; display: flex; justify-content: space-between;">
-                                <span><i class="fa-solid fa-ghost"></i> ${char.name || "Unbenannter Held"}</span>
-                                <span style="font-size: 0.8rem;">Stufe ${char.level || 1}</span>
-                            </div>
-                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; display: flex; justify-content: space-between;">
-                                <span>${char.class || "-"} (${char.species || "-"})</span>
-                                <span>Ruht seit: ${lastAccess}</span>
-                            </div>
+                        <div>
+                            <div style="font-weight: bold; color: var(--text);">${char.name || "Held"}</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">${char.class || "-"}</div>
                         </div>
-                        <div style="display: flex; gap: 8px; margin-left: 10px;">
-                            <button class="icon-action-btn" onclick="restoreCharacter(event, '${char.id}')" title="Wiederbeleben & Laden" style="background: none; border: 1.5px solid var(--border); border-radius: 4px; padding: 6px 8px; cursor: pointer; color: var(--text-muted);">
-                                <i class="fa-solid fa-wand-magic-sparkles"></i>
-                            </button>
-                            <button class="icon-action-btn delete" onclick="deleteCharacterPermanently(event, '${char.id}')" title="Endgültig löschen" style="background: none; border: 1.5px solid var(--border); border-radius: 4px; padding: 6px 8px; cursor: pointer; color: #a94442;">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
+                        <div style="display: flex; gap: 6px;">
+                            <button onclick="restoreCharacter(event, '${char.id}')" style="background:none; border:1.5px solid var(--border); border-radius:4px; padding:6px; color:var(--text-muted); cursor:pointer;"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+                            <button onclick="deleteCharacterPermanently(event, '${char.id}')" style="background:none; border:1.5px solid var(--border); border-radius:4px; padding:6px; color:#a94442; cursor:pointer;"><i class="fa-solid fa-trash-can"></i></button>
                         </div>
                     `;
                     container.appendChild(item);
                 });
             }
-
             document.getElementById('graveyard-modal').style.display = 'flex';
         }
-
-        function closeGraveyardModal() {
-            document.getElementById('graveyard-modal').style.display = 'none';
-        }
-
-        function selectArchivedCharacter(id) {
-            let characters = getStoredCharacters();
-            const index = characters.findIndex(c => c.id === id);
-            if (index >= 0) {
-                delete characters[index].archived;
-                characters[index].lastAccess = new Date().toISOString();
-                saveStoredCharacters(characters);
-                localStorage.setItem('dnd_active_character', JSON.stringify(characters[index]));
-            }
-            window.location.href = 'manager.html';
-        }
-
+        function closeGraveyardModal() { document.getElementById('graveyard-modal').style.display = 'none'; }
         function restoreCharacter(event, id) {
             event.stopPropagation();
             let characters = getStoredCharacters();
             const index = characters.findIndex(c => c.id === id);
-            if (index >= 0) {
-                delete characters[index].archived;
-                saveStoredCharacters(characters);
-                openGraveyardModal();
-            }
+            if (index >= 0) { delete characters[index].archived; saveStoredCharacters(characters); openGraveyardModal(); }
         }
-
         function deleteCharacterPermanently(event, id) {
             event.stopPropagation();
-            if (confirm("Möchtest du diesen Helden wirklich endgültig aus dem Buch der Toten löschen?")) {
+            if (confirm("Endgültig löschen?")) {
                 let characters = getStoredCharacters();
                 characters = characters.filter(c => c.id !== id);
                 saveStoredCharacters(characters);
