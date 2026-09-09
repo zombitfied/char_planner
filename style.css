@@ -239,7 +239,7 @@ select:focus, input:focus {
     opacity: 0.8; 
 }
 
-/* Goldener Haupt-Button für das Startmenü */
+/* Goldener Haupt-Button (mit 3px dickem Rahmen) */
 .btn-gold-main {
     background: var(--accent);
     color: #fff;
@@ -265,7 +265,7 @@ select:focus, input:focus {
     background: var(--accent-hover); 
 }
 
-/* Grauer Haupt-Button (wie der goldene, nur in Grau) */
+/* Grauer Haupt-Button (exakt wie der goldene, nur mit grauem Hintergrund & 3px Rahmen) */
 .btn-gray-main {
     background: var(--btn-back-bg);
     color: var(--text);
