@@ -15,7 +15,7 @@
     --btn-back-bg: #faf7f2;
 }
 
-/* Beispiel für ein späteres "Dungeon" / Dark Theme */
+/* Dungeon / Dark Theme */
 [data-theme="dungeon"] {
     --bg: #121212;
     --card: #1e1e1e;
