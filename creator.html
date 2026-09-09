@@ -379,6 +379,59 @@
 </div>
 
 <script>
+// --- DEBUG-KONSOLE ---
+const debugBox = document.createElement('div');
+debugBox.style.cssText = "position:fixed; bottom:0; left:0; width:100%; height:120px; background:black; color:lime; font-size:10px; overflow-y:scroll; z-index:99999; padding:5px; display:none; box-sizing:border-box;";
+document.body.appendChild(debugBox);
+
+function toggleDebugConsole() {
+    debugBox.style.display = (debugBox.style.display === 'none' || debugBox.style.display === '') ? 'block' : 'none';
+}
+
+function debugLog(text, color = "lime") {
+    const time = new Date().toLocaleTimeString();
+    debugBox.innerHTML += `<br><span style="color:${color};">[${time}] ${text}</span>`;
+    debugBox.scrollTop = debugBox.scrollHeight;
+}
+
+window.onerror = function(msg, url, line) {
+    debugLog(`FEHLER: ${msg} (Zeile ${line})`, "red");
+};
+
+const oldLog = console.log;
+console.log = function(...args) {
+    debugLog(`LOG: ${args.join(' ')}`, "cyan");
+    oldLog.apply(console, args);
+};
+
+const oldWarn = console.warn;
+console.warn = function(...args) {
+    debugLog(`WARN: ${args.join(' ')}`, "orange");
+    oldWarn.apply(console, args);
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    debugLog("DOM geladen - Event-Tracking aktiv.");
+    
+    document.addEventListener('change', (e) => {
+        if (e.target && e.target.id) {
+            debugLog(`Geändert: #${e.target.id} auf "${e.target.value}"`, "yellow");
+        } else if (e.target && e.target.className) {
+            debugLog(`Geändert: .${e.target.className} auf "${e.target.value}"`, "yellow");
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if (e.target && (e.target.tagName === 'BUTTON' || e.target.tagName === 'A' || e.target.classList.contains('stat-box'))) {
+            let name = e.target.innerText || e.target.id || e.target.className;
+            debugLog(`Klick auf: [${e.target.tagName}] ${name.trim().substring(0, 20)}`, "magenta");
+        }
+    });
+});
+
+debugLog("Konsole initialisiert und bereit.");
+
+
 const BACKGROUNDS_JSON_URL = "./backgrounds.json";
 const SPELLS_HTML_URL = "./spells-parsed.html";
 const SPELL_LISTS_HTML_URL = "./spelllists-parsed.html";
@@ -1061,24 +1114,6 @@ function renderEquipmentSectionInSheet(clsName) {
         container.innerHTML = `<div style="font-size:0.85rem;"><b>Feste Startausrüstung:</b> Gemäß Klassenvorgabe in der HTML-Datei.</div>`;
     }
 }
-
-// --- DEBUG-KONSOLE ---
-const debugBox = document.createElement('div');
-debugBox.style.cssText = "position:fixed; bottom:0; left:0; width:100%; max-height:180px; background:black; color:lime; font-size:10px; overflow-y:scroll; z-index:99999; padding:5px; display:none;";
-document.body.appendChild(debugBox);
-
-function toggleDebugConsole() {
-    debugBox.style.display = debugBox.style.display === 'none' ? 'block' : 'none';
-}
-
-window.onerror = function(msg, url, line) {
-    debugBox.innerHTML += `<br><span style="color:red;">[FEHLER]</span> ${msg} (Zeile ${line})`;
-};
-const oldLog = console.log;
-console.log = function(...args) {
-    debugBox.innerHTML += `<br>[LOG] ${args.join(' ')}`;
-    oldLog.apply(console, args);
-};
 </script>
 </body>
 </html>
