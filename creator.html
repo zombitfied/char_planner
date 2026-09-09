@@ -1,410 +1,4 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D&D 5e / 2024 Charakter erstellen</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root { 
-            --bg: #f4f0ea; 
-            --card: #ffffff; 
-            --accent: #b8860b; 
-            --accent-hover: #996515;
-            --text: #2c221e; 
-            --text-muted: #6b5b52;
-            --border: #7c7265; 
-        }
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-            background: var(--bg); 
-            color: var(--text); 
-            margin: 0; 
-            padding: 15px; 
-            background-image: radial-gradient(#e6dbcc 15%, transparent 16%);
-            background-size: 20px 20px;
-        }
-        body.modal-open {
-            overflow: hidden;
-        }
-        .container { max-width: 750px; margin: 0 auto; }
-        
-        .top-nav { margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-        
-        .btn-back {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #faf7f2;
-            color: var(--text-muted);
-            border: 3px solid var(--border);
-            padding: 10px 16px;
-            border-radius: 10px 14px 12px 16px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 4px 12px rgba(44, 34, 30, 0.1);
-            filter: url(#rough-edge);
-        }
-        .btn-back:hover { color: var(--text); border-color: var(--accent); background: #f0ebe1; }
-
-        .btn-toggle-console {
-            background: #faf7f2;
-            color: var(--accent);
-            border: 2px solid var(--border);
-            width: 38px;
-            height: 38px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 6px rgba(44, 34, 30, 0.1);
-            filter: url(#rough-edge);
-        }
-        .btn-toggle-console:hover { border-color: var(--accent); background: #f0ebe1; }
-
-        .page-title { 
-            font-size: 1.4rem; 
-            text-align: center; 
-            color: var(--text); 
-            font-family: serif; 
-            text-transform: uppercase; 
-            background: var(--card);
-            border: 3px solid var(--border);
-            border-radius: 14px 10px 16px 12px;
-            padding: 16px;
-            margin-bottom: 20px;
-            box-shadow: 0 6px 18px rgba(44, 34, 30, 0.12);
-            filter: url(#rough-edge);
-            letter-spacing: 0.5px;
-        }
-        
-        .step-card { 
-            background: var(--card); 
-            border: 3px solid var(--border); 
-            border-radius: 12px 16px 10px 14px; 
-            padding: 15px; 
-            margin-bottom: 15px; 
-            box-shadow: 0 6px 18px rgba(44, 34, 30, 0.12);
-            filter: url(#rough-edge);
-        }
-        .step-title { font-size: 1.1rem; color: var(--accent); margin-top: 0; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-weight: bold; text-transform: uppercase; }
-        label { display: block; margin-top: 8px; font-weight: bold; font-size: 0.85rem; color: var(--text-muted); }
-        
-        .input-row { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
-        select, button, input { width: 100%; padding: 10px; border-radius: 6px; border: 1.5px solid var(--border); background: #faf7f2; color: var(--text); font-size: 0.95rem; box-sizing: border-box; }
-        select:focus, input:focus { outline: none; border-color: var(--accent); }
-        
-        .info-btn { width: 38px; height: 38px; flex-shrink: 0; padding: 0; background: #faf7f2; color: var(--accent); border: 1.5px solid var(--border); border-radius: 6px; font-weight: bold; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; filter: url(#rough-edge); white-space: nowrap; }
-        .info-btn:hover { background: #f0ebe1; }
-
-        .spell-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #faf7f2;
-            border: 1.5px solid var(--border);
-            padding: 8px 12px;
-            border-radius: 8px;
-            margin-bottom: 6px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            color: var(--text);
-        }
-
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .grid-race { display: grid; grid-template-columns: 1fr 1.8fr; gap: 10px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        
-        .main-btn { 
-            background: var(--accent); 
-            color: #fff; 
-            font-weight: bold; 
-            border: 3px solid var(--border); 
-            margin-top: 15px; 
-            padding: 14px; 
-            cursor: pointer; 
-            font-size: 1rem; 
-            border-radius: 8px 12px 10px 14px; 
-            width: 100%; 
-            text-transform: uppercase; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            filter: url(#rough-edge);
-        }
-        .main-btn:hover { background: var(--accent-hover); }
-        .main-btn:active { opacity: 0.8; }
-
-        .sheet { 
-            background: var(--card); 
-            padding: 15px; 
-            border-radius: 12px 16px 10px 14px; 
-            margin-top: 20px; 
-            border: 3px solid var(--border); 
-            display: none; 
-            box-shadow: 0 6px 18px rgba(44, 34, 30, 0.12);
-            filter: url(#rough-edge);
-        }
-        .stat-box { background: #faf7f2; border: 1.5px solid var(--border); padding: 8px; border-radius: 6px; text-align: center; cursor: pointer; transition: background 0.2s; }
-        .stat-box:hover { background: #f0ebe1; }
-        .stat-val { font-size: 1.2rem; font-weight: bold; color: var(--text); }
-        .stat-mod { font-size: 0.85rem; color: var(--accent); }
-        
-        @keyframes glitter-glow-soft {
-            0% { background-color: #faf7f2; border-color: var(--border); box-shadow: none; }
-            50% { background-color: #f0f9fa; border-color: #80deea; box-shadow: 0 0 8px rgba(0, 188, 212, 0.25); }
-            100% { background-color: #faf7f2; border-color: var(--border); box-shadow: none; }
-        }
-        .glitter-box {
-            animation: glitter-glow-soft 4s infinite ease-in-out;
-        }
-
-        .badge { background: #faf7f2; border: 1.5px solid var(--border); color: var(--text); padding: 6px 10px; border-radius: 4px; font-size: 0.85rem; display: inline-block; margin-right: 5px; margin-top: 5px; cursor: pointer; transition: background 0.2s; }
-        .badge:hover { background: #f0ebe1; border-color: var(--accent); }
-        
-        .error { color: #d32f2f; font-size: 0.85rem; margin-top: 5px; display: none; }
-        
-        .spell-container { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
-        
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(44,34,30,0.6); backdrop-filter: blur(2px); z-index: 1000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; overflow: hidden; }
-        .modal-content { 
-            background: var(--card); 
-            border: 3px solid var(--border); 
-            border-radius: 12px 16px 10px 14px; 
-            max-width: 450px; 
-            width: 85%; 
-            padding: 15px; 
-            color: var(--text); 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
-            text-align: center;
-            filter: url(#rough-edge);
-            max-height: 55vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .modal-title { font-size: 1.1rem; color: var(--accent); font-weight: bold; margin-bottom: 4px; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 10px; flex-shrink: 0; }
-        .modal-subtitle { font-size: 0.85rem; color: var(--accent); font-weight: bold; margin-bottom: 8px; text-transform: uppercase; flex-shrink: 0; }
-        
-        .modal-icon-box {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 28px;
-            height: 28px;
-            background: #faf7f2;
-            border: 2px solid var(--border);
-            border-radius: 6px;
-            color: var(--accent);
-            font-size: 0.85rem;
-        }
-
-        .modal-body { font-size: 0.85rem; line-height: 1.4; color: var(--text-muted); text-align: left; overflow-y: auto; flex-grow: 1; padding-right: 5px; }
-
-        ul { margin: 5px 0; padding-left: 20px; font-size: 0.9rem; color: var(--text-muted); }
-        li { margin-bottom: 4px; }
-        
-        .special-attribute-box {
-            background: #faf7f2;
-            border: 1.5px dashed var(--accent);
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 10px;
-            display: none;
-        }
-        .special-attribute-box label {
-            color: var(--accent);
-            margin-top: 0;
-        }
-    </style>
-</head>
-<body>
-
-<svg style="display:none;" aria-hidden="true">
-    <filter id="rough-edge">
-        <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="3" result="noise" />
-        <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G" />
-    </filter>
-</svg>
-
-<div class="container">
-    <div class="top-nav">
-        <a href="index.html" class="btn-back">
-            <i class="fa-solid fa-arrow-left"></i> Zum Eingang
-        </a>
-        <button type="button" class="btn-toggle-console" onclick="toggleDebugConsole()" title="Konsole öffnen">
-            <i class="fa-solid fa-bug"></i>
-        </button>
-    </div>
-
-    <div class="page-title">Held/in erstellen</div>
-
-    <div class="step-card">
-        <div class="step-title">Identität & Volk</div>
-        <div>
-            <label for="char-name">Name</label>
-            <input type="text" id="char-name" value="Gimble">
-        </div>
-        <div class="grid-race" style="margin-top: 8px;">
-            <div>
-                <label for="main-race">Volk</label>
-                <div class="input-row">
-                    <select id="main-race" onchange="onMainRaceChange()"></select>
-                </div>
-            </div>
-            <div id="subrace-container" style="display: none;">
-                <label for="sub-race">Abstammung</label>
-                <div class="input-row">
-                    <select id="sub-race" onchange="updateSubraceOptions()"></select>
-                    <button type="button" class="info-btn" onclick="showRaceModal()">ℹ</button>
-                </div>
-            </div>
-        </div>
-        <div id="special-attr-container" class="special-attribute-box">
-            <label id="special-attr-label">Spezial-Attribut wählen:</label>
-            <select id="special-attr-select"></select>
-        </div>
-    </div>
-
-    <div class="step-card">
-        <div class="step-title">Klasse und Hintergrund</div>
-        <div class="grid-2">
-            <div>
-                <label for="class-select">Klasse</label>
-                <div class="input-row">
-                    <select id="class-select" onchange="onClassChange()"></select>
-                    <button type="button" class="info-btn" id="class-info-btn" onclick="showClassModal()"><i class="fa-solid fa-wrench" id="class-icon-indicator"></i></button>
-                </div>
-            </div>
-            <div>
-                <label for="bg-select">Hintergrund</label>
-                <div class="input-row">
-                    <select id="bg-select" onchange="onBgChange()"></select>
-                    <button type="button" class="info-btn" onclick="showBgModal()">ℹ</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Hintergrund Attributsverteilung (+3 Punkte) -->
-        <div style="margin-top: 12px; background: #faf7f2; padding: 10px; border-radius: 8px; border: 1.5px solid var(--border);">
-            <label for="bg-asi-mode" style="margin-top:0; color:var(--accent);">Hintergrund-Attributsbonus (+3 Punkte):</label>
-            <select id="bg-asi-mode" onchange="onBgAsiModeChange()" style="margin-top:4px; margin-bottom:8px;">
-                <option value="2_1">+2 auf ein Attribut, +1 auf ein anderes</option>
-                <option value="1_1_1">+1 auf drei verschiedene Attribute</option>
-            </select>
-            <div id="bg-asi-slots" class="grid-3" style="gap:6px;"></div>
-            <div id="bg-asi-error" class="error" style="display:none;">Wähle unterschiedliche Attribute ohne Dopplungen innerhalb der Boni!</div>
-        </div>
-
-        <!-- Dynamische Hintergrund-Wahlmöglichkeiten (Werkzeuge & Ausrüstung) -->
-        <div id="bg-dynamic-options-container" style="margin-top: 12px; display: none; background: #faf7f2; padding: 10px; border-radius: 8px; border: 1.5px solid var(--border);">
-            <div id="bg-tool-choice-wrapper" style="margin-bottom: 8px; display: none;">
-                <label id="bg-tool-label" style="margin-top:0; color:var(--accent);">Werkzeug-Wahl:</label>
-                <select id="bg-tool-select" style="margin-top:4px;"></select>
-            </div>
-            <div id="bg-eq-choice-wrapper" style="display: none;">
-                <label id="bg-eq-label" style="margin-top:0; color:var(--accent);">Startausrüstung (Paket wählen):</label>
-                <select id="bg-eq-select" style="margin-top:4px;">
-                    <option value="A">Option A (Ausrüstungspaket + Gold)</option>
-                    <option value="B">Option B (50 Goldstücke)</option>
-                </select>
-            </div>
-        </div>
-    </div>
-
-    <div class="step-card">
-        <div class="step-title">Start-Attribute zuweisen</div>
-        <div class="grid-3">
-            <div><label>Stärke</label><select class="array-select" id="str-val" onchange="onStatsChange()"></select></div>
-            <div><label>Geschicklichkeit</label><select class="array-select" id="dex-val" onchange="onStatsChange()"></select></div>
-            <div><label>Konstitution</label><select class="array-select" id="con-val" onchange="onStatsChange()"></select></div>
-            <div><label>Intelligenz</label><select class="array-select" id="int-val" onchange="onStatsChange()"></select></div>
-            <div><label>Weisheit</label><select class="array-select" id="wis-val" onchange="onStatsChange()"></select></div>
-            <div><label>Charisma</label><select class="array-select" id="cha-val" onchange="onStatsChange()"></select></div>
-        </div>
-        <div id="array-error" class="error">Wähle 15, 14, 13, 12, 10, 8 ohne Dopplungen!</div>
-    </div>
-
-    <div class="step-card">
-        <div class="step-title">Fertigkeiten wählen</div>
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-            <div>
-                <label for="skill1">Fertigkeit 1</label>
-                <div class="input-row">
-                    <select id="skill1" onchange="validateSkills()"></select>
-                    <button type="button" class="info-btn" onclick="showSkillModal('skill1')">ℹ</button>
-                </div>
-            </div>
-            <div>
-                <label for="skill2">Fertigkeit 2</label>
-                <div class="input-row">
-                    <select id="skill2" onchange="validateSkills()"></select>
-                    <button type="button" class="info-btn" onclick="showSkillModal('skill2')">ℹ</button>
-                </div>
-            </div>
-        </div>
-        <div id="skill-error" class="error">Wähle 2 verschiedene Fertigkeiten, die sich nicht mit deinem Hintergrund überschneiden!</div>
-    </div>
-
-    <div class="step-card" id="spells-step-card">
-        <div class="step-title">Klassen-Zauber wählen</div>
-        
-        <label id="cantrip-label">Zaubertricks wählen</label>
-        <div class="spell-container" id="cantrips-group"></div>
-
-        <label id="prep-spells-label" style="margin-top:15px;">Stufe 1 Zauber wählen:</label>
-        <div class="spell-container" id="level1-group"></div>
-    </div>
-
-    <button class="main-btn" onclick="buildCharacter()">Charakterblatt generieren</button>
-
-    <div id="sheet" class="sheet">
-        <h2 id="screen-out-name" style="margin-top:0; color:var(--accent);"></h2>
-        <div id="screen-out-meta" style="font-size:0.9rem; color:var(--text-muted); text-align:center; margin-bottom:10px;"></div>
-        
-        <div style="margin-bottom: 12px;">
-            <span class="badge" id="screen-out-hp" onclick="showCalcModal('HP')"></span>
-            <span class="badge" id="screen-out-ac" onclick="showCalcModal('RK')"></span>
-            <span class="badge" id="screen-out-init" onclick="showCalcModal('Initiative')"></span>
-            <span class="badge" id="screen-out-prof" onclick="showCalcModal('Übungsbonus')">Übungsbonus: +2</span>
-            <span class="badge" id="screen-out-speed" onclick="showCalcModal('Bewegungsrate')"></span>
-        </div>
-
-        <h3 style="color:var(--accent);">Attributswerte & Modifikatoren</h3>
-        <div class="grid-3" id="screen-out-stats" style="margin-bottom:15px;"></div>
-
-        <h3 style="color:var(--accent);">Fertigkeiten & Merkmale</h3>
-        <ul id="screen-out-features" style="margin-bottom:15px;"></ul>
-
-        <h3 style="color:var(--accent);">Ausrüstung & Waffen-Konfiguration</h3>
-        <div id="sheet-equipment-controls" style="background:#faf7f2; padding:12px; border-radius:6px; border:1.5px solid var(--border); margin-bottom:15px;"></div>
-
-        <h3 style="color:var(--accent);">Zauber & Zaubertricks Übersicht</h3>
-        <div id="screen-out-spells" style="margin-bottom:20px;"></div>
-
-        <div style="display: flex; gap: 10px; margin-top: 15px;">
-            <button class="main-btn" onclick="manualSaveCharacter()" style="margin-top:0; background:#6c757d; color:#fff;">
-                <i class="fa-solid fa-floppy-disk"></i> Held speichern
-            </button>
-            <button id="btn-adventure" class="main-btn" onclick="startAdventure()" style="margin-top:0; background:#cccccc; color:#666666; cursor: not-allowed;" disabled>
-                <i class="fa-solid fa-dungeon"></i> Auf ins Abenteuer!
-            </button>
-        </div>
-    </div>
-</div>
-
-<div class="modal-overlay" id="rule-modal" onclick="closeModal()">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <div class="modal-title" id="modal-title">Regeldetails</div>
-        <div id="modal-subtitle-container"></div>
-        <div class="modal-body" id="modal-body">Beschreibungstext...</div>
-    </div>
-</div>
-
 <script>
-const LOCAL_JSON_URL = "./compendium.json";
 const BACKGROUNDS_JSON_URL = "./backgrounds.json";
 const SPELLS_HTML_URL = "./spells-parsed.html";
 const SPELL_LISTS_HTML_URL = "./spelllists-parsed.html";
@@ -421,33 +15,11 @@ const attributeDescriptions = {
 };
 
 const attrNamesDE = {
-    "STR": "Stärke",
-    "DEX": "Geschicklichkeit",
-    "CON": "Konstitution",
-    "INT": "Intelligenz",
-    "WIS": "Weisheit",
-    "CHA": "Charisma"
+    "STR": "Stärke", "DEX": "Geschicklichkeit", "CON": "Konstitution",
+    "INT": "Intelligenz", "WIS": "Weisheit", "CHA": "Charisma"
 };
 
-const classMapping = {
-    "Barbarian": "Barbar",
-    "Bard": "Barde",
-    "Cleric": "Kleriker",
-    "Druid": "Druide",
-    "Fighter": "Kämpfer",
-    "Monk": "Mönch",
-    "Paladin": "Paladin",
-    "Ranger": "Waldläufer",
-    "Rogue": "Schurke",
-    "Sorcerer": "Zauberer",
-    "Warlock": "Hexenmeister",
-    "Wizard": "Magier",
-    "Artificer": "Artifizier"
-};
-
-const classMapENtoDE = classMapping;
-const classMapDEtoEN = Object.fromEntries(Object.entries(classMapping).map(([k, v]) => [v, k]));
-
+// Exakte Zuordnung der deutschen Klassen zu ihren HTML-Dateien im Ordner /klassen/
 const classFileMap = {
     "Artifizier": "artifizier.html",
     "Barbar": "barbar.html",
@@ -464,8 +36,41 @@ const classFileMap = {
     "Magier": "magier.html"
 };
 
+// Fertigkeiten exakt nach den jeweiligen Klassen-HTMLs
+const classSkillsData = {
+    "Artifizier": ["Arkankunde", "Geschichte", "Untersuchung", "Heilkunde", "Naturkunde", "Wahrnehmung", "Fingerfertigkeit"],
+    "Barbar": ["Athletik", "Einschüchtern", "Naturkunde", "Tierumgang", "Überleben", "Wahrnehmung"],
+    "Barde": ["Akrobatik", "Auftreten", "Athletik", "Einblick", "Geschichte", "Heimlichkeit", "Täuschen", "Überzeugen", "Wahrnehmung"], // Plus beliebige, hier aus Auswahl
+    "Kleriker": ["Einblick", "Geschichte", "Heilkunde", "Religion", "Überzeugen"],
+    "Druide": ["Einblick", "Heilkunde", "Naturkunde", "Religion", "Tierumgang", "Überleben", "Wahrnehmung"],
+    "Kämpfer": ["Akrobatik", "Athletik", "Einblick", "Einschüchtern", "Geschichte", "Tierumgang", "Überleben", "Wahrnehmung"],
+    "Mönch": ["Akrobatik", "Athletik", "Einblick", "Heimlichkeit", "Religion", "Verstohlenheit"],
+    "Paladin": ["Athletik", "Einschüchtern", "Heilkunde", "Motiv erkennen", "Religion", "Überzeugen"],
+    "Waldläufer": ["Athletik", "Heimlichkeit", "Mit Tieren umgehen", "Motiv erkennen", "Nachforschungen", "Naturkunde", "Überlebenskunst", "Wahrnehmung"],
+    "Schurke": ["Akrobatik", "Athletik", "Auftreten", "Einschüchtern", "Fingerfertigkeit", "Heimlichkeit", "Motiv erkennen", "Nachforschungen", "Täuschen", "Überzeugen", "Wahrnehmung"],
+    "Zauberer": ["Arkane Kunde", "Einschüchtern", "Motiv erkennen", "Religion", "Täuschen", "Überzeugen"],
+    "Hexenmeister": ["Arkankunde", "Einschüchtern", "Geschichte", "Investigation", "Naturkunde", "Religion", "Täuschen"],
+    "Magier": ["Arkankunde", "Einblick", "Geschichte", "Investigation", "Medizin", "Religion"]
+};
+
+// Trefferwürfel und Basis-HP pro Klasse (aus den Klassen-HTMLs)
+const classHpData = {
+    "Artifizier": { die: 8, base: 8 },
+    "Barbar": { die: 12, base: 12 },
+    "Barde": { die: 8, base: 8 },
+    "Kleriker": { die: 8, base: 8 },
+    "Druide": { die: 8, base: 8 },
+    "Kämpfer": { die: 10, base: 10 },
+    "Mönch": { die: 8, base: 8 },
+    "Paladin": { die: 10, base: 10 },
+    "Waldläufer": { die: 10, base: 10 },
+    "Schurke": { die: 8, base: 8 },
+    "Zauberer": { die: 6, base: 6 },
+    "Hexenmeister": { die: 8, base: 8 },
+    "Magier": { die: 6, base: 6 }
+};
+
 let speciesData = {};
-let classes = {};
 let backgrounds = {};
 let skillDescriptions = {};
 let spellCompendium = { cantrips: {}, level1: {} };
@@ -478,21 +83,15 @@ let isSaved = false;
 
 window.onload = async function() {
     try {
-        console.log("Starte Laden der JSON-Daten...");
-        const cacheBusterUrl = LOCAL_JSON_URL + "?t=" + new Date().getTime();
-        const response = await fetch(cacheBusterUrl);
-        
-        if (!response.ok) {
-            throw new Error(`HTTP Fehlerstatus: ${response.status}`);
-        }
+        console.log("Lade Basisdaten...");
+        // Wir laden die compendium.json nur noch für Rassen, Skills und Waffen, da die Klassen in den HTMLs liegen
+        const response = await fetch("./compendium.json?t=" + new Date().getTime());
+        if (!response.ok) throw new Error(`HTTP Fehlerstatus: ${response.status}`);
         
         const data = await response.json();
-
         speciesData = data.speciesData;
-        classes = data.classes;
         skillDescriptions = data.skills || {};
         weaponsCompendium = data.weapons || {};
-        console.log("Geladene Klassen aus JSON:", Object.keys(classes));
 
         try {
             const bgResponse = await fetch(BACKGROUNDS_JSON_URL + "?t=" + new Date().getTime());
@@ -500,30 +99,21 @@ window.onload = async function() {
                 const bgData = await bgResponse.json();
                 backgrounds = bgData.backgrounds ? bgData.backgrounds : bgData;
             } else {
-                throw new Error("backgrounds.json nicht gefunden");
+                backgrounds = data.backgrounds || {};
             }
-        } catch (bgErr) {
-            console.warn("Konnte backgrounds.json nicht laden, nutze Fallback.", bgErr);
+        } catch (e) {
             backgrounds = data.backgrounds || {};
         }
 
         try {
             const spellResponse = await fetch(SPELLS_HTML_URL + "?t=" + new Date().getTime());
-            if (spellResponse.ok) {
-                parseSpellsHtml(await spellResponse.text());
-            }
-        } catch (spellErr) {
-            console.warn("Konnte spells-parsed.html nicht laden.", spellErr);
-        }
+            if (spellResponse.ok) parseSpellsHtml(await spellResponse.text());
+        } catch (e) {}
 
         try {
             const listResponse = await fetch(SPELL_LISTS_HTML_URL + "?t=" + new Date().getTime());
-            if (listResponse.ok) {
-                parseSpellListsHtml(await listResponse.text());
-            }
-        } catch (listErr) {
-            console.warn("Konnte spelllists-parsed.html nicht laden.", listErr);
-        }
+            if (listResponse.ok) parseSpellListsHtml(await listResponse.text());
+        } catch (e) {}
 
         initApp();
     } catch (err) {
@@ -535,77 +125,37 @@ window.onload = async function() {
 function parseSpellsHtml(htmlText) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlText, 'text/html');
-    const spellDivs = doc.querySelectorAll('.spell');
-
-    spellDivs.forEach(div => {
+    doc.querySelectorAll('.spell').forEach(div => {
         const h5 = div.querySelector('h5');
         if (!h5) return;
-        const spellName = h5.textContent.trim();
-        const htmlContent = div.innerHTML;
-        const textContent = div.textContent;
-
-        const isCantrip = textContent.includes('Zaubertrick');
-        const isLevel1 = textContent.includes('1. Grades');
-
-        if (isCantrip) {
-            spellCompendium.cantrips[spellName] = { rule: htmlContent };
-        } else if (isLevel1) {
-            spellCompendium.level1[spellName] = { rule: htmlContent };
-        }
+        const name = h5.textContent.trim();
+        if (div.textContent.includes('Zaubertrick')) spellCompendium.cantrips[name] = { rule: div.innerHTML };
+        else if (div.textContent.includes('1. Grades')) spellCompendium.level1[name] = { rule: div.innerHTML };
     });
 }
 
 function parseSpellListsHtml(htmlText) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlText, 'text/html');
-    const h4Elements = doc.querySelectorAll('h4');
-    
-    h4Elements.forEach(h4 => {
-        const titleText = h4.textContent.trim();
-        let className = titleText.replace('Zauber des ', '').replace('Zauber der ', '').trim();
-        
-        const mapping = {
-            "Barden": "Bard",
-            "Druiden": "Druid",
-            "Hexenmeisters": "Warlock",
-            "Klerikers": "Cleric",
-            "Magiers": "Wizard",
-            "Paladins": "Paladin",
-            "Waldläufers": "Ranger",
-            "Zauberers": "Wizard"
-        };
-        
-        if (mapping[className]) {
-            className = mapping[className];
-        }
+    doc.querySelectorAll('h4').forEach(h4 => {
+        let className = h4.textContent.replace('Zauber des ', '').replace('Zauber der ', '').trim();
+        const map = { "Barden": "Barde", "Druiden": "Druide", "Hexenmeisters": "Hexenmeister", "Klerikers": "Kleriker", "Magiers": "Magier", "Paladins": "Paladin", "Waldläufers": "Waldläufer", "Zauberers": "Zauberer" };
+        if (map[className]) className = map[className];
 
-        if (!classSpellLists[className]) {
-            classSpellLists[className] = { cantrips: [], level1: [] };
-        }
+        if (!classSpellLists[className]) classSpellLists[className] = { cantrips: [], level1: [] };
 
-        let nextElem = h4.nextElementSibling;
-        let currentLevelKey = null;
-
-        while (nextElem && nextElem.tagName !== 'H4') {
-            if (nextElem.tagName === 'H5') {
-                const h5Text = nextElem.textContent.toLowerCase();
-                if (h5Text.includes('zaubertrick') || h5Text.includes('0. grad')) {
-                    currentLevelKey = 'cantrips';
-                } else if (h5Text.includes('1. grad')) {
-                    currentLevelKey = 'level1';
-                } else {
-                    currentLevelKey = null;
-                }
-            } else if (nextElem.tagName === 'UL' && currentLevelKey) {
-                const links = nextElem.querySelectorAll('a');
-                links.forEach(a => {
-                    let spellName = a.textContent.trim();
-                    if (spellName && !classSpellLists[className][currentLevelKey].includes(spellName)) {
-                        classSpellLists[className][currentLevelKey].push(spellName);
-                    }
+        let next = h4.nextElementSibling;
+        let lvl = null;
+        while (next && next.tagName !== 'H4') {
+            if (next.tagName === 'H5') {
+                lvl = next.textContent.toLowerCase().includes('zaubertrick') ? 'cantrips' : (next.textContent.toLowerCase().includes('1. grad') ? 'level1' : null);
+            } else if (next.tagName === 'UL' && lvl) {
+                next.querySelectorAll('a').forEach(a => {
+                    let s = a.textContent.trim();
+                    if (s && !classSpellLists[className][lvl].includes(s)) classSpellLists[className][lvl].push(s);
                 });
             }
-            nextElem = nextElem.nextElementSibling;
+            next = next.nextElementSibling;
         }
     });
 }
@@ -613,11 +163,11 @@ function parseSpellListsHtml(htmlText) {
 function initApp() {
     populateSelect('main-race', Object.keys(speciesData));
     
+    // Fülle Klassen-Dropdown direkt aus der classFileMap (Deutsche Dateinamen/Schlüssel)
     const classSel = document.getElementById('class-select');
     classSel.innerHTML = '';
-    Object.keys(classes).forEach(engKey => {
-        const deName = classMapENtoDE[engKey] || engKey;
-        classSel.innerHTML += `<option value="${deName}">${deName}</option>`;
+    Object.keys(classFileMap).forEach(clsName => {
+        classSel.innerHTML += `<option value="${clsName}">${clsName}</option>`;
     });
 
     populateSelect('bg-select', Object.keys(backgrounds));
@@ -635,7 +185,6 @@ function initApp() {
 
     document.addEventListener('input', markAsUnsaved);
     document.addEventListener('change', markAsUnsaved);
-    console.log("App erfolgreich initialisiert.");
 }
 
 function markAsUnsaved() {
@@ -652,26 +201,15 @@ function markAsUnsaved() {
 function populateSelect(id, items) {
     const sel = document.getElementById(id);
     sel.innerHTML = '';
-    items.forEach(i => {
-        sel.innerHTML += `<option value="${i}">${i}</option>`;
-    });
+    items.forEach(i => sel.innerHTML += `<option value="${i}">${i}</option>`);
 }
 
 function openModal(title, text, iconClass = null, subtitle = null) {
     const titleElem = document.getElementById('modal-title');
     const subContainer = document.getElementById('modal-subtitle-container');
     
-    if (iconClass) {
-        titleElem.innerHTML = `<span class="modal-icon-box"><i class="fa-solid ${iconClass}"></i></span> ${title}`;
-    } else {
-        titleElem.innerText = title;
-    }
-
-    if (subtitle) {
-        subContainer.innerHTML = `<div class="modal-subtitle">${subtitle}</div>`;
-    } else {
-        subContainer.innerHTML = '';
-    }
+    titleElem.innerHTML = iconClass ? `<span class="modal-icon-box"><i class="fa-solid ${iconClass}"></i></span> ${title}` : title;
+    subContainer.innerHTML = subtitle ? `<div class="modal-subtitle">${subtitle}</div>` : '';
 
     document.getElementById('modal-body').innerHTML = text;
     document.getElementById('rule-modal').style.display = 'flex';
@@ -686,29 +224,20 @@ function closeModal() {
 function showRaceModal() {
     const mainRace = document.getElementById('main-race').value;
     const subRace = document.getElementById('sub-race').value;
-    const info = speciesData[mainRace].subraces[subRace];
-    openModal(subRace, info.text, "fa-child");
+    openModal(subRace, speciesData[mainRace].subraces[subRace].text, "fa-child");
 }
 
 async function showClassModal() {
-    const deClass = document.getElementById('class-select').value;
-    const fileName = classFileMap[deClass];
-    console.log("Öffne Klassen-Modal für:", deClass, "Datei:", fileName);
-
-    if (!fileName) {
-        openModal(deClass, `<b>Fehler:</b> Keine Klassendatei für ${deClass} hinterlegt.`, getClassIconByName(deClass));
-        return;
-    }
+    const clsName = document.getElementById('class-select').value;
+    const fileName = classFileMap[clsName];
+    if (!fileName) return openModal(clsName, `Keine Klassendatei für ${clsName} hinterlegt.`, getClassIcon(clsName));
 
     try {
         const response = await fetch(`./klassen/${fileName}?t=` + new Date().getTime());
         if (!response.ok) throw new Error(`HTTP Fehler: ${response.status}`);
-        
-        const htmlContent = await response.text();
-        openModal(deClass, htmlContent, getClassIconByName(deClass));
+        openModal(clsName, await response.text(), getClassIcon(clsName));
     } catch (err) {
-        console.error("Klassen-HTML konnte nicht geladen werden:", fileName, err);
-        openModal(deClass, `<b style="color:var(--error);">Konnte Datei "klassen/${fileName}" nicht laden!</b><br>Bitte prüfe, ob die Datei im GitHub-Ordner 'klassen' existiert.`, getClassIconByName(deClass));
+        openModal(clsName, `Konnte Datei "klassen/${fileName}" nicht laden!`, getClassIcon(clsName));
     }
 }
 
@@ -720,127 +249,76 @@ function showBgModal() {
 }
 
 function showSkillModal(selectId) {
-    const selectedSkill = document.getElementById(selectId).value;
-    const desc = skillDescriptions[selectedSkill] || "Keine Beschreibung verfügbar.";
-    openModal(selectedSkill, desc, "fa-check");
+    const skill = document.getElementById(selectId).value;
+    openModal(skill, skillDescriptions[skill] || "Keine Beschreibung verfügbar.", "fa-check");
 }
 
 function showSpellModalFromDropdown(selectElem) {
-    const spellName = selectElem.value;
-    if (!spellName) return;
-    showSpellModalByName(spellName);
+    showSpellModalByName(selectElem.value);
 }
 
 function showSpellModalByName(spellName) {
     if (!spellName) return;
-    let cleanName = spellName.replace(/ \((Racial|Auto|.*)\)/, '').trim();
+    let clean = spellName.replace(/ \((Racial|Auto|.*)\)/, '').trim();
+    let obj = spellCompendium.cantrips[clean] || spellCompendium.level1[clean] || spellCompendium.cantrips[spellName] || spellCompendium.level1[spellName];
 
-    let spellObj = (spellCompendium.cantrips && spellCompendium.cantrips[cleanName]) || 
-                   (spellCompendium.level1 && spellCompendium.level1[cleanName]) ||
-                   (spellCompendium.cantrips && spellCompendium.cantrips[spellName]) || 
-                   (spellCompendium.level1 && spellCompendium.level1[spellName]);
+    if (!obj) return openModal(clean, "Keine detaillierte Beschreibung verfügbar.", "fa-wand-magic-sparkles");
 
-    if (!spellObj) {
-        openModal(cleanName, "Keine detaillierte Beschreibung verfügbar.", "fa-wand-magic-sparkles");
-        return;
-    }
+    let temp = document.createElement('div');
+    temp.innerHTML = obj.rule;
+    if (temp.querySelector('h5')) temp.querySelector('h5').remove();
 
-    let tempDiv = document.createElement('div');
-    tempDiv.innerHTML = spellObj.rule;
-
-    const h5 = tempDiv.querySelector('h5');
-    if (h5) h5.remove();
-
-    let schoolText = "";
-    let paragraphs = tempDiv.querySelectorAll('p, div');
-    for (let p of paragraphs) {
-        let pText = p.textContent.trim();
-        if (pText.includes('Zaubertrick der') || pText.includes('Zaubertrick des') || pText.includes('Grades')) {
-            schoolText = pText;
+    let school = "";
+    temp.querySelectorAll('p, div').forEach(p => {
+        if (p.textContent.includes('Zaubertrick') || p.textContent.includes('Grades')) {
+            school = p.textContent.trim();
             p.remove();
-            break;
         }
-    }
-
-    let htmlContent = tempDiv.innerHTML;
-    ['Zeitaufwand:', 'Reichweite:', 'Komponenten:', 'Wirkungsdauer:'].forEach(keyword => {
-        let regex = new RegExp(`(${keyword})`, 'gi');
-        htmlContent = htmlContent.replace(regex, '<b>$1</b>');
     });
 
-    openModal(cleanName, htmlContent, "fa-wand-magic-sparkles", schoolText);
+    let html = temp.innerHTML;
+    ['Zeitaufwand:', 'Reichweite:', 'Komponenten:', 'Wirkungsdauer:'].forEach(k => {
+        html = html.replace(new RegExp(`(${k})`, 'gi'), '<b>$1</b>');
+    });
+
+    openModal(clean, html, "fa-wand-magic-sparkles", school);
 }
 
 function showCalcModal(type) {
     if (!lastBuiltCharacter) return;
     const c = lastBuiltCharacter;
-    let title = type;
     let text = "";
-
-    if (type === 'HP') {
-        let engClass = classMapDEtoEN[c.class] || c.class;
-        let clsHp = classes[engClass]?.hp || 8;
-        text = `<b>Berechnung der Trefferpunkte (HP):</b><br>
-                Basis (Klasse ${c.class}): ${clsHp}<br>
-                + Konstitutions-Modifikator (${c.mods.CON >= 0 ? '+' : ''}${c.mods.CON}): ${c.mods.CON}<br>
-                <hr style="border:0; border-top:1px solid var(--border); margin:8px 0;">
-                <b>Total:</b> ${c.hp} HP`;
-    } else if (type === 'RK') {
-        text = `<b>Berechnung der Rüstungsklasse (RK):</b><br>
-                Basiswert (ungerüstet): 10<br>
-                + Geschicklichkeits-Modifikator (${c.mods.DEX >= 0 ? '+' : ''}${c.mods.DEX}): ${c.mods.DEX}<br>
-                <hr style="border:0; border-top:1px solid var(--border); margin:8px 0;">
-                <b>Total:</b> ${c.ac} RK`;
-    } else if (type === 'Initiative') {
-        text = `<b>Berechnung der Initiative:</b><br>
-                Geschicklichkeits-Modifikator: ${c.mods.DEX >= 0 ? '+' : ''}${c.mods.DEX}<br>
-                <hr style="border:0; border-top:1px solid var(--border); margin:8px 0;">
-                <b>Total:</b> ${c.mods.DEX >= 0 ? '+' : ''}${c.mods.DEX}`;
-    } else if (type === 'Übungsbonus') {
-        text = `<b>Übungsbonus (Proficiency Bonus):</b><br>
-                Der Übungsbonus richtet sich nach der Charakterstufe (Stufe 1–4 = +2). Er wird auf Fertigkeiten, Rettungswürfe und Angriffe addiert, bei denen der Charakter geübt ist.<br>
-                <hr style="border:0; border-top:1px solid var(--border); margin:8px 0;">
-                <b>Total:</b> +2`;
-    } else if (type === 'Bewegungsrate') {
-        text = `<b>Bewegungsrate:</b><br>
-                Wird durch das gewählte Volk bzw. die Abstammung bestimmt.<br>
-                <hr style="border:0; border-top:1px solid var(--border); margin:8px 0;">
-                <b>Total:</b> ${c.speed || 30} Fuß`;
-    }
-
-    openModal(title, text, "fa-calculator");
+    if (type === 'HP') text = `Basis (${c.class}): ${c.hp - c.mods.CON}<br>+ Konstitution (${c.mods.CON}): ${c.mods.CON}<br><b>Total: ${c.hp}</b>`;
+    else if (type === 'RK') text = `Basis: 10<br>+ Geschicklichkeit (${c.mods.DEX}): ${c.mods.DEX}<br><b>Total: ${c.ac}</b>`;
+    else if (type === 'Initiative') text = `Geschicklichkeits-Modifikator: ${c.mods.DEX}`;
+    else if (type === 'Übungsbonus') text = `Stufe 1–4 = +2`;
+    else if (type === 'Bewegungsrate') text = `${c.speed || 30} Fuß`;
+    openModal(type, text, "fa-calculator");
 }
 
-function getClassIcon(deClassName) {
-    const engClass = classMapDEtoEN[deClassName] || deClassName;
-    switch (engClass) {
-        case "Artificer": return "fa-wrench";
-        case "Barbarian": return "fa-hammer";
-        case "Bard": return "fa-guitar";
-        case "Cleric": return "fa-cross";
-        case "Druid": return "fa-tree";
-        case "Fighter": return "fa-shield";
-        case "Monk": return "fa-ring";
+function getClassIcon(className) {
+    switch (className) {
+        case "Artifizier": return "fa-wrench";
+        case "Barbar": return "fa-hammer";
+        case "Barde": return "fa-guitar";
+        case "Kleriker": return "fa-cross";
+        case "Druide": return "fa-tree";
+        case "Kämpfer": return "fa-shield";
+        case "Mönch": return "fa-ring";
         case "Paladin": return "fa-shield";
-        case "Ranger": return "fa-crosshairs";
-        case "Rogue": return "fa-dagger";
-        case "Sorcerer": return "fa-fire";
-        case "Warlock": return "fa-star-of-life";
-        case "Wizard": return "fa-hat-wizard";
+        case "Waldläufer": return "fa-crosshairs";
+        case "Schurke": return "fa-dagger";
+        case "Zauberer": return "fa-fire";
+        case "Hexenmeister": return "fa-star-of-life";
+        case "Magier": return "fa-hat-wizard";
         default: return "fa-user";
     }
-}
-
-function getClassIconByName(className) {
-    return getClassIcon(className);
 }
 
 function updateClassIconDisplay() {
     const c = document.getElementById('class-select').value;
     const iconElem = document.getElementById('class-icon-indicator');
-    if (iconElem) {
-        iconElem.className = `fa-solid ${getClassIcon(c)}`;
-    }
+    if (iconElem) iconElem.className = `fa-solid ${getClassIcon(c)}`;
 }
 
 function onMainRaceChange() {
@@ -848,11 +326,10 @@ function onMainRaceChange() {
     const subContainer = document.getElementById('subrace-container');
     const subSelect = document.getElementById('sub-race');
 
-    const subraces = speciesData[mainRace].subraces;
     subSelect.innerHTML = '';
-    for (let subKey in subraces) {
+    Object.keys(speciesData[mainRace].subraces).forEach(subKey => {
         subSelect.innerHTML += `<option value="${subKey}">${subKey}</option>`;
-    }
+    });
     subContainer.style.display = 'block';
     updateSubraceOptions();
 }
@@ -862,51 +339,32 @@ function updateSubraceOptions() {
     const raceData = speciesData[mainRace];
     const specialContainer = document.getElementById('special-attr-container');
     const specialSelect = document.getElementById('special-attr-select');
-    const specialLabel = document.getElementById('special-attr-label');
 
     if (raceData && raceData["spezial-attribut"] && raceData["spezial-attribut"].spellcasting) {
-        const options = raceData["spezial-attribut"].spellcasting;
-        specialLabel.innerText = "Zauberwirkungs-Attribut wählen:";
         specialSelect.innerHTML = '';
-        options.forEach(opt => {
-            specialSelect.innerHTML += `<option value="${opt}">${opt}</option>`;
-        });
+        raceData["spezial-attribut"].spellcasting.forEach(opt => specialSelect.innerHTML += `<option value="${opt}">${opt}</option>`);
         specialContainer.style.display = 'block';
     } else {
         specialContainer.style.display = 'none';
     }
-
     updateSpellsUI();
 }
 
 function onClassChange() {
-    const deClass = document.getElementById('class-select').value;
-    const engClass = classMapDEtoEN[deClass] || deClass;
-    const cls = classes[engClass];
-    console.log("Klasse geändert zu Deutsch:", deClass, "Englisch:", engClass, "Daten gefunden:", !!cls);
-    
+    const clsName = document.getElementById('class-select').value;
     updateClassIconDisplay();
 
     const s1 = document.getElementById('skill1');
     const s2 = document.getElementById('skill2');
     s1.innerHTML = ''; s2.innerHTML = '';
-    
-    if (cls && cls.skills && Array.isArray(cls.skills)) {
-        cls.skills.forEach(sk => {
-            s1.innerHTML += `<option value="${sk}">${sk}</option>`;
-            s2.innerHTML += `<option value="${sk}">${sk}</option>`;
-        });
-        s1.selectedIndex = 0;
-        if (cls.skills.length > 1) {
-            s2.selectedIndex = 1;
-        } else {
-            s2.selectedIndex = 0;
-        }
-    } else {
-        console.warn("Keine Fertigkeiten für Klasse gefunden in JSON:", engClass, cls);
-        s1.innerHTML = `<option value="">Keine Fertigkeiten</option>`;
-        s2.innerHTML = `<option value="">Keine Fertigkeiten</option>`;
-    }
+
+    const skills = classSkillsData[clsName] || ["Akrobatik", "Athletik", "Einblick", "Wahrnehmung"];
+    skills.forEach(sk => {
+        s1.innerHTML += `<option value="${sk}">${sk}</option>`;
+        s2.innerHTML += `<option value="${sk}">${sk}</option>`;
+    });
+    s1.selectedIndex = 0;
+    s2.selectedIndex = skills.length > 1 ? 1 : 0;
 
     validateSkills();
     updateSpellsUI();
@@ -917,9 +375,7 @@ function onBgChange() {
     validateSkills();
 }
 
-function onBgAsiModeChange() {
-    updateBgAsiUI();
-}
+function onBgAsiModeChange() { updateBgAsiUI(); }
 
 function updateBgDynamicUI() {
     updateBgAsiUI();
@@ -932,55 +388,27 @@ function updateBgAsiUI() {
     const slotsContainer = document.getElementById('bg-asi-slots');
     const mode = document.getElementById('bg-asi-mode').value;
     
-    if (!bgObj || !bgObj.attributes) {
-        slotsContainer.innerHTML = '';
-        return;
-    }
+    if (!bgObj || !bgObj.attributes) { slotsContainer.innerHTML = ''; return; }
 
     slotsContainer.innerHTML = '';
-    const allowedAttrs = bgObj.attributes;
-
-    let optionsHtml = '';
-    allowedAttrs.forEach(attr => {
-        optionsHtml += `<option value="${attr}">${attrNamesDE[attr] || attr}</option>`;
-    });
+    let optionsHtml = bgObj.attributes.map(attr => `<option value="${attr}">${attrNamesDE[attr] || attr}</option>`).join('');
 
     if (mode === "2_1") {
         slotsContainer.innerHTML = `
-            <div>
-                <label style="font-size:0.75rem;">+2 Attribut</label>
-                <select id="bg-asi-2" onchange="validateBgAsi()">${optionsHtml}</select>
-            </div>
-            <div>
-                <label style="font-size:0.75rem;">+1 Attribut</label>
-                <select id="bg-asi-1a" onchange="validateBgAsi()">${optionsHtml}</select>
-            </div>
-            <div></div>
-        `;
+            <div><label style="font-size:0.75rem;">+2 Attribut</label><select id="bg-asi-2" onchange="validateBgAsi()">${optionsHtml}</select></div>
+            <div><label style="font-size:0.75rem;">+1 Attribut</label><select id="bg-asi-1a" onchange="validateBgAsi()">${optionsHtml}</select></div>
+            <div></div>`;
         const sel1a = document.getElementById('bg-asi-1a');
-        if (sel1a && allowedAttrs.length > 1) sel1a.selectedIndex = 1;
+        if (sel1a && bgObj.attributes.length > 1) sel1a.selectedIndex = 1;
     } else {
         slotsContainer.innerHTML = `
-            <div>
-                <label style="font-size:0.75rem;">+1 Attribut</label>
-                <select id="bg-asi-1a" onchange="validateBgAsi()">${optionsHtml}</select>
-            </div>
-            <div>
-                <label style="font-size:0.75rem;">+1 Attribut</label>
-                <select id="bg-asi-1b" onchange="validateBgAsi()">${optionsHtml}</select>
-            </div>
-            <div>
-                <label style="font-size:0.75rem;">+1 Attribut</label>
-                <select id="bg-asi-1c" onchange="validateBgAsi()">${optionsHtml}</select>
-            </div>
-        `;
-        const sel1a = document.getElementById('bg-asi-1a');
-        const sel1b = document.getElementById('bg-asi-1b');
-        const sel1c = document.getElementById('bg-asi-1c');
-        if (sel1a && allowedAttrs.length > 0) sel1a.selectedIndex = 0;
-        if (sel1b && allowedAttrs.length > 1) sel1b.selectedIndex = 1;
-        if (sel1c && allowedAttrs.length > 2) sel1c.selectedIndex = 2;
-        else if (sel1c) sel1c.selectedIndex = 0;
+            <div><label style="font-size:0.75rem;">+1</label><select id="bg-asi-1a" onchange="validateBgAsi()">${optionsHtml}</select></div>
+            <div><label style="font-size:0.75rem;">+1</label><select id="bg-asi-1b" onchange="validateBgAsi()">${optionsHtml}</select></div>
+            <div><label style="font-size:0.75rem;">+1</label><select id="bg-asi-1c" onchange="validateBgAsi()">${optionsHtml}</select></div>`;
+        const sel1a = document.getElementById('bg-asi-1a'), sel1b = document.getElementById('bg-asi-1b'), sel1c = document.getElementById('bg-asi-1c');
+        if (sel1a && bgObj.attributes.length > 0) sel1a.selectedIndex = 0;
+        if (sel1b && bgObj.attributes.length > 1) sel1b.selectedIndex = 1;
+        if (sel1c && bgObj.attributes.length > 2) sel1c.selectedIndex = 2;
     }
     validateBgAsi();
 }
@@ -990,35 +418,23 @@ function updateBgToolAndEquipmentUI() {
     const bgObj = backgrounds[bgName];
     const container = document.getElementById('bg-dynamic-options-container');
     const toolWrapper = document.getElementById('bg-tool-choice-wrapper');
-    const toolLabel = document.getElementById('bg-tool-label');
     const toolSelect = document.getElementById('bg-tool-select');
     const eqWrapper = document.getElementById('bg-eq-choice-wrapper');
 
-    if (!bgObj) {
-        container.style.display = 'none';
-        return;
-    }
+    if (!bgObj) { container.style.display = 'none'; return; }
 
     let hasChoices = false;
-
     if (bgObj.tools && bgObj.tools.choiceA && bgObj.tools.choiceA.options) {
-        toolLabel.innerText = bgObj.tools.choiceA.text || "Werkzeug wählen:";
         toolSelect.innerHTML = '';
-        bgObj.tools.choiceA.options.forEach(opt => {
-            toolSelect.innerHTML += `<option value="${opt}">${opt}</option>`;
-        });
+        bgObj.tools.choiceA.options.forEach(opt => toolSelect.innerHTML += `<option value="${opt}">${opt}</option>`);
         toolWrapper.style.display = 'block';
         hasChoices = true;
-    } else {
-        toolWrapper.style.display = 'none';
-    }
+    } else { toolWrapper.style.display = 'none'; }
 
     if (bgObj.equipment && bgObj.equipment.choiceA && bgObj.equipment.choiceB) {
         eqWrapper.style.display = 'block';
         hasChoices = true;
-    } else {
-        eqWrapper.style.display = 'none';
-    }
+    } else { eqWrapper.style.display = 'none'; }
 
     container.style.display = hasChoices ? 'block' : 'none';
 }
@@ -1027,18 +443,12 @@ function validateBgAsi() {
     const mode = document.getElementById('bg-asi-mode').value;
     const errElem = document.getElementById('bg-asi-error');
     let isValid = true;
-
     if (mode === "2_1") {
-        const val2 = document.getElementById('bg-asi-2').value;
-        const val1 = document.getElementById('bg-asi-1a').value;
-        if (val2 === val1) isValid = false;
+        if (document.getElementById('bg-asi-2').value === document.getElementById('bg-asi-1a').value) isValid = false;
     } else {
-        const v1 = document.getElementById('bg-asi-1a').value;
-        const v2 = document.getElementById('bg-asi-1b').value;
-        const v3 = document.getElementById('bg-asi-1c').value;
+        const v1 = document.getElementById('bg-asi-1a').value, v2 = document.getElementById('bg-asi-1b').value, v3 = document.getElementById('bg-asi-1c').value;
         if (v1 === v2 || v1 === v3 || v2 === v3) isValid = false;
     }
-
     errElem.style.display = isValid ? 'none' : 'block';
     return isValid;
 }
@@ -1049,17 +459,12 @@ function getBgBonuses() {
     if (!validateBgAsi()) return bonuses;
 
     if (mode === "2_1") {
-        const attr2 = document.getElementById('bg-asi-2').value;
-        const attr1 = document.getElementById('bg-asi-1a').value;
-        if (bonuses[attr2] !== undefined) bonuses[attr2] += 2;
-        if (bonuses[attr1] !== undefined) bonuses[attr1] += 1;
+        bonuses[document.getElementById('bg-asi-2').value] += 2;
+        bonuses[document.getElementById('bg-asi-1a').value] += 1;
     } else {
-        const v1 = document.getElementById('bg-asi-1a').value;
-        const v2 = document.getElementById('bg-asi-1b').value;
-        const v3 = document.getElementById('bg-asi-1c').value;
-        if (bonuses[v1] !== undefined) bonuses[v1] += 1;
-        if (bonuses[v2] !== undefined) bonuses[v2] += 1;
-        if (bonuses[v3] !== undefined) bonuses[v3] += 1;
+        bonuses[document.getElementById('bg-asi-1a').value] += 1;
+        bonuses[document.getElementById('bg-asi-1b').value] += 1;
+        bonuses[document.getElementById('bg-asi-1c').value] += 1;
     }
     return bonuses;
 }
@@ -1068,67 +473,18 @@ function getSelectedBgEquipmentAndTools(bgName) {
     const bgObj = backgrounds[bgName];
     if (!bgObj) return { tools: [], equipment: [] };
 
-    let selectedTools = [];
-    if (bgObj.tools) {
-        if (Array.isArray(bgObj.tools)) {
-            selectedTools = [...bgObj.tools];
-        } else if (typeof bgObj.tools === 'string') {
-            selectedTools = [bgObj.tools];
-        } else if (bgObj.tools.choiceA) {
-            const toolSelect = document.getElementById('bg-tool-select');
-            selectedTools = [toolSelect ? toolSelect.value : bgObj.tools.choiceA.options[0]];
-        }
-    }
-
-    let selectedEquipment = [];
-    const eqModeElem = document.getElementById('bg-eq-select');
-    const eqMode = eqModeElem ? eqModeElem.value : 'A';
-
-    if (bgObj.equipment) {
-        if (eqMode === 'B' && bgObj.equipment.choiceB) {
-            selectedEquipment = Array.isArray(bgObj.equipment.choiceB) ? [...bgObj.equipment.choiceB] : [bgObj.equipment.choiceB];
-        } else if (bgObj.equipment.choiceA) {
-            let choiceA = bgObj.equipment.choiceA;
-            if (Array.isArray(choiceA)) {
-                selectedEquipment = [...choiceA];
-            } else if (typeof choiceA === 'object') {
-                if (choiceA.options) {
-                    const toolSelect = document.getElementById('bg-tool-select');
-                    selectedEquipment.push(toolSelect ? toolSelect.value : choiceA.options[0]);
-                }
-                if (choiceA.additionalItems) {
-                    choiceA.additionalItems.forEach(item => {
-                        if (typeof item === 'object' && item.name) {
-                            selectedEquipment.push(`${item.qty}x ${item.name}`);
-                        } else {
-                            selectedEquipment.push(item);
-                        }
-                    });
-                }
-            } else {
-                selectedEquipment = [choiceA];
-            }
-        } else if (Array.isArray(bgObj.equipment)) {
-            selectedEquipment = [...bgObj.equipment];
-        }
-    }
-
-    return { tools: selectedTools, equipment: selectedEquipment };
+    let tools = bgObj.tools?.choiceA ? [document.getElementById('bg-tool-select').value] : (Array.isArray(bgObj.tools) ? bgObj.tools : [bgObj.tools]);
+    let eqMode = document.getElementById('bg-eq-select')?.value || 'A';
+    let equipment = eqMode === 'B' ? bgObj.equipment.choiceB : bgObj.equipment.choiceA;
+    return { tools: tools.filter(Boolean), equipment: Array.isArray(equipment) ? equipment : [equipment] };
 }
 
-function updateBgInfo() { validateSkills(); }
 function getMod(score) { return Math.floor((score - 10) / 2); }
-
-function onStatsChange() { 
-    validateArray();
-    updateSpellsUI();
-}
+function onStatsChange() { validateArray(); updateSpellsUI(); }
 
 function validateArray() {
-    const selects = Array.from(document.querySelectorAll('.array-select'));
-    const vals = selects.map(s => parseInt(s.value)).filter(v => !isNaN(v));
-    const unique = new Set(vals);
-    const isValid = vals.length === 6 && unique.size === 6;
+    const vals = Array.from(document.querySelectorAll('.array-select')).map(s => parseInt(s.value)).filter(v => !isNaN(v));
+    const isValid = vals.length === 6 && new Set(vals).size === 6;
     document.getElementById('array-error').style.display = isValid ? 'none' : 'block';
     return isValid;
 }
@@ -1136,106 +492,53 @@ function validateArray() {
 function validateSkills() {
     const sk1 = document.getElementById('skill1').value;
     const sk2 = document.getElementById('skill2').value;
-    const bg = document.getElementById('bg-select').value;
-    const bgObj = backgrounds[bg];
-    if (!bgObj) return true;
-    const bgSkills = bgObj.skills || [];
-
+    const bgSkills = backgrounds[document.getElementById('bg-select').value]?.skills || [];
     const isValid = (sk1 !== sk2) && !bgSkills.includes(sk1) && !bgSkills.includes(sk2);
     document.getElementById('skill-error').style.display = isValid ? 'none' : 'block';
     return isValid;
 }
 
-function getPrepSpellsLimit(engClassName) {
-    return classes[engClassName]?.prepSpellsLvl1 || 2;
-}
-
 function updateSpellsUI() {
-    const deClass = document.getElementById('class-select').value;
-    const className = classMapDEtoEN[deClass] || deClass;
-    const cls = classes[className];
-
-    if (!cls) return;
-
+    const clsName = document.getElementById('class-select').value;
     const cantripGroup = document.getElementById('cantrips-group');
     const lvl1Group = document.getElementById('level1-group');
-    cantripGroup.innerHTML = '';
-    lvl1Group.innerHTML = '';
+    cantripGroup.innerHTML = ''; lvl1Group.innerHTML = '';
 
-    if (cls.casterType === "NONE") {
+    const nonCasters = ["Kämpfer", "Barbar", "Schurke", "Mönch"];
+    if (nonCasters.includes(clsName)) {
         document.getElementById('cantrip-label').innerText = "Zaubertricks: Keine für diese Klasse.";
         document.getElementById('prep-spells-label').innerText = "Stufe 1 Zauber: Keine für diese Klasse.";
         return;
     }
 
-    const classList = classSpellLists[className] || {};
-    const allowedCantrips = (classList.cantrips && classList.cantrips.length > 0) 
-        ? classList.cantrips 
-        : Object.keys(spellCompendium.cantrips || {});
-
-    const maxCantrips = cls.cantripsKnown || 0;
+    let allowedCantrips = classSpellLists[clsName]?.cantrips?.length ? classSpellLists[clsName].cantrips : Object.keys(spellCompendium.cantrips);
+    let maxCantrips = (clsName === "Barde" || clsName === "Zauberer" || clsName === "Hexenmeister" || clsName === "Magier" || clsName === "Artifizier" || clsName === "Kleriker" || clsName === "Druide") ? 2 : 0;
+    
     document.getElementById('cantrip-label').innerText = `Wähle ${maxCantrips} Zaubertricks:`;
-
     for (let i = 0; i < maxCantrips; i++) {
-        let optionsHtml = `<option value="">-- Zaubertrick ${i + 1} wählen --</option>`;
-        allowedCantrips.forEach(c => {
-            optionsHtml += `<option value="${c}">${c}</option>`;
-        });
-
-        cantripGroup.innerHTML += `
-            <div class="input-row">
-                <select class="char-cantrip-select">
-                    ${optionsHtml}
-                </select>
-                <button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling)">✨</button>
-            </div>`;
+        let opts = allowedCantrips.map(c => `<option value="${c}">${c}</option>`).join('');
+        cantripGroup.innerHTML += `<div class="input-row"><select class="char-cantrip-select"><option value="">-- Wählen --</option>${opts}</select><button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling)">✨</button></div>`;
     }
 
-    const allowedLvl1 = (classList.level1 && classList.level1.length > 0)
-        ? classList.level1
-        : Object.keys(spellCompendium.level1 || {});
-
-    const maxPrep = getPrepSpellsLimit(className);
+    let allowedLvl1 = classSpellLists[clsName]?.level1?.length ? classSpellLists[clsName].level1 : Object.keys(spellCompendium.level1);
+    let maxPrep = 2;
     document.getElementById('prep-spells-label').innerText = `Wähle Stufe 1 Zauber (Limit: ${maxPrep}):`;
 
     for (let i = 0; i < maxPrep; i++) {
-        let optionsHtml = `<option value="">-- Stufe 1 Zauber ${i + 1} wählen --</option>`;
-        allowedLvl1.forEach(s => {
-            optionsHtml += `<option value="${s}">${s}</option>`;
-        });
-
-        lvl1Group.innerHTML += `
-            <div class="input-row">
-                <select class="char-spell-select">
-                    ${optionsHtml}
-                </select>
-                <button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling)">I</button>
-            </div>`;
+        let opts = allowedLvl1.map(s => `<option value="${s}">${s}</option>`).join('');
+        lvl1Group.innerHTML += `<div class="input-row"><select class="char-spell-select"><option value="">-- Wählen --</option>${opts}</select><button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling)">I</button></div>`;
     }
-}
-
-function getWeaponData(wName) {
-    for (let cat in weaponsCompendium) {
-        if (weaponsCompendium[cat][wName]) return weaponsCompendium[cat][wName];
-    }
-    return { "damage": "1d6", "type": "Slashing", "properties": [] };
 }
 
 function buildCharacter() {
-    if (!validateArray() || !validateSkills() || !validateBgAsi()) {
-        return alert("Bitte behebe alle Markierungs- und Validierungsfehler!");
-    }
+    if (!validateArray() || !validateSkills() || !validateBgAsi()) return alert("Bitte behebe alle Validierungsfehler!");
 
     const name = document.getElementById('char-name').value || "Unbenannter Held";
     const mainRace = document.getElementById('main-race').value;
     const subRace = document.getElementById('sub-race').value;
-    const deClass = document.getElementById('class-select').value;
-    const cls = classMapDEtoEN[deClass] || deClass;
+    const clsName = document.getElementById('class-select').value;
     const bg = document.getElementById('bg-select').value;
-
     const subInfo = speciesData[mainRace].subraces[subRace];
-    const specialAttrContainer = document.getElementById('special-attr-container');
-    const specialAttrVal = (specialAttrContainer.style.display !== 'none') ? document.getElementById('special-attr-select').value : null;
 
     let rawStats = {
         STR: parseInt(document.getElementById('str-val').value),
@@ -1246,13 +549,7 @@ function buildCharacter() {
         CHA: parseInt(document.getElementById('cha-val').value)
     };
 
-    let speciesBonuses = {};
-    if (subInfo.bonus) {
-        for (let s in subInfo.bonus) {
-            speciesBonuses[s] = subInfo.bonus[s];
-        }
-    }
-
+    let speciesBonuses = subInfo.bonus || {};
     let bgBonuses = getBgBonuses();
     let bgCustomData = getSelectedBgEquipmentAndTools(bg);
 
@@ -1266,259 +563,96 @@ function buildCharacter() {
     for (let s in stats) mods[s] = getMod(stats[s]);
     currentCalculatedMods = mods;
 
-    const hp = (classes[cls]?.hp || 8) + mods.CON;
+    const hpBase = classHpData[clsName]?.base || 8;
+    const hp = hpBase + mods.CON;
     const ac = 10 + mods.DEX;
 
-    let chosenCantrips = Array.from(document.querySelectorAll('.char-cantrip-select'))
-        .map(sel => sel.value)
-        .filter(val => val !== "");
-    
-    if (subRace === "Rock Gnome" && !chosenCantrips.includes("Prestidigitation")) chosenCantrips.unshift("Prestidigitation (Racial)");
-    if (subRace === "High Elf" && !chosenCantrips.includes("Prestidigitation")) chosenCantrips.unshift("Prestidigitation (Racial)");
-    if (subRace === "Wood Elf" && !chosenCantrips.includes("Druidcraft")) chosenCantrips.unshift("Druidcraft (Racial)");
-    if (subRace === "Drow" && !chosenCantrips.includes("Dancing Lights")) chosenCantrips.unshift("Dancing Lights (Racial)");
-
-    if (classes[cls]?.autoCantrip) {
-        let autoList = Array.isArray(classes[cls].autoCantrip) ? classes[cls].autoCantrip : [classes[cls].autoCantrip];
-        autoList.reverse().forEach(ac => {
-            let entry = `${ac} (Auto)`;
-            if (!chosenCantrips.includes(entry)) chosenCantrips.unshift(entry);
-        });
-    }
-
-    let chosenSpells = Array.from(document.querySelectorAll('.char-spell-select'))
-        .map(sel => sel.value)
-        .filter(val => val !== "");
-
-    const sk1 = document.getElementById('skill1').value;
-    const sk2 = document.getElementById('skill2').value;
-    const bgObj = backgrounds[bg] || { skills: [], feat: "" };
-    const allSkills = [...(bgObj.skills || []), sk1, sk2];
+    let chosenCantrips = Array.from(document.querySelectorAll('.char-cantrip-select')).map(s => s.value).filter(Boolean);
+    let chosenSpells = Array.from(document.querySelectorAll('.char-spell-select')).map(s => s.value).filter(Boolean);
+    const allSkills = [...(backgrounds[bg]?.skills || []), document.getElementById('skill1').value, document.getElementById('skill2').value];
 
     lastBuiltCharacter = {
-        id: 'char_' + Date.now(),
-        name: name,
-        class: deClass,
-        species: subRace,
-        background: bg,
-        level: 1,
-        xp: 0,
-        hp: hp,
-        maxHp: hp,
-        ac: ac,
-        speed: subInfo.speed || 30,
-        rawStats: rawStats,
-        speciesBonuses: speciesBonuses,
-        bgBonuses: bgBonuses,
-        bgCustomData: bgCustomData,
-        stats: stats,
-        mods: mods,
-        skills: allSkills,
-        cantrips: chosenCantrips,
-        spells: chosenSpells,
-        specialAttribute: specialAttrVal ? { label: "Zauberwirkungs-Attribut", value: specialAttrVal } : null,
-        lastAccess: new Date().toISOString()
+        id: 'char_' + Date.now(), name, class: clsName, species: subRace, background: bg,
+        level: 1, hp, maxHp: hp, ac, speed: subInfo.speed || 30, stats, mods, skills: allSkills, cantrips: chosenCantrips, spells: chosenSpells, lastAccess: new Date().toISOString()
     };
 
     markAsUnsaved();
 
-    document.getElementById('screen-out-name').innerHTML = `<i class="fa-solid ${getClassIcon(deClass)}"></i> ${name}`;
-    document.getElementById('screen-out-meta').innerText = `${subRace} | ${deClass} Stufe 1 | ${bg}`;
+    document.getElementById('screen-out-name').innerHTML = `<i class="fa-solid ${getClassIcon(clsName)}"></i> ${name}`;
+    document.getElementById('screen-out-meta').innerText = `${subRace} | ${clsName} Stufe 1 | ${bg}`;
     document.getElementById('screen-out-hp').innerText = `HP: ${hp}`;
     document.getElementById('screen-out-ac').innerText = `RK: ${ac}`;
     document.getElementById('screen-out-init').innerText = `Initiative: ${mods.DEX >= 0 ? '+' : ''}${mods.DEX}`;
     document.getElementById('screen-out-prof').innerText = `Übungsbonus: +2`;
     document.getElementById('screen-out-speed').innerText = `Bewegungsrate: ${subInfo.speed || 30} ft`;
 
-    let targetAttrCode = null;
-    if (specialAttrVal) {
-        if (specialAttrVal.includes("INT")) targetAttrCode = "INT";
-        else if (specialAttrVal.includes("WIS")) targetAttrCode = "WIS";
-        else if (specialAttrVal.includes("CHA")) targetAttrCode = "CHA";
-        else if (specialAttrVal.includes("STR")) targetAttrCode = "STR";
-        else if (specialAttrVal.includes("DEX")) targetAttrCode = "DEX";
-        else if (specialAttrVal.includes("CON")) targetAttrCode = "CON";
-    }
+    document.getElementById('screen-out-stats').innerHTML = Object.keys(stats).map(s => `
+        <div class="stat-box" onclick="openModal('${s} Wert', '${attributeDescriptions[s]}')">
+            <div style="font-size:0.75rem; color:var(--text-muted);">${s}</div>
+            <div class="stat-val">${stats[s]}</div>
+            <div class="stat-mod">${mods[s] >= 0 ? '+' : ''}${mods[s]}</div>
+        </div>`).join('');
 
-    const screenStatsDiv = document.getElementById('screen-out-stats');
-    screenStatsDiv.innerHTML = '';
-    for (let s in stats) {
-        let isGlitter = (s === targetAttrCode);
-        screenStatsDiv.innerHTML += `
-            <div class="stat-box ${isGlitter ? 'glitter-box' : ''}" onclick="openModal('${s} Wert', '${attributeDescriptions[s]}')">
-                <div style="font-size:0.75rem; color:var(--text-muted);">${s}</div>
-                <div class="stat-val">${stats[s]}</div>
-                <div class="stat-mod">${mods[s] >= 0 ? '+' : ''}${mods[s]}</div>
-            </div>`;
-    }
-
-    let skillTags = allSkills.map(s => 
-        `<span class="clickable-tag" onclick="openModal('${s}', '${skillDescriptions[s] || ''}')">${s}</span>`
-    ).join(' ');
-
-    let formattedText = subInfo.text
-        .replace(/ \| /g, '<br>')
-        .replace(/\. /g, '.<br>');
-
-    if (specialAttrVal) {
-        formattedText += `<br><b>Zauberwirkungs-Attribut:</b> ${specialAttrVal}`;
-    }
-
-    const clsData = classes[cls] || {};
     document.getElementById('screen-out-features').innerHTML = `
-        <li><b>Fertigkeiten:</b> ${skillTags}</li>
-        <li><b>Volksmerkmale:</b><br>${formattedText}</li>
-        <li><b>Hintergrund-Talent:</b> ${bgObj.feat || ''}</li>
-        <li><b>Hintergrund-Werkzeuge:</b> ${bgCustomData.tools.join(', ') || 'Keine'}</li>
-        <li><b>Hintergrund-Ausrüstung:</b> ${bgCustomData.equipment.join(', ')}</li>
-        <li><b>Klassen-Rettungswürfe:</b> ${(clsData.saves || []).join(', ')}</li>
-        <li><b>Rüstungs-Proficiency:</b> ${clsData.armor || 'Keine'}</li>
+        <li><b>Fertigkeiten:</b> ${allSkills.join(', ')}</li>
+        <li><b>Volksmerkmale:</b><br>${subInfo.text}</li>
+        <li><b>Talent:</b> ${backgrounds[bg]?.feat || ''}</li>
+        <li><b>Werkzeuge:</b> ${bgCustomData.tools.join(', ') || 'Keine'}</li>
+        <li><b>Ausrüstung:</b> ${bgCustomData.equipment.join(', ')}</li>
     `;
 
-    renderEquipmentSectionInSheet(cls);
-
-    let cantripRows = chosenCantrips.map(c => {
-        let cleanName = c.replace(/ \((Racial|Auto|.*)\)/, '').trim();
-        return `
-            <div class="spell-row">
-                <span><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--accent); margin-right:6px;"></i> ${c}</span>
-                <button type="button" class="info-btn" style="width:38px; height:38px;" onclick="showSpellModalByName('${cleanName.replace(/'/g, "\\'")}')">✨</button>
-            </div>
-        `;
-    }).join('');
-
-    let spellRows = chosenSpells.map(s => {
-        let cleanName = s.replace(/ \((Racial|Auto|.*)\)/, '').trim();
-        return `
-            <div class="spell-row">
-                <span><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--accent); margin-right:6px;"></i> ${s}</span>
-                <button type="button" class="info-btn" style="width:38px; height:38px;" onclick="showSpellModalByName('${cleanName.replace(/'/g, "\\'")}')">I</button>
-            </div>
-        `;
-    }).join('');
+    renderEquipmentSectionInSheet(clsName);
 
     document.getElementById('screen-out-spells').innerHTML = `
-        <div style="margin-bottom: 6px; font-weight:bold; font-size:0.85rem; color:var(--text-muted);">Zaubertricks:</div>
-        <div style="margin-bottom: 12px;">${cantripRows || '<span style="font-size:0.85rem; color:var(--text-muted);">Keine</span>'}</div>
-        
-        <div style="margin-bottom: 6px; font-weight:bold; font-size:0.85rem; color:var(--text-muted);">Vorbereitete Stufe 1 Zauber:</div>
-        <div style="margin-bottom: 12px;">${spellRows || '<span style="font-size:0.85rem; color:var(--text-muted);">Keine ausgewählt</span>'}</div>
-        
-        <div style="font-size: 0.85rem; color: var(--text-muted);"><strong>Stufe 1 Zauberplätze:</strong> ${(clsData.casterType && clsData.casterType !== "NONE") ? '2 / Lange Rast' : '0'}</div>
+        <div style="font-weight:bold; font-size:0.85rem; color:var(--text-muted);">Zaubertricks:</div>
+        <div>${chosenCantrips.join(', ') || 'Keine'}</div>
+        <div style="margin-top:8px; font-weight:bold; font-size:0.85rem; color:var(--text-muted);">Vorbereitete Stufe 1 Zauber:</div>
+        <div>${chosenSpells.join(', ') || 'Keine'}</div>
     `;
 
-    const sheetElem = document.getElementById('sheet');
-    sheetElem.style.display = 'block';
-    sheetElem.scrollIntoView({ behavior: 'smooth' });
-}
-
-function saveCharacterToStorage(charObj) {
-    let characters = [];
-    const savedList = localStorage.getItem('dnd_character_list');
-    if (savedList) {
-        try { characters = JSON.parse(savedList); } catch(e) {}
-    }
-    
-    characters.push(charObj);
-    localStorage.setItem('dnd_character_list', JSON.stringify(characters));
-    localStorage.setItem('dnd_active_character', JSON.stringify(charObj));
+    const sheet = document.getElementById('sheet');
+    sheet.style.display = 'block';
+    sheet.scrollIntoView({ behavior: 'smooth' });
 }
 
 function manualSaveCharacter() {
     if (!lastBuiltCharacter) return;
-    lastBuiltCharacter.lastAccess = new Date().toISOString();
-    saveCharacterToStorage(lastBuiltCharacter);
+    let list = JSON.parse(localStorage.getItem('dnd_character_list') || '[]');
+    list.push(lastBuiltCharacter);
+    localStorage.setItem('dnd_character_list', JSON.stringify(list));
+    localStorage.setItem('dnd_active_character', JSON.stringify(lastBuiltCharacter));
     
     isSaved = true;
-    const advBtn = document.getElementById('btn-adventure');
-    if (advBtn) {
-        advBtn.disabled = false;
-        advBtn.style.background = '#2e7d32';
-        advBtn.style.color = '#fff';
-        advBtn.style.cursor = 'pointer';
-    }
-
+    const adv = document.getElementById('btn-adventure');
+    adv.disabled = false; adv.style.background = '#2e7d32'; adv.style.color = '#fff'; adv.style.cursor = 'pointer';
     alert("Held erfolgreich gespeichert!");
 }
 
 function startAdventure() {
-    if (!isSaved) {
-        alert("Bitte speichere den Helden zuerst ab!");
-        return;
-    }
-    if (lastBuiltCharacter) {
-        localStorage.setItem('dnd_active_character', JSON.stringify(lastBuiltCharacter));
-    }
+    if (!isSaved) return alert("Bitte zuerst speichern!");
     window.location.href = 'manager.html';
 }
 
-function renderEquipmentSectionInSheet(clsKey) {
+function renderEquipmentSectionInSheet(clsName) {
     const container = document.getElementById('sheet-equipment-controls');
-    const cls = classes[clsKey] || {};
-    const fixedEq = (cls.equipment && cls.equipment[0] && cls.equipment[0].fixed) ? cls.equipment[0].fixed : "Standardausrüstung";
-
-    const simpleWeapons = [...Object.keys(weaponsCompendium["Simple Melee"] || {}), ...Object.keys(weaponsCompendium["Simple Ranged"] || {})];
-    const martialWeapons = [...Object.keys(weaponsCompendium["Martial Melee"] || {}), ...Object.keys(weaponsCompendium["Martial Ranged"] || {})];
-    const allWeapons = [...simpleWeapons, ...martialWeapons];
-
-    let html = `<div style="font-size:0.85rem; margin-bottom:8px;"><b>Feste Startausrüstung:</b> ${fixedEq}</div>`;
-
-    if (["Fighter", "Paladin", "Ranger", "Barbarian", "Rogue", "Monk", "Bard"].includes(clsKey)) {
-        html += `
-            <div class="grid-2">
-                <div>
-                    <label style="font-size:0.75rem;">Primärwaffe wählen:</label>
-                    <select id="sheet-weapon-1">
-                        ${(["Fighter", "Paladin", "Ranger", "Barbarian"].includes(clsKey) ? martialWeapons : simpleWeapons).map(w => `<option value="${w}">${w}</option>`).join('')}
-                    </select>
-                </div>
-                <div>
-                    <label style="font-size:0.75rem;">Sekundärwaffe wählen:</label>
-                    <select id="sheet-weapon-2">
-                        ${allWeapons.map(w => `<option value="${w}">${w}</option>`).join('')}
-                    </select>
-                </div>
-            </div>`;
-    } else {
-        html += `<div style="font-size:0.85rem; color:var(--text-muted); margin-top:4px;">Diese Klasse nutzt die oben definierte feste Startausrüstung.</div>`;
-    }
-
-    container.innerHTML = html;
+    container.innerHTML = `<div style="font-size:0.85rem;"><b>Feste Startausrüstung:</b> Gemäß Klassenvorgabe in der HTML-Datei.</div>`;
 }
 
 // --- DEBUG-KONSOLE ---
 const debugBox = document.createElement('div');
-debugBox.id = "custom-debug-console";
-debugBox.style.cssText = "position:fixed; bottom:0; left:0; width:100%; max-height:180px; background:black; color:lime; font-size:10px; overflow-y:scroll; z-index:99999; padding:5px; opacity:0.95; display:none;";
+debugBox.style.cssText = "position:fixed; bottom:0; left:0; width:100%; max-height:180px; background:black; color:lime; font-size:10px; overflow-y:scroll; z-index:99999; padding:5px; display:none;";
 document.body.appendChild(debugBox);
 
 function toggleDebugConsole() {
-    if (debugBox.style.display === 'none') {
-        debugBox.style.display = 'block';
-        if (!debugBox.innerHTML.trim()) {
-            debugBox.innerHTML = '<span style="color:cyan;">[LOG]</span> Konsole geöffnet und aktiv.';
-        }
-    } else {
-        debugBox.style.display = 'none';
-    }
+    debugBox.style.display = debugBox.style.display === 'none' ? 'block' : 'none';
 }
 
 window.onerror = function(msg, url, line) {
     debugBox.innerHTML += `<br><span style="color:red;">[FEHLER]</span> ${msg} (Zeile ${line})`;
 };
-
 const oldLog = console.log;
 console.log = function(...args) {
-    debugBox.innerHTML += `<br><span style="color:cyan;">[LOG]</span> ${args.join(' ')}`;
+    debugBox.innerHTML += `<br>[LOG] ${args.join(' ')}`;
     oldLog.apply(console, args);
 };
-
-const oldWarn = console.warn;
-console.warn = function(...args) {
-    debugBox.innerHTML += `<br><span style="color:orange;">[WARN]</span> ${args.join(' ')}`;
-    oldWarn.apply(console, args);
-};
 </script>
-
-</body>
-</html>
