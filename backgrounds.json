@@ -1,3 +1,4 @@
+{
 "backgrounds": {
   "Adeliger": {
     "attributes": ["STR", "INT", "CHA"],
@@ -327,4 +328,5 @@
     },
     "text": "Du hast deine jungen Jahre damit verbracht, zu Herrenhäusern und Klöstern zu reisen und dir mit verschiedenen Gelegenheitsarbeiten und Dienstleistungen Zugang zu den Bibliotheken zu erarbeiten. Lange Abende hast du mit dem Studium von Büchern und Schriftrollen verbracht und dir Wissen über das Multiversum und die Grundlagen der Magie angeeignet. Und dein Geist verlangt nach mehr."
   }
+}
 }
