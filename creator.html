@@ -374,6 +374,7 @@ function parseEquipmentHtml(htmlText) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlText, 'text/html');
     
+    // 1. Absätze mit .trait-name einlesen (z.B. Ausrüstungspakete, Beschreibungen)
     doc.querySelectorAll('p').forEach(p => {
         const traitSpan = p.querySelector('.trait-name');
         if (traitSpan) {
@@ -382,6 +383,7 @@ function parseEquipmentHtml(htmlText) {
         }
     });
 
+    // 2. Alle Tabellen in der ausruestung.html durchgehen (Waffen, Rüstungen, Werkzeuge etc.)
     doc.querySelectorAll('table').forEach(table => {
         table.querySelectorAll('tr').forEach(tr => {
             const tds = tr.querySelectorAll('td');
@@ -915,8 +917,8 @@ function buildCharacter() {
             <div class="stat-mod">${mods[s] >= 0 ? '+' : ''}${mods[s]}</div>
         </div>`).join('');
 
-    let toolsStr = Array.isArray(bgCustomData.tools) ? bgCustomData.tools.join(', ') : (bgCustomData.tools || 'Keine');
-    let eqStr = Array.isArray(bgCustomData.equipment) ? bgCustomData.equipment.join(', ') : (bgCustomData.equipment || 'Keine');
+    let toolsStr = Array.isArray(bgCustomData.tools) ? bgCustomData.tools.join(', ') : (typeof bgCustomData.tools === 'object' ? JSON.stringify(bgCustomData.tools) : (bgCustomData.tools || 'Keine'));
+    let eqStr = Array.isArray(bgCustomData.equipment) ? bgCustomData.equipment.join(', ') : (typeof bgCustomData.equipment === 'object' ? JSON.stringify(bgCustomData.equipment) : (bgCustomData.equipment || 'Keine'));
 
     document.getElementById('screen-out-features').innerHTML = `
         <li><b>Fertigkeiten:</b> ${allSkills.join(', ')}</li>
@@ -942,26 +944,110 @@ function buildCharacter() {
     }
 }
 
+function expandEquipmentEntries(entries) {
+    let expanded = [];
+    entries.forEach(entry => {
+        if (!entry) return;
+        let str = typeof entry === 'string' ? entry.trim() : JSON.stringify(entry);
+        str = str.replace(/\.$/, '');
+        let parts = str.split(/,| und /);
+        parts.forEach(p => {
+            let cleaned = p.trim();
+            if (cleaned) expanded.push(cleaned);
+        });
+    });
+    return expanded;
+}
+
+function accumulateItems(itemList) {
+    let map = {};
+    itemList.forEach(raw => {
+        if (!raw) return;
+        let str = typeof raw === 'string' ? raw.trim() : JSON.stringify(raw);
+        if (str.startsWith('[object') || str === 'Keine') return;
+
+        let qty = "1";
+        let name = str;
+
+        let numMatch = str.match(/^(\d+)\s*(?:x\s*)?(.*)$/);
+        if (numMatch) {
+            qty = numMatch[1];
+            name = numMatch[2].trim();
+        } else {
+            let lower = str.toLowerCase();
+            if (lower.startsWith('ein ') || lower.startsWith('eine ') || lower.startsWith('einen ')) {
+                qty = "1";
+                name = str.replace(/^(ein|eine|einen)\s+/i, '').trim();
+            } else if (lower.startsWith('zwei ')) {
+                qty = "2";
+                name = str.replace(/^zwei\s+/i, '').trim();
+            } else if (lower.startsWith('drei ')) {
+                qty = "3";
+                name = str.replace(/^drei\s+/i, '').trim();
+            } else if (lower.startsWith('vier ')) {
+                qty = "4";
+                name = str.replace(/^vier\s+/i, '').trim();
+            } else if (lower.startsWith('fünf ')) {
+                qty = "5";
+                name = str.replace(/^fünf\s+/i, '').trim();
+            } else if (lower.startsWith('zehn ')) {
+                qty = "10";
+                name = str.replace(/^zehn\s+/i, '').trim();
+            }
+        }
+
+        name = name.replace(/[.,;]$/, '').trim();
+        if (!name) return;
+
+        let key = name.toLowerCase();
+        if (map[key]) {
+            let q1 = parseInt(map[key].qty);
+            let q2 = parseInt(qty);
+            if (!isNaN(q1) && !isNaN(q2)) {
+                map[key].qty = (q1 + q2).toString();
+            } else {
+                map[key].qty = `${map[key].qty}, ${qty}`;
+            }
+        } else {
+            map[key] = { originalName: name, qty: qty };
+        }
+    });
+    return Object.values(map);
+}
+
 function renderEquipmentSectionInSheet(clsName, bgCustomData) {
     const container = document.getElementById('sheet-equipment-controls');
     if (!container) return;
 
     let classItems = [];
-    if (clsName === "Artifizier") classItems = ["Dolch", "Schuppenpanzer", "Tüftlerwerkzeuge", "Materialkomponentenbeutel"];
-    else if (clsName === "Barbar") classItems = ["Zweihandaxt", "Wurfspeer", "Entdeckerausrüstung"];
-    else if (clsName === "Barde") classItems = ["Rapier", "Laute", "Diplomatenausrüstung", "Leder"];
-    else if (clsName === "Kleriker") classItems = ["Streitkolben", "Kettenhemd", "Heiliges Symbol", "Entdeckerausrüstung"];
-    else if (clsName === "Kämpfer") classItems = ["Langschwert", "Plattenpanzer", "Schild", "Gewölbeforscherausrüstung"];
-    else classItems = ["Dolch", "Entdeckerausrüstung"];
+    if (clsName === "Artifizier") classItems = ["1 Dolch", "1 Schuppenpanzer", "1 Tüftlerwerkzeuge", "1 Materialkomponentenbeutel"];
+    else if (clsName === "Barbar") classItems = ["1 Zweihandaxt", "4 Wurfspeer", "1 Entdeckerausrüstung"];
+    else if (clsName === "Barde") classItems = ["1 Rapier", "1 Laute", "1 Diplomatenausrüstung", "1 Leder"];
+    else if (clsName === "Kleriker") classItems = ["1 Streitkolben", "1 Kettenhemd", "1 Heiliges Symbol", "1 Entdeckerausrüstung"];
+    else if (clsName === "Kämpfer") classItems = ["1 Langschwert", "1 Plattenpanzer", "1 Schild", "1 Gewölbeforscherausrüstung"];
+    else classItems = ["1 Dolch", "1 Entdeckerausrüstung"];
 
     let bgEquipList = Array.isArray(bgCustomData.equipment) ? bgCustomData.equipment : [bgCustomData.equipment];
-    let allCombined = [...classItems, ...bgEquipList, ...(bgCustomData.tools || [])].filter(Boolean);
+    let toolsList = Array.isArray(bgCustomData.tools) ? bgCustomData.tools : [bgCustomData.tools];
 
-    let badgesHtml = allCombined.map(item => `<span class="badge" onclick="showEquipmentModal('${item}')"><i class="fa-solid fa-box-open" style="color:var(--accent); margin-right:4px;"></i>${item}</span>`).join(' ');
+    let rawList = [...classItems, ...bgEquipList, ...toolsList];
+    let expanded = expandEquipmentEntries(rawList);
+    let accumulated = accumulateItems(expanded);
+
+    let rowsHtml = accumulated.map(item => `
+        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--card); border: 1.5px solid var(--border); padding: 6px 10px; border-radius: 6px; margin-bottom: 6px;">
+            <span onclick="showEquipmentModal('${item.originalName}')" style="color: var(--accent); cursor: pointer; font-weight: bold; text-decoration: underline;">
+                <i class="fa-solid fa-box-open" style="margin-right: 6px;"></i>${item.originalName}
+            </span>
+            <span style="background: var(--btn-back-bg); border: 1px solid var(--border); padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; color: var(--text);">
+                Anzahl: ${item.qty}
+            </span>
+        </div>
+    `).join('');
 
     container.innerHTML = `
-        <div style="font-size:0.85rem; margin-bottom: 8px;"><b>Klasse (${clsName}) & Hintergrund Ausrüstung:</b> (Klicke auf einen Gegenstand für Regeldetails)</div>
-        <div style="display: flex; flex-wrap: wrap; gap: 6px;">${badgesHtml}</div>
+        <div style="font-size:0.85rem; margin-bottom: 8px; color: var(--text-muted);"><b>Ausrüstungsliste (kumuliert):</b> (Klicke auf den Namen für Regeldetails)</div>
+        <div style="display: flex; flex-direction: column;">${rowsHtml}</div>
     `;
 }
 
