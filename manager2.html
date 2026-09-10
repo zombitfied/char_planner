@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&D 2024 - Charakter-Manager</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f4f0ea;
+            --surface-color: #ffffff;
+            --surface-border: #7c7265;
+            --primary-gold: #b8860b;
+            --primary-gold-hover: #996515;
+            --text-color: #2c221e;
+            --text-muted: #6b5b52;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            background-image: radial-gradient(#e6dbcc 15%, transparent 16%);
+            background-size: 20px 20px;
+        }
+
+        header {
+            background-color: var(--surface-color);
+            padding: 10px 16px;
+            border-bottom: 3px solid var(--surface-border);
+            border-radius: 0 0 16px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(44, 34, 30, 0.1);
+            z-index: 10;
+            margin: 0;
+            flex-shrink: 0;
+        }
+
+        .btn-icon {
+            background: #faf7f2;
+            border: 1.5px solid var(--surface-border);
+            color: var(--text-muted);
+            padding: 6px 12px;
+            border-radius: 10px 14px 12px 16px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(44, 34, 30, 0.08);
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-icon:hover {
+            color: var(--text-color);
+            border-color: var(--primary-gold);
+            background: #f0ebe1;
+        }
+
+        .container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            padding-bottom: 140px;
+            max-width: 600px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: var(--surface-color);
+            border: 3px solid var(--surface-border);
+            border-radius: 12px 16px 10px 14px;
+            padding: 16px;
+            margin-bottom: 15px;
+            box-shadow: 0 6px 18px rgba(44, 34, 30, 0.12);
+            filter: url(#rough-edge);
+        }
+
+        .card h2 {
+            font-size: 1rem;
+            margin-top: 0;
+            color: var(--primary-gold);
+            border-bottom: 1px solid var(--surface-border);
+            padding-bottom: 6px;
+            text-transform: uppercase;
+            font-family: serif;
+        }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .grid-combat { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+
+        .stat-box {
+            background: #faf7f2;
+            border: 1.5px solid var(--surface-border);
+            padding: 8px 6px;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .stat-box:hover {
+            border-color: var(--primary-gold);
+            background: #f0ebe1;
+        }
+
+        /* Blauer Glanz-Effekt für Temp HP */
+        .temp-hp-glow {
+            box-shadow: 0 0 12px 3px rgba(30, 144, 255, 0.6), inset 0 0 6px rgba(30, 144, 255, 0.4) !important;
+            border-color: #1e90ff !important;
+        }
+
+        .stat-val { font-size: 1.1rem; font-weight: bold; color: var(--text-color); }
+        .stat-mod { font-size: 0.8rem; color: var(--primary-gold); }
+
+        /* Unten angeordnete Tab-Leiste im Stein-Look */
+        nav.tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--surface-color);
+            border-top: 3px solid var(--surface-border);
+            border-radius: 16px 16px 0 0;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 1000;
+            box-shadow: 0 -6px 18px rgba(44, 34, 30, 0.12);
+            filter: url(#rough-edge);
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            flex: 1;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .tab-button.active {
+            color: var(--primary-gold);
+        }
+
+        .tab-button i {
+            font-size: 1.1rem;
+        }
+
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; }
+
+        /* Modals */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(44, 34, 30, 0.6);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+
+        .modal-card {
+            background: var(--surface-color);
+            border: 3px solid var(--surface-border);
+            border-radius: 14px;
+            padding: 20px;
+            width: 100%;
+            max-width: 420px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            filter: url(#rough-edge);
+        }
+
+        .modal-card h3 {
+            margin-top: 0;
+            color: var(--primary-gold);
+            font-family: serif;
+            text-transform: uppercase;
+            font-size: 1.1rem;
+            border-bottom: 1px solid var(--surface-border);
+            padding-bottom: 8px;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 12px 0;
+            border: 1.5px solid var(--surface-border);
+            border-radius: 8px;
+            background: #faf7f2;
+            font-size: 1rem;
+            color: var(--text-color);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 15px;
+        }
+
+        .btn-primary {
+            background: var(--primary-gold);
+            color: white;
+            border: 1.5px solid var(--surface-border);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-gold-hover);
+        }
+
+        .btn-secondary {
+            background: #faf7f2;
+            color: var(--text-muted);
+            border: 1.5px solid var(--surface-border);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-secondary:hover {
+            color: var(--text-color);
+            background: #f0ebe1;
+        }
+
+        .btn-disabled {
+            opacity: 0.5;
+            cursor: not-allowed !important;
+        }
+
+        .clickable-badge {
+            display: inline-block;
+            background: #faf7f2;
+            border: 1.5px solid var(--surface-border);
+            padding: 2px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary-gold);
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .clickable-badge:hover {
+            background: #f0ebe1;
+            border-color: var(--primary-gold);
+        }
+
+        .combat-btn-row {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin: 4px 0;
+            flex-wrap: wrap;
+        }
+        .mini-btn {
+            background: #faf7f2;
+            border: 1.5px solid var(--surface-border);
+            border-radius: 4px;
+            padding: 3px 8px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+        .mini-btn:hover {
+            background: var(--primary-gold);
+            color: white;
+            border-color: var(--primary-gold);
+        }
+        .mini-btn.disabled {
+            opacity: 0.3;
+            cursor: not-allowed !important;
+            pointer-events: none;
+        }
+
+        .death-saves-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 4px 0;
+            font-size: 0.75rem;
+        }
+        .death-checkboxes {
+            display: flex;
+            gap: 6px;
+        }
+        .death-checkboxes input[type="checkbox"] {
+            width: 14px;
+            height: 14px;
+            accent-color: var(--primary-gold);
+            cursor: pointer;
+        }
+
+        @keyframes diceShake {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(-15deg); }
+            50% { transform: rotate(15deg); }
+            75% { transform: rotate(-10deg); }
+            100% { transform: rotate(0deg); }
+        }
+        .dice-anim {
+            display: inline-block;
+            animation: diceShake 0.5s ease;
+            color: var(--primary-gold);
+            font-size: 1.5rem;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SVG-Filter für den grisselig-rauhen Stein-Kanten-Effekt -->
+    <svg style="display:none;" aria-hidden="true">
+        <filter id="rough-edge">
+            <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="3" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+    </svg>
+
+    <header>
+        <a href="index.html" class="btn-icon">
+            <i class="fa-solid fa-door-open"></i> Eingang
+        </a>
+        <button class="btn-icon" onclick="openRestModal()">
+            <i class="fa-solid fa-bed"></i> Rast
+        </button>
+        <button class="btn-icon" onclick="openXpModal()" title="Erfahrung & Stufe verwalten">
+            <i class="fa-solid fa-award"></i> EP/Lvl
+        </button>
+    </header>
+
+    <div class="container">
+
+        <!-- TAB 1: SHEET -->
+        <div id="tab-sheet" class="tab-pane active">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div>
+                        <h2 id="sheet-name" style="margin:0 0 6px 0; border:none; padding:0; font-size: 1.2rem;">-</h2>
+                        <div style="font-size: 0.85rem; color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+                            <span id="sheet-species" class="clickable-badge" onclick="openInfoModal('species')">-</span> | 
+                            <span id="sheet-class" class="clickable-badge" onclick="openInfoModal('class')">-</span> | 
+                            <span id="sheet-bg" class="clickable-badge" onclick="openInfoModal('background')">-</span> 
+                            <span>(Stufe <span id="sheet-level">1</span>)</span>
+                        </div>
+                    </div>
+                    <div id="sheet-icons" style="font-size: 1.5rem; display: flex; gap: 8px; color: var(--primary-gold);"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Kampfwerte</h2>
+                <!-- Zeile 1: Trefferpunkte & Rüstungsklasse -->
+                <div class="grid-combat">
+                    <div id="sheet-hp-box" class="stat-box" onclick="openHpModal()" title="Trefferpunkte verwalten">
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Trefferpunkte</div>
+                        
+                        <!-- Dynamische HP Anzeige (Normal vs Temp HP) -->
+                        <div id="sheet-hp-display-container">
+                            <div class="stat-val"><span id="sheet-hp">10</span>/<span id="sheet-max-hp">10</span></div>
+                        </div>
+
+                    </div>
+                    <div class="stat-box" onclick="openAcModal()" title="Rüstungsklasse verwalten">
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">RK</div>
+                        <div id="sheet-temp-ac-container" style="font-size: 0.75rem; color: var(--primary-gold); font-weight: bold; display: none;">+<span id="sheet-temp-ac">0</span> temp</div>
+                        <div class="stat-val"><span id="sheet-ac">12</span></div>
+                    </div>
+                </div>
+
+                <!-- Zeile 2: Trefferwürfel & Todesrettungswürfe -->
+                <div class="grid-combat" style="margin-bottom: 0;">
+                    <!-- Trefferwürfel Box -->
+                    <div class="stat-box" onclick="openHitDiceModal()" title="Trefferwürfel einsetzen / heilen">
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Trefferwürfel</div>
+                        <div class="stat-val" style="font-size: 1.05rem; margin-top: 4px;">
+                            <span id="sheet-hit-dice-type">W8</span>: <span id="sheet-hit-dice-current">1</span>/<span id="sheet-hit-dice-max">1</span>
+                        </div>
+                        <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">Verfügbar / Gesamt</div>
+                    </div>
+
+                    <!-- Todesrettungswürfe Box -->
+                    <div class="stat-box" style="cursor: default; text-align: left; padding: 6px 8px;">
+                        <div style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-bottom: 2px;">Todesrettung</div>
+                        <div class="death-saves-row">
+                            <span>Erfolge</span>
+                            <div class="death-checkboxes">
+                                <input type="checkbox" id="death-succ-0" onclick="saveDeathSaves()">
+                                <input type="checkbox" id="death-succ-1" onclick="saveDeathSaves()">
+                                <input type="checkbox" id="death-succ-2" onclick="saveDeathSaves()">
+                            </div>
+                        </div>
+                        <div class="death-saves-row" style="margin-bottom: 0;">
+                            <span>Fehler</span>
+                            <div class="death-checkboxes">
+                                <input type="checkbox" id="death-fail-0" onclick="saveDeathSaves()">
+                                <input type="checkbox" id="death-fail-1" onclick="saveDeathSaves()">
+                                <input type="checkbox" id="death-fail-2" onclick="saveDeathSaves()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Attribute <span style="font-size:0.75rem; font-weight:normal; color:var(--text-muted); float:right; line-height:1.5rem;">(Antippen für Details)</span></h2>
+                <div class="grid-3" id="sheet-stats-grid">
+                    <!-- Wird per JS befüllt -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: INVENTAR -->
+        <div id="tab-inventory" class="tab-pane">
+            <div class="card">
+                <h2>Inventar & Ausrüstung</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">Hier verwaltest du deine Gegenstände, Waffen und Gold.</p>
+            </div>
+        </div>
+
+        <!-- TAB 3: ZAUBER -->
+        <div id="tab-spells" class="tab-pane">
+            <div class="card">
+                <h2>Zauber & Cantrips</h2>
+                <div id="sheet-spells-container" style="font-size: 0.9rem;">
+                    <!-- Wird per JS befüllt -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: MERKMALE -->
+        <div id="tab-abilities" class="tab-pane">
+            <div class="card">
+                <h2>Fähigkeiten & Talente</h2>
+                <ul id="sheet-features-list" style="padding-left: 15px; font-size: 0.85rem;">
+                    <!-- Wird per JS befüllt -->
+                </ul>
+            </div>
+        </div>
+
+        <!-- TAB 5: JOURNAL -->
+        <div id="tab-journal" class="tab-pane">
+            <div class="card">
+                <h2>Tagebuch & Notizen</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">Notizen zu deinen Abenteuern und Erlebnissen.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Unten angeordnete Tab-Leiste -->
+    <nav class="tab-bar">
+        <button class="tab-button active" onclick="switchTab('sheet', event)">
+            <i class="fa-solid fa-shield-halved"></i>
+            Sheet
+        </button>
+        <button class="tab-button" onclick="switchTab('inventory', event)">
+            <i class="fa-solid fa-backpack"></i>
+            Inventar
+        </button>
+        <button class="tab-button" onclick="switchTab('spells', event)">
+            <i class="fa-solid fa-wand-sparkles"></i>
+            Zauber
+        </button>
+        <button class="tab-button" onclick="switchTab('abilities', event)">
+            <i class="fa-solid fa-star"></i>
+            Merkmale
+        </button>
+        <button class="tab-button" onclick="switchTab('journal', event)">
+            <i class="fa-solid fa-book-open"></i>
+            Journal
+        </button>
+    </nav>
+
+    <!-- MODAL: RAST AUSWAHL -->
+    <div id="rest-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3>Rast einlegen</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted);">Wähle die Art der Rast:</p>
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
+                <button class="btn-primary" onclick="performShortRest()"><i class="fa-solid fa-mug-hot"></i> Kurze Rast (Short Rest)</button>
+                <button class="btn-primary" onclick="performLongRest()"><i class="fa-solid fa-bed"></i> Lange Rast (Long Rest)</button>
+            </div>
+            <div class="modal-buttons" style="margin-top: 20px;">
+                <button class="btn-secondary" onclick="closeRestModal()">Abbrechen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: TREFFERWÜRFEL NUTZEN -->
+    <div id="hitdice-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3>Trefferwürfel einsetzen</h3>
+            <div style="font-size: 0.9rem; margin-bottom: 12px; color: var(--text-muted);">
+                Verfügbare Trefferwürfel: <strong id="modal-hd-display">1/1</strong>
+            </div>
+            <p style="font-size: 0.85rem;">Gib einen Würfel aus, um HP zu heilen (1 Würfel + Konstitutions-Modifikator).</p>
+            <div class="modal-buttons">
+                <button class="btn-primary" onclick="spendHitDie()"><i class="fa-solid fa-dice"></i> Trefferwürfel würfeln</button>
+                <button class="btn-secondary" onclick="closeHitDiceModal()">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: EP & LEVELUP -->
+    <div id="xp-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3>Erfahrung & Stufenaufstieg</h3>
+            <div style="font-size: 0.9rem; margin-bottom: 12px; color: var(--text-muted);">
+                Aktuelle EP: <strong id="modal-current-xp" style="color: var(--text-color);">0</strong><br>
+                Fehlt bis Stufe <span id="modal-next-level">2</span>: <strong id="modal-needed-xp" style="color: var(--primary-gold);">300</strong> EP
+            </div>
+            
+            <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                <input type="number" id="xp-input" class="modal-input" placeholder="EP hinzufügen..." style="margin:0; flex:1;">
+                <button class="btn-primary" onclick="addXp()" style="white-space: nowrap;"><i class="fa-solid fa-plus"></i></button>
+                <button class="btn-secondary" onclick="openXpOverride()" title="EP direkt setzen (Korrigieren)" style="padding: 10px 12px;"><i class="fa-solid fa-pen"></i></button>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px solid var(--surface-border); padding-top: 12px;">
+                <button id="levelup-btn" class="btn-primary btn-disabled" onclick="openLevelUpModal()" disabled>
+                    <i class="fa-solid fa-angles-up"></i> Stufenaufstieg durchführen
+                </button>
+                <button class="btn-secondary" onclick="closeXpModal()">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: LEVELUP AUSWAHL & HP METHODE -->
+    <div id="levelup-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3>Stufenaufstieg</h3>
+            <div id="levelup-content" style="font-size: 0.9rem; margin-bottom: 12px;">
+                <!-- Wird per JS befüllt -->
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-secondary" onclick="closeLevelUpModal()">Abbrechen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: TREFFERPUNKTE DETAIL MIT SCHNELL-BUTTONS -->
+    <div id="hp-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3>Trefferpunkte verwalten</h3>
+            
+            <div id="hp-lock-warning" style="font-size: 0.8rem; color: #1e90ff; font-weight: bold; text-align: center; margin-bottom: 8px; display: none;">
+                <i class="fa-solid fa-shield-halved"></i> Normale Trefferpunkte sind durch temporäre Trefferpunkte geschützt!
+            </div>
+
+            <!-- Plus-Buttons oben -->
+            <div class="combat-btn-row">
+                <button id="btn-plus-1" class="mini-btn" onclick="modalModifyHp(1)">+1</button>
+                <button id="btn-plus-2" class="mini-btn" onclick="modalModifyHp(2)">+2</button>
+                <button id="btn-plus-5" class="mini-btn" onclick="modalModifyHp(5)">+5</button>
+            </div>
+
+            <!-- Anzeige & Komplett-Auffüllen-Button hinter der Anzeige -->
+            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin: 8px 0;">
+                <div style="font-size: 1rem; color: var(--text-color); font-weight: bold;">
+                    Aktuell: <span id="modal-hp-display" style="font-size: 1.2rem; color: var(--primary-gold);">10/10</span>
+                    <span id="modal-temp-hp-indicator" style="font-size: 0.85rem; color: #1e90ff; display:none;">(+<span id="modal-temp-hp-val">0</span> temp)</span>
+                </div>
+                <button class="btn-primary" onclick="confirmFullyHeal()" title="Komplett auffüllen" style="padding: 6px 10px; font-size: 0.9rem;"><i class="fa-solid fa-heart-pulse"></i></button>
+            </div>
+
+            <!-- Minus-Buttons darunter -->
+            <div class="combat-btn-row" style="margin-bottom: 15px;">
+                <button id="btn-minus-1" class="mini-btn" onclick="modalModifyHp(-1)">-1</button>
+                <button id="btn-minus-2" class="mini-btn" onclick="modalModifyHp(-2)">-2</button>
+                <button id="btn-minus-5" class="mini-btn" onclick="modalModifyHp(-5)">-5</button>
+            </div>
+
+            <!-- Temporäre Trefferpunkte mit Plus/Minus -->
+            <label style="font-size: 0.85rem; font-weight: bold; display: block; text-align: center; margin-bottom: 4px; color: #1e90ff;">Temporäre Trefferpunkte</label>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px;">
+                <button class="mini-btn" onclick="modifyTempHp(-1)" style="padding: 6px 12px; font-size: 0.9rem;">-</button>
+                <span id="modal-temp-hp-number" style="font-size: 1.2rem; font-weight: bold; min-width: 30px; text-align: center; color: #1e90ff;">0</span>
+                <button class="mini-btn" onclick="modifyTempHp(1)" style="padding: 6px 12px; font-size: 0.9rem;">+</button>
+            </div>
+
+            <div class="modal-buttons">
+                <button class="btn-primary" onclick="closeHpModal()">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: BESTÄTIGUNG VOLLSTÄNDIG AUFFÜLLEN -->
+    <div id="confirm-heal-modal" class="modal-overlay" style="z-index: 2100;">
+        <div class="modal-card" style="max-width: 320px;">
+            <h3>Heilung bestätigen</h3>
+            <p style="font-size: 0.9rem; line-height: 1.4; margin: 10px 0 20px 0;">
+                Hiermit werden alle Trefferpunkte wiederhergestellt. Möchtest du fortfahren?
+            </p>
+            <div class="modal-buttons">
+                <button class="btn-primary" onclick="executeFullyHeal()">Ja</button>
+                <button class="btn-secondary" onclick="closeConfirmHealModal()">Nein</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: RÜSTUNGSKLASSE DETAIL -->
+    <div id="ac-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3>Rüstungsklasse verwalten</h3>
+            <div style="font-size: 0.9rem; margin-bottom: 12px; color: var(--text-muted); text-align: center;">
+                Gesamt RK: <strong id="modal-total-ac" style="color: var(--text-color); font-size: 1.1rem;">12</strong>
+            </div>
+            
+            <label style="font-size: 0.85rem; font-weight: bold; display: block; text-align: center; margin-bottom: 4px;">Temporärer RK-Bonus</label>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px;">
+                <button class="mini-btn" onclick="modifyTempAc(-1)" style="padding: 6px 12px; font-size: 0.9rem;">-</button>
+                <span id="modal-temp-ac-number" style="font-size: 1.2rem; font-weight: bold; min-width: 30px; text-align: center; color: var(--primary-gold);">0</span>
+                <button class="mini-btn" onclick="modifyTempAc(1)" style="padding: 6px 12px; font-size: 0.9rem;">+</button>
+            </div>
+
+            <div class="modal-buttons">
+                <button class="btn-primary" onclick="closeAcModal()">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ATTRIBUT DETAIL -->
+    <div id="stat-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3 id="stat-modal-title">Attribut</h3>
+            <div id="stat-modal-body" style="font-size: 0.9rem; margin-bottom: 15px;">
+                <!-- Aufschlüsselung -->
+            </div>
+
+            <label style="font-size: 0.85rem; font-weight: bold;">Temporärer Bonus / Ausrüstung (zusätzlich):</label>
+            <input type="number" id="stat-temp-input" class="modal-input" placeholder="z.B. +2 durch Item oder Zauber">
+
+            <div class="modal-buttons">
+                <button class="btn-primary" onclick="saveStatChanges()">Speichern</button>
+                <button class="btn-secondary" onclick="closeStatModal()">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: REGELN / INFO (Rasse, Klasse, Hintergrund) -->
+    <div id="info-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3 id="info-modal-title">Regeln & Infos</h3>
+            <div id="info-modal-body" style="font-size: 0.9rem; line-height: 1.5; color: var(--text-color); margin-bottom: 15px;">
+                <!-- Inhalt -->
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-secondary" onclick="closeInfoModal()">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const xpThresholds = [0, 300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 64000, 85000, 100000, 120000, 140000, 165000, 195000, 225000, 265000, 305000, 355000];
+        let activeChar = null;
+        let selectedStatKey = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedChar = localStorage.getItem('dnd_active_character');
+            if (!savedChar) {
+                alert("Kein aktiver Charakter gefunden! Bitte erstelle oder wähle einen Helden.");
+                window.location.href = 'index.html';
+                return;
+            }
+
+            try {
+                activeChar = JSON.parse(savedChar);
+            } catch (e) {
+                alert("Fehler beim Laden des Charakters.");
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Fallbacks & Kompatibilität für ältere Charaktere ohne rawStats
+            if (!activeChar.rawStats && activeChar.stats) {
+                activeChar.rawStats = { ...activeChar.stats };
+            }
+            if (!activeChar.speciesBonuses) {
+                activeChar.speciesBonuses = {};
+                if (activeChar.species && activeChar.species.toLowerCase().includes('gnome')) {
+                    activeChar.speciesBonuses.INT = 2;
+                }
+            }
+
+            if (activeChar.xp === undefined) activeChar.xp = 0;
+            if (activeChar.maxHp === undefined) activeChar.maxHp = 10;
+            if (activeChar.hp === undefined) activeChar.hp = activeChar.maxHp;
+            if (activeChar.tempHp === undefined) activeChar.tempHp = 0;
+            if (activeChar.tempAc === undefined) activeChar.tempAc = 0;
+            if (activeChar.hitDiceCurrent === undefined) activeChar.hitDiceCurrent = activeChar.level || 1;
+            if (!activeChar.deathSaves) {
+                activeChar.deathSaves = { successes: [false, false, false], failures: [false, false, false] };
+            }
+            if (!activeChar.classesList) {
+                activeChar.classesList = [{ name: activeChar.class || "Abenteurer", level: activeChar.level || 1 }];
+            }
+            if (!activeChar.statTemps) {
+                activeChar.statTemps = { STR: 0, DEX: 0, CON: 0, INT: 0, WIS: 0, CHA: 0 };
+            }
+
+            updateUI();
+        });
+
+        function updateUI() {
+            if (!activeChar) return;
+
+            document.getElementById('sheet-name').innerText = activeChar.name || "Unbenannter Held";
+            document.getElementById('sheet-species').innerText = activeChar.species || "-";
+            
+            let speciesIcon = getSpeciesIcon(activeChar.species);
+            let classIcon = getClassIcon(activeChar.classesList[0].name);
+            document.getElementById('sheet-icons').innerHTML = `<i class="${speciesIcon}" title="${activeChar.species || ''}"></i><i class="${classIcon}" title="${activeChar.classesList[0].name}"></i>`;
+
+            let classStr = activeChar.classesList.map(c => `${c.name} ${c.level}`).join(' / ');
+            let totalLevel = activeChar.classesList.reduce((sum, c) => sum + c.level, 0);
+
+            document.getElementById('sheet-class').innerText = classStr;
+            document.getElementById('sheet-level').innerText = totalLevel;
+            document.getElementById('sheet-bg').innerText = activeChar.background || "-";
+            
+            // HP & Temp HP Anzeige auf dem Hauptsheet
+            const hpDisplayContainer = document.getElementById('sheet-hp-display-container');
+            const hpBox = document.getElementById('sheet-hp-box');
+
+            if (activeChar.tempHp > 0) {
+                // Wenn Temp HP vorhanden: Temp HP groß oben in Blau, normale HP kleiner darunter
+                hpDisplayContainer.innerHTML = `
+                    <div style="font-size: 1.2rem; font-weight: bold; color: #1e90ff; line-height: 1.2;">+${activeChar.tempHp}</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: bold;"><span id="sheet-hp">${activeChar.hp}</span>/<span id="sheet-max-hp">${activeChar.maxHp}</span></div>
+                `;
+                hpBox.classList.add('temp-hp-glow');
+            } else {
+                // Normale HP Anzeige groß, wenn keine Temp HP da sind
+                hpDisplayContainer.innerHTML = `
+                    <div class="stat-val"><span id="sheet-hp">${activeChar.hp}</span>/<span id="sheet-max-hp">${activeChar.maxHp}</span></div>
+                `;
+                hpBox.classList.remove('temp-hp-glow');
+            }
+
+            // AC & Temp AC (Berechnung mit rawStats & speciesBonuses)
+            let dexBase = activeChar.rawStats ? (activeChar.rawStats.DEX || 10) : 10;
+            let dexBonus = activeChar.speciesBonuses && activeChar.speciesBonuses.DEX ? activeChar.speciesBonuses.DEX : 0;
+            let dexTemp = activeChar.statTemps && activeChar.statTemps.DEX ? activeChar.statTemps.DEX : 0;
+            let dexTotal = dexBase + dexBonus + dexTemp;
+            let dexMod = Math.floor((dexTotal - 10) / 2);
+            let baseAc = 10 + dexMod; 
+            let effectiveAc = baseAc + (activeChar.tempAc || 0);
+            document.getElementById('sheet-ac').innerText = effectiveAc;
+
+            const tempAcContainer = document.getElementById('sheet-temp-ac-container');
+            const tempAcSpan = document.getElementById('sheet-temp-ac');
+            if (activeChar.tempAc > 0) {
+                tempAcSpan.innerText = activeChar.tempAc;
+                tempAcContainer.style.display = 'block';
+            } else {
+                tempAcContainer.style.display = 'none';
+            }
+
+            // Trefferwürfel
+            let primaryClassName = activeChar.classesList[0].name;
+            let dieSize = getHitDieSize(primaryClassName);
+            document.getElementById('sheet-hit-dice-type').innerText = `W${dieSize}`;
+            activeChar.hitDiceMax = totalLevel;
+            if (activeChar.hitDiceCurrent > activeChar.hitDiceMax) activeChar.hitDiceCurrent = activeChar.hitDiceMax;
+            document.getElementById('sheet-hit-dice-current').innerText = activeChar.hitDiceCurrent;
+            document.getElementById('sheet-hit-dice-max').innerText = activeChar.hitDiceMax;
+
+            // Todesrettungswürfe
+            for (let i = 0; i < 3; i++) {
+                document.getElementById(`death-succ-${i}`).checked = activeChar.deathSaves.successes[i];
+                document.getElementById(`death-fail-${i}`).checked = activeChar.deathSaves.failures[i];
+            }
+
+            // Attribute (Mit rawStats und speciesBonuses berechnen)
+            const statsGrid = document.getElementById('sheet-stats-grid');
+            const statKeys = activeChar.rawStats ? Object.keys(activeChar.rawStats) : ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
+            
+            if (statsGrid) {
+                statsGrid.innerHTML = '';
+                for (let s of statKeys) {
+                    let baseVal = activeChar.rawStats ? activeChar.rawStats[s] : 10;
+                    let speciesBonus = activeChar.speciesBonuses && activeChar.speciesBonuses[s] ? activeChar.speciesBonuses[s] : 0;
+                    let tempVal = activeChar.statTemps && activeChar.statTemps[s] ? activeChar.statTemps[s] : 0;
+                    let totalVal = baseVal + speciesBonus + tempVal;
+                    let mod = Math.floor((totalVal - 10) / 2);
+                    let modStr = mod >= 0 ? `+${mod}` : `${mod}`;
+
+                    statsGrid.innerHTML += `
+                        <div class="stat-box" onclick="openStatModal('${s}')" title="${s} Details anzeigen">
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">${s}</div>
+                            <div class="stat-val">${totalVal}</div>
+                            <div class="stat-mod">${modStr}</div>
+                        </div>
+                    `;
+                }
+            }
+
+            // Zauber
+            const spellsContainer = document.getElementById('sheet-spells-container');
+            if (spellsContainer) {
+                let cantripsText = activeChar.cantrips && activeChar.cantrips.length > 0 ? activeChar.cantrips.join(', ') : 'Keine';
+                let spellsText = activeChar.spells && activeChar.spells.length > 0 ? activeChar.spells.join(', ') : 'Keine';
+                spellsContainer.innerHTML = `
+                    <p><strong>Cantrips:</strong> ${cantripsText}</p>
+                    <p><strong>Vorbereitete Stufe 1 Zauber:</strong> ${spellsText}</p>
+                `;
+            }
+
+            // Skills / Merkmale
+            const featuresList = document.getElementById('sheet-features-list');
+            if (featuresList && activeChar.skills) {
+                featuresList.innerHTML = `<li><strong>Fertigkeiten:</strong> ${activeChar.skills.join(', ')}</li>`;
+            }
+
+            saveActiveChar();
+        }
+
+        function saveActiveChar() {
+            localStorage.setItem('dnd_active_character', JSON.stringify(activeChar));
+        }
+
+        function switchTab(tabId, event) {
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById('tab-' + tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // --- RAST LOGIK ---
+        function openRestModal() {
+            document.getElementById('rest-modal').style.display = 'flex';
+        }
+
+        function closeRestModal() {
+            document.getElementById('rest-modal').style.display = 'none';
+        }
+
+        function performShortRest() {
+            closeRestModal();
+            alert("Kurze Rast eingelegt: Du kannst Trefferwürfel einsetzen, um TP zu heilen.");
+            openHitDiceModal();
+        }
+
+        function performLongRest() {
+            closeRestModal();
+            activeChar.hp = activeChar.maxHp;
+            activeChar.tempHp = 0;
+            let totalLevel = activeChar.classesList.reduce((sum, c) => sum + c.level, 0);
+            let recoveredHd = Math.max(1, Math.floor(totalLevel / 2));
+            activeChar.hitDiceCurrent = Math.min(totalLevel, (activeChar.hitDiceCurrent || 0) + recoveredHd);
+            activeChar.deathSaves = { successes: [false, false, false], failures: [false, false, false] };
+            
+            updateUI();
+            alert("Lange Rast abgeschlossen! TP vollständig wiederhergestellt, Trefferwürfel regeneriert und Todesrettungswürfe zurückgesetzt.");
+        }
+
+        // --- TREFFERWÜRFEL MODAL ---
+        function openHitDiceModal() {
+            let totalLevel = activeChar.classesList.reduce((sum, c) => sum + c.level, 0);
+            if (activeChar.hitDiceCurrent === undefined) activeChar.hitDiceCurrent = totalLevel;
+            document.getElementById('modal-hd-display').innerText = `${activeChar.hitDiceCurrent}/${totalLevel}`;
+            document.getElementById('hitdice-modal').style.display = 'flex';
+        }
+
+        function closeHitDiceModal() {
+            document.getElementById('hitdice-modal').style.display = 'none';
+        }
+
+        function spendHitDie() {
+            if (activeChar.hitDiceCurrent <= 0) {
+                alert("Du hast keine Trefferwürfel mehr übrig!");
+                return;
+            }
+            let primaryClassName = activeChar.classesList[0].name;
+            let dieSize = getHitDieSize(primaryClassName);
+            
+            let conBase = activeChar.rawStats ? (activeChar.rawStats.CON || 10) : 10;
+            let conBonus = activeChar.speciesBonuses && activeChar.speciesBonuses.CON ? activeChar.speciesBonuses.CON : 0;
+            let conTemp = activeChar.statTemps && activeChar.statTemps.CON ? activeChar.statTemps.CON : 0;
+            let conMod = Math.floor(((conBase + conBonus + conTemp - 10) / 2));
+            
+            let roll = Math.floor(Math.random() * dieSize) + 1;
+            let healing = Math.max(1, roll + conMod);
+
+            activeChar.hitDiceCurrent -= 1;
+            activeChar.hp = Math.min(activeChar.maxHp, activeChar.hp + healing);
+
+            updateUI();
+            closeHitDiceModal();
+            alert(`Trefferwürfel (1W${dieSize}) gewürfelt: ${roll} + ${conMod} (CON) = ${healing} TP geheilt!`);
+        }
+
+        // --- TODESRETTUNGSWÜRFE ---
+        function saveDeathSaves() {
+            for (let i = 0; i < 3; i++) {
+                activeChar.deathSaves.successes[i] = document.getElementById(`death-succ-${i}`).checked;
+                activeChar.deathSaves.failures[i] = document.getElementById(`death-fail-${i}`).checked;
+            }
+            saveActiveChar();
+        }
+
+        // --- XP & LEVELUP MODAL ---
+        function openXpModal() {
+            let totalLevel = activeChar.classesList.reduce((sum, c) => sum + c.level, 0);
+            let nextLvl = totalLevel + 1;
+            let neededXp = xpThresholds[totalLevel] || (xpThresholds[xpThresholds.length - 1] + 25000 * (totalLevel - 20));
+
+            document.getElementById('modal-current-xp').innerText = activeChar.xp;
+            document.getElementById('modal-next-level').innerText = nextLvl <= 20 ? nextLvl : 20;
+            document.getElementById('modal-needed-xp').innerText = activeChar.xp >= neededXp ? 0 : (neededXp - activeChar.xp);
+            document.getElementById('xp-input').value = '';
+
+            const levelupBtn = document.getElementById('levelup-btn');
+            if (totalLevel < 20 && activeChar.xp >= neededXp) {
+                levelupBtn.classList.remove('btn-disabled');
+                levelupBtn.removeAttribute('disabled');
+            } else {
+                levelupBtn.classList.add('btn-disabled');
+                levelupBtn.setAttribute('disabled', 'true');
+            }
+
+            document.getElementById('xp-modal').style.display = 'flex';
+        }
+
+        function closeXpModal() {
+            document.getElementById('xp-modal').style.display = 'none';
+        }
+
+        function addXp() {
+            const inputVal = parseInt(document.getElementById('xp-input').value);
+            if (isNaN(inputVal)) return;
+            activeChar.xp = Math.max(0, activeChar.xp + inputVal);
+            updateUI();
+            openXpModal();
+        }
+
+        function openXpOverride() {
+            const newXp = prompt("EP auf exakten Wert setzen:", activeChar.xp);
+            if (newXp !== null && !isNaN(newXp)) {
+                activeChar.xp = Math.max(0, parseInt(newXp));
+                updateUI();
+                openXpModal();
+            }
+        }
+
+        function openLevelUpModal() {
+            closeXpModal();
+            let totalLevel = activeChar.classesList.reduce((sum, c) => sum + c.level, 0);
+            let container = document.getElementById('levelup-content');
+            
+            let html = `<p style="margin-top:0;">Wähle die Klasse, die du aufstufen möchtest:</p>`;
+            html += `<div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;">`;
+            
+            activeChar.classesList.forEach((c, index) => {
+                html += `<button class="btn-secondary" style="text-align: left; padding: 10px;" onclick="chooseClassForLevelUp(${index})"><i class="fa-solid fa-shield"></i> <strong>${c.name}</strong> (Aktuell Stufe ${c.level}) aufstufen</button>`;
+            });
+
+            if (totalLevel >= 2 && activeChar.classesList.length === 1) {
+                html += `<button class="btn-secondary" style="text-align: left; padding: 10px; border-color: var(--primary-gold);" onclick="chooseNewMulticlass()"><i class="fa-solid fa-plus-circle"></i> Eine neue Zweitklasse wählen (Multiclassing)</button>`;
+            }
+
+            html += `</div>`;
+            container.innerHTML = html;
+            document.getElementById('levelup-modal').style.display = 'flex';
+        }
+
+        function closeLevelUpModal() {
+            document.getElementById('levelup-modal').style.display = 'none';
+        }
+
+        function chooseClassForLevelUp(index) {
+            let className = activeChar.classesList[index].name;
+            activeChar.classesList[index].level += 1;
+            finalizeLevelUpStep(className);
+        }
+
+        function chooseNewMulticlass() {
+            let newClass = prompt("Gib den Namen der Zweitklasse ein (z.B. Fighter, Rogue, Wizard):");
+            if (newClass && newClass.trim() !== "") {
+                let cleanName = newClass.trim();
+                activeChar.classesList.push({ name: cleanName, level: 1 });
+                finalizeLevelUpStep(cleanName);
+            }
+        }
+
+        function finalizeLevelUpStep(className) {
+            closeLevelUpModal();
+            let conBase = activeChar.rawStats ? (activeChar.rawStats.CON || 10) : 10;
+            let conBonus = activeChar.speciesBonuses && activeChar.speciesBonuses.CON ? activeChar.speciesBonuses.CON : 0;
+            let conTemp = activeChar.statTemps && activeChar.statTemps.CON ? activeChar.statTemps.CON : 0;
+            let conMod = Math.floor(((conBase + conBonus + conTemp - 10) / 2));
+            
+            let container = document.getElementById('levelup-content');
+            let dieSize = getHitDieSize(className);
+
+            container.innerHTML = `
+                <div style="text-align: center;">
+                    <div id="dice-container"><i class="fa-solid fa-dice-${getDiceIconName(dieSize)} dice-anim"></i></div>
+                    <p>Stufenaufstieg in <strong>${className}</strong> erfolgreich!</p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Wie möchtest du deine Trefferpunkte erhöhen?</p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
+                    <button class="btn-primary" onclick="applyHpGain('fixed', ${dieSize}, ${conMod})">Pauschaler Wert (${Math.floor(dieSize/2) + 1} + CON-Mod)</button>
+                    <button class="btn-secondary" onclick="applyHpGain('roll', ${dieSize}, ${conMod})">Würfeln (1d${dieSize} + CON-Mod)</button>
+                </div>
+            `;
+            document.getElementById('levelup-modal').style.display = 'flex';
+        }
+
+        function getHitDieSize(className) {
+            const c = className.toLowerCase();
+            if (c.includes('barbarian') || c.includes('barbar')) return 12;
+            if (c.includes('fighter') || c.includes('kämpfer') || c.includes('paladin') || c.includes('ranger') || c.includes('waldläufer')) return 10;
+            if (c.includes('cleric') || c.includes('kleriker') || c.includes('druid') || c.includes('druide') || c.includes('monk') || c.includes('mönch') || c.includes('rogue') || c.includes('schurke') || c.includes('warlock') || c.includes('hexenmeister') || c.includes('artificer')) return 8;
+            return 6;
+        }
+
+        function getDiceIconName(sides) {
+            if (sides === 6) return 'six';
+            if (sides === 8) return 'eight';
+            return 'six';
+        }
+
+        function applyHpGain(method, dieSize, conMod) {
+            let gainedHp = 0;
+            if (method === 'fixed') {
+                gainedHp = Math.floor(dieSize / 2) + 1 + conMod;
+            } else {
+                let roll = Math.floor(Math.random() * dieSize) + 1;
+                gainedHp = Math.max(1, roll + conMod);
+                alert(`Du hast eine ${roll} gewürfelt! (+${conMod} CON = +${gainedHp} TP)`);
+            }
+
+            activeChar.maxHp += Math.max(1, gainedHp);
+            activeChar.hp = activeChar.maxHp;
+            activeChar.hitDiceMax = activeChar.classesList.reduce((sum, c) => sum + c.level, 0);
+            activeChar.hitDiceCurrent = activeChar.hitDiceMax;
+
+            activeChar.class = activeChar.classesList.map(c => `${c.name} ${c.level}`).join(' / ');
+            activeChar.level = activeChar.hitDiceMax;
+
+            closeLevelUpModal();
+            updateUI();
+            alert(`Stufenaufstieg komplett! Du bist nun Stufe ${activeChar.level}.`);
+        }
+
+        // --- HP MODAL LOGIK ---
+        function openHpModal() {
+            refreshHpModalDisplay();
+            document.getElementById('hp-modal').style.display = 'flex';
+        }
+
+        function closeHpModal() {
+            document.getElementById('hp-modal').style.display = 'none';
+        }
+
+        function refreshHpModalDisplay() {
+            document.getElementById('modal-hp-display').innerText = `${activeChar.hp}/${activeChar.maxHp}`;
+            document.getElementById('modal-temp-hp-number').innerText = activeChar.tempHp || 0;
+            
+            const tempIndicator = document.getElementById('modal-temp-hp-indicator');
+            const tempValSpan = document.getElementById('modal-temp-hp-val');
+            const warningEl = document.getElementById('hp-lock-warning');
+
+            if (activeChar.tempHp > 0) {
+                tempValSpan.innerText = activeChar.tempHp;
+                tempIndicator.style.display = 'inline';
+                warningEl.style.display = 'block';
+
+                // Normale HP Bedienelemente ausgrauen / deaktivieren
+                ['btn-plus-1', 'btn-plus-2', 'btn-plus-5', 'btn-minus-1', 'btn-minus-2', 'btn-minus-5'].forEach(id => {
+                    document.getElementById(id).classList.add('disabled');
+                });
+            } else {
+                tempIndicator.style.display = 'none';
+                warningEl.style.display = 'none';
+
+                // Normale HP Bedienelemente aktivieren
+                ['btn-plus-1', 'btn-plus-2', 'btn-plus-5', 'btn-minus-1', 'btn-minus-2', 'btn-minus-5'].forEach(id => {
+                    document.getElementById(id).classList.remove('disabled');
+                });
+            }
+        }
+
+        function modalModifyHp(amount) {
+            if (activeChar.tempHp > 0) return; // Gesperrt solange Temp HP existieren
+            activeChar.hp = Math.max(0, Math.min(activeChar.maxHp, activeChar.hp + amount));
+            refreshHpModalDisplay();
+            updateUI();
+        }
+
+        function modifyTempHp(amount) {
+            activeChar.tempHp = Math.max(0, (activeChar.tempHp || 0) + amount);
+            refreshHpModalDisplay();
+            updateUI();
+        }
+
+        // Bestätigung für Komplett Auffüllen
+        function confirmFullyHeal() {
+            document.getElementById('confirm-heal-modal').style.display = 'flex';
+        }
+
+        function closeConfirmHealModal() {
+            document.getElementById('confirm-heal-modal').style.display = 'none';
+        }
+
+        function executeFullyHeal() {
+            activeChar.hp = activeChar.maxHp;
+            refreshHpModalDisplay();
+            updateUI();
+            closeConfirmHealModal();
+        }
+
+        // --- AC MODAL LOGIK ---
+        function openAcModal() {
+            refreshAcModalDisplay();
+            document.getElementById('ac-modal').style.display = 'flex';
+        }
+
+        function closeAcModal() {
+            document.getElementById('ac-modal').style.display = 'none';
+        }
+
+        function refreshAcModalDisplay() {
+            let dexBase = activeChar.rawStats ? (activeChar.rawStats.DEX || 10) : 10;
+            let dexBonus = activeChar.speciesBonuses && activeChar.speciesBonuses.DEX ? activeChar.speciesBonuses.DEX : 0;
+            let dexTemp = activeChar.statTemps && activeChar.statTemps.DEX ? activeChar.statTemps.DEX : 0;
+            let dexTotal = dexBase + dexBonus + dexTemp;
+            let dexMod = Math.floor((dexTotal - 10) / 2);
+            let baseAc = 10 + dexMod;
+            let totalAc = baseAc + (activeChar.tempAc || 0);
+
+            document.getElementById('modal-total-ac').innerText = totalAc;
+            document.getElementById('modal-temp-ac-number').innerText = activeChar.tempAc || 0;
+        }
+
+        function modifyTempAc(amount) {
+            activeChar.tempAc = Math.max(0, (activeChar.tempAc || 0) + amount);
+            refreshAcModalDisplay();
+            updateUI();
+        }
+
+        // --- STAT DETAIL MODAL ---
+        function openStatModal(statKey) {
+            selectedStatKey = statKey;
+            let baseVal = activeChar.rawStats ? (activeChar.rawStats[statKey] || 10) : 10;
+            let speciesBonus = activeChar.speciesBonuses && activeChar.speciesBonuses[statKey] ? activeChar.speciesBonuses[statKey] : 0;
+            let tempVal = activeChar.statTemps && activeChar.statTemps[statKey] ? activeChar.statTemps[statKey] : 0;
+            let totalVal = baseVal + speciesBonus + tempVal;
+            let mod = Math.floor((totalVal - 10) / 2);
+            let modStr = mod >= 0 ? `+${mod}` : `${mod}`;
+
+            document.getElementById('stat-modal-title').innerText = `Attribut: ${statKey}`;
+            
+            let html = `
+                <p><strong>Basiswert:</strong> ${baseVal}</p>
+                <p><strong>Rassenbonus:</strong> ${speciesBonus >= 0 ? '+' + speciesBonus : speciesBonus}</p>
+                <p><strong>Temporärer Bonus (Ausrüstung/Zauber):</strong> ${tempVal >= 0 ? '+' + tempVal : tempVal}</p>
+                <hr style="border: 0; border-top: 1px solid var(--surface-border); margin: 10px 0;">
+                <p><strong>Gesamtwert:</strong> ${totalVal}</p>
+                <p><strong>Modifikator:</strong> <span style="color:var(--primary-gold); font-size:1.1rem; font-weight:bold;">${modStr}</span> (Formel: (${totalVal} - 10) / 2 abgerundet)</p>
+            `;
+            document.getElementById('stat-modal-body').innerHTML = html;
+            document.getElementById('stat-temp-input').value = tempVal;
+            document.getElementById('stat-modal').style.display = 'flex';
+        }
+
+        function closeStatModal() {
+            document.getElementById('stat-modal').style.display = 'none';
+            selectedStatKey = null;
+        }
+
+        function saveStatChanges() {
+            if (!selectedStatKey) return;
+            const tempVal = parseInt(document.getElementById('stat-temp-input').value);
+            if (!isNaN(tempVal)) {
+                if (!activeChar.statTemps) activeChar.statTemps = { STR: 0, DEX: 0, CON: 0, INT: 0, WIS: 0, CHA: 0 };
+                activeChar.statTemps[selectedStatKey] = tempVal;
+            }
+            updateUI();
+            closeStatModal();
+        }
+
+        // --- INFO MODAL ---
+        function openInfoModal(type) {
+            let title = "";
+            let text = "";
+
+            if (type === 'species') {
+                title = `Spezies: ${activeChar.species || '-'}`;
+                text = `Spezies-Merkmale, Geschwindigkeiten und Attributsboni (z.B. +2 auf Intelligenz bei Gnomen) sind hier aktiv.`;
+            } else if (type === 'class') {
+                title = `Klasse: ${activeChar.class || '-'}`;
+                text = `Übersicht der gewählten Klassen und Stufen nach D&D 2024 Regeln. Bestimmt Trefferwürfel und Fähigkeiten.`;
+            } else if (type === 'background') {
+                title = `Hintergrund: ${activeChar.background || '-'}`;
+                text = `Der gewählte Hintergrund prägt die Herkunft des Charakters und gewährt Startfertigkeiten sowie ein Ursprungs-Talent.`;
+            }
+
+            document.getElementById('info-modal-title').innerText = title;
+            document.getElementById('info-modal-body').innerText = text;
+            document.getElementById('info-modal').style.display = 'flex';
+        }
+
+        function closeInfoModal() {
+            document.getElementById('info-modal').style.display = 'none';
+        }
+
+        // Helper für Icons
+        function getSpeciesIcon(species) {
+            if (!species) return 'fa-solid fa-user';
+            const s = species.toLowerCase();
+            if (s.includes('elf')) return 'fa-solid fa-feather';
+            if (s.includes('dwarf') || s.includes('zwerg')) return 'fa-solid fa-mountain';
+            if (s.includes('gnome') || s.includes('gnom')) return 'fa-solid fa-gear';
+            if (s.includes('halfling') || s.includes('halbling')) return 'fa-solid fa-shoe-prints';
+            if (s.includes('dragon')) return 'fa-solid fa-dragon';
+            return 'fa-solid fa-user-shield';
+        }
+
+        function getClassIcon(className) {
+            if (!className) return 'fa-solid fa-shield-halved';
+            const c = className.toLowerCase();
+            if (c.includes('artificer')) return 'fa-solid fa-screwdriver-wrench';
+            if (c.includes('wizard') || c.includes('zauberer')) return 'fa-solid fa-hat-wizard';
+            if (c.includes('fighter') || c.includes('kämpfer')) return 'fa-solid fa-sword';
+            if (c.includes('cleric') || c.includes('kleriker')) return 'fa-solid fa-ankh';
+            if (c.includes('rogue') || c.includes('schurke')) return 'fa-solid fa-user-ninja';
+            return 'fa-solid fa-shield-halved';
+        }
+    </script>
+</body>
+</html>
