@@ -562,22 +562,10 @@
     </div>
 
     <script>
-        // Eingebettetes Kompendium & Hintergründe als Fallback / direkte Datenquelle
-        const compendiumData = {
-            "Gnom": {
-                "subraces": {
-                    "Felsgnom": { 
-                        "speed": 30, 
-                        "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Klein | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Dunkelsicht:</b> 60 Fuß.<br>• <b>Gnomische List:</b> Vorteil bei INT-, WEIS- und CHA-Rettungswürfen gegen Magie.<br>• <b>Gnomische Linie (Felsgnom):</b> Du erlernst <i>Fingerfertigkeit</i> und kannst winzige Uhrwerk-Vorrichtungen erschaffen." 
-                    },
-                    "Waldgnom": { 
-                        "speed": 30, 
-                        "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Klein | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Dunkelsicht:</b> 60 Fuß.<br>• <b>Gnomische List:</b> Vorteil bei INT-, WEIS- und CHA-Rettungswürfen gegen Magie.<br>• <b>Gnomische Linie (Waldgnom):</b> Du erlernst <i>Geringe Illusion</i> und kannst <i>Mit Tieren sprechen</i> wirken." 
-                    }
-                }
-            }
-        };
+        // Globale Variable für die geladenen Kompendium-Daten
+        let loadedCompendiumData = null;
 
+        // Hintergründe-Datenstruktur wie von dir beschrieben
         const backgroundsData = {
             "Artisan": {
                 "feat": "Handwerker-Talent (Craftsman)",
@@ -593,7 +581,7 @@
 
         let activeChar = null;
 
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', async () => {
             const savedChar = localStorage.getItem('dnd_active_character');
             if (!savedChar) {
                 alert("Kein aktiver Charakter gefunden!");
@@ -613,6 +601,16 @@
                 let initialLevel = activeChar.level || 1;
                 let initialClassName = activeChar.class ? activeChar.class.replace(/Stufe \d+/, '').trim() : "Artificer";
                 activeChar.classesList = [{ name: initialClassName, level: initialLevel }];
+            }
+
+            // Kompendium.json asynchron laden, damit die Spezies-Daten bereitstehen
+            try {
+                let res = await fetch('compendium.json');
+                if (res.ok) {
+                    loadedCompendiumData = await res.json();
+                }
+            } catch (err) {
+                console.error("Konnte compendium.json nicht laden:", err);
             }
 
             updateUI();
@@ -660,27 +658,34 @@
             saveActiveChar();
         }
 
-        // 1. SPEZIES MODAL (Liest Text aus compendiumData)
+        // 1. SPEZIES MODAL (Liest korrekt über speciesData aus der compendium.json)
         function openSpeciesModal() {
-            let speciesName = activeChar.species || "Felsgnom";
+            let speciesName = activeChar.species || "Aasimar";
             let title = `Spezies: ${speciesName}`;
-            let htmlContent = `<p>Keine Spezies-Details im Kompendium gefunden.</p>`;
+            let htmlContent = `<p>Keine Spezies-Details im Kompendium für <b>${speciesName}</b> gefunden.</p>`;
 
-            // Suche in compendiumData (z.B. Gnom -> Subraces -> Felsgnom)
-            for (let mainRace in compendiumData) {
-                let subraces = compendiumData[mainRace].subraces;
-                if (subraces && subraces[speciesName]) {
-                    htmlContent = subraces[speciesName].text;
-                    break;
-                } else if (mainRace.toLowerCase() === speciesName.toLowerCase()) {
-                    htmlContent = `<b>Bewegungsrate:</b> ${compendiumData[mainRace].speed || 30} Fuß.`;
-                    break;
+            if (loadedCompendiumData && loadedCompendiumData.speciesData) {
+                let speciesDataObj = loadedCompendiumData.speciesData;
+                
+                // Durchsuche speciesData nach der Rasse oder Subrasse
+                for (let mainRaceKey in speciesDataObj) {
+                    let raceEntry = speciesDataObj[mainRaceKey];
+                    if (raceEntry && raceEntry.subraces) {
+                        // Prüfen ob exakt die Subrasse übereinstimmt (z.B. "Felsgnom")
+                        if (raceEntry.subraces[speciesName]) {
+                            htmlContent = raceEntry.subraces[speciesName].text;
+                            break;
+                        }
+                        // Oder ob der Hauptschlüssel übereinstimmt (z.B. "Aasimar")
+                        if (mainRaceKey.toLowerCase() === speciesName.toLowerCase()) {
+                            let firstSub = Object.keys(raceEntry.subraces)[0];
+                            if (firstSub) {
+                                htmlContent = raceEntry.subraces[firstSub].text;
+                                break;
+                            }
+                        }
+                    }
                 }
-            }
-
-            // Fallback falls exact match nicht direkt greift aber Felsgnom im String ist
-            if (htmlContent.includes("Keine Spezies-Details") && speciesName.includes("Felsgnom")) {
-                htmlContent = compendiumData["Gnom"].subraces["Felsgnom"].text;
             }
 
             document.getElementById('info-modal-title').innerText = title;
@@ -691,7 +696,6 @@
         // 2. KLASSE MODAL (Lädt die HTML aus dem Ordner klassen/)
         async function openClassModal() {
             let className = activeChar.classesList[0].name.toLowerCase();
-            // Mapping deutscher/englischer Dateinamen
             let fileNameMap = {
                 "artificer": "artifizier.html",
                 "artifizier": "artifizier.html",
@@ -763,7 +767,6 @@
             event.currentTarget.classList.add('active');
         }
 
-        // Dummy-Funktionen für verbleibende Buttons
         function openRestModal() { document.getElementById('rest-modal').style.display = 'flex'; }
         function closeRestModal() { document.getElementById('rest-modal').style.display = 'none'; }
         function openXpModal() { document.getElementById('xp-modal').style.display = 'flex'; }
@@ -773,7 +776,7 @@
         function modalModifyHp(amt) { activeChar.hp = Math.max(0, (activeChar.hp || 10) + amt); document.getElementById('modal-hp-display').innerText = `${activeChar.hp}/${activeChar.maxHp}`; updateUI(); }
         function openAcModal() { document.getElementById('ac-modal').style.display = 'flex'; }
         function closeAcModal() { document.getElementById('ac-modal').style.display = 'none'; }
-        function openStatModal(k) { document.getElementById('stat-modal-title').innerText = `Attribut: ${k}`; document.getElementById('stat-modal-body.innerText') = `Wert: ${activeChar.rawStats[k]}`; document.getElementById('stat-modal').style.display = 'flex'; }
+        function openStatModal(k) { document.getElementById('stat-modal-title').innerText = `Attribut: ${k}`; document.getElementById('stat-modal-body').innerText = `Wert: ${activeChar.rawStats[k]}`; document.getElementById('stat-modal').style.display = 'flex'; }
         function closeStatModal() { document.getElementById('stat-modal').style.display = 'none'; }
         function openEquipmentSlotModal(s) { document.getElementById('equipment-slot-modal').style.display = 'flex'; }
         function closeEquipmentSlotModal() { document.getElementById('equipment-slot-modal').style.display = 'none'; }
