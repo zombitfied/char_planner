@@ -96,6 +96,17 @@
             color: var(--accent);
         }
 
+        /* Klickbarer Zauber im Text */
+        .clickable-spell {
+            color: var(--accent);
+            cursor: pointer;
+            font-weight: bold;
+            border-bottom: 1px dashed var(--accent);
+        }
+        .clickable-spell:hover {
+            opacity: 0.8;
+        }
+
         .tab-bar {
             position: fixed;
             bottom: 0;
@@ -241,19 +252,6 @@
             flex-grow: 1;
         }
 
-        .modal-input {
-            width: 100%;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1.5px solid var(--border);
-            background: var(--btn-back-bg);
-            color: var(--text);
-            font-size: 0.95rem;
-            box-sizing: border-box;
-            margin-top: 6px;
-            margin-bottom: 12px;
-        }
-
         .modal-buttons {
             display: flex;
             justify-content: flex-end;
@@ -339,7 +337,6 @@
                             <div id="sheet-icons" style="font-size: 1.3rem; display: flex; gap: 8px; color: var(--accent);"></div>
                         </div>
                         
-                        <!-- Kachel-Layout für Rasse, Klasse und Hintergrund ohne Striche -->
                         <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 0.85rem;">
                             <span id="sheet-species" class="clickable-badge" onclick="openSpeciesModal()">-</span>
                             <span id="sheet-class" class="clickable-badge" onclick="openClassModal()">-</span>
@@ -479,6 +476,17 @@
         </div>
     </div>
 
+    <!-- MODAL: ZAUBER DETAIL (SPEZIELL FÜR SPELLS-PARSED.HTML) -->
+    <div id="spell-detail-modal" class="modal-overlay" style="z-index: 2100;">
+        <div class="modal-card">
+            <h3 id="spell-modal-title">Zauber-Details</h3>
+            <div id="spell-modal-body" class="modal-body-content">Lade Zauber...</div>
+            <div class="modal-buttons">
+                <button class="btn-primary" onclick="closeSpellDetailModal()">Schließen</button>
+            </div>
+        </div>
+    </div>
+
     <!-- STANDARD MODALS -->
     <div id="equipment-slot-modal" class="modal-overlay">
         <div class="modal-card">
@@ -562,10 +570,8 @@
     </div>
 
     <script>
-        // Globale Variable für die geladenen Kompendium-Daten
         let loadedCompendiumData = null;
 
-        // Hintergründe-Datenstruktur wie von dir beschrieben
         const backgroundsData = {
             "Artisan": {
                 "feat": "Handwerker-Talent (Craftsman)",
@@ -603,7 +609,6 @@
                 activeChar.classesList = [{ name: initialClassName, level: initialLevel }];
             }
 
-            // Kompendium.json asynchron laden, damit die Spezies-Daten bereitstehen
             try {
                 let res = await fetch('compendium.json');
                 if (res.ok) {
@@ -621,22 +626,17 @@
 
             document.getElementById('sheet-name').innerText = activeChar.name || "Heldenname";
             
-            // Spezies Badge
             let speciesText = activeChar.species || "Felsgnom";
             document.getElementById('sheet-species').innerText = speciesText;
 
-            // Klasse & Stufe Badge
             let primaryClassObj = activeChar.classesList[0];
             document.getElementById('sheet-class').innerText = `${primaryClassObj.name} ${primaryClassObj.level}`;
 
-            // Hintergrund Badge (ohne Stufe)
             let bgText = activeChar.background || "Artisan";
             document.getElementById('sheet-bg').innerText = bgText;
 
-            let totalLevel = activeChar.classesList.reduce((sum, c) => sum + c.level, 0);
             document.getElementById('sheet-icons').innerHTML = `<i class="fa-solid fa-gear"></i><i class="fa-solid fa-wrench"></i>`;
 
-            // Kampfwerte & Stats Rendering
             document.getElementById('sheet-hp').innerText = activeChar.hp || 10;
             document.getElementById('sheet-max-hp').innerText = activeChar.maxHp || 10;
             document.getElementById('sheet-ac').innerText = activeChar.ac || 12;
@@ -658,7 +658,15 @@
             saveActiveChar();
         }
 
-        // 1. SPEZIES MODAL (Liest korrekt über speciesData aus der compendium.json)
+        // Hilfsfunktion: Macht bekannte Zauber (wie <i>Licht</i>) im Text klickbar
+        function parseSpellsInText(htmlText) {
+            // Wandelt kursive Zaubernamen in interaktive Klick-Elemente um
+            return htmlText.replace(/<i>(.*?)<\/i>/g, (match, spellName) => {
+                return `<span class="clickable-spell" onclick="openSpellDetailModal('${spellName.trim()}')"><i>${spellName}</i></span>`;
+            });
+        }
+
+        // 1. SPEZIES MODAL
         function openSpeciesModal() {
             let speciesName = activeChar.species || "Aasimar";
             let title = `Spezies: ${speciesName}`;
@@ -666,17 +674,13 @@
 
             if (loadedCompendiumData && loadedCompendiumData.speciesData) {
                 let speciesDataObj = loadedCompendiumData.speciesData;
-                
-                // Durchsuche speciesData nach der Rasse oder Subrasse
                 for (let mainRaceKey in speciesDataObj) {
                     let raceEntry = speciesDataObj[mainRaceKey];
                     if (raceEntry && raceEntry.subraces) {
-                        // Prüfen ob exakt die Subrasse übereinstimmt (z.B. "Felsgnom")
                         if (raceEntry.subraces[speciesName]) {
                             htmlContent = raceEntry.subraces[speciesName].text;
                             break;
                         }
-                        // Oder ob der Hauptschlüssel übereinstimmt (z.B. "Aasimar")
                         if (mainRaceKey.toLowerCase() === speciesName.toLowerCase()) {
                             let firstSub = Object.keys(raceEntry.subraces)[0];
                             if (firstSub) {
@@ -688,12 +692,15 @@
                 }
             }
 
+            // Zauber im Text automatisch anklickbar machen
+            htmlContent = parseSpellsInText(htmlContent);
+
             document.getElementById('info-modal-title').innerText = title;
             document.getElementById('info-modal-body').innerHTML = htmlContent;
             document.getElementById('info-modal').style.display = 'flex';
         }
 
-        // 2. KLASSE MODAL (Lädt die HTML aus dem Ordner klassen/)
+        // 2. KLASSE MODAL
         async function openClassModal() {
             let className = activeChar.classesList[0].name.toLowerCase();
             let fileNameMap = {
@@ -727,23 +734,23 @@
                 let response = await fetch(`klassen/${targetFile}`);
                 if (response.ok) {
                     let htmlText = await response.text();
-                    document.getElementById('info-modal-body').innerHTML = htmlText;
+                    document.getElementById('info-modal-body').innerHTML = parseSpellsInText(htmlText);
                 } else {
-                    document.getElementById('info-modal-body').innerHTML = `<p>Klassendatei <code>klassen/${targetFile}</code> konnte nicht geladen werden.</p>`;
+                    document.getElementById('info-modal-body').innerHTML = `<p>Klassendatei konnte nicht geladen werden.</p>`;
                 }
             } catch (e) {
-                document.getElementById('info-modal-body').innerHTML = `<p>Fehler beim Laden der Klassenseite.</p>`;
+                document.getElementById('info-modal-body').innerHTML = `<p>Fehler beim Laden.</p>`;
             }
         }
 
-        // 3. HINTERGRUND MODAL (Zeigt feat, skills und text)
+        // 3. HINTERGRUND MODAL
         function openBackgroundModal() {
             let bgName = activeChar.background || "Artisan";
             let title = `Hintergrund: ${bgName}`;
             let bgInfo = backgroundsData[bgName] || {
                 feat: "Ursprungs-Talent",
-                skills: "Fertigkeiten gemäß Regelwerk",
-                text: "Dieser Hintergrund prägt die Geschichte deines Charakters."
+                skills: "Fertigkeiten",
+                text: "Dieser Hintergrund prägt deinen Charakter."
             };
 
             let htmlContent = `
@@ -754,8 +761,51 @@
             `;
 
             document.getElementById('info-modal-title').innerText = title;
-            document.getElementById('info-modal-body').innerHTML = htmlContent;
+            document.getElementById('info-modal-body').innerHTML = parseSpellsInText(htmlContent);
             document.getElementById('info-modal').style.display = 'flex';
+        }
+
+        // 4. ZAUBER-DETAIL MODAL (Lädt aus spells-parsed.html)
+        async function openSpellDetailModal(spellName) {
+            document.getElementById('spell-modal-title').innerText = `Zauber: ${spellName}`;
+            document.getElementById('spell-modal-body').innerHTML = "Lade Zauber-Details...";
+            document.getElementById('spell-detail-modal').style.display = 'flex';
+
+            try {
+                let res = await fetch('spells-parsed.html');
+                if (res.ok) {
+                    let htmlText = await res.text();
+                    
+                    // Parse den HTML-Inhalt im Browser-Speicher, um nach der passenden Div-ID zu suchen
+                    let parser = new DOMParser();
+                    let doc = parser.parseFromString(htmlText, 'text/html');
+                    
+                    // Suche nach dem Div mit der ID (z.B. spell-licht) oder durchsuche die <h5> nach dem Namen
+                    let targetSpellDiv = null;
+                    let normalizedSearch = spellName.toLowerCase().replace(/ü/g, 'u').replace(/ä/g, 'a').replace(/ö/g, 'o');
+                    
+                    doc.querySelectorAll('.spell').forEach(div => {
+                        let h5 = div.querySelector('h5');
+                        if (h5 && h5.innerText.trim().toLowerCase() === spellName.trim().toLowerCase()) {
+                            targetSpellDiv = div;
+                        }
+                    });
+
+                    if (targetSpellDiv) {
+                        document.getElementById('spell-modal-body').innerHTML = targetSpellDiv.innerHTML;
+                    } else {
+                        document.getElementById('spell-modal-body').innerHTML = `<p>Keine Details für den Zauber <b>${spellName}</b> in der <code>spells-parsed.html</code> gefunden.</p>`;
+                    }
+                } else {
+                    document.getElementById('spell-modal-body').innerHTML = `<p>Konnte <code>spells-parsed.html</code> nicht laden.</p>`;
+                }
+            } catch (err) {
+                document.getElementById('spell-modal-body').innerHTML = `<p>Fehler beim Abrufen des Zaubers.</p>`;
+            }
+        }
+
+        function closeSpellDetailModal() {
+            document.getElementById('spell-detail-modal').style.display = 'none';
         }
 
         function closeInfoModal() { document.getElementById('info-modal').style.display = 'none'; }
