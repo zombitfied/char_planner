@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="style.css">
 
     <style>
-        /* Grundlegendes Layout & Header-Fix */
+        /* Header-Layout im originalen Design */
         header {
             background-color: var(--surface-color);
             padding: 10px 16px;
@@ -51,6 +51,27 @@
             color: var(--text-color);
             border-color: var(--primary-gold);
             background: #f0ebe1;
+        }
+
+        /* Originale Karten mit rauhen Kanten */
+        .card {
+            background-color: var(--surface-color);
+            border: 3px solid var(--surface-border);
+            border-radius: 12px 16px 10px 14px;
+            padding: 16px;
+            margin-bottom: 15px;
+            box-shadow: 0 6px 18px rgba(44, 34, 30, 0.12);
+            filter: url(#rough-edge);
+        }
+
+        .card h2 {
+            font-size: 1rem;
+            margin-top: 0;
+            color: var(--primary-gold);
+            border-bottom: 1px solid var(--surface-border);
+            padding-bottom: 6px;
+            text-transform: uppercase;
+            font-family: serif;
         }
 
         .grid-combat { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
@@ -131,6 +152,7 @@
 </head>
 <body>
 
+    <!-- SVG-Filter für den grisselig-rauhen Stein-Kanten-Effekt -->
     <svg style="display:none;" aria-hidden="true">
         <filter id="rough-edge">
             <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="3" result="noise" />
