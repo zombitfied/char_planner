@@ -132,7 +132,6 @@
         .tab-pane { display: none; padding-bottom: 70px; }
         .tab-pane.active { display: block; }
 
-        /* Erweitertes Paperdoll-Layout für Ganzkörper-Ansicht */
         .paperdoll-container {
             position: relative;
             width: 100%;
@@ -186,21 +185,14 @@
             width: 100%;
         }
 
-        /* Exakte Positionen nach deinen Vorgaben um das Männchen herum */
-        /* Oben */
+        /* Positionen um das fa-person Männchen herum */
         .slot-kopf { top: 10px; left: calc(50% - 27px); }
-
-        /* Links (von oben nach unten): Gürtel, Torso, linke Hand */
         .slot-guertel { top: 75px; left: 15px; }
         .slot-torso { top: 145px; left: 15px; }
         .slot-handLinks { top: 215px; left: 15px; }
-
-        /* Rechts (von oben nach unten): Rücken 1, Rüstung, rechte Hand */
         .slot-ruecken { top: 75px; right: 15px; }
         .slot-ruestung { top: 145px; right: 15px; }
         .slot-handRechts { top: 215px; right: 15px; }
-
-        /* Unten (von links nach rechts): Beine, Füße */
         .slot-beine { bottom: 15px; left: calc(50% - 60px); }
         .slot-schuhe { bottom: 15px; left: calc(50% + 5px); }
 
@@ -404,12 +396,11 @@
                 <div class="grid-3" id="sheet-stats-grid"></div>
             </div>
 
-            <!-- Ganzkörper Paperdoll mit allen gewünschten Slots -->
+            <!-- Paperdoll mit fa-person Silhouette -->
             <div class="card">
                 <h2>Ausrüstung & Slots</h2>
                 <div class="paperdoll-container">
-                    <!-- Ganzkörper-Silhouette -->
-                    <i class="fa-solid fa-street-view paperdoll-center-icon"></i>
+                    <i class="fa-solid fa-person paperdoll-center-icon"></i>
 
                     <!-- Oben -->
                     <div class="equipment-slot slot-kopf" onclick="openMultiEquipmentModal('kopf')" title="Kopf">
@@ -520,21 +511,19 @@
         </div>
     </div>
 
-    <!-- MODAL: MULTI-EQUIPMENT (Mit Plus-Button und Ausrüstungs-Tabelle) -->
+    <!-- MODAL: MULTI-EQUIPMENT -->
     <div id="multi-equipment-modal" class="modal-overlay" style="z-index: 2100;">
         <div class="modal-card">
-            <h3 id="multi-equip-modal-title">Slot verwalten</h3>
-            <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">Füge mehrere Gegenstände hinzu (z.B. Hut + Brille am Kopf).</div>
+            <h3 id="multi-equip-modal-title">Kopf</h3>
             
+            <!-- Volle Breite für Dropdown, quadratischer Plus-Button rechts -->
             <div style="display: flex; gap: 8px; margin-bottom: 15px; align-items: center;">
-                <select id="multi-equip-item-select" class="modal-input" style="margin:0; flex:1;"></select>
-                <button class="btn-primary" onclick="addEquipmentToActiveSlot()" title="Gegenstand ausrüsten" style="padding: 10px 14px;"><i class="fa-solid fa-plus"></i></button>
+                <select id="multi-equip-item-select" class="modal-input" style="margin:0; flex:1; width:auto;"></select>
+                <button class="btn-primary" onclick="addEquipmentToActiveSlot()" title="Gegenstand ausrüsten" style="width: 44px; height: 44px; padding: 0; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i class="fa-solid fa-plus"></i></button>
             </div>
 
             <div style="font-weight: bold; font-size: 0.9rem; margin-bottom: 6px; color: var(--accent);">Ausgerüstete Gegenstände:</div>
-            <div id="multi-equip-table-container" class="modal-body-content" style="max-height: 200px; border: 1.5px solid var(--border); border-radius: 6px; padding: 6px; background: var(--btn-back-bg);">
-                <!-- Tabelle wird hier gerendert -->
-            </div>
+            <div id="multi-equip-table-container" class="modal-body-content" style="max-height: 200px; border: 1.5px solid var(--border); border-radius: 6px; padding: 6px; background: var(--btn-back-bg);"></div>
 
             <div class="modal-buttons" style="margin-top: 15px;">
                 <button class="btn-primary" onclick="closeMultiEquipmentModal()">Schließen</button>
@@ -620,7 +609,7 @@
     <script>
         let loadedCompendiumData = null;
         let activeChar = null;
-        let activeMultiSlotKey = null; // Hält den aktuell im Multi-Modal geöffneten Slot
+        let activeMultiSlotKey = null;
 
         const slotNamesMap = {
             kopf: "Kopf",
@@ -669,7 +658,6 @@
                 activeChar.classesList = [{ name: initialClassName, level: initialLevel }];
             }
 
-            // Migration von alten Einzel-Equipment-Objekten auf das neue Array-Format pro Slot
             if (!activeChar.equipment || !Array.isArray(activeChar.equipment.kopf)) {
                 let oldEq = activeChar.equipment || {};
                 activeChar.equipment = {};
@@ -703,7 +691,21 @@
             document.getElementById('sheet-max-hp').innerText = activeChar.maxHp || 10;
             document.getElementById('sheet-ac').innerText = activeChar.ac || 12;
 
-            // Slots auf dem Sheet aktualisieren (zeigt Anzahl oder ersten Namen)
+            const statsGrid = document.getElementById('sheet-stats-grid');
+            if (statsGrid && activeChar.rawStats) {
+                statsGrid.innerHTML = '';
+                for (let s in activeChar.rawStats) {
+                    let val = activeChar.rawStats[s];
+                    let mod = Math.floor((val - 10) / 2);
+                    statsGrid.innerHTML += `
+                        <div class="stat-box" onclick="openStatModal('${s}')">
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">${s}</div>
+                            <div class="stat-val">${val}</div>
+                            <div class="stat-mod">${mod >= 0 ? '+' + mod : mod}</div>
+                        </div>`;
+                }
+            }
+
             for (let slotKey in slotNamesMap) {
                 let itemsArray = activeChar.equipment[slotKey] || [];
                 let labelEl = document.getElementById(`slot-label-${slotKey}`);
@@ -726,12 +728,10 @@
             saveActiveChar();
         }
 
-        // Multi-Equipment Modal öffnen
         function openMultiEquipmentModal(slotKey) {
             activeMultiSlotKey = slotKey;
-            document.getElementById('multi-equip-modal-title').innerText = `Slot: ${slotNamesMap[slotKey]}`;
+            document.getElementById('multi-equip-modal-title').innerText = slotNamesMap[slotKey];
 
-            // Dropdown mit Inventar füllen
             const selectEl = document.getElementById('multi-equip-item-select');
             selectEl.innerHTML = '<option value="">-- Gegenstand aus Inventar wählen --</option>';
             if (activeChar.inventory) {
@@ -750,7 +750,6 @@
             updateUI();
         }
 
-        // Gegenstand zum aktiven Slot hinzufügen (+)
         function addEquipmentToActiveSlot() {
             if (!activeMultiSlotKey) return;
             const selectEl = document.getElementById('multi-equip-item-select');
@@ -768,14 +767,12 @@
             }
         }
 
-        // Gegenstand aus Slot entfernen
         function removeEquipmentFromSlot(index) {
             if (!activeMultiSlotKey) return;
             activeChar.equipment[activeMultiSlotKey].splice(index, 1);
             renderMultiEquipTable();
         }
 
-        // Tabelle der ausgerüsteten Gegenstände im Modal rendern
         function renderMultiEquipTable() {
             const container = document.getElementById('multi-equip-table-container');
             let items = activeChar.equipment[activeMultiSlotKey] || [];
@@ -788,10 +785,10 @@
             let html = '<table style="width:100%; border-collapse: collapse; font-size: 0.85rem;">';
             items.forEach((item, index) => {
                 html += `
-                    <tr style="border-bottom: 1px solid var(--border);">
+                    <tr>
                         <td style="padding: 6px; font-weight: bold;">${item}</td>
-                        <td style="padding: 6px; text-align: right;">
-                            <button class="mini-btn" onclick="removeEquipmentFromSlot(${index})" style="color: #a94442; padding: 2px 8px;"><i class="fa-solid fa-trash"></i></button>
+                        <td style="padding: 6px; text-align: right; width: 40px;">
+                            <button onclick="removeEquipmentFromSlot(${index})" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 1rem; padding: 2px 6px;" title="Entfernen"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                 `;
