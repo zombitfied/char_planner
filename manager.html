@@ -14,11 +14,11 @@
     <link rel="stylesheet" href="style.css">
 
     <style>
-        /* Header-Layout im originalen Design */
+        /* Header-Layout im originalen Design mit style.css Variablen */
         header {
-            background-color: var(--surface-color);
+            background-color: var(--card);
             padding: 10px 16px;
-            border-bottom: 3px solid var(--surface-border);
+            border-bottom: 3px solid var(--border);
             border-radius: 0 0 16px 16px;
             display: flex;
             justify-content: space-between;
@@ -30,8 +30,8 @@
         }
 
         .btn-icon {
-            background: #faf7f2;
-            border: 1.5px solid var(--surface-border);
+            background: var(--btn-back-bg);
+            border: 1.5px solid var(--border);
             color: var(--text-muted);
             padding: 6px 12px;
             border-radius: 10px 14px 12px 16px;
@@ -48,15 +48,15 @@
         }
 
         .btn-icon:hover {
-            color: var(--text-color);
-            border-color: var(--primary-gold);
-            background: #f0ebe1;
+            color: var(--text);
+            border-color: var(--accent);
+            background: var(--card);
         }
 
-        /* Originale Karten mit rauhen Kanten */
+        /* Karten mit rauhen Kanten passend zu style.css */
         .card {
-            background-color: var(--surface-color);
-            border: 3px solid var(--surface-border);
+            background-color: var(--card);
+            border: 3px solid var(--border);
             border-radius: 12px 16px 10px 14px;
             padding: 16px;
             margin-bottom: 15px;
@@ -67,8 +67,8 @@
         .card h2 {
             font-size: 1rem;
             margin-top: 0;
-            color: var(--primary-gold);
-            border-bottom: 1px solid var(--surface-border);
+            color: var(--accent);
+            border-bottom: 1px solid var(--border);
             padding-bottom: 6px;
             text-transform: uppercase;
             font-family: serif;
@@ -76,13 +76,61 @@
 
         .grid-combat { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
 
+        /* Unten angeordnete Tab-Leiste */
+        .tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--card);
+            border-top: 3px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            box-shadow: 0 -4px 12px rgba(44, 34, 30, 0.1);
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+
+        .tab-button {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            padding: 4px 8px;
+            transition: color 0.2s;
+        }
+
+        .tab-button i {
+            font-size: 1.1rem;
+        }
+
+        .tab-button.active {
+            color: var(--accent);
+        }
+
+        .tab-pane {
+            display: none;
+            padding-bottom: 70px; /* Platz für Tab-Leiste */
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
         /* Paperdoll-Ausrüstungssystem */
         .paperdoll-container {
             position: relative;
             width: 100%;
             height: 280px;
             background: var(--btn-back-bg);
-            border: 1.5px solid var(--surface-border);
+            border: 1.5px solid var(--border);
             border-radius: 12px;
             display: flex;
             justify-content: center;
@@ -103,8 +151,8 @@
             position: absolute;
             width: 52px;
             height: 52px;
-            background: var(--surface-color);
-            border: 2px solid var(--surface-border);
+            background: var(--card);
+            border: 2px solid var(--border);
             border-radius: 8px;
             display: flex;
             flex-direction: column;
@@ -119,13 +167,13 @@
         }
 
         .equipment-slot:hover {
-            border-color: var(--primary-gold);
+            border-color: var(--accent);
             transform: scale(1.05);
         }
 
         .equipment-slot i {
             font-size: 1.1rem;
-            color: var(--primary-gold);
+            color: var(--accent);
         }
 
         .equipment-slot .slot-label {
@@ -148,6 +196,115 @@
         
         .slot-ruecken { top: 148px; left: 16px; }
         .slot-guertel { top: 148px; right: 16px; }
+
+        /* Modals & Hilfsklassen */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(44,34,30,0.6);
+            backdrop-filter: blur(2px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .modal-card {
+            background: var(--card);
+            border: 3px solid var(--border);
+            border-radius: 12px 16px 10px 14px;
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            color: var(--text);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            filter: url(#rough-edge);
+        }
+
+        .modal-card h3 {
+            color: var(--accent);
+            margin-top: 0;
+            text-transform: uppercase;
+            font-family: serif;
+            font-size: 1.1rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 6px;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1.5px solid var(--border);
+            background: var(--btn-back-bg);
+            color: var(--text);
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            margin-top: 6px;
+            margin-bottom: 12px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            font-weight: bold;
+            border: 2px solid var(--border);
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .btn-primary:hover { background: var(--accent-hover); }
+
+        .btn-secondary {
+            background: var(--btn-back-bg);
+            color: var(--text);
+            font-weight: bold;
+            border: 2px solid var(--border);
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .btn-secondary:hover { background: var(--card); }
+
+        .mini-btn {
+            background: var(--btn-back-bg);
+            border: 1.5px solid var(--border);
+            color: var(--text);
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .mini-btn:hover { border-color: var(--accent); }
+
+        .combat-btn-row {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+
+        .death-saves-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+        .death-checkboxes {
+            display: flex;
+            gap: 4px;
+        }
     </style>
 </head>
 <body>
@@ -172,7 +329,7 @@
         </button>
     </header>
 
-    <div class="container">
+    <div class="container" style="padding-top: 15px;">
 
         <!-- TAB 1: SHEET -->
         <div id="tab-sheet" class="tab-pane active">
@@ -187,7 +344,7 @@
                             <span>(Stufe <span id="sheet-level">1</span>)</span>
                         </div>
                     </div>
-                    <div id="sheet-icons" style="font-size: 1.5rem; display: flex; gap: 8px; color: var(--primary-gold);"></div>
+                    <div id="sheet-icons" style="font-size: 1.5rem; display: flex; gap: 8px; color: var(--accent);"></div>
                 </div>
             </div>
 
@@ -202,7 +359,7 @@
                     </div>
                     <div class="stat-box" onclick="openAcModal()" title="Rüstungsklasse verwalten">
                         <div style="font-size: 0.75rem; color: var(--text-muted);">RK</div>
-                        <div id="sheet-temp-ac-container" style="font-size: 0.75rem; color: var(--primary-gold); font-weight: bold; display: none;">+<span id="sheet-temp-ac">0</span> temp</div>
+                        <div id="sheet-temp-ac-container" style="font-size: 0.75rem; color: var(--accent); font-weight: bold; display: none;">+<span id="sheet-temp-ac">0</span> temp</div>
                         <div class="stat-val"><span id="sheet-ac">12</span></div>
                     </div>
                 </div>
@@ -409,8 +566,8 @@
         <div class="modal-card">
             <h3>Erfahrung & Stufenaufstieg</h3>
             <div style="font-size: 0.9rem; margin-bottom: 12px; color: var(--text-muted);">
-                Aktuelle EP: <strong id="modal-current-xp" style="color: var(--text-color);">0</strong><br>
-                Fehlt bis Stufe <span id="modal-next-level">2</span>: <strong id="modal-needed-xp" style="color: var(--primary-gold);">300</strong> EP
+                Aktuelle EP: <strong id="modal-current-xp" style="color: var(--text);">0</strong><br>
+                Fehlt bis Stufe <span id="modal-next-level">2</span>: <strong id="modal-needed-xp" style="color: var(--accent);">300</strong> EP
             </div>
             
             <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
@@ -419,7 +576,7 @@
                 <button class="btn-secondary" onclick="openXpOverride()" title="EP direkt setzen (Korrigieren)" style="padding: 10px 12px;"><i class="fa-solid fa-pen"></i></button>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px solid var(--surface-border); padding-top: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px solid var(--border); padding-top: 12px;">
                 <button id="levelup-btn" class="btn-primary btn-disabled" onclick="openLevelUpModal()" disabled>
                     <i class="fa-solid fa-angles-up"></i> Stufenaufstieg durchführen
                 </button>
@@ -444,8 +601,8 @@
             </div>
 
             <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin: 8px 0;">
-                <div style="font-size: 1rem; color: var(--text-color); font-weight: bold;">
-                    Aktuell: <span id="modal-hp-display" style="font-size: 1.2rem; color: var(--primary-gold);">10/10</span>
+                <div style="font-size: 1rem; color: var(--text); font-weight: bold;">
+                    Aktuell: <span id="modal-hp-display" style="font-size: 1.2rem; color: var(--accent);">10/10</span>
                     <span id="modal-temp-hp-indicator" style="font-size: 0.85rem; color: #1e90ff; display:none;">(+<span id="modal-temp-hp-val">0</span> temp)</span>
                 </div>
                 <button class="btn-primary" onclick="confirmFullyHeal()" title="Komplett auffüllen" style="padding: 6px 10px; font-size: 0.9rem;"><i class="fa-solid fa-heart-pulse"></i></button>
@@ -489,13 +646,13 @@
         <div class="modal-card">
             <h3>Rüstungsklasse verwalten</h3>
             <div style="font-size: 0.9rem; margin-bottom: 12px; color: var(--text-muted); text-align: center;">
-                Gesamt RK: <strong id="modal-total-ac" style="color: var(--text-color); font-size: 1.1rem;">12</strong>
+                Gesamt RK: <strong id="modal-total-ac" style="color: var(--text); font-size: 1.1rem;">12</strong>
             </div>
             
             <label style="font-size: 0.85rem; font-weight: bold; display: block; text-align: center; margin-bottom: 4px;">Temporärer RK-Bonus</label>
             <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px;">
                 <button class="mini-btn" onclick="modifyTempAc(-1)" style="padding: 6px 12px; font-size: 0.9rem;">-</button>
-                <span id="modal-temp-ac-number" style="font-size: 1.2rem; font-weight: bold; min-width: 30px; text-align: center; color: var(--primary-gold);">0</span>
+                <span id="modal-temp-ac-number" style="font-size: 1.2rem; font-weight: bold; min-width: 30px; text-align: center; color: var(--accent);">0</span>
                 <button class="mini-btn" onclick="modifyTempAc(1)" style="padding: 6px 12px; font-size: 0.9rem;">+</button>
             </div>
 
@@ -525,7 +682,7 @@
     <div id="info-modal" class="modal-overlay">
         <div class="modal-card">
             <h3 id="info-modal-title">Regeln & Infos</h3>
-            <div id="info-modal-body" style="font-size: 0.9rem; line-height: 1.5; color: var(--text-color); margin-bottom: 15px;"></div>
+            <div id="info-modal-body" style="font-size: 0.9rem; line-height: 1.5; color: var(--text); margin-bottom: 15px;"></div>
             <div class="modal-buttons">
                 <button class="btn-secondary" onclick="closeInfoModal()">Schließen</button>
             </div>
@@ -703,7 +860,7 @@
                 let labelEl = document.getElementById(`slot-label-${slotKey}`);
                 if (labelEl) {
                     labelEl.innerText = assignedItem ? assignedItem : slotNamesMap[slotKey];
-                    labelEl.style.color = assignedItem ? 'var(--primary-gold)' : 'var(--text-muted)';
+                    labelEl.style.color = assignedItem ? 'var(--accent)' : 'var(--text-muted)';
                 }
             }
 
@@ -806,7 +963,7 @@
             let html = '<div style="display: flex; flex-direction: column; gap: 6px;">';
             activeChar.inventory.forEach((item, index) => {
                 html += `
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: #faf7f2; border: 1.5px solid var(--surface-border); padding: 6px 10px; border-radius: 6px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--btn-back-bg); border: 1.5px solid var(--border); padding: 6px 10px; border-radius: 6px;">
                         <span style="font-size: 0.9rem; font-weight: bold;">${item}</span>
                         <button class="mini-btn" onclick="removeInventoryItem(${index})" style="color: #a94442;"><i class="fa-solid fa-trash"></i></button>
                     </div>
