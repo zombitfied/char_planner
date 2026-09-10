@@ -96,17 +96,6 @@
             color: var(--accent);
         }
 
-        /* Klickbarer Zauber im Text */
-        .clickable-spell {
-            color: var(--accent);
-            cursor: pointer;
-            font-weight: bold;
-            border-bottom: 1px dashed var(--accent);
-        }
-        .clickable-spell:hover {
-            opacity: 0.8;
-        }
-
         .tab-bar {
             position: fixed;
             bottom: 0;
@@ -143,10 +132,11 @@
         .tab-pane { display: none; padding-bottom: 70px; }
         .tab-pane.active { display: block; }
 
+        /* Erweitertes Paperdoll-Layout für Ganzkörper-Ansicht */
         .paperdoll-container {
             position: relative;
             width: 100%;
-            height: 280px;
+            height: 380px;
             background: var(--btn-back-bg);
             border: 1.5px solid var(--border);
             border-radius: 12px;
@@ -158,17 +148,17 @@
         }
 
         .paperdoll-center-icon {
-            font-size: 7rem;
+            font-size: 14rem;
             color: var(--text-muted);
-            opacity: 0.25;
+            opacity: 0.15;
             position: absolute;
             z-index: 1;
         }
 
         .equipment-slot {
             position: absolute;
-            width: 52px;
-            height: 52px;
+            width: 55px;
+            height: 55px;
             background: var(--card);
             border: 2px solid var(--border);
             border-radius: 8px;
@@ -196,14 +186,23 @@
             width: 100%;
         }
 
-        .slot-kopf { top: 12px; left: calc(50% - 26px); }
-        .slot-torso { top: 80px; left: calc(50% - 26px); }
-        .slot-hosen { top: 148px; left: calc(50% - 26px); }
-        .slot-schuhe { top: 216px; left: calc(50% - 26px); }
-        .slot-hand-links { top: 80px; left: 16px; }
-        .slot-hand-rechts { top: 80px; right: 16px; }
-        .slot-ruecken { top: 148px; left: 16px; }
-        .slot-guertel { top: 148px; right: 16px; }
+        /* Exakte Positionen nach deinen Vorgaben um das Männchen herum */
+        /* Oben */
+        .slot-kopf { top: 10px; left: calc(50% - 27px); }
+
+        /* Links (von oben nach unten): Gürtel, Torso, linke Hand */
+        .slot-guertel { top: 75px; left: 15px; }
+        .slot-torso { top: 145px; left: 15px; }
+        .slot-handLinks { top: 215px; left: 15px; }
+
+        /* Rechts (von oben nach unten): Rücken 1, Rüstung, rechte Hand */
+        .slot-ruecken { top: 75px; right: 15px; }
+        .slot-ruestung { top: 145px; right: 15px; }
+        .slot-handRechts { top: 215px; right: 15px; }
+
+        /* Unten (von links nach rechts): Beine, Füße */
+        .slot-beine { bottom: 15px; left: calc(50% - 60px); }
+        .slot-schuhe { bottom: 15px; left: calc(50% + 5px); }
 
         .modal-overlay {
             display: none;
@@ -228,7 +227,7 @@
             color: var(--text);
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             filter: url(#rough-edge);
-            max-height: 80vh;
+            max-height: 85vh;
             display: flex;
             flex-direction: column;
         }
@@ -250,6 +249,19 @@
             overflow-y: auto;
             margin-bottom: 15px;
             flex-grow: 1;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1.5px solid var(--border);
+            background: var(--btn-back-bg);
+            color: var(--text);
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            margin-top: 6px;
+            margin-bottom: 12px;
         }
 
         .modal-buttons {
@@ -314,15 +326,9 @@
     </svg>
 
     <header>
-        <a href="index.html" class="btn-icon">
-            <i class="fa-solid fa-door-open"></i> Eingang
-        </a>
-        <button class="btn-icon" onclick="openRestModal()">
-            <i class="fa-solid fa-bed"></i> Rast
-        </button>
-        <button class="btn-icon" onclick="openXpModal()" title="Erfahrung & Stufe verwalten">
-            <i class="fa-solid fa-award"></i> EP/Lvl
-        </button>
+        <a href="index.html" class="btn-icon"><i class="fa-solid fa-door-open"></i> Eingang</a>
+        <button class="btn-icon" onclick="openRestModal()"><i class="fa-solid fa-bed"></i> Rast</button>
+        <button class="btn-icon" onclick="openXpModal()"><i class="fa-solid fa-award"></i> EP/Lvl</button>
     </header>
 
     <div class="container" style="padding-top: 5px;">
@@ -349,13 +355,13 @@
             <div class="card">
                 <h2>Kampfwerte</h2>
                 <div class="grid-combat">
-                    <div id="sheet-hp-box" class="stat-box" onclick="openHpModal()" title="Trefferpunkte verwalten">
+                    <div id="sheet-hp-box" class="stat-box" onclick="openHpModal()">
                         <div style="font-size: 0.75rem; color: var(--text-muted);">Trefferpunkte</div>
                         <div id="sheet-hp-display-container">
                             <div class="stat-val"><span id="sheet-hp">10</span>/<span id="sheet-max-hp">10</span></div>
                         </div>
                     </div>
-                    <div class="stat-box" onclick="openAcModal()" title="Rüstungsklasse verwalten">
+                    <div class="stat-box" onclick="openAcModal()">
                         <div style="font-size: 0.75rem; color: var(--text-muted);">RK</div>
                         <div id="sheet-temp-ac-container" style="font-size: 0.75rem; color: var(--accent); font-weight: bold; display: none;">+<span id="sheet-temp-ac">0</span> temp</div>
                         <div class="stat-val"><span id="sheet-ac">12</span></div>
@@ -363,7 +369,7 @@
                 </div>
 
                 <div class="grid-combat" style="margin-bottom: 0;">
-                    <div class="stat-box" onclick="openHitDiceModal()" title="Trefferwürfel einsetzen / heilen">
+                    <div class="stat-box" onclick="openHitDiceModal()">
                         <div style="font-size: 0.75rem; color: var(--text-muted);">Trefferwürfel</div>
                         <div class="stat-val" style="font-size: 1.05rem; margin-top: 4px;">
                             <span id="sheet-hit-dice-type">W8</span>: <span id="sheet-hit-dice-current">1</span>/<span id="sheet-hit-dice-max">1</span>
@@ -398,18 +404,56 @@
                 <div class="grid-3" id="sheet-stats-grid"></div>
             </div>
 
+            <!-- Ganzkörper Paperdoll mit allen gewünschten Slots -->
             <div class="card">
                 <h2>Ausrüstung & Slots</h2>
                 <div class="paperdoll-container">
-                    <i class="fa-solid fa-user paperdoll-center-icon"></i>
-                    <div class="equipment-slot slot-kopf" onclick="openEquipmentSlotModal('kopf')"><i class="fa-solid fa-hat-wizard"></i><div class="slot-label" id="slot-label-kopf">Kopf</div></div>
-                    <div class="equipment-slot slot-torso" onclick="openEquipmentSlotModal('torso')"><i class="fa-solid fa-shirt"></i><div class="slot-label" id="slot-label-torso">Torso</div></div>
-                    <div class="equipment-slot slot-hosen" onclick="openEquipmentSlotModal('hosen')"><i class="fa-solid fa-user-pants"></i><div class="slot-label" id="slot-label-hosen">Hose</div></div>
-                    <div class="equipment-slot slot-schuhe" onclick="openEquipmentSlotModal('schuhe')"><i class="fa-solid fa-shoe-prints"></i><div class="slot-label" id="slot-label-schuhe">Schuhe</div></div>
-                    <div class="equipment-slot slot-hand-links" onclick="openEquipmentSlotModal('handLinks')"><i class="fa-solid fa-shield-halved"></i><div class="slot-label" id="slot-label-handLinks">L. Hand</div></div>
-                    <div class="equipment-slot slot-hand-rechts" onclick="openEquipmentSlotModal('handRechts')"><i class="fa-solid fa-sword"></i><div class="slot-label" id="slot-label-handRechts">R. Hand</div></div>
-                    <div class="equipment-slot slot-ruecken" onclick="openEquipmentSlotModal('ruecken')"><i class="fa-solid fa-shield"></i><div class="slot-label" id="slot-label-ruecken">Rücken</div></div>
-                    <div class="equipment-slot slot-guertel" onclick="openEquipmentSlotModal('guertel')"><i class="fa-solid fa-ring"></i><div class="slot-label" id="slot-label-guertel">Gürtel</div></div>
+                    <!-- Ganzkörper-Silhouette -->
+                    <i class="fa-solid fa-street-view paperdoll-center-icon"></i>
+
+                    <!-- Oben -->
+                    <div class="equipment-slot slot-kopf" onclick="openMultiEquipmentModal('kopf')" title="Kopf">
+                        <i class="fa-solid fa-hat-wizard"></i>
+                        <div class="slot-label" id="slot-label-kopf">Kopf</div>
+                    </div>
+
+                    <!-- Rechts: Rücken 1, Rüstung, rechte Hand -->
+                    <div class="equipment-slot slot-ruecken" onclick="openMultiEquipmentModal('ruecken')" title="Rücken 1">
+                        <i class="fa-solid fa-shield"></i>
+                        <div class="slot-label" id="slot-label-ruecken">Rücken 1</div>
+                    </div>
+                    <div class="equipment-slot slot-ruestung" onclick="openMultiEquipmentModal('ruestung')" title="Rüstung">
+                        <i class="fa-solid fa-shirt"></i>
+                        <div class="slot-label" id="slot-label-ruestung">Rüstung</div>
+                    </div>
+                    <div class="equipment-slot slot-handRechts" onclick="openMultiEquipmentModal('handRechts')" title="Rechte Hand">
+                        <i class="fa-solid fa-sword"></i>
+                        <div class="slot-label" id="slot-label-handRechts">R. Hand</div>
+                    </div>
+
+                    <!-- Links: Gürtel, Torso, linke Hand -->
+                    <div class="equipment-slot slot-guertel" onclick="openMultiEquipmentModal('guertel')" title="Gürtel">
+                        <i class="fa-solid fa-ring"></i>
+                        <div class="slot-label" id="slot-label-guertel">Gürtel</div>
+                    </div>
+                    <div class="equipment-slot slot-torso" onclick="openMultiEquipmentModal('torso')" title="Torso">
+                        <i class="fa-solid fa-vest"></i>
+                        <div class="slot-label" id="slot-label-torso">Torso</div>
+                    </div>
+                    <div class="equipment-slot slot-handLinks" onclick="openMultiEquipmentModal('handLinks')" title="Linke Hand">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <div class="slot-label" id="slot-label-handLinks">L. Hand</div>
+                    </div>
+
+                    <!-- Unten: Beine, Füße -->
+                    <div class="equipment-slot slot-beine" onclick="openMultiEquipmentModal('beine')" title="Beine">
+                        <i class="fa-solid fa-user-pants"></i>
+                        <div class="slot-label" id="slot-label-beine">Beine</div>
+                    </div>
+                    <div class="equipment-slot slot-schuhe" onclick="openMultiEquipmentModal('schuhe')" title="Füße">
+                        <i class="fa-solid fa-shoe-prints"></i>
+                        <div class="slot-label" id="slot-label-schuhe">Füße</div>
+                    </div>
                 </div>
             </div>
 
@@ -465,7 +509,7 @@
         <button class="tab-button" onclick="switchTab('journal', event)"><i class="fa-solid fa-book-open"></i>Journal</button>
     </nav>
 
-    <!-- MODAL: UNIVERSAL INFO (SPEZIES, KLASSE, HINTERGRUND) -->
+    <!-- MODAL: UNIVERSAL INFO -->
     <div id="info-modal" class="modal-overlay">
         <div class="modal-card">
             <h3 id="info-modal-title">Regeln & Infos</h3>
@@ -476,34 +520,38 @@
         </div>
     </div>
 
-    <!-- MODAL: ZAUBER DETAIL (SPEZIELL FÜR SPELLS-PARSED.HTML) -->
-    <div id="spell-detail-modal" class="modal-overlay" style="z-index: 2100;">
+    <!-- MODAL: MULTI-EQUIPMENT (Mit Plus-Button und Ausrüstungs-Tabelle) -->
+    <div id="multi-equipment-modal" class="modal-overlay" style="z-index: 2100;">
+        <div class="modal-card">
+            <h3 id="multi-equip-modal-title">Slot verwalten</h3>
+            <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">Füge mehrere Gegenstände hinzu (z.B. Hut + Brille am Kopf).</div>
+            
+            <div style="display: flex; gap: 8px; margin-bottom: 15px; align-items: center;">
+                <select id="multi-equip-item-select" class="modal-input" style="margin:0; flex:1;"></select>
+                <button class="btn-primary" onclick="addEquipmentToActiveSlot()" title="Gegenstand ausrüsten" style="padding: 10px 14px;"><i class="fa-solid fa-plus"></i></button>
+            </div>
+
+            <div style="font-weight: bold; font-size: 0.9rem; margin-bottom: 6px; color: var(--accent);">Ausgerüstete Gegenstände:</div>
+            <div id="multi-equip-table-container" class="modal-body-content" style="max-height: 200px; border: 1.5px solid var(--border); border-radius: 6px; padding: 6px; background: var(--btn-back-bg);">
+                <!-- Tabelle wird hier gerendert -->
+            </div>
+
+            <div class="modal-buttons" style="margin-top: 15px;">
+                <button class="btn-primary" onclick="closeMultiEquipmentModal()">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ZAUBER DETAIL MODAL -->
+    <div id="spell-detail-modal" class="modal-overlay" style="z-index: 2200;">
         <div class="modal-card">
             <h3 id="spell-modal-title">Zauber-Details</h3>
             <div id="spell-modal-body" class="modal-body-content">Lade Zauber...</div>
-            <div class="modal-buttons">
-                <button class="btn-primary" onclick="closeSpellDetailModal()">Schließen</button>
-            </div>
+            <div class="modal-buttons"><button class="btn-primary" onclick="closeSpellDetailModal()">Schließen</button></div>
         </div>
     </div>
 
     <!-- STANDARD MODALS -->
-    <div id="equipment-slot-modal" class="modal-overlay">
-        <div class="modal-card">
-            <h3 id="equipment-modal-title">Slot verwalten</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted);" id="equipment-modal-current">Aktuell: Keins</p>
-            <div style="margin: 15px 0;">
-                <label style="font-size: 0.85rem; font-weight: bold;">Gegenstand wählen:</label>
-                <select id="equipment-item-select" class="modal-input" style="margin-top: 6px;"></select>
-            </div>
-            <div class="modal-buttons">
-                <button class="btn-secondary" onclick="unequipCurrentSlot()" style="color: #a94442; border-color: #a94442;">Leeren</button>
-                <button class="btn-primary" onclick="equipSelectedItem()">Ausrüsten</button>
-                <button class="btn-secondary" onclick="closeEquipmentSlotModal()">Schließen</button>
-            </div>
-        </div>
-    </div>
-
     <div id="rest-modal" class="modal-overlay">
         <div class="modal-card">
             <h3>Rast einlegen</h3>
@@ -571,6 +619,20 @@
 
     <script>
         let loadedCompendiumData = null;
+        let activeChar = null;
+        let activeMultiSlotKey = null; // Hält den aktuell im Multi-Modal geöffneten Slot
+
+        const slotNamesMap = {
+            kopf: "Kopf",
+            ruecken: "Rücken 1",
+            ruestung: "Rüstung",
+            handRechts: "Rechte Hand",
+            guertel: "Gürtel",
+            torso: "Torso",
+            handLinks: "Linke Hand",
+            beine: "Beine",
+            schuhe: "Füße"
+        };
 
         const backgroundsData = {
             "Artisan": {
@@ -584,8 +646,6 @@
                 "text": "Du bist im Dienst eines Tempels oder Schreins aufgewachsen und hast gelernt, göttliche Riten zu vollziehen."
             }
         };
-
-        let activeChar = null;
 
         window.addEventListener('DOMContentLoaded', async () => {
             const savedChar = localStorage.getItem('dnd_active_character');
@@ -609,14 +669,23 @@
                 activeChar.classesList = [{ name: initialClassName, level: initialLevel }];
             }
 
+            // Migration von alten Einzel-Equipment-Objekten auf das neue Array-Format pro Slot
+            if (!activeChar.equipment || !Array.isArray(activeChar.equipment.kopf)) {
+                let oldEq = activeChar.equipment || {};
+                activeChar.equipment = {};
+                for (let k in slotNamesMap) {
+                    activeChar.equipment[k] = oldEq[k] ? [oldEq[k]] : [];
+                }
+            }
+
+            if (!activeChar.inventory) {
+                activeChar.inventory = ["Langschwert", "Kettenhemd", "Schild", "Heiltrank", "Hut", "Brille"];
+            }
+
             try {
                 let res = await fetch('compendium.json');
-                if (res.ok) {
-                    loadedCompendiumData = await res.json();
-                }
-            } catch (err) {
-                console.error("Konnte compendium.json nicht laden:", err);
-            }
+                if (res.ok) loadedCompendiumData = await res.json();
+            } catch (err) {}
 
             updateUI();
         });
@@ -625,53 +694,174 @@
             if (!activeChar) return;
 
             document.getElementById('sheet-name').innerText = activeChar.name || "Heldenname";
-            
-            let speciesText = activeChar.species || "Felsgnom";
-            document.getElementById('sheet-species').innerText = speciesText;
-
-            let primaryClassObj = activeChar.classesList[0];
-            document.getElementById('sheet-class').innerText = `${primaryClassObj.name} ${primaryClassObj.level}`;
-
-            let bgText = activeChar.background || "Artisan";
-            document.getElementById('sheet-bg').innerText = bgText;
-
+            document.getElementById('sheet-species').innerText = activeChar.species || "Felsgnom";
+            document.getElementById('sheet-class').innerText = `${activeChar.classesList[0].name} ${activeChar.classesList[0].level}`;
+            document.getElementById('sheet-bg').innerText = activeChar.background || "Artisan";
             document.getElementById('sheet-icons').innerHTML = `<i class="fa-solid fa-gear"></i><i class="fa-solid fa-wrench"></i>`;
 
             document.getElementById('sheet-hp').innerText = activeChar.hp || 10;
             document.getElementById('sheet-max-hp').innerText = activeChar.maxHp || 10;
             document.getElementById('sheet-ac').innerText = activeChar.ac || 12;
 
-            const statsGrid = document.getElementById('sheet-stats-grid');
-            if (statsGrid && activeChar.rawStats) {
-                statsGrid.innerHTML = '';
-                for (let s in activeChar.rawStats) {
-                    let val = activeChar.rawStats[s];
-                    let mod = Math.floor((val - 10) / 2);
-                    statsGrid.innerHTML += `
-                        <div class="stat-box" onclick="openStatModal('${s}')">
-                            <div style="font-size: 0.75rem; color: var(--text-muted);">${s}</div>
-                            <div class="stat-val">${val}</div>
-                            <div class="stat-mod">${mod >= 0 ? '+' + mod : mod}</div>
-                        </div>`;
+            // Slots auf dem Sheet aktualisieren (zeigt Anzahl oder ersten Namen)
+            for (let slotKey in slotNamesMap) {
+                let itemsArray = activeChar.equipment[slotKey] || [];
+                let labelEl = document.getElementById(`slot-label-${slotKey}`);
+                if (labelEl) {
+                    if (itemsArray.length === 0) {
+                        labelEl.innerText = slotNamesMap[slotKey];
+                        labelEl.style.color = 'var(--text-muted)';
+                    } else if (itemsArray.length === 1) {
+                        labelEl.innerText = itemsArray[0];
+                        labelEl.style.color = 'var(--accent)';
+                    } else {
+                        labelEl.innerText = `${itemsArray[0]} (+${itemsArray.length - 1})`;
+                        labelEl.style.color = 'var(--accent)';
+                    }
                 }
             }
+
+            renderEquippedWeapons();
+            renderInventoryList();
             saveActiveChar();
         }
 
-        // Hilfsfunktion: Macht bekannte Zauber (wie <i>Licht</i>) im Text klickbar
+        // Multi-Equipment Modal öffnen
+        function openMultiEquipmentModal(slotKey) {
+            activeMultiSlotKey = slotKey;
+            document.getElementById('multi-equip-modal-title').innerText = `Slot: ${slotNamesMap[slotKey]}`;
+
+            // Dropdown mit Inventar füllen
+            const selectEl = document.getElementById('multi-equip-item-select');
+            selectEl.innerHTML = '<option value="">-- Gegenstand aus Inventar wählen --</option>';
+            if (activeChar.inventory) {
+                activeChar.inventory.forEach(invItem => {
+                    selectEl.innerHTML += `<option value="${invItem}">${invItem}</option>`;
+                });
+            }
+
+            renderMultiEquipTable();
+            document.getElementById('multi-equipment-modal').style.display = 'flex';
+        }
+
+        function closeMultiEquipmentModal() {
+            document.getElementById('multi-equipment-modal').style.display = 'none';
+            activeMultiSlotKey = null;
+            updateUI();
+        }
+
+        // Gegenstand zum aktiven Slot hinzufügen (+)
+        function addEquipmentToActiveSlot() {
+            if (!activeMultiSlotKey) return;
+            const selectEl = document.getElementById('multi-equip-item-select');
+            const chosenItem = selectEl.value;
+
+            if (chosenItem) {
+                if (!activeChar.equipment[activeMultiSlotKey]) {
+                    activeChar.equipment[activeMultiSlotKey] = [];
+                }
+                activeChar.equipment[activeMultiSlotKey].push(chosenItem);
+                renderMultiEquipTable();
+                selectEl.value = "";
+            } else {
+                alert("Bitte wähle einen Gegenstand aus.");
+            }
+        }
+
+        // Gegenstand aus Slot entfernen
+        function removeEquipmentFromSlot(index) {
+            if (!activeMultiSlotKey) return;
+            activeChar.equipment[activeMultiSlotKey].splice(index, 1);
+            renderMultiEquipTable();
+        }
+
+        // Tabelle der ausgerüsteten Gegenstände im Modal rendern
+        function renderMultiEquipTable() {
+            const container = document.getElementById('multi-equip-table-container');
+            let items = activeChar.equipment[activeMultiSlotKey] || [];
+
+            if (items.length === 0) {
+                container.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted); text-align:center; margin:10px 0;">Keine Gegenstände in diesem Slot ausgerüstet.</p>`;
+                return;
+            }
+
+            let html = '<table style="width:100%; border-collapse: collapse; font-size: 0.85rem;">';
+            items.forEach((item, index) => {
+                html += `
+                    <tr style="border-bottom: 1px solid var(--border);">
+                        <td style="padding: 6px; font-weight: bold;">${item}</td>
+                        <td style="padding: 6px; text-align: right;">
+                            <button class="mini-btn" onclick="removeEquipmentFromSlot(${index})" style="color: #a94442; padding: 2px 8px;"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+            html += '</table>';
+            container.innerHTML = html;
+        }
+
+        function renderEquippedWeapons() {
+            const container = document.getElementById('sheet-equipped-weapons-list');
+            let weapons = [];
+            for (let slot in activeChar.equipment) {
+                (activeChar.equipment[slot] || []).forEach(item => {
+                    let lower = item.toLowerCase();
+                    if (lower.includes('schwert') || lower.includes('axt') || lower.includes('dolch') || lower.includes('bogen') || lower.includes('stab') || lower.includes('hammer')) {
+                        weapons.push(`<strong>${item}</strong> (${slotNamesMap[slot]})`);
+                    }
+                });
+            }
+            container.innerHTML = weapons.length > 0 ? weapons.join(', ') : 'Keine Waffen ausgerüstet.';
+        }
+
+        function renderInventoryList() {
+            const container = document.getElementById('inventory-list-container');
+            if (!container) return;
+            if (!activeChar.inventory || activeChar.inventory.length === 0) {
+                container.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted);">Dein Inventar ist leer.</p>`;
+                return;
+            }
+            let html = '<div style="display: flex; flex-direction: column; gap: 6px;">';
+            activeChar.inventory.forEach((item, index) => {
+                html += `
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--btn-back-bg); border: 1.5px solid var(--border); padding: 6px 10px; border-radius: 6px;">
+                        <span style="font-size: 0.9rem; font-weight: bold;">${item}</span>
+                        <button class="mini-btn" onclick="removeInventoryItem(${index})" style="color: #a94442;"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function addNewInventoryItem() {
+            const input = document.getElementById('new-item-input');
+            const val = input.value.trim();
+            if (val) {
+                if (!activeChar.inventory) activeChar.inventory = [];
+                activeChar.inventory.push(val);
+                input.value = '';
+                updateUI();
+            }
+        }
+
+        function removeInventoryItem(index) {
+            let removed = activeChar.inventory.splice(index, 1)[0];
+            for (let slot in activeChar.equipment) {
+                activeChar.equipment[slot] = (activeChar.equipment[slot] || []).filter(i => i !== removed);
+            }
+            updateUI();
+        }
+
         function parseSpellsInText(htmlText) {
-            // Wandelt kursive Zaubernamen in interaktive Klick-Elemente um
             return htmlText.replace(/<i>(.*?)<\/i>/g, (match, spellName) => {
                 return `<span class="clickable-spell" onclick="openSpellDetailModal('${spellName.trim()}')"><i>${spellName}</i></span>`;
             });
         }
 
-        // 1. SPEZIES MODAL
         function openSpeciesModal() {
             let speciesName = activeChar.species || "Aasimar";
-            let title = `Spezies: ${speciesName}`;
-            let htmlContent = `<p>Keine Spezies-Details im Kompendium für <b>${speciesName}</b> gefunden.</p>`;
-
+            let htmlContent = `<p>Keine Spezies-Details gefunden.</p>`;
             if (loadedCompendiumData && loadedCompendiumData.speciesData) {
                 let speciesDataObj = loadedCompendiumData.speciesData;
                 for (let mainRaceKey in speciesDataObj) {
@@ -681,133 +871,56 @@
                             htmlContent = raceEntry.subraces[speciesName].text;
                             break;
                         }
-                        if (mainRaceKey.toLowerCase() === speciesName.toLowerCase()) {
-                            let firstSub = Object.keys(raceEntry.subraces)[0];
-                            if (firstSub) {
-                                htmlContent = raceEntry.subraces[firstSub].text;
-                                break;
-                            }
-                        }
                     }
                 }
             }
-
-            // Zauber im Text automatisch anklickbar machen
-            htmlContent = parseSpellsInText(htmlContent);
-
-            document.getElementById('info-modal-title').innerText = title;
-            document.getElementById('info-modal-body').innerHTML = htmlContent;
-            document.getElementById('info-modal').style.display = 'flex';
-        }
-
-        // 2. KLASSE MODAL
-        async function openClassModal() {
-            let className = activeChar.classesList[0].name.toLowerCase();
-            let fileNameMap = {
-                "artificer": "artifizier.html",
-                "artifizier": "artifizier.html",
-                "barbar": "barbar.html",
-                "barde": "barde.html",
-                "druide": "druide.html",
-                "hexenmeister": "hexenmeister.html",
-                "kämpfer": "kaempfer.html",
-                "kaempfer": "kaempfer.html",
-                "kleriker": "kleriker.html",
-                "magier": "magier.html",
-                "mönch": "moench.html",
-                "moench": "moench.html",
-                "paladin": "paladin.html",
-                "schurke": "schurke.html",
-                "waldläufer": "waldlaeufer.html",
-                "waldlaeufer": "waldlaeufer.html",
-                "zauberer": "zauberer.html"
-            };
-
-            let targetFile = fileNameMap[className] || "artifizier.html";
-            let title = `Klasse: ${activeChar.classesList[0].name} (Stufe ${activeChar.classesList[0].level})`;
-            
-            document.getElementById('info-modal-title').innerText = title;
-            document.getElementById('info-modal-body').innerHTML = "Lade Klassendaten...";
-            document.getElementById('info-modal').style.display = 'flex';
-
-            try {
-                let response = await fetch(`klassen/${targetFile}`);
-                if (response.ok) {
-                    let htmlText = await response.text();
-                    document.getElementById('info-modal-body').innerHTML = parseSpellsInText(htmlText);
-                } else {
-                    document.getElementById('info-modal-body').innerHTML = `<p>Klassendatei konnte nicht geladen werden.</p>`;
-                }
-            } catch (e) {
-                document.getElementById('info-modal-body').innerHTML = `<p>Fehler beim Laden.</p>`;
-            }
-        }
-
-        // 3. HINTERGRUND MODAL
-        function openBackgroundModal() {
-            let bgName = activeChar.background || "Artisan";
-            let title = `Hintergrund: ${bgName}`;
-            let bgInfo = backgroundsData[bgName] || {
-                feat: "Ursprungs-Talent",
-                skills: "Fertigkeiten",
-                text: "Dieser Hintergrund prägt deinen Charakter."
-            };
-
-            let htmlContent = `
-                <p><b>Ursprungs-Talent (Feat):</b> ${bgInfo.feat}</p>
-                <p><b>Fertigkeiten (Skills):</b> ${bgInfo.skills}</p>
-                <hr style="border: 0; border-top: 1px solid var(--border); margin: 10px 0;">
-                <p>${bgInfo.text}</p>
-            `;
-
-            document.getElementById('info-modal-title').innerText = title;
+            document.getElementById('info-modal-title').innerText = `Spezies: ${speciesName}`;
             document.getElementById('info-modal-body').innerHTML = parseSpellsInText(htmlContent);
             document.getElementById('info-modal').style.display = 'flex';
         }
 
-        // 4. ZAUBER-DETAIL MODAL (Lädt aus spells-parsed.html)
+        async function openClassModal() {
+            let className = activeChar.classesList[0].name.toLowerCase();
+            let fileNameMap = { "artificer": "artifizier.html", "artifizier": "artifizier.html", "barbar": "barbar.html", "barde": "barde.html", "druide": "druide.html", "hexenmeister": "hexenmeister.html", "kämpfer": "kaempfer.html", "kaempfer": "kaempfer.html", "kleriker": "kleriker.html", "magier": "magier.html", "mönch": "moench.html", "moench": "moench.html", "paladin": "paladin.html", "schurke": "schurke.html", "waldläufer": "waldlaeufer.html", "waldlaeufer": "waldlaeufer.html", "zauberer": "zauberer.html" };
+            let targetFile = fileNameMap[className] || "artifizier.html";
+            document.getElementById('info-modal-title').innerText = `Klasse: ${activeChar.classesList[0].name}`;
+            document.getElementById('info-modal-body').innerHTML = "Lade Klassendaten...";
+            document.getElementById('info-modal').style.display = 'flex';
+            try {
+                let res = await fetch(`klassen/${targetFile}`);
+                if (res.ok) document.getElementById('info-modal-body').innerHTML = parseSpellsInText(await res.text());
+                else document.getElementById('info-modal-body').innerHTML = `<p>Klassendatei nicht gefunden.</p>`;
+            } catch (e) { document.getElementById('info-modal-body').innerHTML = `<p>Fehler beim Laden.</p>`; }
+        }
+
+        function openBackgroundModal() {
+            let bgName = activeChar.background || "Artisan";
+            let bgInfo = backgroundsData[bgName] || { feat: "Talent", skills: "Skills", text: "Beschreibung" };
+            let htmlContent = `<p><b>Ursprungs-Talent (Feat):</b> ${bgInfo.feat}</p><p><b>Fertigkeiten (Skills):</b> ${bgInfo.skills}</p><hr style="border:0; border-top:1px solid var(--border); margin:10px 0;"><p>${bgInfo.text}</p>`;
+            document.getElementById('info-modal-title').innerText = `Hintergrund: ${bgName}`;
+            document.getElementById('info-modal-body').innerHTML = parseSpellsInText(htmlContent);
+            document.getElementById('info-modal').style.display = 'flex';
+        }
+
         async function openSpellDetailModal(spellName) {
             document.getElementById('spell-modal-title').innerText = `Zauber: ${spellName}`;
-            document.getElementById('spell-modal-body').innerHTML = "Lade Zauber-Details...";
+            document.getElementById('spell-modal-body').innerHTML = "Lade Zauber...";
             document.getElementById('spell-detail-modal').style.display = 'flex';
-
             try {
                 let res = await fetch('spells-parsed.html');
                 if (res.ok) {
-                    let htmlText = await res.text();
-                    
-                    // Parse den HTML-Inhalt im Browser-Speicher, um nach der passenden Div-ID zu suchen
-                    let parser = new DOMParser();
-                    let doc = parser.parseFromString(htmlText, 'text/html');
-                    
-                    // Suche nach dem Div mit der ID (z.B. spell-licht) oder durchsuche die <h5> nach dem Namen
-                    let targetSpellDiv = null;
-                    let normalizedSearch = spellName.toLowerCase().replace(/ü/g, 'u').replace(/ä/g, 'a').replace(/ö/g, 'o');
-                    
+                    let doc = new DOMParser().parseFromString(await res.text(), 'text/html');
+                    let target = null;
                     doc.querySelectorAll('.spell').forEach(div => {
                         let h5 = div.querySelector('h5');
-                        if (h5 && h5.innerText.trim().toLowerCase() === spellName.trim().toLowerCase()) {
-                            targetSpellDiv = div;
-                        }
+                        if (h5 && h5.innerText.trim().toLowerCase() === spellName.trim().toLowerCase()) target = div;
                     });
-
-                    if (targetSpellDiv) {
-                        document.getElementById('spell-modal-body').innerHTML = targetSpellDiv.innerHTML;
-                    } else {
-                        document.getElementById('spell-modal-body').innerHTML = `<p>Keine Details für den Zauber <b>${spellName}</b> in der <code>spells-parsed.html</code> gefunden.</p>`;
-                    }
-                } else {
-                    document.getElementById('spell-modal-body').innerHTML = `<p>Konnte <code>spells-parsed.html</code> nicht laden.</p>`;
+                    document.getElementById('spell-modal-body').innerHTML = target ? target.innerHTML : `<p>Keine Details gefunden.</p>`;
                 }
-            } catch (err) {
-                document.getElementById('spell-modal-body').innerHTML = `<p>Fehler beim Abrufen des Zaubers.</p>`;
-            }
+            } catch (err) { document.getElementById('spell-modal-body').innerHTML = `<p>Fehler beim Laden.</p>`; }
         }
 
-        function closeSpellDetailModal() {
-            document.getElementById('spell-detail-modal').style.display = 'none';
-        }
-
+        function closeSpellDetailModal() { document.getElementById('spell-detail-modal').style.display = 'none'; }
         function closeInfoModal() { document.getElementById('info-modal').style.display = 'none'; }
         function saveActiveChar() { localStorage.setItem('dnd_active_character', JSON.stringify(activeChar)); }
         function switchTab(tabId, event) {
@@ -828,14 +941,9 @@
         function closeAcModal() { document.getElementById('ac-modal').style.display = 'none'; }
         function openStatModal(k) { document.getElementById('stat-modal-title').innerText = `Attribut: ${k}`; document.getElementById('stat-modal-body').innerText = `Wert: ${activeChar.rawStats[k]}`; document.getElementById('stat-modal').style.display = 'flex'; }
         function closeStatModal() { document.getElementById('stat-modal').style.display = 'none'; }
-        function openEquipmentSlotModal(s) { document.getElementById('equipment-slot-modal').style.display = 'flex'; }
-        function closeEquipmentSlotModal() { document.getElementById('equipment-slot-modal').style.display = 'none'; }
         function performShortRest() { closeRestModal(); alert("Kurze Rast eingelegt."); }
         function performLongRest() { closeRestModal(); activeChar.hp = activeChar.maxHp; updateUI(); alert("Lange Rast abgeschlossen."); }
         function addXp() { alert("EP hinzugefügt."); closeXpModal(); }
-        function addNewInventoryItem() { document.getElementById('new-item-input').value = ''; }
-        function unequipCurrentSlot() {}
-        function equipSelectedItem() {}
         function spendHitDie() {}
         function saveDeathSaves() {}
     </script>
