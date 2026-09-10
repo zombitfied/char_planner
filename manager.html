@@ -80,7 +80,7 @@
 
         .grid-combat { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
 
-        /* Kachel-Badges exakt wie im Creator/Referenzbild */
+        /* Kachel-Badges exakt wie im Creator/Referenzbild ohne Striche dazwischen */
         .clickable-badge {
             background: var(--btn-back-bg);
             border: 1.5px solid var(--border);
@@ -364,12 +364,10 @@
                             <div id="sheet-icons" style="font-size: 1.3rem; display: flex; gap: 8px; color: var(--accent);"></div>
                         </div>
                         
-                        <!-- Kachel-Layout für Rasse, Klasse und Hintergrund exakt wie im Creator -->
+                        <!-- Kachel-Layout für Rasse, Klasse und Hintergrund ohne Striche -->
                         <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 0.85rem;">
                             <span id="sheet-species" class="clickable-badge" onclick="openInfoModal('species')">-</span>
-                            <span style="color: var(--text-muted);">|</span>
                             <span id="sheet-class" class="clickable-badge" onclick="openInfoModal('class')">-</span>
-                            <span style="color: var(--text-muted);">|</span>
                             <span id="sheet-bg" class="clickable-badge" onclick="openInfoModal('background')">-</span>
                         </div>
                     </div>
@@ -792,24 +790,23 @@
 
             document.getElementById('sheet-name').innerText = activeChar.name || "Unbenannter Held";
             
-            // Formatierung der Rasse als einzelner Badge-Text
-            let speciesText = activeChar.species || "-";
+            // Korrekte Daten aus dem activeChar Objekt laden
+            let speciesText = activeChar.species || "Unbekannt";
             document.getElementById('sheet-species').innerText = speciesText;
             
+            let primaryClassName = activeChar.classesList && activeChar.classesList.length > 0 ? activeChar.classesList[0].name : (activeChar.class || "Abenteurer");
+            let totalLevel = activeChar.classesList ? activeChar.classesList.reduce((sum, c) => sum + c.level, 0) : (activeChar.level || 1);
+            
+            document.getElementById('sheet-class').innerText = `${primaryClassName} ${totalLevel}`;
+            
+            let bgText = activeChar.background || "Hintergrund";
+            document.getElementById('sheet-bg').innerText = `${bgText} (Stufe 1)`;
+
             let speciesIcon = getSpeciesIcon(speciesText);
-            let primaryClassName = activeChar.classesList[0].name;
             let classIcon = getClassIcon(primaryClassName);
             document.getElementById('sheet-icons').innerHTML = `<i class="${speciesIcon}" title="${speciesText}"></i><i class="${classIcon}" title="${primaryClassName}"></i>`;
 
-            let totalLevel = activeChar.classesList.reduce((sum, c) => sum + c.level, 0);
             document.getElementById('sheet-level').innerText = totalLevel;
-            
-            // Klassen-Badge zeigt "Klassenname Stufe X"
-            document.getElementById('sheet-class').innerText = `${primaryClassName} ${totalLevel}`;
-            
-            // Hintergrund-Badge
-            let bgText = activeChar.background || "Hintergrund";
-            document.getElementById('sheet-bg').innerText = `${bgText} (Stufe 1)`;
             
             const hpDisplayContainer = document.getElementById('sheet-hp-display-container');
             const hpBox = document.getElementById('sheet-hp-box');
@@ -1143,18 +1140,17 @@
         function closeStatModal() { document.getElementById('stat-modal').style.display = 'none'; }
         function saveStatChanges() { closeStatModal(); }
 
-        // Korrigierte Info-Modal Logik für Rasse, Klasse und Hintergrund
         function openInfoModal(type) {
             let title = "";
             let text = "";
 
             if (type === 'species') {
                 title = `Spezies: ${activeChar.species || '-'}`;
-                text = `Spezies-Merkmale, Geschwindigkeiten und Attributsboni (z.B. +2 auf Intelligenz bei Gnomen) sind hier aktiv.`;
+                text = `Spezies-Merkmale, Geschwindigkeiten und Attributsboni für ${activeChar.species || 'diesen Charakter'} sind aktiv.`;
             } else if (type === 'class') {
                 let className = activeChar.classesList ? activeChar.classesList.map(c => `${c.name} ${c.level}`).join(' / ') : (activeChar.class || '-');
                 title = `Klasse(n): ${className}`;
-                text = `Übersicht der gewählten Klassen und Stufen nach D&D 2024 Regeln. Bestimmt Trefferwürfel und Klassenfähigkeiten.`;
+                text = `Übersicht der gewählten Klassen und Stufen nach D&D 2024 Regeln.`;
             } else if (type === 'background') {
                 title = `Hintergrund: ${activeChar.background || '-'}`;
                 text = `Der gewählte Hintergrund prägt die Herkunft des Charakters und gewährt Startfertigkeiten sowie ein Ursprungs-Talent.`;
