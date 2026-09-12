@@ -23,9 +23,8 @@
         .book-wrapper {
             display: flex;
             width: 200vw;
-            height: calc(100vh - 70px);
+            height: calc(100vh - 85px);
             transition: transform 0.4s ease-in-out;
-            /* Manuelles Wischen/Scrollen am Touchscreen komplett unterbinden */
             overflow: hidden;
             pointer-events: auto;
         }
@@ -34,7 +33,8 @@
             height: 100%;
             box-sizing: border-box;
             padding: 16px;
-            padding-bottom: 20px;
+            /* Ausreichend Abstand unten, damit der Inhalt nicht vom Footer überdeckt wird */
+            padding-bottom: 90px;
             display: flex;
             justify-content: center;
             overflow-y: auto;
@@ -44,28 +44,30 @@
             max-width: 600px;
         }
 
-        /* Permanenter Footer im Seiten-Design (wie Menü im Manager) */
+        /* Permanenter Footer im echten Seiten-Design (mit SVG rauen Rändern wie die Boxen) */
         .page-footer-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 64px;
+            height: 75px;
             background: var(--card);
             border-top: 2px solid var(--border);
             display: flex;
-            justify-content: space-around;
+            justify-content: center;
             align-items: center;
             z-index: 1000;
-            box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.15);
             padding: 0 16px;
             box-sizing: border-box;
+            gap: 12px;
+            filter: drop-shadow(0px -2px 4px rgba(0,0,0,0.05));
         }
         .footer-tab-btn {
             background: var(--btn-back-bg);
             border: 1.5px solid var(--border);
-            border-radius: 8px;
-            padding: 8px 24px;
+            border-radius: 6px;
+            padding: 10px 20px;
             font-weight: bold;
             color: var(--text);
             cursor: pointer;
@@ -73,8 +75,13 @@
             font-size: 1rem;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
+            flex: 1;
+            max-width: 180px;
             transition: all 0.2s;
+            /* SVG rauer Rand-Effekt für die Buttons im Footer */
+            clip-path: url(#rough-edge);
         }
         .footer-tab-btn.active {
             background: var(--accent);
@@ -89,7 +96,15 @@
 </head>
 <body>
 
-<!-- Permanenter Footer im Seiten-Design -->
+<!-- SVG Filter für das handgezeichnete/raue Pergament-Design der Footer-Buttons -->
+<svg style="display:none;" aria-hidden="true">
+    <filter id="rough-edge">
+        <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="3" result="noise" />
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+</svg>
+
+<!-- Permanenter Footer im echten Seiten-Design -->
 <div class="page-footer-nav">
     <button type="button" class="footer-tab-btn active" id="btn-tab-create" onclick="switchPage('create')">
         <i class="fa-solid fa-feather"></i> Erstellen
@@ -102,13 +117,6 @@
 <button class="btn-theme-toggle" onclick="openThemeModal()" title="Design wählen">
     <i class="fa-solid fa-paintbrush"></i>
 </button>
-
-<svg style="display:none;" aria-hidden="true">
-    <filter id="rough-edge">
-        <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="3" result="noise" />
-        <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G" />
-    </filter>
-</svg>
 
 <div class="book-wrapper" id="bookWrapper">
     <!-- SEITE 1: ERSTELLUNG -->
@@ -227,7 +235,7 @@
                 <div id="skill-error" class="error">Wähle 2 verschiedene Fertigkeiten, die sich nicht mit deinem Hintergrund überschneiden!</div>
             </div>
 
-            <div class="step-card" id="spells-step-card" style="margin-bottom: 40px;">
+            <div class="step-card" id="spells-step-card" style="margin-bottom: 20px;">
                 <div class="step-title">Klassen-Zauber wählen</div>
                 <label id="cantrip-label">Zaubertricks wählen</label>
                 <div class="spell-container" id="cantrips-group"></div>
@@ -241,7 +249,7 @@
     <!-- SEITE 2: HELD / CHARAKTERBLATT -->
     <div class="book-page">
         <div class="container" style="max-width:100%;">
-            <div id="sheet" class="sheet" style="display: block; margin-top: 10px; margin-bottom: 40px;">
+            <div id="sheet" class="sheet" style="display: block; margin-top: 10px; margin-bottom: 20px;">
                 <h2 id="screen-out-name" style="margin-top:0; color:var(--accent);"></h2>
                 <div id="screen-out-meta" style="font-size:0.9rem; color:var(--text-muted); text-align:center; margin-bottom:10px;"></div>
                 
@@ -321,16 +329,14 @@
 </div>
 
 <script>
-let currentPage = 'create'; // 'create' oder 'sheet'
+let currentPage = 'create';
 
 function switchPage(targetPage) {
     if (currentPage === targetPage) return;
 
     if (targetPage === 'sheet') {
-        // Wenn man von 'create' nach 'sheet' wechseln will, Abfrage zeigen
         document.getElementById('change-confirm-modal').style.display = 'flex';
     } else {
-        // Zurück zur Erstellung ohne Abfrage
         executePageSwitch('create');
     }
 }
@@ -338,10 +344,9 @@ function switchPage(targetPage) {
 function confirmPageSwitch(doSave) {
     document.getElementById('change-confirm-modal').style.display = 'none';
     if (doSave) {
-        buildCharacter(); // Übernimmt/generiert die aktuellen Änderungen
+        buildCharacter();
         executePageSwitch('sheet');
     } else {
-        // Bei Nein: Auf Erstellseite bleiben (aber direkt zum Blatt wechseln, wenn bereits eins generiert wurde? Falls gewünscht, hier einfach wechseln ohne Neubau:)
         executePageSwitch('sheet');
     }
 }
