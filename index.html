@@ -110,7 +110,6 @@
         <div class="modal-content">
             <div class="modal-title">
                 <span><i class="fa-solid fa-monument"></i> Heldenfriedhof</span>
-                <button class="close-btn" onclick="closeGraveyardModal()" style="background:none; border:none; color:var(--text-muted); cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
             <div id="graveyard-list-container" class="modal-body" style="max-height: 40vh; display: flex; flex-direction: column; gap: 10px;"></div>
@@ -123,10 +122,11 @@
     <div id="custom-confirm-modal" class="modal-overlay" style="display:none; z-index: 9999;">
         <div class="modal-content" style="text-align: center; max-width: 320px;">
             <div class="modal-title" style="justify-content: center;">
-                <span>Helden begraben?</span>
+                <span id="confirm-title">Titel</span>
             </div>
             <div class="modal-body" style="font-size: 0.9rem; color: var(--text); margin: 15px 0;">
-                <span id="confirm-text">Möchtest du diesen Helden wirklich in den Heldenfriedhof überführen?</span>
+                <div id="confirm-text" style="font-weight: bold; margin-bottom: 8px;">Frage</div>
+                <div id="confirm-subtext" style="font-size: 0.75rem; color: var(--text-muted); font-style: italic;">Untertext</div>
             </div>
             <div style="display: flex; gap: 10px; margin-top: 10px;">
                 <button id="confirm-yes-btn" class="main-btn" style="flex: 1; background: var(--btn-back-bg); color: var(--text); border: 1.5px solid var(--border); margin-bottom: 0;">Ja</button>
@@ -194,17 +194,16 @@
             window.location.href = 'manager.html';
         }
 
-        function handleArchiveClick(event, id, name) {
-            event.stopPropagation();
+        function showCustomConfirm(title, text, subtext, onYes) {
             const modal = document.getElementById('custom-confirm-modal');
-            const textEl = document.getElementById('confirm-text');
+            document.getElementById('confirm-title').innerText = title;
+            document.getElementById('confirm-text').innerText = text;
+            document.getElementById('confirm-subtext').innerText = subtext;
+            modal.style.display = 'flex';
+
             const yesBtn = document.getElementById('confirm-yes-btn');
             const noBtn = document.getElementById('confirm-no-btn');
 
-            textEl.innerHTML = `"${name}" wirklich in den Heldenfriedhof überführen?`;
-            modal.style.display = 'flex';
-
-            // Alte Listener entfernen um Mehrfach-Ausführung zu verhindern
             const newYes = yesBtn.cloneNode(true);
             const newNo = noBtn.cloneNode(true);
             yesBtn.parentNode.replaceChild(newYes, yesBtn);
@@ -212,18 +211,30 @@
 
             newYes.addEventListener('click', () => {
                 modal.style.display = 'none';
-                let characters = getStoredCharacters();
-                const index = characters.findIndex(c => c.id === id);
-                if (index >= 0) { 
-                    characters[index].archived = true; 
-                    saveStoredCharacters(characters); 
-                    openCharacterModal(); 
-                }
+                onYes();
             });
 
             newNo.addEventListener('click', () => {
                 modal.style.display = 'none';
             });
+        }
+
+        function handleArchiveClick(event, id, name) {
+            event.stopPropagation();
+            showCustomConfirm(
+                "Helden begraben?",
+                `"${name}" wirklich in den Heldenfriedhof überführen?`,
+                "",
+                () => {
+                    let characters = getStoredCharacters();
+                    const index = characters.findIndex(c => c.id === id);
+                    if (index >= 0) { 
+                        characters[index].archived = true; 
+                        saveStoredCharacters(characters); 
+                        openCharacterModal(); 
+                    }
+                }
+            );
         }
 
         function openGraveyardModal() {
@@ -242,8 +253,8 @@
                             <div style="font-size: 0.75rem; color: var(--text-muted);">${char.class || "-"}</div>
                         </div>
                         <div style="display: flex; gap: 6px;">
-                            <button onclick="restoreCharacter(event, '${char.id}')" style="background:none; border:1.5px solid var(--border); border-radius:4px; padding:6px; color:var(--text-muted); cursor:pointer;"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
-                            <button onclick="deleteCharacterPermanently(event, '${char.id}')" style="background:none; border:1.5px solid var(--border); border-radius:4px; padding:6px; color:#a94442; cursor:pointer;"><i class="fa-solid fa-trash-can"></i></button>
+                            <button onclick="handleRestoreClick(event, '${char.id}', '${char.name || "Held"}')" style="background:none; border:1.5px solid var(--border); border-radius:4px; padding:6px; color:var(--text-muted); cursor:pointer;"><i class="fa-solid fa-person-arrow-up-from-line"></i></button>
+                            <button onclick="handleDeletePermanentlyClick(event, '${char.id}', '${char.name || "Held"}')" style="background:none; border:1.5px solid var(--border); border-radius:4px; padding:6px; color:#a94442; cursor:pointer;"><i class="fa-solid fa-trash-can"></i></button>
                         </div>
                     `;
                     container.appendChild(item);
@@ -252,20 +263,38 @@
             document.getElementById('graveyard-modal').style.display = 'flex';
         }
         function closeGraveyardModal() { document.getElementById('graveyard-modal').style.display = 'none'; }
-        function restoreCharacter(event, id) {
+        
+        function handleRestoreClick(event, id, name) {
             event.stopPropagation();
-            let characters = getStoredCharacters();
-            const index = characters.findIndex(c => c.id === id);
-            if (index >= 0) { delete characters[index].archived; saveStoredCharacters(characters); openGraveyardModal(); }
+            showCustomConfirm(
+                "Helden wiederbeleben?",
+                `Möchtest du "${name}" wiederbeleben?`,
+                "Du weißt was wir von Nekromantie halten!",
+                () => {
+                    let characters = getStoredCharacters();
+                    const index = characters.findIndex(c => c.id === id);
+                    if (index >= 0) { 
+                        delete characters[index].archived; 
+                        saveStoredCharacters(characters); 
+                        openGraveyardModal(); 
+                    }
+                }
+            );
         }
-        function deleteCharacterPermanently(event, id) {
+
+        function handleDeletePermanentlyClick(event, id, name) {
             event.stopPropagation();
-            if (confirm("Endgültig löschen?")) {
-                let characters = getStoredCharacters();
-                characters = characters.filter(c => c.id !== id);
-                saveStoredCharacters(characters);
-                openGraveyardModal();
-            }
+            showCustomConfirm(
+                "Endgültig löschen?",
+                `Soll die Seele dieses Helden („${name}“) für alle Ewigkeit in Leere verschwinden?`,
+                "",
+                () => {
+                    let characters = getStoredCharacters();
+                    characters = characters.filter(c => c.id !== id);
+                    saveStoredCharacters(characters);
+                    openGraveyardModal();
+                }
+            );
         }
     </script>
 </body>
