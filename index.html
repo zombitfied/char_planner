@@ -53,7 +53,8 @@
                 <i class="fa-solid fa-dragon"></i>
             </div>
 
-            <h1 style="font-size: 1.35rem; color: var(--text); margin: 0 0 4px 0; text-transform: uppercase; font-family: serif; letter-spacing: 0.5px;">Gewölbe und Flugechsen</h1>
+            <h1 style="font-size: 0.9rem; color: var(--text-muted); margin: 0 0 2px 0; text-transform: uppercase; font-family: serif; letter-spacing: 0.5px;">Gewölbe und Flugechsen</h1>
+            <div style="font-size: 1.6rem; color: var(--text); font-weight: bold; margin-bottom: 4px; text-transform: uppercase; font-family: serif;">Heldenschmiede</div>
             <div class="subtitle" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 24px; font-style: italic;">v.0.0.1</div>
 
             <a href="creator.html" class="btn-gold-main">
@@ -61,7 +62,7 @@
             </a>
             
             <button class="btn-menu-main" onclick="openCharacterModal()">
-                <i class="fa-solid fa-scroll"></i> Abenteuer fortsetzen
+                <i class="fa-solid fa-person-arrow-up-from-line"></i> Helden laden
             </button>
             
             <button class="btn-menu-main" onclick="openGraveyardModal()" style="color: var(--text-muted); margin-bottom: 0;">
@@ -191,7 +192,7 @@
                 saveStoredCharacters(characters);
                 localStorage.setItem('dnd_active_character', JSON.stringify(characters[index]));
             }
-            window.location.href = 'manager.html';
+            window.location.href = 'creator.html';
         }
 
         function showCustomConfirm(title, text, subtext, onYes) {
