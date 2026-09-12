@@ -23,7 +23,7 @@
             display: flex;
             width: 200vw;
             transition: transform 0.4s ease-in-out;
-            pointer-events: none; /* Verhindert das Blockieren von Klicks auf den Footer */
+            pointer-events: none;
         }
         .book-page {
             width: 100vw;
@@ -33,7 +33,7 @@
             padding-bottom: 105px;
             display: flex;
             justify-content: center;
-            pointer-events: auto; /* Erlaubt Interaktionen innerhalb der Seiten wieder */
+            pointer-events: auto;
         }
         .book-page .container {
             width: 100%;
@@ -61,40 +61,40 @@
             filter: url(#rough-edge);
         }
         
-        /* Buttons: Icon links neben Text, kleiner und kompakt */
+        /* Footer Buttons: Immer aktiv, flexibel */
         .footer-tab-btn {
             background: var(--btn-back-bg);
             border: 1.5px solid var(--border);
             border-radius: 8px;
-            padding: 8px 14px;
+            padding: 10px 20px;
             font-weight: bold;
-            color: var(--text-muted);
+            color: var(--text);
             cursor: pointer;
             font-family: serif;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             display: flex;
             flex-direction: row;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            flex: 1;
+            gap: 10px;
+            width: 100%;
+            max-width: 300px;
             transition: all 0.2s;
             filter: url(#rough-edge);
         }
         .footer-tab-btn i {
-            font-size: 0.95rem;
+            font-size: 1rem;
+            color: var(--accent);
         }
-        .footer-tab-btn.active {
-            color: var(--bg);
+        .footer-tab-btn:hover {
             background: var(--accent);
-            border-color: var(--accent);
+            color: var(--bg);
         }
-        .footer-tab-btn:disabled {
-            opacity: 0.35;
-            cursor: not-allowed;
+        .footer-tab-btn:hover i {
+            color: var(--bg);
         }
 
-        /* Kleiner roter Käfer-Reset-Button neben dem Design-Button */
+        /* Kleiner roter Käfer-Reset-Button oben rechts neben dem Design-Button */
         .btn-debug-reset {
             position: fixed;
             top: 16px;
@@ -128,16 +128,13 @@
     </filter>
 </svg>
 
-<div class="page-footer-nav">
-    <button type="button" class="footer-tab-btn active" id="btn-tab-create" onclick="switchPage('create')">
-        <i class="fa-solid fa-feather"></i> Erstellen
-    </button>
-    <button type="button" class="footer-tab-btn" id="btn-tab-sheet" onclick="switchPage('sheet')" disabled>
-        <i class="fa-solid fa-shield-halved"></i> Held
+<!-- Footer wechselt je nach aktueller Ansicht -->
+<div class="page-footer-nav" id="footerNavContainer">
+    <button type="button" class="footer-tab-btn" onclick="switchToSheet()">
+        <i class="fa-solid fa-shield-halved"></i> Zum Heldenbogen
     </button>
 </div>
 
-<!-- Kleiner roter Käfer-Button oben links neben dem Design-Button -->
 <button class="btn-debug-reset" onclick="resetLocalStorage()" title="Speicher komplett leeren (Reset)">
     <i class="fa-solid fa-bug"></i>
 </button>
@@ -311,22 +308,6 @@
     </div>
 </div>
 
-<!-- MODAL: Änderungen übernehmen Abfrage -->
-<div id="change-confirm-modal" class="modal-overlay" style="display:none; z-index: 9999;">
-    <div class="modal-content" style="text-align: center; max-width: 320px;">
-        <div class="modal-title" style="justify-content: center;">
-            <span>Änderungen übernehmen?</span>
-        </div>
-        <div class="modal-body" style="font-size: 0.9rem; color: var(--text); margin: 15px 0;">
-            <span>Möchtest du die aktuellen Änderungen an deinem Helden speichern und zum Charakterblatt wechseln?</span>
-        </div>
-        <div style="display: flex; gap: 10px; margin-top: 10px;">
-            <button onclick="confirmPageSwitch(true)" class="main-btn" style="flex: 1; background: var(--btn-back-bg); color: var(--text); border: 1.5px solid var(--border); margin-bottom: 0;">Ja</button>
-            <button onclick="confirmPageSwitch(false)" class="main-btn" style="flex: 1; background: var(--btn-back-bg); color: var(--text); border: 1.5px solid var(--border); margin-bottom: 0;">Nein</button>
-        </div>
-    </div>
-</div>
-
 <div id="theme-modal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-title">
@@ -359,40 +340,37 @@
 <script>
 let currentPage = 'create';
 
-function switchPage(targetPage) {
-    if (currentPage === targetPage) return;
-
-    if (targetPage === 'sheet') {
-        document.getElementById('change-confirm-modal').style.display = 'flex';
-    } else {
-        executePageSwitch('create');
+function switchToSheet() {
+    // Wenn kein Held im Speicher liegt, erst einen generieren
+    if (!lastBuiltCharacter) {
+        buildCharacterSilentData();
     }
+    executePageSwitch('sheet');
 }
 
-function confirmPageSwitch(doSave) {
-    document.getElementById('change-confirm-modal').style.display = 'none';
-    if (doSave) {
-        buildCharacter();
-        executePageSwitch('sheet');
-    } else {
-        executePageSwitch('sheet');
-    }
+function switchToCreate() {
+    executePageSwitch('create');
 }
 
 function executePageSwitch(targetPage) {
     currentPage = targetPage;
     const wrapper = document.getElementById('bookWrapper');
-    const btnCreate = document.getElementById('btn-tab-create');
-    const btnSheet = document.getElementById('btn-tab-sheet');
+    const footerContainer = document.getElementById('footerNavContainer');
 
     if (targetPage === 'sheet') {
         wrapper.style.transform = 'translateX(-100vw)';
-        btnCreate.classList.remove('active');
-        btnSheet.classList.add('active');
+        footerContainer.innerHTML = `
+            <button type="button" class="footer-tab-btn" onclick="switchToCreate()">
+                <i class="fa-solid fa-feather"></i> Held bearbeiten
+            </button>
+        `;
     } else {
         wrapper.style.transform = 'translateX(0vw)';
-        btnSheet.classList.remove('active');
-        btnCreate.classList.add('active');
+        footerContainer.innerHTML = `
+            <button type="button" class="footer-tab-btn" onclick="switchToSheet()">
+                <i class="fa-solid fa-shield-halved"></i> Zum Heldenbogen
+            </button>
+        `;
     }
 }
 
@@ -532,7 +510,6 @@ function loadCharacterIntoCreator(char) {
 
 function buildCharacterSilent(charData) {
     lastBuiltCharacter = charData;
-    document.getElementById('btn-tab-sheet').disabled = false;
 
     document.getElementById('screen-out-name').innerHTML = `<i class="fa-solid ${getClassIcon(charData.class)}"></i> ${charData.name}`;
     document.getElementById('screen-out-meta').innerText = `${charData.species} | ${charData.class} Stufe ${charData.level || 1} | ${charData.background}`;
@@ -1007,31 +984,25 @@ function updateSpellsUI() {
     }
 }
 
-function buildCharacter() {
-    if (!validateArray() || !validateSkills() || !validateBgAsi()) {
-        alert("Bitte behebe alle Validierungsfehler!");
-        return;
-    }
-
+function buildCharacterSilentData() {
     const name = document.getElementById('char-name').value || "Unbenannter Held";
-    const mainRace = document.getElementById('main-race').value;
-    const subRace = document.getElementById('sub-race').value;
-    const clsName = document.getElementById('class-select').value;
-    const bg = document.getElementById('bg-select').value;
-    const subInfo = speciesData[mainRace].subraces[subRace];
+    const mainRace = document.getElementById('main-race').value || Object.keys(speciesData)[0];
+    const subRace = document.getElementById('sub-race').value || Object.keys(speciesData[mainRace]?.subraces || {})[0];
+    const clsName = document.getElementById('class-select').value || "Kämpfer";
+    const bg = document.getElementById('bg-select').value || Object.keys(backgrounds)[0];
+    const subInfo = speciesData[mainRace]?.subraces[subRace] || { bonus: {}, speed: 30 };
 
     let rawStats = {
-        STR: parseInt(document.getElementById('str-val').value),
-        DEX: parseInt(document.getElementById('dex-val').value),
-        CON: parseInt(document.getElementById('con-val').value),
-        INT: parseInt(document.getElementById('int-val').value),
-        WIS: parseInt(document.getElementById('wis-val').value),
-        CHA: parseInt(document.getElementById('cha-val').value)
+        STR: parseInt(document.getElementById('str-val')?.value) || 15,
+        DEX: parseInt(document.getElementById('dex-val')?.value) || 14,
+        CON: parseInt(document.getElementById('con-val')?.value) || 13,
+        INT: parseInt(document.getElementById('int-val')?.value) || 12,
+        WIS: parseInt(document.getElementById('wis-val')?.value) || 10,
+        CHA: parseInt(document.getElementById('cha-val')?.value) || 8
     };
 
     let speciesBonuses = subInfo.bonus || {};
     let bgBonuses = getBgBonuses();
-    let bgCustomData = getSelectedBgEquipmentAndTools(bg);
 
     let stats = { ...rawStats };
     for (let s in stats) {
@@ -1056,18 +1027,15 @@ function buildCharacter() {
     };
 
     let list = JSON.parse(localStorage.getItem('dnd_character_list') || '[]');
-    const existingIndex = list.findIndex(c => c.id === lastBuiltCharacter.id);
-    if (existingIndex >= 0) {
-        list[existingIndex] = lastBuiltCharacter;
-    } else {
-        list.push(lastBuiltCharacter);
-    }
+    list.push(lastBuiltCharacter);
     localStorage.setItem('dnd_character_list', JSON.stringify(list));
     localStorage.setItem('dnd_active_character', JSON.stringify(lastBuiltCharacter));
 
     buildCharacterSilent(lastBuiltCharacter);
+}
 
-    document.getElementById('btn-tab-sheet').disabled = false;
+function buildCharacter() {
+    buildCharacterSilentData();
     executePageSwitch('sheet');
 }
 
