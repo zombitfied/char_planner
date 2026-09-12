@@ -160,7 +160,7 @@
                             <div style="font-weight: bold; color: var(--text);">${char.name || "Held"} (Stufe ${char.level || 1})</div>
                             <div style="font-size: 0.75rem; color: var(--text-muted);">${char.class || "-"} | ${char.species || "-"}</div>
                         </div>
-                        <button onclick="archiveCharacter(event, '${char.id}')" style="background:none; border:1.5px solid var(--border); border-radius:4px; padding:6px; color:var(--text-muted); cursor:pointer;"><i class="fa-solid fa-monument"></i></button>
+                        <button onclick="handleArchiveClick(event, '${char.id}', '${char.name || "Held"}')" style="background:none; border:none; width:40px; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0; flex-shrink:0;"><i class="fa-solid fa-monument" style="font-size: 1.4rem; color: var(--text-muted);"></i></button>
                     `;
                     container.appendChild(item);
                 });
@@ -178,11 +178,18 @@
             }
             window.location.href = 'manager.html';
         }
-        function archiveCharacter(event, id) {
+
+        function handleArchiveClick(event, id, name) {
             event.stopPropagation();
-            let characters = getStoredCharacters();
-            const index = characters.findIndex(c => c.id === id);
-            if (index >= 0) { characters[index].archived = true; saveStoredCharacters(characters); openCharacterModal(); }
+            if (confirm(`Helden begraben?\n\n"${name}" wirklich in den Heldenfriedhof überführen?`)) {
+                let characters = getStoredCharacters();
+                const index = characters.findIndex(c => c.id === id);
+                if (index >= 0) { 
+                    characters[index].archived = true; 
+                    saveStoredCharacters(characters); 
+                    openCharacterModal(); 
+                }
+            }
         }
 
         function openGraveyardModal() {
