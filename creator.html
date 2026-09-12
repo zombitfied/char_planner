@@ -12,8 +12,70 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Layout für die Buchseiten-Tabs (horizontal gescrollt) */
+        body {
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        .book-wrapper {
+            display: flex;
+            width: 200vw;
+            min-height: 100vh;
+            transition: transform 0.5s ease-in-out;
+        }
+        .book-page {
+            width: 100vw;
+            box-sizing: border-box;
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+        }
+        .book-page .container {
+            width: 100%;
+            max-width: 600px;
+        }
+        /* Floating Tab Navigation oben */
+        .tab-nav {
+            position: fixed;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            background: var(--btn-back-bg);
+            border: 1.5px solid var(--border);
+            border-radius: 20px;
+            padding: 4px;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 16px;
+            font-weight: bold;
+            color: var(--text);
+            cursor: pointer;
+            font-family: serif;
+        }
+        .tab-btn.active {
+            background: var(--accent);
+            color: var(--bg);
+        }
+        .tab-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
 <body>
+
+<div class="tab-nav">
+    <button type="button" class="tab-btn active" id="btn-tab-create" onclick="switchPage('create')">Erstellen</button>
+    <button type="button" class="tab-btn" id="btn-tab-sheet" onclick="switchPage('sheet')" disabled>Held</button>
+</div>
 
 <button class="btn-theme-toggle" onclick="openThemeModal()" title="Design wählen">
     <i class="fa-solid fa-paintbrush"></i>
@@ -26,165 +88,188 @@
     </filter>
 </svg>
 
-<div class="container">
-    <div class="top-nav">
-        <a href="index.html" class="btn-back">
-            <i class="fa-solid fa-arrow-left"></i> Zum Eingang
-        </a>
-        <button type="button" class="btn-toggle-console" onclick="toggleDebugConsole()" title="Konsole öffnen">
-            <i class="fa-solid fa-bug"></i>
-        </button>
-    </div>
+<div class="book-wrapper" id="bookWrapper">
+    <!-- SEITE 1: ERSTELLUNG -->
+    <div class="book-page">
+        <div class="container" style="max-width:100%;">
+            <div class="top-nav" style="justify-content: space-between;">
+                <a href="index.html" class="btn-back">
+                    <i class="fa-solid fa-arrow-left"></i> Zum Eingang
+                </a>
+                <button type="button" class="btn-toggle-console" onclick="toggleDebugConsole()" title="Konsole öffnen">
+                    <i class="fa-solid fa-bug"></i>
+                </button>
+            </div>
 
-    <div class="page-title">Held/in erstellen</div>
+            <div class="page-title">Held/in erstellen</div>
 
-    <div class="step-card">
-        <div class="step-title">Identität & Volk</div>
-        <div>
-            <label for="char-name">Name</label>
-            <input type="text" id="char-name" value="Gimble">
-        </div>
-        <div class="grid-race" style="margin-top: 8px;">
-            <div>
-                <label for="main-race">Volk</label>
-                <div class="input-row">
-                    <select id="main-race" onchange="onMainRaceChange()"></select>
+            <div class="step-card">
+                <div class="step-title">Identität & Volk</div>
+                <div>
+                    <label for="char-name">Name</label>
+                    <input type="text" id="char-name" value="Gimble">
+                </div>
+                <div class="grid-race" style="margin-top: 8px;">
+                    <div>
+                        <label for="main-race">Volk</label>
+                        <div class="input-row">
+                            <select id="main-race" onchange="onMainRaceChange()"></select>
+                        </div>
+                    </div>
+                    <div id="subrace-container" style="display: none;">
+                        <label for="sub-race">Abstammung</label>
+                        <div class="input-row">
+                            <select id="sub-race" onchange="updateSubraceOptions()"></select>
+                            <button type="button" class="info-btn" onclick="showRaceModal()">ℹ</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="special-attr-container" class="special-attribute-box">
+                    <label id="special-attr-label">Spezial-Attribut wählen:</label>
+                    <select id="special-attr-select"></select>
                 </div>
             </div>
-            <div id="subrace-container" style="display: none;">
-                <label for="sub-race">Abstammung</label>
-                <div class="input-row">
-                    <select id="sub-race" onchange="updateSubraceOptions()"></select>
-                    <button type="button" class="info-btn" onclick="showRaceModal()">ℹ</button>
+
+            <div class="step-card">
+                <div class="step-title">Klasse und Hintergrund</div>
+                <div class="grid-2">
+                    <div>
+                        <label for="class-select">Klasse</label>
+                        <div class="input-row">
+                            <select id="class-select" onchange="onClassChange()"></select>
+                            <button type="button" class="info-btn" id="class-info-btn" onclick="showClassModal()"><i class="fa-solid fa-wrench" id="class-icon-indicator"></i></button>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="bg-select">Hintergrund</label>
+                        <div class="input-row">
+                            <select id="bg-select" onchange="onBgChange()"></select>
+                            <button type="button" class="info-btn" onclick="showBgModal()">ℹ</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 12px; background: var(--btn-back-bg); padding: 10px; border-radius: 8px; border: 1.5px solid var(--border);">
+                    <label for="bg-asi-mode" style="margin-top:0; color:var(--accent);">Hintergrund-Attributsbonus (+3 Punkte):</label>
+                    <select id="bg-asi-mode" onchange="onBgAsiModeChange()" style="margin-top:4px; margin-bottom:8px;">
+                        <option value="2_1">+2 auf ein Attribut, +1 auf ein anderes</option>
+                        <option value="1_1_1">+1 auf drei verschiedene Attribute</option>
+                    </select>
+                    <div id="bg-asi-slots" class="grid-3" style="gap:6px;"></div>
+                    <div id="bg-asi-error" class="error" style="display:none;">Wähle unterschiedliche Attribute ohne Dopplungen innerhalb der Boni!</div>
+                </div>
+
+                <div id="bg-dynamic-options-container" style="margin-top: 12px; display: none; background: var(--btn-back-bg); padding: 10px; border-radius: 8px; border: 1.5px solid var(--border);">
+                    <div id="bg-tool-choice-wrapper" style="margin-bottom: 8px; display: none;">
+                        <label id="bg-tool-label" style="margin-top:0; color:var(--accent);">Werkzeug-Wahl:</label>
+                        <select id="bg-tool-select" style="margin-top:4px;"></select>
+                    </div>
+                    <div id="bg-eq-choice-wrapper" style="display: none;">
+                        <label id="bg-eq-label" style="margin-top:0; color:var(--accent);">Startausrüstung (Paket wählen):</label>
+                        <select id="bg-eq-select" style="margin-top:4px;">
+                            <option value="A">Option A (Ausrüstungspaket + Gold)</option>
+                            <option value="B">Option B (50 Goldstücke)</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div id="special-attr-container" class="special-attribute-box">
-            <label id="special-attr-label">Spezial-Attribut wählen:</label>
-            <select id="special-attr-select"></select>
+
+            <div class="step-card">
+                <div class="step-title">Start-Attribute zuweisen</div>
+                <div class="grid-3">
+                    <div><label>Stärke</label><select class="array-select" id="str-val" onchange="onStatsChange()"></select></div>
+                    <div><label>Geschicklichkeit</label><select class="array-select" id="dex-val" onchange="onStatsChange()"></select></div>
+                    <div><label>Konstitution</label><select class="array-select" id="con-val" onchange="onStatsChange()"></select></div>
+                    <div><label>Intelligenz</label><select class="array-select" id="int-val" onchange="onStatsChange()"></select></div>
+                    <div><label>Weisheit</label><select class="array-select" id="wis-val" onchange="onStatsChange()"></select></div>
+                    <div><label>Charisma</label><select class="array-select" id="cha-val" onchange="onStatsChange()"></select></div>
+                </div>
+                <div id="array-error" class="error">Wähle 15, 14, 13, 12, 10, 8 ohne Dopplungen!</div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-title">Fertigkeiten wählen</div>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <label for="skill1">Fertigkeit 1</label>
+                        <div class="input-row">
+                            <select id="skill1" onchange="validateSkills()"></select>
+                            <button type="button" class="info-btn" onclick="showSkillModal('skill1')">ℹ</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="skill2">Fertigkeit 2</label>
+                        <div class="input-row">
+                            <select id="skill2" onchange="validateSkills()"></select>
+                            <button type="button" class="info-btn" onclick="showSkillModal('skill2')">ℹ</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="skill-error" class="error">Wähle 2 verschiedene Fertigkeiten, die sich nicht mit deinem Hintergrund überschneiden!</div>
+            </div>
+
+            <div class="step-card" id="spells-step-card">
+                <div class="step-title">Klassen-Zauber wählen</div>
+                <label id="cantrip-label">Zaubertricks wählen</label>
+                <div class="spell-container" id="cantrips-group"></div>
+
+                <label id="prep-spells-label" style="margin-top:15px;">Stufe 1 Zauber wählen:</label>
+                <div class="spell-container" id="level1-group"></div>
+            </div>
+
+            <button class="main-btn" onclick="buildCharacter()">Held erstellen</button>
         </div>
     </div>
 
-    <div class="step-card">
-        <div class="step-title">Klasse und Hintergrund</div>
-        <div class="grid-2">
-            <div>
-                <label for="class-select">Klasse</label>
-                <div class="input-row">
-                    <select id="class-select" onchange="onClassChange()"></select>
-                    <button type="button" class="info-btn" id="class-info-btn" onclick="showClassModal()"><i class="fa-solid fa-wrench" id="class-icon-indicator"></i></button>
+    <!-- SEITE 2: HELD / CHARAKTERBLATT -->
+    <div class="book-page">
+        <div class="container" style="max-width:100%;">
+            <div id="sheet" class="sheet" style="display: block; margin-top: 40px;">
+                <h2 id="screen-out-name" style="margin-top:0; color:var(--accent);"></h2>
+                <div id="screen-out-meta" style="font-size:0.9rem; color:var(--text-muted); text-align:center; margin-bottom:10px;"></div>
+                
+                <div style="margin-bottom: 12px;">
+                    <span class="badge" id="screen-out-hp" onclick="showCalcModal('HP')"></span>
+                    <span class="badge" id="screen-out-ac" onclick="showCalcModal('RK')"></span>
+                    <span class="badge" id="screen-out-init" onclick="showCalcModal('Initiative')"></span>
+                    <span class="badge" id="screen-out-prof" onclick="showCalcModal('Übungsbonus')">Übungsbonus: +2</span>
+                    <span class="badge" id="screen-out-speed" onclick="showCalcModal('Bewegungsrate')"></span>
                 </div>
-            </div>
-            <div>
-                <label for="bg-select">Hintergrund</label>
-                <div class="input-row">
-                    <select id="bg-select" onchange="onBgChange()"></select>
-                    <button type="button" class="info-btn" onclick="showBgModal()">ℹ</button>
-                </div>
-            </div>
-        </div>
 
-        <div style="margin-top: 12px; background: var(--btn-back-bg); padding: 10px; border-radius: 8px; border: 1.5px solid var(--border);">
-            <label for="bg-asi-mode" style="margin-top:0; color:var(--accent);">Hintergrund-Attributsbonus (+3 Punkte):</label>
-            <select id="bg-asi-mode" onchange="onBgAsiModeChange()" style="margin-top:4px; margin-bottom:8px;">
-                <option value="2_1">+2 auf ein Attribut, +1 auf ein anderes</option>
-                <option value="1_1_1">+1 auf drei verschiedene Attribute</option>
-            </select>
-            <div id="bg-asi-slots" class="grid-3" style="gap:6px;"></div>
-            <div id="bg-asi-error" class="error" style="display:none;">Wähle unterschiedliche Attribute ohne Dopplungen innerhalb der Boni!</div>
-        </div>
+                <h3 style="color:var(--accent);">Attributswerte & Modifikatoren</h3>
+                <div class="grid-3" id="screen-out-stats" style="margin-bottom:15px;"></div>
 
-        <div id="bg-dynamic-options-container" style="margin-top: 12px; display: none; background: var(--btn-back-bg); padding: 10px; border-radius: 8px; border: 1.5px solid var(--border);">
-            <div id="bg-tool-choice-wrapper" style="margin-bottom: 8px; display: none;">
-                <label id="bg-tool-label" style="margin-top:0; color:var(--accent);">Werkzeug-Wahl:</label>
-                <select id="bg-tool-select" style="margin-top:4px;"></select>
-            </div>
-            <div id="bg-eq-choice-wrapper" style="display: none;">
-                <label id="bg-eq-label" style="margin-top:0; color:var(--accent);">Startausrüstung (Paket wählen):</label>
-                <select id="bg-eq-select" style="margin-top:4px;">
-                    <option value="A">Option A (Ausrüstungspaket + Gold)</option>
-                    <option value="B">Option B (50 Goldstücke)</option>
-                </select>
-            </div>
-        </div>
-    </div>
+                <h3 style="color:var(--accent);">Fertigkeiten & Merkmale</h3>
+                <ul id="screen-out-features" style="margin-bottom:15px;"></ul>
 
-    <div class="step-card">
-        <div class="step-title">Start-Attribute zuweisen</div>
-        <div class="grid-3">
-            <div><label>Stärke</label><select class="array-select" id="str-val" onchange="onStatsChange()"></select></div>
-            <div><label>Geschicklichkeit</label><select class="array-select" id="dex-val" onchange="onStatsChange()"></select></div>
-            <div><label>Konstitution</label><select class="array-select" id="con-val" onchange="onStatsChange()"></select></div>
-            <div><label>Intelligenz</label><select class="array-select" id="int-val" onchange="onStatsChange()"></select></div>
-            <div><label>Weisheit</label><select class="array-select" id="wis-val" onchange="onStatsChange()"></select></div>
-            <div><label>Charisma</label><select class="array-select" id="cha-val" onchange="onStatsChange()"></select></div>
-        </div>
-        <div id="array-error" class="error">Wähle 15, 14, 13, 12, 10, 8 ohne Dopplungen!</div>
-    </div>
+                <h3 style="color:var(--accent);">Ausrüstung & Waffen-Konfiguration</h3>
+                <div id="sheet-equipment-controls" style="background:var(--btn-back-bg); padding:12px; border-radius:6px; border:1.5px solid var(--border); margin-bottom:15px;"></div>
 
-    <div class="step-card">
-        <div class="step-title">Fertigkeiten wählen</div>
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-            <div>
-                <label for="skill1">Fertigkeit 1</label>
-                <div class="input-row">
-                    <select id="skill1" onchange="validateSkills()"></select>
-                    <button type="button" class="info-btn" onclick="showSkillModal('skill1')">ℹ</button>
-                </div>
-            </div>
-            <div>
-                <label for="skill2">Fertigkeit 2</label>
-                <div class="input-row">
-                    <select id="skill2" onchange="validateSkills()"></select>
-                    <button type="button" class="info-btn" onclick="showSkillModal('skill2')">ℹ</button>
+                <h3 style="color:var(--accent);">Zauber & Zaubertricks Übersicht</h3>
+                <div id="screen-out-spells" style="margin-bottom:20px;"></div>
+
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button class="btn-gray-main" onclick="manualSaveCharacter()" style="margin-top:0; width: 100%;">
+                        <i class="fa-solid fa-floppy-disk"></i> Held speichern
+                    </button>
                 </div>
             </div>
         </div>
-        <div id="skill-error" class="error">Wähle 2 verschiedene Fertigkeiten, die sich nicht mit deinem Hintergrund überschneiden!</div>
     </div>
+</div>
 
-    <div class="step-card" id="spells-step-card">
-        <div class="step-title">Klassen-Zauber wählen</div>
-        <label id="cantrip-label">Zaubertricks wählen</label>
-        <div class="spell-container" id="cantrips-group"></div>
-
-        <label id="prep-spells-label" style="margin-top:15px;">Stufe 1 Zauber wählen:</label>
-        <div class="spell-container" id="level1-group"></div>
-    </div>
-
-    <button class="main-btn" onclick="buildCharacter()">Charakterblatt generieren</button>
-
-    <div id="sheet" class="sheet">
-        <h2 id="screen-out-name" style="margin-top:0; color:var(--accent);"></h2>
-        <div id="screen-out-meta" style="font-size:0.9rem; color:var(--text-muted); text-align:center; margin-bottom:10px;"></div>
-        
-        <div style="margin-bottom: 12px;">
-            <span class="badge" id="screen-out-hp" onclick="showCalcModal('HP')"></span>
-            <span class="badge" id="screen-out-ac" onclick="showCalcModal('RK')"></span>
-            <span class="badge" id="screen-out-init" onclick="showCalcModal('Initiative')"></span>
-            <span class="badge" id="screen-out-prof" onclick="showCalcModal('Übungsbonus')">Übungsbonus: +2</span>
-            <span class="badge" id="screen-out-speed" onclick="showCalcModal('Bewegungsrate')"></span>
+<!-- MODAL: Änderungen übernehmen Abfrage -->
+<div id="change-confirm-modal" class="modal-overlay" style="display:none; z-index: 9999;">
+    <div class="modal-content" style="text-align: center; max-width: 320px;">
+        <div class="modal-title" style="justify-content: center;">
+            <span>Änderungen übernehmen?</span>
         </div>
-
-        <h3 style="color:var(--accent);">Attributswerte & Modifikatoren</h3>
-        <div class="grid-3" id="screen-out-stats" style="margin-bottom:15px;"></div>
-
-        <h3 style="color:var(--accent);">Fertigkeiten & Merkmale</h3>
-        <ul id="screen-out-features" style="margin-bottom:15px;"></ul>
-
-        <h3 style="color:var(--accent);">Ausrüstung & Waffen-Konfiguration</h3>
-        <div id="sheet-equipment-controls" style="background:var(--btn-back-bg); padding:12px; border-radius:6px; border:1.5px solid var(--border); margin-bottom:15px;"></div>
-
-        <h3 style="color:var(--accent);">Zauber & Zaubertricks Übersicht</h3>
-        <div id="screen-out-spells" style="margin-bottom:20px;"></div>
-
-        <div style="display: flex; gap: 10px; margin-top: 15px;">
-            <button class="btn-gray-main" onclick="manualSaveCharacter()" style="margin-top:0;">
-                <i class="fa-solid fa-floppy-disk"></i> Held speichern
-            </button>
-            <button id="btn-adventure" class="btn-gray-main" onclick="startAdventure()" style="margin-top:0; opacity: 0.6; cursor: not-allowed;" disabled>
-                <i class="fa-solid fa-dungeon"></i> Auf ins Abenteuer!
-            </button>
+        <div class="modal-body" style="font-size: 0.9rem; color: var(--text); margin: 15px 0;">
+            <span>Möchtest du die aktuellen Änderungen an deinem Helden speichern und zum Charakterblatt wechseln?</span>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 10px;">
+            <button onclick="confirmPageSwitch(true)" class="main-btn" style="flex: 1; background: var(--btn-back-bg); color: var(--text); border: 1.5px solid var(--border); margin-bottom: 0;">Ja</button>
+            <button onclick="confirmPageSwitch(false)" class="main-btn" style="flex: 1; background: var(--btn-back-bg); color: var(--text); border: 1.5px solid var(--border); margin-bottom: 0;">Nein</button>
         </div>
     </div>
 </div>
@@ -219,6 +304,47 @@
 </div>
 
 <script>
+let currentPage = 'create'; // 'create' oder 'sheet'
+
+function switchPage(targetPage) {
+    if (currentPage === targetPage) return;
+
+    if (targetPage === 'sheet') {
+        // Wenn man von 'create' nach 'sheet' wechseln will, Abfrage zeigen
+        document.getElementById('change-confirm-modal').style.display = 'flex';
+    } else {
+        // Zurück zur Erstellung ohne Abfrage
+        executePageSwitch('create');
+    }
+}
+
+function confirmPageSwitch(doSave) {
+    document.getElementById('change-confirm-modal').style.display = 'none';
+    if (doSave) {
+        buildCharacter(); // Übernimmt/generiert die aktuellen Änderungen
+        executePageSwitch('sheet');
+    } else {
+        // Bei Nein: Auf Erstellseite bleiben
+    }
+}
+
+function executePageSwitch(targetPage) {
+    currentPage = targetPage;
+    const wrapper = document.getElementById('bookWrapper');
+    const btnCreate = document.getElementById('btn-tab-create');
+    const btnSheet = document.getElementById('btn-tab-sheet');
+
+    if (targetPage === 'sheet') {
+        wrapper.style.transform = 'translateX(-100vw)';
+        btnCreate.classList.remove('active');
+        btnSheet.classList.add('active');
+    } else {
+        wrapper.style.transform = 'translateX(0vw)';
+        btnSheet.classList.remove('active');
+        btnCreate.classList.add('active');
+    }
+}
+
 function openThemeModal() {
     const current = localStorage.getItem('dnd_theme') || 'standard';
     document.getElementById('check-standard').style.display = current === 'standard' ? 'inline' : 'none';
@@ -309,20 +435,17 @@ let classSpellLists = {};
 
 let currentCalculatedMods = { STR:0, DEX:0, CON:0, INT:0, WIS:0, CHA:0 };
 let lastBuiltCharacter = null;
-let isSaved = false;
 
 window.onload = async function() {
     try {
         console.log("Lade Basisdaten...");
         
-        // compendium.json für Rassen und Skills laden
         const compResponse = await fetch(COMPENDIUM_JSON_URL + "?t=" + new Date().getTime());
         if (!compResponse.ok) throw new Error(`HTTP Fehlerstatus compendium.json: ${compResponse.status}`);
         const compData = await compResponse.json();
         speciesData = compData.speciesData;
         skillDescriptions = compData.skills || {};
 
-        // backgrounds.json für Hintergründe laden
         try {
             const bgResponse = await fetch(BACKGROUNDS_JSON_URL + "?t=" + new Date().getTime());
             if (bgResponse.ok) {
@@ -345,12 +468,93 @@ window.onload = async function() {
             if (listResponse.ok) parseSpellListsHtml(await listResponse.text());
         } catch (e) {}
 
+        // Prüfen, ob ein aktiver Held geladen werden soll (aus index.html)
+        checkAndLoadActiveCharacter();
+
         initApp();
     } catch (err) {
         alert("Ladefehler: " + err.message);
         console.error("JSON Load Details:", err);
     }
 };
+
+function checkAndLoadActiveCharacter() {
+    const activeCharJson = localStorage.getItem('dnd_active_character');
+    if (activeCharJson) {
+        try {
+            const char = JSON.parse(activeCharJson);
+            loadCharacterIntoCreator(char);
+        } catch (e) {
+            console.error("Fehler beim Laden des aktiven Helden:", e);
+        }
+    }
+}
+
+function loadCharacterIntoCreator(char) {
+    if (!char) return;
+    
+    // Felder belegen
+    if (char.name && document.getElementById('char-name')) document.getElementById('char-name').value = char.name;
+    if (char.species && document.getElementById('sub-race')) document.getElementById('sub-race').value = char.species;
+    if (char.class && document.getElementById('class-select')) {
+        document.getElementById('class-select').value = char.class;
+        onClassChange();
+    }
+    if (char.background && document.getElementById('bg-select')) {
+        document.getElementById('bg-select').value = char.background;
+        onBgChange();
+    }
+
+    // Direkt das Charakterblatt im Hintergrund generieren und den "Held"-Tab freischalten
+    buildCharacterSilent(char);
+}
+
+function buildCharacterSilent(charData) {
+    lastBuiltCharacter = charData;
+    
+    // Button freischalten
+    document.getElementById('btn-tab-sheet').disabled = false;
+
+    // UI im Sheet befüllen
+    document.getElementById('screen-out-name').innerHTML = `<i class="fa-solid ${getClassIcon(charData.class)}"></i> ${charData.name}`;
+    document.getElementById('screen-out-meta').innerText = `${charData.species} | ${charData.class} Stufe ${charData.level || 1} | ${charData.background}`;
+    document.getElementById('screen-out-hp').innerText = `HP: ${charData.hp}`;
+    document.getElementById('screen-out-ac').innerText = `RK: ${charData.ac}`;
+    document.getElementById('screen-out-init').innerText = `Initiative: ${charData.mods.DEX >= 0 ? '+' : ''}${charData.mods.DEX}`;
+    document.getElementById('screen-out-prof').innerText = `Übungsbonus: +2`;
+    document.getElementById('screen-out-speed').innerText = `Bewegungsrate: ${charData.speed || 30} ft`;
+
+    document.getElementById('screen-out-stats').innerHTML = Object.keys(charData.stats).map(s => `
+        <div class="stat-box" onclick="openModal('${s} Wert', '${attributeDescriptions[s]}')">
+            <div style="font-size:0.75rem; color:var(--text-muted);">${s}</div>
+            <div class="stat-val">${charData.stats[s]}</div>
+            <div class="stat-mod">${charData.mods[s] >= 0 ? '+' : ''}${charData.mods[s]}</div>
+        </div>`).join('');
+
+    const bgObj = backgrounds[charData.background] || {};
+    let bgCustomData = getSelectedBgEquipmentAndTools(charData.background);
+    let flattenedTools = flattenEquipment(bgCustomData.tools);
+    let flattenedEq = flattenEquipment(bgCustomData.equipment);
+    let toolsStr = flattenedTools.join(', ') || 'Keine';
+    let eqStr = flattenedEq.join(', ') || 'Keine';
+
+    document.getElementById('screen-out-features').innerHTML = `
+        <li><b>Fertigkeiten:</b> ${charData.skills.join(', ')}</li>
+        <li><b>Volksmerkmale:</b><br>Geladener Charakter</li>
+        <li><b>Talent:</b> ${bgObj.feat || ''}</li>
+        <li><b>Werkzeuge:</b> ${toolsStr}</li>
+        <li><b>Hintergrund-Ausrüstung:</b> ${eqStr}</li>
+    `;
+
+    renderEquipmentSectionInSheet(charData.class, bgCustomData);
+
+    document.getElementById('screen-out-spells').innerHTML = `
+        <div style="font-weight:bold; font-size:0.85rem; color:var(--text-muted);">Zaubertricks:</div>
+        <div>${(charData.cantrips || []).join(', ') || 'Keine'}</div>
+        <div style="margin-top:8px; font-weight:bold; font-size:0.85rem; color:var(--text-muted);">Vorbereitete Stufe 1 Zauber:</div>
+        <div>${(charData.spells || []).join(', ') || 'Keine'}</div>
+    `;
+}
 
 function parseSpellsHtml(htmlText) {
     const parser = new DOMParser();
@@ -411,19 +615,6 @@ function initApp() {
     onMainRaceChange();
     onClassChange();
     updateBgDynamicUI();
-
-    document.addEventListener('input', markAsUnsaved);
-    document.addEventListener('change', markAsUnsaved);
-}
-
-function markAsUnsaved() {
-    isSaved = false;
-    const advBtn = document.getElementById('btn-adventure');
-    if (advBtn) {
-        advBtn.disabled = true;
-        advBtn.style.opacity = '0.6';
-        advBtn.style.cursor = 'not-allowed';
-    }
 }
 
 function populateSelect(id, items) {
@@ -518,10 +709,6 @@ function showSpellModalByName(spellName) {
     });
 
     openModal(clean, html, "fa-wand-magic-sparkles", school);
-}
-
-function showEquipmentModal(itemName) {
-    openModal(itemName, `Keine Detailbeschreibung hinterlegt.`, "fa-shield-halved");
 }
 
 function showCalcModal(type) {
@@ -803,7 +990,10 @@ function updateSpellsUI() {
 }
 
 function buildCharacter() {
-    if (!validateArray() || !validateSkills() || !validateBgAsi()) return alert("Bitte behebe alle Validierungsfehler!");
+    if (!validateArray() || !validateSkills() || !validateBgAsi()) {
+        alert("Bitte behebe alle Validierungsfehler!");
+        return;
+    }
 
     const name = document.getElementById('char-name').value || "Unbenannter Held";
     const mainRace = document.getElementById('main-race').value;
@@ -833,7 +1023,6 @@ function buildCharacter() {
 
     let mods = {};
     for (let s in stats) mods[s] = getMod(stats[s]);
-    currentCalculatedMods = mods;
 
     const hpBase = classHpData[clsName]?.base || 8;
     const hp = hpBase + mods.CON;
@@ -848,50 +1037,24 @@ function buildCharacter() {
         level: 1, hp, maxHp: hp, ac, speed: subInfo.speed || 30, stats, mods, skills: allSkills, cantrips: chosenCantrips, spells: chosenSpells, lastAccess: new Date().toISOString()
     };
 
-    markAsUnsaved();
-
-    document.getElementById('screen-out-name').innerHTML = `<i class="fa-solid ${getClassIcon(clsName)}"></i> ${name}`;
-    document.getElementById('screen-out-meta').innerText = `${subRace} | ${clsName} Stufe 1 | ${bg}`;
-    document.getElementById('screen-out-hp').innerText = `HP: ${hp}`;
-    document.getElementById('screen-out-ac').innerText = `RK: ${ac}`;
-    document.getElementById('screen-out-init').innerText = `Initiative: ${mods.DEX >= 0 ? '+' : ''}${mods.DEX}`;
-    document.getElementById('screen-out-prof').innerText = `Übungsbonus: +2`;
-    document.getElementById('screen-out-speed').innerText = `Bewegungsrate: ${subInfo.speed || 30} ft`;
-
-    document.getElementById('screen-out-stats').innerHTML = Object.keys(stats).map(s => `
-        <div class="stat-box" onclick="openModal('${s} Wert', '${attributeDescriptions[s]}')">
-            <div style="font-size:0.75rem; color:var(--text-muted);">${s}</div>
-            <div class="stat-val">${stats[s]}</div>
-            <div class="stat-mod">${mods[s] >= 0 ? '+' : ''}${mods[s]}</div>
-        </div>`).join('');
-
-    let flattenedTools = flattenEquipment(bgCustomData.tools);
-    let flattenedEq = flattenEquipment(bgCustomData.equipment);
-    let toolsStr = flattenedTools.join(', ') || 'Keine';
-    let eqStr = flattenedEq.join(', ') || 'Keine';
-
-    document.getElementById('screen-out-features').innerHTML = `
-        <li><b>Fertigkeiten:</b> ${allSkills.join(', ')}</li>
-        <li><b>Volksmerkmale:</b><br>${subInfo.text}</li>
-        <li><b>Talent:</b> ${backgrounds[bg]?.feat || ''}</li>
-        <li><b>Werkzeuge:</b> ${toolsStr}</li>
-        <li><b>Hintergrund-Ausrüstung:</b> ${typeof backgrounds[bg]?.equipment === 'string' ? backgrounds[bg].equipment : eqStr}</li>
-    `;
-
-    renderEquipmentSectionInSheet(clsName, bgCustomData);
-
-    document.getElementById('screen-out-spells').innerHTML = `
-        <div style="font-weight:bold; font-size:0.85rem; color:var(--text-muted);">Zaubertricks:</div>
-        <div>${chosenCantrips.join(', ') || 'Keine'}</div>
-        <div style="margin-top:8px; font-weight:bold; font-size:0.85rem; color:var(--text-muted);">Vorbereitete Stufe 1 Zauber:</div>
-        <div>${chosenSpells.join(', ') || 'Keine'}</div>
-    `;
-
-    const sheet = document.getElementById('sheet');
-    if (sheet) {
-        sheet.style.display = 'block';
-        sheet.scrollIntoView({ behavior: 'smooth' });
+    // Automatisch im LocalStorage sichern, damit der Held direkt da ist
+    let list = JSON.parse(localStorage.getItem('dnd_character_list') || '[]');
+    // Prüfen ob er schon existiert (Update) oder neu ist
+    const existingIndex = list.findIndex(c => c.id === lastBuiltCharacter.id);
+    if (existingIndex >= 0) {
+        list[existingIndex] = lastBuiltCharacter;
+    } else {
+        list.push(lastBuiltCharacter);
     }
+    localStorage.setItem('dnd_character_list', JSON.stringify(list));
+    localStorage.setItem('dnd_active_character', JSON.stringify(lastBuiltCharacter));
+
+    // UI im Sheet befüllen
+    buildCharacterSilent(lastBuiltCharacter);
+
+    // Freischalten und rüberspringen
+    document.getElementById('btn-tab-sheet').disabled = false;
+    executePageSwitch('sheet');
 }
 
 function flattenEquipment(item) {
@@ -1004,23 +1167,15 @@ function renderEquipmentSectionInSheet(clsName, bgCustomData) {
 function manualSaveCharacter() {
     if (!lastBuiltCharacter) return;
     let list = JSON.parse(localStorage.getItem('dnd_character_list') || '[]');
-    list.push(lastBuiltCharacter);
+    const existingIndex = list.findIndex(c => c.id === lastBuiltCharacter.id);
+    if (existingIndex >= 0) {
+        list[existingIndex] = lastBuiltCharacter;
+    } else {
+        list.push(lastBuiltCharacter);
+    }
     localStorage.setItem('dnd_character_list', JSON.stringify(list));
     localStorage.setItem('dnd_active_character', JSON.stringify(lastBuiltCharacter));
-    
-    isSaved = true;
-    const adv = document.getElementById('btn-adventure');
-    if (adv) {
-        adv.disabled = false; 
-        adv.style.opacity = '1'; 
-        adv.style.cursor = 'pointer';
-    }
     alert("Held erfolgreich gespeichert!");
-}
-
-function startAdventure() {
-    if (!isSaved) return alert("Bitte zuerst speichern!");
-    window.location.href = 'manager.html';
 }
 </script>
 </body>
