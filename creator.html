@@ -13,58 +13,75 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Layout für die Buchseiten-Tabs (horizontal gescrollt) */
-        body {
-            overflow-x: hidden;
+        /* Buch-Seiten Layout mit fixiertem Footer für Tabs */
+        html, body {
+            overflow: hidden;
             margin: 0;
             padding: 0;
+            height: 100vh;
         }
         .book-wrapper {
             display: flex;
             width: 200vw;
-            min-height: 100vh;
-            transition: transform 0.5s ease-in-out;
+            height: calc(100vh - 70px);
+            transition: transform 0.4s ease-in-out;
+            /* Manuelles Wischen/Scrollen am Touchscreen komplett unterbinden */
+            overflow: hidden;
+            pointer-events: auto;
         }
         .book-page {
             width: 100vw;
+            height: 100%;
             box-sizing: border-box;
             padding: 16px;
+            padding-bottom: 20px;
             display: flex;
             justify-content: center;
+            overflow-y: auto;
         }
         .book-page .container {
             width: 100%;
             max-width: 600px;
         }
-        /* Floating Tab Navigation oben */
-        .tab-nav {
+
+        /* Permanenter Footer im Seiten-Design (wie Menü im Manager) */
+        .page-footer-nav {
             position: fixed;
-            top: 12px;
-            left: 50%;
-            transform: translateX(-50%);
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 64px;
+            background: var(--card);
+            border-top: 2px solid var(--border);
             display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+            padding: 0 16px;
+            box-sizing: border-box;
+        }
+        .footer-tab-btn {
             background: var(--btn-back-bg);
             border: 1.5px solid var(--border);
-            border-radius: 20px;
-            padding: 4px;
-            z-index: 1000;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-        }
-        .tab-btn {
-            background: transparent;
-            border: none;
-            padding: 6px 16px;
-            border-radius: 16px;
+            border-radius: 8px;
+            padding: 8px 24px;
             font-weight: bold;
             color: var(--text);
             cursor: pointer;
             font-family: serif;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
         }
-        .tab-btn.active {
+        .footer-tab-btn.active {
             background: var(--accent);
             color: var(--bg);
+            border-color: var(--accent);
         }
-        .tab-btn:disabled {
+        .footer-tab-btn:disabled {
             opacity: 0.4;
             cursor: not-allowed;
         }
@@ -72,9 +89,14 @@
 </head>
 <body>
 
-<div class="tab-nav">
-    <button type="button" class="tab-btn active" id="btn-tab-create" onclick="switchPage('create')">Erstellen</button>
-    <button type="button" class="tab-btn" id="btn-tab-sheet" onclick="switchPage('sheet')" disabled>Held</button>
+<!-- Permanenter Footer im Seiten-Design -->
+<div class="page-footer-nav">
+    <button type="button" class="footer-tab-btn active" id="btn-tab-create" onclick="switchPage('create')">
+        <i class="fa-solid fa-feather"></i> Erstellen
+    </button>
+    <button type="button" class="footer-tab-btn" id="btn-tab-sheet" onclick="switchPage('sheet')" disabled>
+        <i class="fa-solid fa-shield-halved"></i> Held
+    </button>
 </div>
 
 <button class="btn-theme-toggle" onclick="openThemeModal()" title="Design wählen">
@@ -96,9 +118,6 @@
                 <a href="index.html" class="btn-back">
                     <i class="fa-solid fa-arrow-left"></i> Zum Eingang
                 </a>
-                <button type="button" class="btn-toggle-console" onclick="toggleDebugConsole()" title="Konsole öffnen">
-                    <i class="fa-solid fa-bug"></i>
-                </button>
             </div>
 
             <div class="page-title">Held/in erstellen</div>
@@ -208,7 +227,7 @@
                 <div id="skill-error" class="error">Wähle 2 verschiedene Fertigkeiten, die sich nicht mit deinem Hintergrund überschneiden!</div>
             </div>
 
-            <div class="step-card" id="spells-step-card">
+            <div class="step-card" id="spells-step-card" style="margin-bottom: 40px;">
                 <div class="step-title">Klassen-Zauber wählen</div>
                 <label id="cantrip-label">Zaubertricks wählen</label>
                 <div class="spell-container" id="cantrips-group"></div>
@@ -216,15 +235,13 @@
                 <label id="prep-spells-label" style="margin-top:15px;">Stufe 1 Zauber wählen:</label>
                 <div class="spell-container" id="level1-group"></div>
             </div>
-
-            <button class="main-btn" onclick="buildCharacter()">Held erstellen</button>
         </div>
     </div>
 
     <!-- SEITE 2: HELD / CHARAKTERBLATT -->
     <div class="book-page">
         <div class="container" style="max-width:100%;">
-            <div id="sheet" class="sheet" style="display: block; margin-top: 40px;">
+            <div id="sheet" class="sheet" style="display: block; margin-top: 10px; margin-bottom: 40px;">
                 <h2 id="screen-out-name" style="margin-top:0; color:var(--accent);"></h2>
                 <div id="screen-out-meta" style="font-size:0.9rem; color:var(--text-muted); text-align:center; margin-bottom:10px;"></div>
                 
@@ -324,7 +341,8 @@ function confirmPageSwitch(doSave) {
         buildCharacter(); // Übernimmt/generiert die aktuellen Änderungen
         executePageSwitch('sheet');
     } else {
-        // Bei Nein: Auf Erstellseite bleiben
+        // Bei Nein: Auf Erstellseite bleiben (aber direkt zum Blatt wechseln, wenn bereits eins generiert wurde? Falls gewünscht, hier einfach wechseln ohne Neubau:)
+        executePageSwitch('sheet');
     }
 }
 
@@ -357,24 +375,6 @@ function setTheme(themeName) {
     document.documentElement.setAttribute('data-theme', themeName);
     closeThemeModal();
 }
-
-const debugBox = document.createElement('div');
-debugBox.style.cssText = "position:fixed; bottom:0; left:0; width:100%; height:120px; background:black; color:lime; font-size:10px; overflow-y:scroll; z-index:99999; padding:5px; display:none; box-sizing:border-box;";
-document.body.appendChild(debugBox);
-
-function toggleDebugConsole() {
-    debugBox.style.display = (debugBox.style.display === 'none' || debugBox.style.display === '') ? 'block' : 'none';
-}
-
-function debugLog(text, color = "lime") {
-    const time = new Date().toLocaleTimeString();
-    debugBox.innerHTML += `<br><span style="color:${color};">[${time}] ${text}</span>`;
-    debugBox.scrollTop = debugBox.scrollHeight;
-}
-
-window.onerror = function(msg, url, line) {
-    debugLog(`FEHLER: ${msg} (Zeile ${line})`, "red");
-};
 
 const COMPENDIUM_JSON_URL = "./compendium.json";
 const BACKGROUNDS_JSON_URL = "./backgrounds.json";
@@ -433,13 +433,10 @@ let skillDescriptions = {};
 let spellCompendium = { cantrips: {}, level1: {} };
 let classSpellLists = {};
 
-let currentCalculatedMods = { STR:0, DEX:0, CON:0, INT:0, WIS:0, CHA:0 };
 let lastBuiltCharacter = null;
 
 window.onload = async function() {
     try {
-        console.log("Lade Basisdaten...");
-        
         const compResponse = await fetch(COMPENDIUM_JSON_URL + "?t=" + new Date().getTime());
         if (!compResponse.ok) throw new Error(`HTTP Fehlerstatus compendium.json: ${compResponse.status}`);
         const compData = await compResponse.json();
@@ -468,13 +465,10 @@ window.onload = async function() {
             if (listResponse.ok) parseSpellListsHtml(await listResponse.text());
         } catch (e) {}
 
-        // Prüfen, ob ein aktiver Held geladen werden soll (aus index.html)
         checkAndLoadActiveCharacter();
-
         initApp();
     } catch (err) {
         alert("Ladefehler: " + err.message);
-        console.error("JSON Load Details:", err);
     }
 };
 
@@ -484,16 +478,12 @@ function checkAndLoadActiveCharacter() {
         try {
             const char = JSON.parse(activeCharJson);
             loadCharacterIntoCreator(char);
-        } catch (e) {
-            console.error("Fehler beim Laden des aktiven Helden:", e);
-        }
+        } catch (e) {}
     }
 }
 
 function loadCharacterIntoCreator(char) {
     if (!char) return;
-    
-    // Felder belegen
     if (char.name && document.getElementById('char-name')) document.getElementById('char-name').value = char.name;
     if (char.species && document.getElementById('sub-race')) document.getElementById('sub-race').value = char.species;
     if (char.class && document.getElementById('class-select')) {
@@ -504,18 +494,13 @@ function loadCharacterIntoCreator(char) {
         document.getElementById('bg-select').value = char.background;
         onBgChange();
     }
-
-    // Direkt das Charakterblatt im Hintergrund generieren und den "Held"-Tab freischalten
     buildCharacterSilent(char);
 }
 
 function buildCharacterSilent(charData) {
     lastBuiltCharacter = charData;
-    
-    // Button freischalten
     document.getElementById('btn-tab-sheet').disabled = false;
 
-    // UI im Sheet befüllen
     document.getElementById('screen-out-name').innerHTML = `<i class="fa-solid ${getClassIcon(charData.class)}"></i> ${charData.name}`;
     document.getElementById('screen-out-meta').innerText = `${charData.species} | ${charData.class} Stufe ${charData.level || 1} | ${charData.background}`;
     document.getElementById('screen-out-hp').innerText = `HP: ${charData.hp}`;
@@ -1037,9 +1022,7 @@ function buildCharacter() {
         level: 1, hp, maxHp: hp, ac, speed: subInfo.speed || 30, stats, mods, skills: allSkills, cantrips: chosenCantrips, spells: chosenSpells, lastAccess: new Date().toISOString()
     };
 
-    // Automatisch im LocalStorage sichern, damit der Held direkt da ist
     let list = JSON.parse(localStorage.getItem('dnd_character_list') || '[]');
-    // Prüfen ob er schon existiert (Update) oder neu ist
     const existingIndex = list.findIndex(c => c.id === lastBuiltCharacter.id);
     if (existingIndex >= 0) {
         list[existingIndex] = lastBuiltCharacter;
@@ -1049,10 +1032,8 @@ function buildCharacter() {
     localStorage.setItem('dnd_character_list', JSON.stringify(list));
     localStorage.setItem('dnd_active_character', JSON.stringify(lastBuiltCharacter));
 
-    // UI im Sheet befüllen
     buildCharacterSilent(lastBuiltCharacter);
 
-    // Freischalten und rüberspringen
     document.getElementById('btn-tab-sheet').disabled = false;
     executePageSwitch('sheet');
 }
