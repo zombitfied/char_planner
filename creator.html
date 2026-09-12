@@ -321,6 +321,19 @@
     </div>
 </div>
 
+<!-- MODAL: Einheitlicher Hinweis-Dialog (Custom Alert) -->
+<div id="custom-alert-modal" class="modal-overlay" style="display:none; z-index: 10000;">
+    <div class="modal-content" style="text-align: center; max-width: 320px;">
+        <div class="modal-title" style="justify-content: center;">
+            <span id="custom-alert-title">Hinweis</span>
+        </div>
+        <div class="modal-body" id="custom-alert-text" style="font-size: 0.9rem; color: var(--text); margin: 15px 0; font-weight: bold;">
+            Nachricht...
+        </div>
+        <button onclick="closeCustomAlert()" class="main-btn" style="background: var(--btn-back-bg); color: var(--text); border: 1.5px solid var(--border); margin-bottom: 0; width: 100%;">OK</button>
+    </div>
+</div>
+
 <div id="theme-modal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-title">
@@ -353,6 +366,16 @@
 <script>
 let currentPage = 'create';
 let lastBuiltCharacter = null;
+
+function showCustomAlert(text, title = "Hinweis") {
+    document.getElementById('custom-alert-title').innerText = title;
+    document.getElementById('custom-alert-text').innerText = text;
+    document.getElementById('custom-alert-modal').style.display = 'flex';
+}
+
+function closeCustomAlert() {
+    document.getElementById('custom-alert-modal').style.display = 'none';
+}
 
 function requestSwitchToSheet() {
     document.getElementById('change-confirm-modal').style.display = 'flex';
@@ -500,7 +523,7 @@ window.onload = async function() {
         initApp();
         handleUrlModeAndStartup();
     } catch (err) {
-        alert("Ladefehler: " + err.message);
+        showCustomAlert("Ladefehler: " + err.message, "Fehler");
     }
 };
 
@@ -582,7 +605,7 @@ function loadCharacterIntoCreator(char) {
 
 function buildCharacterAndSave() {
     if (!validateArray() || !validateSkills() || !validateBgAsi()) {
-        alert("Bitte behebe alle Validierungsfehler im Formular!");
+        showCustomAlert("Bitte behebe alle Validierungsfehler im Formular!", "Achtung");
         return;
     }
 
@@ -1244,13 +1267,13 @@ function renderEquipmentSectionInSheet(clsName, bgCustomData) {
 
 function manualSaveCharacter() {
     buildCharacterAndSave();
-    alert("Held erfolgreich gespeichert!");
+    showCustomAlert("Held erfolgreich gespeichert!");
 }
 
 function resetLocalStorage() {
     if (confirm("Möchtest du wirklich den gesamten lokalen Speicher leeren? Alle gespeicherten Helden und Einstellungen gehen verloren.")) {
         localStorage.clear();
-        alert("Speicher erfolgreich geleert!");
+        showCustomAlert("Speicher erfolgreich geleert!");
         location.reload();
     }
 }
