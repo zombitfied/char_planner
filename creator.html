@@ -272,8 +272,11 @@
                 <div id="screen-out-spells" style="margin-bottom:20px;"></div>
 
                 <div style="display: flex; gap: 10px; margin-top: 15px;">
-                    <button class="btn-gray-main" onclick="manualSaveCharacter()" style="margin-top:0; width: 100%;">
+                    <button class="btn-gray-main" onclick="manualSaveCharacter()" style="margin-top:0; flex: 1;">
                         <i class="fa-solid fa-floppy-disk"></i> Held speichern
+                    </button>
+                    <button class="btn-gray-main" onclick="resetLocalStorage()" style="margin-top:0; flex: 1; background: #8b0000; color: #fff; border-color: #5c0000;">
+                        <i class="fa-solid fa-trash-can"></i> Speicher leeren (Reset)
                     </button>
                 </div>
             </div>
@@ -333,10 +336,8 @@ function switchPage(targetPage) {
     if (currentPage === targetPage) return;
 
     if (targetPage === 'sheet') {
-        // Von Erstellen zum Held wechseln (löst Abfrage aus)
         document.getElementById('change-confirm-modal').style.display = 'flex';
     } else {
-        // Vom Held zurück zum Erstellen wechseln (direkt ohne Abfrage)
         executePageSwitch('create');
     }
 }
@@ -504,7 +505,6 @@ function loadCharacterIntoCreator(char) {
 
 function buildCharacterSilent(charData) {
     lastBuiltCharacter = charData;
-    // Held-Button wird erst freigeschaltet, wenn ein Charakter existiert/generiert wurde
     document.getElementById('btn-tab-sheet').disabled = false;
 
     document.getElementById('screen-out-name').innerHTML = `<i class="fa-solid ${getClassIcon(charData.class)}"></i> ${charData.name}`;
@@ -1163,6 +1163,14 @@ function manualSaveCharacter() {
     localStorage.setItem('dnd_character_list', JSON.stringify(list));
     localStorage.setItem('dnd_active_character', JSON.stringify(lastBuiltCharacter));
     alert("Held erfolgreich gespeichert!");
+}
+
+function resetLocalStorage() {
+    if (confirm("Möchtest du wirklich den gesamten lokalen Speicher leeren? Alle gespeicherten Helden und Einstellungen gehen verloren.")) {
+        localStorage.clear();
+        alert("Speicher erfolgreich geleert!");
+        location.reload();
+    }
 }
 </script>
 </body>
