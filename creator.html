@@ -13,65 +13,61 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Buch-Seiten Layout mit fixiertem Footer im exakten Stil wie im Manager */
+        /* Normales Scrollen ohne Abschneiden oben */
         html, body {
-            overflow: hidden;
+            overflow-x: hidden;
             margin: 0;
             padding: 0;
-            height: 100vh;
+            min-height: 100vh;
         }
         .book-wrapper {
             display: flex;
             width: 200vw;
-            height: calc(100vh - 75px);
             transition: transform 0.4s ease-in-out;
-            overflow: hidden;
             pointer-events: auto;
         }
         .book-page {
             width: 100vw;
-            height: 100%;
             box-sizing: border-box;
             padding: 16px;
-            padding-top: 24px; /* Kein Abschneiden mehr oben */
-            padding-bottom: 95px; /* Platz für den Footer unten */
+            padding-top: 16px;
+            padding-bottom: 110px; /* Platz für den Footer */
             display: flex;
             justify-content: center;
-            overflow-y: auto;
         }
         .book-page .container {
             width: 100%;
             max-width: 600px;
         }
 
-        /* Permanenter Footer exakt im Stil von Bild 3 (Manager-Menü unten) */
+        /* Permanenter Footer im echten, grisseligen Seiten-Design */
         .page-footer-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 75px;
             background: var(--card);
-            border-top: 1.5px solid var(--border);
+            border-top: 2px solid var(--border);
             display: flex;
             justify-content: space-around;
             align-items: center;
             z-index: 1000;
-            box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
-            padding: 0 16px;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.15);
+            padding: 12px 16px;
             box-sizing: border-box;
             gap: 16px;
         }
+        /* Nutzung der echten Button-Optik mit rauen Rändern */
         .footer-tab-btn {
             background: var(--btn-back-bg);
             border: 1.5px solid var(--border);
-            border-radius: 6px;
-            padding: 8px 12px;
+            border-radius: 8px;
+            padding: 10px 16px;
             font-weight: bold;
             color: var(--text-muted);
             cursor: pointer;
             font-family: serif;
-            font-size: 0.85rem;
+            font-size: 0.95rem;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -79,15 +75,15 @@
             gap: 4px;
             flex: 1;
             transition: all 0.2s;
-            clip-path: url(#rough-edge);
+            filter: url(#rough-edge);
         }
         .footer-tab-btn i {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
         }
         .footer-tab-btn.active {
-            color: var(--accent);
+            color: var(--bg);
+            background: var(--accent);
             border-color: var(--accent);
-            background: var(--card);
         }
         .footer-tab-btn:disabled {
             opacity: 0.35;
@@ -105,7 +101,7 @@
     </filter>
 </svg>
 
-<!-- Permanenter Footer im Manager-Stil (Bild 3) -->
+<!-- Permanenter Footer mit Lücke und Grissel-Optik -->
 <div class="page-footer-nav">
     <button type="button" class="footer-tab-btn active" id="btn-tab-create" onclick="switchPage('create')">
         <i class="fa-solid fa-feather"></i> Erstellen
