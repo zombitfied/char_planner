@@ -252,9 +252,9 @@
                             <div style="font-weight: bold; color: var(--text);">${char.name || "Held"}</div>
                             <div style="font-size: 0.75rem; color: var(--text-muted);">${char.class || "-"}</div>
                         </div>
-                        <div style="display: flex; gap: 6px;">
-                            <button onclick="handleRestoreClick(event, '${char.id}', '${char.name || "Held"}')" style="background:none; border:1.5px solid var(--border); border-radius:4px; padding:6px; color:var(--text-muted); cursor:pointer;"><i class="fa-solid fa-person-arrow-up-from-line"></i></button>
-                            <button onclick="handleDeletePermanentlyClick(event, '${char.id}', '${char.name || "Held"}')" style="background:none; border:1.5px solid var(--border); border-radius:4px; padding:6px; color:#a94442; cursor:pointer;"><i class="fa-solid fa-trash-can"></i></button>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <button onclick="handleRestoreClick(event, '${char.id}', '${char.name || "Held"}')" style="background:none; border:none; width:40px; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0; flex-shrink:0;"><i class="fa-solid fa-person-arrow-up-from-line" style="font-size: 1.4rem; color: var(--text-muted);"></i></button>
+                            <button onclick="handleDeletePermanentlyClick(event, '${char.id}', '${char.name || "Held"}')" style="background:none; border:none; width:40px; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0; flex-shrink:0;"><i class="fa-solid fa-trash-can" style="font-size: 1.4rem; color: #a94442;"></i></button>
                         </div>
                     `;
                     container.appendChild(item);
@@ -286,7 +286,7 @@
             event.stopPropagation();
             showCustomConfirm(
                 "Endgültig löschen?",
-                `Soll die Seele dieses Helden („${name}“) für alle Ewigkeit in Leere verschwinden?`,
+                `Soll die Seele von "${name}" für alle Ewigkeit in der Leere verschwinden?`,
                 "",
                 () => {
                     let characters = getStoredCharacters();
