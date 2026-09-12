@@ -104,7 +104,7 @@
 </svg>
 
 <div class="page-footer-nav">
-    <button type="button" class="footer-tab-btn active" id="btn-tab-create" onclick="handleFooterCreateClick()">
+    <button type="button" class="footer-tab-btn active" id="btn-tab-create" onclick="switchPage('create')">
         <i class="fa-solid fa-feather"></i> Erstellen
     </button>
     <button type="button" class="footer-tab-btn" id="btn-tab-sheet" onclick="switchPage('sheet')" disabled>
@@ -329,22 +329,14 @@
 <script>
 let currentPage = 'create';
 
-function handleFooterCreateClick() {
-    if (currentPage === 'sheet') {
-        // Wenn man auf dem Charakterblatt ist, führt "Erstellen" zurück zum Bearbeiten-Bereich
-        switchPage('create');
-    } else {
-        // Wenn man bereits im Erstellen-Bereich ist, macht es nichts oder schaltet um
-        switchPage('create');
-    }
-}
-
 function switchPage(targetPage) {
     if (currentPage === targetPage) return;
 
     if (targetPage === 'sheet') {
+        // Von Erstellen zum Held wechseln (löst Abfrage aus)
         document.getElementById('change-confirm-modal').style.display = 'flex';
     } else {
+        // Vom Held zurück zum Erstellen wechseln (direkt ohne Abfrage)
         executePageSwitch('create');
     }
 }
@@ -512,6 +504,7 @@ function loadCharacterIntoCreator(char) {
 
 function buildCharacterSilent(charData) {
     lastBuiltCharacter = charData;
+    // Held-Button wird erst freigeschaltet, wenn ein Charakter existiert/generiert wurde
     document.getElementById('btn-tab-sheet').disabled = false;
 
     document.getElementById('screen-out-name').innerHTML = `<i class="fa-solid ${getClassIcon(charData.class)}"></i> ${charData.name}`;
