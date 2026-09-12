@@ -355,24 +355,20 @@ let currentPage = 'create';
 let lastBuiltCharacter = null;
 
 function requestSwitchToSheet() {
-    // Zeige Abfrage-Modal an, ob Änderungen übernommen werden sollen
     document.getElementById('change-confirm-modal').style.display = 'flex';
 }
 
 function confirmPageSwitch(doSave) {
     document.getElementById('change-confirm-modal').style.display = 'none';
     if (doSave) {
-        // Erstelle/Speichere den Helden aus den aktuellen Formulareingaben
         buildCharacterAndSave();
     } else {
-        // Bei Nein: Lade den existierenden aktiven Helden oder generiere einen Standard-Stand ohne das Formular zu überschreiben
         loadExistingOrFallbackCharacter();
     }
     executePageSwitch('sheet');
 }
 
 function switchToCreate() {
-    // Beim Klick auf "Held bearbeiten" holen wir die Daten des aktuellen Helden zurück ins Formular
     if (lastBuiltCharacter) {
         loadCharacterIntoCreator(lastBuiltCharacter);
     }
@@ -502,23 +498,34 @@ window.onload = async function() {
         } catch (e) {}
 
         initApp();
-        checkAndLoadActiveCharacter();
+        handleUrlModeAndStartup();
     } catch (err) {
         alert("Ladefehler: " + err.message);
     }
 };
 
-function checkAndLoadActiveCharacter() {
-    const activeCharJson = localStorage.getItem('dnd_active_character');
-    if (activeCharJson) {
-        try {
-            const char = JSON.parse(activeCharJson);
-            lastBuiltCharacter = char;
-            renderCharacterToSheet(char);
-        } catch (e) {}
+function handleUrlModeAndStartup() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const mode = urlParams.get('mode'); // Entweder "create" oder "sheet"
+
+    if (mode === 'create') {
+        localStorage.removeItem('dnd_active_character');
+        lastBuiltCharacter = null;
+        executePageSwitch('create');
     } else {
-        // Direkt beim Start einen Standard-Helden generieren, falls nichts da ist
+        const activeCharJson = localStorage.getItem('dnd_active_character');
+        if (activeCharJson) {
+            try {
+                const char = JSON.parse(activeCharJson);
+                lastBuiltCharacter = char;
+                loadCharacterIntoCreator(char);
+                renderCharacterToSheet(char);
+                executePageSwitch('sheet');
+                return;
+            } catch (e) {}
+        }
         buildCharacterAndSave();
+        executePageSwitch('create');
     }
 }
 
@@ -538,34 +545,38 @@ function loadCharacterIntoCreator(char) {
     if (!char) return;
     if (char.name && document.getElementById('char-name')) document.getElementById('char-name').value = char.name;
     
-    // Rasse & Unterrasse setzen
+    if (char.mainRace && document.getElementById('main-race')) {
+        document.getElementById('main-race').value = char.mainRace;
+        onMainRaceChange();
+    }
     if (char.species && document.getElementById('sub-race')) {
         document.getElementById('sub-race').value = char.species;
     }
     
-    // Klasse setzen
     if (char.class && document.getElementById('class-select')) {
         document.getElementById('class-select').value = char.class;
         onClassChange();
     }
 
-    // Hintergrund setzen
     if (char.background && document.getElementById('bg-select')) {
         document.getElementById('bg-select').value = char.background;
         onBgChange();
     }
 
-    // Attribute ins Formular zurückschreiben
-    if (char.stats) {
-        // Hier greifen wir auf die Rohwerte zurück, falls im Objekt gespeichert, ansonsten Standardwerte
-        if (char.rawStats) {
-            if (document.getElementById('str-val')) document.getElementById('str-val').value = char.rawStats.STR;
-            if (document.getElementById('dex-val')) document.getElementById('dex-val').value = char.rawStats.DEX;
-            if (document.getElementById('con-val')) document.getElementById('con-val').value = char.rawStats.CON;
-            if (document.getElementById('int-val')) document.getElementById('int-val').value = char.rawStats.INT;
-            if (document.getElementById('wis-val')) document.getElementById('wis-val').value = char.rawStats.WIS;
-            if (document.getElementById('cha-val')) document.getElementById('cha-val').value = char.rawStats.CHA;
-        }
+    if (char.rawStats) {
+        if (document.getElementById('str-val')) document.getElementById('str-val').value = char.rawStats.STR;
+        if (document.getElementById('dex-val')) document.getElementById('dex-val').value = char.rawStats.DEX;
+        if (document.getElementById('con-val')) document.getElementById('con-val').value = char.rawStats.CON;
+        if (document.getElementById('int-val')) document.getElementById('int-val').value = char.rawStats.INT;
+        if (document.getElementById('wis-val')) document.getElementById('wis-val').value = char.rawStats.WIS;
+        if (document.getElementById('cha-val')) document.getElementById('cha-val').value = char.rawStats.CHA;
+    }
+
+    if (char.skills && char.skills.length >= 2) {
+        const bgSkills = backgrounds[char.background]?.skills || [];
+        const customSkills = char.skills.filter(s => !bgSkills.includes(s));
+        if (customSkills[0] && document.getElementById('skill1')) document.getElementById('skill1').value = customSkills[0];
+        if (customSkills[1] && document.getElementById('skill2')) document.getElementById('skill2').value = customSkills[1];
     }
 }
 
@@ -611,8 +622,10 @@ function buildCharacterAndSave() {
     let chosenSpells = Array.from(document.querySelectorAll('.char-spell-select')).map(s => s.value).filter(Boolean);
     const allSkills = [...(backgrounds[bg]?.skills || []), document.getElementById('skill1')?.value, document.getElementById('skill2')?.value].filter(Boolean);
 
+    const charId = (lastBuiltCharacter && lastBuiltCharacter.id) ? lastBuiltCharacter.id : 'char_' + Date.now();
+
     lastBuiltCharacter = {
-        id: 'char_' + Date.now(), 
+        id: charId, 
         name, 
         class: clsName, 
         species: subRace, 
@@ -633,7 +646,13 @@ function buildCharacterAndSave() {
     };
 
     let list = JSON.parse(localStorage.getItem('dnd_character_list') || '[]');
-    list.push(lastBuiltCharacter);
+    const index = list.findIndex(c => c.id === lastBuiltCharacter.id);
+    if (index >= 0) {
+        list[index] = lastBuiltCharacter;
+    } else {
+        list.push(lastBuiltCharacter);
+    }
+
     localStorage.setItem('dnd_character_list', JSON.stringify(list));
     localStorage.setItem('dnd_active_character', JSON.stringify(lastBuiltCharacter));
 
