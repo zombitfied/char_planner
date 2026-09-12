@@ -104,7 +104,7 @@
 </svg>
 
 <div class="page-footer-nav">
-    <button type="button" class="footer-tab-btn active" id="btn-tab-create" onclick="switchPage('create')">
+    <button type="button" class="footer-tab-btn active" id="btn-tab-create" onclick="handleFooterCreateClick()">
         <i class="fa-solid fa-feather"></i> Erstellen
     </button>
     <button type="button" class="footer-tab-btn" id="btn-tab-sheet" onclick="switchPage('sheet')" disabled>
@@ -328,6 +328,16 @@
 
 <script>
 let currentPage = 'create';
+
+function handleFooterCreateClick() {
+    if (currentPage === 'sheet') {
+        // Wenn man auf dem Charakterblatt ist, führt "Erstellen" zurück zum Bearbeiten-Bereich
+        switchPage('create');
+    } else {
+        // Wenn man bereits im Erstellen-Bereich ist, macht es nichts oder schaltet um
+        switchPage('create');
+    }
+}
 
 function switchPage(targetPage) {
     if (currentPage === targetPage) return;
