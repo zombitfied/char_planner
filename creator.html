@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Normales Scrollen ohne Abschneiden oben */
         html, body {
             overflow-x: hidden;
             margin: 0;
@@ -31,7 +30,7 @@
             box-sizing: border-box;
             padding: 16px;
             padding-top: 16px;
-            padding-bottom: 110px; /* Platz für den Footer */
+            padding-bottom: 105px;
             display: flex;
             justify-content: center;
         }
@@ -40,7 +39,7 @@
             max-width: 600px;
         }
 
-        /* Permanenter Footer im echten, grisseligen Seiten-Design */
+        /* Permanenter Footer mit abgerundeter, rauer SVG-Kante oben */
         .page-footer-nav {
             position: fixed;
             bottom: 0;
@@ -48,37 +47,41 @@
             width: 100%;
             background: var(--card);
             border-top: 2px solid var(--border);
+            border-top-left-radius: 18px;
+            border-top-right-radius: 18px;
             display: flex;
             justify-content: space-around;
             align-items: center;
             z-index: 1000;
             box-shadow: 0 -4px 15px rgba(0,0,0,0.15);
-            padding: 12px 16px;
+            padding: 10px 16px;
             box-sizing: border-box;
-            gap: 16px;
+            gap: 12px;
+            filter: url(#rough-edge);
         }
-        /* Nutzung der echten Button-Optik mit rauen Rändern */
+        
+        /* Buttons: Icon links neben Text, kleiner und kompakt */
         .footer-tab-btn {
             background: var(--btn-back-bg);
             border: 1.5px solid var(--border);
             border-radius: 8px;
-            padding: 10px 16px;
+            padding: 8px 14px;
             font-weight: bold;
             color: var(--text-muted);
             cursor: pointer;
             font-family: serif;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             align-items: center;
             justify-content: center;
-            gap: 4px;
+            gap: 8px;
             flex: 1;
             transition: all 0.2s;
             filter: url(#rough-edge);
         }
         .footer-tab-btn i {
-            font-size: 1.2rem;
+            font-size: 0.95rem;
         }
         .footer-tab-btn.active {
             color: var(--bg);
@@ -93,7 +96,6 @@
 </head>
 <body>
 
-<!-- SVG Filter für den handgezeichneten rauen Rand -->
 <svg style="display:none;" aria-hidden="true">
     <filter id="rough-edge">
         <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="3" result="noise" />
@@ -101,7 +103,6 @@
     </filter>
 </svg>
 
-<!-- Permanenter Footer mit Lücke und Grissel-Optik -->
 <div class="page-footer-nav">
     <button type="button" class="footer-tab-btn active" id="btn-tab-create" onclick="switchPage('create')">
         <i class="fa-solid fa-feather"></i> Erstellen
