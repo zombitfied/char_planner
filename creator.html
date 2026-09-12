@@ -61,7 +61,6 @@
             filter: url(#rough-edge);
         }
         
-        /* Footer Buttons: Immer aktiv, flexibel */
         .footer-tab-btn {
             background: var(--btn-back-bg);
             border: 1.5px solid var(--border);
@@ -94,7 +93,6 @@
             color: var(--bg);
         }
 
-        /* Kleiner roter Käfer-Reset-Button oben rechts neben dem Design-Button */
         .btn-debug-reset {
             position: fixed;
             top: 16px;
@@ -128,9 +126,8 @@
     </filter>
 </svg>
 
-<!-- Footer wechselt je nach aktueller Ansicht -->
 <div class="page-footer-nav" id="footerNavContainer">
-    <button type="button" class="footer-tab-btn" onclick="switchToSheet()">
+    <button type="button" class="footer-tab-btn" onclick="requestSwitchToSheet()">
         <i class="fa-solid fa-shield-halved"></i> Zum Heldenbogen
     </button>
 </div>
@@ -308,6 +305,22 @@
     </div>
 </div>
 
+<!-- MODAL: Änderungen übernehmen Abfrage -->
+<div id="change-confirm-modal" class="modal-overlay" style="display:none; z-index: 9999;">
+    <div class="modal-content" style="text-align: center; max-width: 340px;">
+        <div class="modal-title" style="justify-content: center;">
+            <span>Änderungen übernehmen?</span>
+        </div>
+        <div class="modal-body" style="font-size: 0.9rem; color: var(--text); margin: 15px 0;">
+            <span>Möchtest du die aktuellen Änderungen aus dem Formular für deinen Helden übernehmen?</span>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 10px;">
+            <button onclick="confirmPageSwitch(true)" class="main-btn" style="flex: 1; background: var(--accent); color: var(--bg); border: 1.5px solid var(--accent); margin-bottom: 0; font-weight:bold;">Ja</button>
+            <button onclick="confirmPageSwitch(false)" class="main-btn" style="flex: 1; background: var(--btn-back-bg); color: var(--text); border: 1.5px solid var(--border); margin-bottom: 0;">Nein</button>
+        </div>
+    </div>
+</div>
+
 <div id="theme-modal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-title">
@@ -339,16 +352,30 @@
 
 <script>
 let currentPage = 'create';
+let lastBuiltCharacter = null;
 
-function switchToSheet() {
-    // Wenn kein Held im Speicher liegt, erst einen generieren
-    if (!lastBuiltCharacter) {
-        buildCharacterSilentData();
+function requestSwitchToSheet() {
+    // Zeige Abfrage-Modal an, ob Änderungen übernommen werden sollen
+    document.getElementById('change-confirm-modal').style.display = 'flex';
+}
+
+function confirmPageSwitch(doSave) {
+    document.getElementById('change-confirm-modal').style.display = 'none';
+    if (doSave) {
+        // Erstelle/Speichere den Helden aus den aktuellen Formulareingaben
+        buildCharacterAndSave();
+    } else {
+        // Bei Nein: Lade den existierenden aktiven Helden oder generiere einen Standard-Stand ohne das Formular zu überschreiben
+        loadExistingOrFallbackCharacter();
     }
     executePageSwitch('sheet');
 }
 
 function switchToCreate() {
+    // Beim Klick auf "Held bearbeiten" holen wir die Daten des aktuellen Helden zurück ins Formular
+    if (lastBuiltCharacter) {
+        loadCharacterIntoCreator(lastBuiltCharacter);
+    }
     executePageSwitch('create');
 }
 
@@ -367,7 +394,7 @@ function executePageSwitch(targetPage) {
     } else {
         wrapper.style.transform = 'translateX(0vw)';
         footerContainer.innerHTML = `
-            <button type="button" class="footer-tab-btn" onclick="switchToSheet()">
+            <button type="button" class="footer-tab-btn" onclick="requestSwitchToSheet()">
                 <i class="fa-solid fa-shield-halved"></i> Zum Heldenbogen
             </button>
         `;
@@ -444,8 +471,6 @@ let skillDescriptions = {};
 let spellCompendium = { cantrips: {}, level1: {} };
 let classSpellLists = {};
 
-let lastBuiltCharacter = null;
-
 window.onload = async function() {
     try {
         const compResponse = await fetch(COMPENDIUM_JSON_URL + "?t=" + new Date().getTime());
@@ -476,8 +501,8 @@ window.onload = async function() {
             if (listResponse.ok) parseSpellListsHtml(await listResponse.text());
         } catch (e) {}
 
-        checkAndLoadActiveCharacter();
         initApp();
+        checkAndLoadActiveCharacter();
     } catch (err) {
         alert("Ladefehler: " + err.message);
     }
@@ -488,29 +513,136 @@ function checkAndLoadActiveCharacter() {
     if (activeCharJson) {
         try {
             const char = JSON.parse(activeCharJson);
-            loadCharacterIntoCreator(char);
+            lastBuiltCharacter = char;
+            renderCharacterToSheet(char);
+        } catch (e) {}
+    } else {
+        // Direkt beim Start einen Standard-Helden generieren, falls nichts da ist
+        buildCharacterAndSave();
+    }
+}
+
+function loadExistingOrFallbackCharacter() {
+    const activeCharJson = localStorage.getItem('dnd_active_character');
+    if (activeCharJson) {
+        try {
+            lastBuiltCharacter = JSON.parse(activeCharJson);
+            renderCharacterToSheet(lastBuiltCharacter);
+            return;
         } catch (e) {}
     }
+    buildCharacterAndSave();
 }
 
 function loadCharacterIntoCreator(char) {
     if (!char) return;
     if (char.name && document.getElementById('char-name')) document.getElementById('char-name').value = char.name;
-    if (char.species && document.getElementById('sub-race')) document.getElementById('sub-race').value = char.species;
+    
+    // Rasse & Unterrasse setzen
+    if (char.species && document.getElementById('sub-race')) {
+        document.getElementById('sub-race').value = char.species;
+    }
+    
+    // Klasse setzen
     if (char.class && document.getElementById('class-select')) {
         document.getElementById('class-select').value = char.class;
         onClassChange();
     }
+
+    // Hintergrund setzen
     if (char.background && document.getElementById('bg-select')) {
         document.getElementById('bg-select').value = char.background;
         onBgChange();
     }
-    buildCharacterSilent(char);
+
+    // Attribute ins Formular zurückschreiben
+    if (char.stats) {
+        // Hier greifen wir auf die Rohwerte zurück, falls im Objekt gespeichert, ansonsten Standardwerte
+        if (char.rawStats) {
+            if (document.getElementById('str-val')) document.getElementById('str-val').value = char.rawStats.STR;
+            if (document.getElementById('dex-val')) document.getElementById('dex-val').value = char.rawStats.DEX;
+            if (document.getElementById('con-val')) document.getElementById('con-val').value = char.rawStats.CON;
+            if (document.getElementById('int-val')) document.getElementById('int-val').value = char.rawStats.INT;
+            if (document.getElementById('wis-val')) document.getElementById('wis-val').value = char.rawStats.WIS;
+            if (document.getElementById('cha-val')) document.getElementById('cha-val').value = char.rawStats.CHA;
+        }
+    }
 }
 
-function buildCharacterSilent(charData) {
-    lastBuiltCharacter = charData;
+function buildCharacterAndSave() {
+    if (!validateArray() || !validateSkills() || !validateBgAsi()) {
+        alert("Bitte behebe alle Validierungsfehler im Formular!");
+        return;
+    }
 
+    const name = document.getElementById('char-name').value || "Unbenannter Held";
+    const mainRace = document.getElementById('main-race').value || Object.keys(speciesData)[0];
+    const subRace = document.getElementById('sub-race').value || Object.keys(speciesData[mainRace]?.subraces || {})[0];
+    const clsName = document.getElementById('class-select').value || "Kämpfer";
+    const bg = document.getElementById('bg-select').value || Object.keys(backgrounds)[0];
+    const subInfo = speciesData[mainRace]?.subraces[subRace] || { bonus: {}, speed: 30 };
+
+    let rawStats = {
+        STR: parseInt(document.getElementById('str-val')?.value) || 15,
+        DEX: parseInt(document.getElementById('dex-val')?.value) || 14,
+        CON: parseInt(document.getElementById('con-val')?.value) || 13,
+        INT: parseInt(document.getElementById('int-val')?.value) || 12,
+        WIS: parseInt(document.getElementById('wis-val')?.value) || 10,
+        CHA: parseInt(document.getElementById('cha-val')?.value) || 8
+    };
+
+    let speciesBonuses = subInfo.bonus || {};
+    let bgBonuses = getBgBonuses();
+
+    let stats = { ...rawStats };
+    for (let s in stats) {
+        if (speciesBonuses[s]) stats[s] += speciesBonuses[s];
+        if (bgBonuses[s]) stats[s] += bgBonuses[s];
+    }
+
+    let mods = {};
+    for (let s in stats) mods[s] = getMod(stats[s]);
+
+    const hpBase = classHpData[clsName]?.base || 8;
+    const hp = hpBase + mods.CON;
+    const ac = 10 + mods.DEX;
+
+    let chosenCantrips = Array.from(document.querySelectorAll('.char-cantrip-select')).map(s => s.value).filter(Boolean);
+    let chosenSpells = Array.from(document.querySelectorAll('.char-spell-select')).map(s => s.value).filter(Boolean);
+    const allSkills = [...(backgrounds[bg]?.skills || []), document.getElementById('skill1')?.value, document.getElementById('skill2')?.value].filter(Boolean);
+
+    lastBuiltCharacter = {
+        id: 'char_' + Date.now(), 
+        name, 
+        class: clsName, 
+        species: subRace, 
+        mainRace: mainRace,
+        background: bg,
+        level: 1, 
+        hp, 
+        maxHp: hp, 
+        ac, 
+        speed: subInfo.speed || 30, 
+        stats, 
+        mods, 
+        rawStats,
+        skills: allSkills, 
+        cantrips: chosenCantrips, 
+        spells: chosenSpells, 
+        lastAccess: new Date().toISOString()
+    };
+
+    let list = JSON.parse(localStorage.getItem('dnd_character_list') || '[]');
+    list.push(lastBuiltCharacter);
+    localStorage.setItem('dnd_character_list', JSON.stringify(list));
+    localStorage.setItem('dnd_active_character', JSON.stringify(lastBuiltCharacter));
+
+    renderCharacterToSheet(lastBuiltCharacter);
+}
+
+function renderCharacterToSheet(charData) {
+    if (!charData) return;
+    
     document.getElementById('screen-out-name').innerHTML = `<i class="fa-solid ${getClassIcon(charData.class)}"></i> ${charData.name}`;
     document.getElementById('screen-out-meta').innerText = `${charData.species} | ${charData.class} Stufe ${charData.level || 1} | ${charData.background}`;
     document.getElementById('screen-out-hp').innerText = `HP: ${charData.hp}`;
@@ -535,7 +667,7 @@ function buildCharacterSilent(charData) {
 
     document.getElementById('screen-out-features').innerHTML = `
         <li><b>Fertigkeiten:</b> ${charData.skills.join(', ')}</li>
-        <li><b>Volksmerkmale:</b><br>Geladener Charakter</li>
+        <li><b>Volksmerkmale:</b> Geladener Charakter</li>
         <li><b>Talent:</b> ${bgObj.feat || ''}</li>
         <li><b>Werkzeuge:</b> ${toolsStr}</li>
         <li><b>Hintergrund-Ausrüstung:</b> ${eqStr}</li>
@@ -984,61 +1116,6 @@ function updateSpellsUI() {
     }
 }
 
-function buildCharacterSilentData() {
-    const name = document.getElementById('char-name').value || "Unbenannter Held";
-    const mainRace = document.getElementById('main-race').value || Object.keys(speciesData)[0];
-    const subRace = document.getElementById('sub-race').value || Object.keys(speciesData[mainRace]?.subraces || {})[0];
-    const clsName = document.getElementById('class-select').value || "Kämpfer";
-    const bg = document.getElementById('bg-select').value || Object.keys(backgrounds)[0];
-    const subInfo = speciesData[mainRace]?.subraces[subRace] || { bonus: {}, speed: 30 };
-
-    let rawStats = {
-        STR: parseInt(document.getElementById('str-val')?.value) || 15,
-        DEX: parseInt(document.getElementById('dex-val')?.value) || 14,
-        CON: parseInt(document.getElementById('con-val')?.value) || 13,
-        INT: parseInt(document.getElementById('int-val')?.value) || 12,
-        WIS: parseInt(document.getElementById('wis-val')?.value) || 10,
-        CHA: parseInt(document.getElementById('cha-val')?.value) || 8
-    };
-
-    let speciesBonuses = subInfo.bonus || {};
-    let bgBonuses = getBgBonuses();
-
-    let stats = { ...rawStats };
-    for (let s in stats) {
-        if (speciesBonuses[s]) stats[s] += speciesBonuses[s];
-        if (bgBonuses[s]) stats[s] += bgBonuses[s];
-    }
-
-    let mods = {};
-    for (let s in stats) mods[s] = getMod(stats[s]);
-
-    const hpBase = classHpData[clsName]?.base || 8;
-    const hp = hpBase + mods.CON;
-    const ac = 10 + mods.DEX;
-
-    let chosenCantrips = Array.from(document.querySelectorAll('.char-cantrip-select')).map(s => s.value).filter(Boolean);
-    let chosenSpells = Array.from(document.querySelectorAll('.char-spell-select')).map(s => s.value).filter(Boolean);
-    const allSkills = [...(backgrounds[bg]?.skills || []), document.getElementById('skill1')?.value, document.getElementById('skill2')?.value].filter(Boolean);
-
-    lastBuiltCharacter = {
-        id: 'char_' + Date.now(), name, class: clsName, species: subRace, background: bg,
-        level: 1, hp, maxHp: hp, ac, speed: subInfo.speed || 30, stats, mods, skills: allSkills, cantrips: chosenCantrips, spells: chosenSpells, lastAccess: new Date().toISOString()
-    };
-
-    let list = JSON.parse(localStorage.getItem('dnd_character_list') || '[]');
-    list.push(lastBuiltCharacter);
-    localStorage.setItem('dnd_character_list', JSON.stringify(list));
-    localStorage.setItem('dnd_active_character', JSON.stringify(lastBuiltCharacter));
-
-    buildCharacterSilent(lastBuiltCharacter);
-}
-
-function buildCharacter() {
-    buildCharacterSilentData();
-    executePageSwitch('sheet');
-}
-
 function flattenEquipment(item) {
     let result = [];
     if (!item) return result;
@@ -1147,16 +1224,7 @@ function renderEquipmentSectionInSheet(clsName, bgCustomData) {
 }
 
 function manualSaveCharacter() {
-    if (!lastBuiltCharacter) return;
-    let list = JSON.parse(localStorage.getItem('dnd_character_list') || '[]');
-    const existingIndex = list.findIndex(c => c.id === lastBuiltCharacter.id);
-    if (existingIndex >= 0) {
-        list[existingIndex] = lastBuiltCharacter;
-    } else {
-        list.push(lastBuiltCharacter);
-    }
-    localStorage.setItem('dnd_character_list', JSON.stringify(list));
-    localStorage.setItem('dnd_active_character', JSON.stringify(lastBuiltCharacter));
+    buildCharacterAndSave();
     alert("Held erfolgreich gespeichert!");
 }
 
