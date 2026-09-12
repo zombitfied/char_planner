@@ -120,6 +120,22 @@
         </div>
     </div>
 
+    <!-- MODAL: Custom Confirm Dialog (im Seiten-Design) -->
+    <div id="custom-confirm-modal" class="modal-overlay" style="display:none; z-index: 9999;">
+        <div class="modal-content" style="text-align: center; max-width: 320px;">
+            <div class="modal-title" style="justify-content: center;">
+                <span>Helden begraben?</span>
+            </div>
+            <div class="modal-body" style="font-size: 0.9rem; color: var(--text); margin: 15px 0;">
+                <span id="confirm-text">Möchtest du diesen Helden wirklich in den Heldenfriedhof überführen?</span>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button id="confirm-yes-btn" class="btn-gold-main" style="flex: 1; margin-bottom: 0;">Ja</button>
+                <button id="confirm-no-btn" class="main-btn" style="flex: 1; background: var(--btn-back-bg); color: var(--text); border: 1.5px solid var(--border); margin-bottom: 0;">Nein</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         function openThemeModal() {
             const current = localStorage.getItem('dnd_theme') || 'standard';
@@ -181,7 +197,22 @@
 
         function handleArchiveClick(event, id, name) {
             event.stopPropagation();
-            if (confirm(`Helden begraben?\n\n"${name}" wirklich in den Heldenfriedhof überführen?`)) {
+            const modal = document.getElementById('custom-confirm-modal');
+            const textEl = document.getElementById('confirm-text');
+            const yesBtn = document.getElementById('confirm-yes-btn');
+            const noBtn = document.getElementById('confirm-no-btn');
+
+            textEl.innerHTML = `"${name}" wirklich in den Heldenfriedhof überführen?`;
+            modal.style.display = 'flex';
+
+            // Alte Listener entfernen um Mehrfach-Ausführung zu verhindern
+            const newYes = yesBtn.cloneNode(true);
+            const newNo = noBtn.cloneNode(true);
+            yesBtn.parentNode.replaceChild(newYes, yesBtn);
+            noBtn.parentNode.replaceChild(newNo, noBtn);
+
+            newYes.addEventListener('click', () => {
+                modal.style.display = 'none';
                 let characters = getStoredCharacters();
                 const index = characters.findIndex(c => c.id === id);
                 if (index >= 0) { 
@@ -189,7 +220,11 @@
                     saveStoredCharacters(characters); 
                     openCharacterModal(); 
                 }
-            }
+            });
+
+            newNo.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
         }
 
         function openGraveyardModal() {
