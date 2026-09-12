@@ -60,11 +60,11 @@
       "subraces": {
         "Felsgnom": { 
           "speed": 30, 
-          "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Klein | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Dunkelsicht:</b> 60 Fuß.<br>• <b>Gnomische List:</b> Vorteil bei INT-, WEIS- und CHA-Rettungswürfen gegen Magie.<br>• <b>Gnomische Linie (Felsgnom):</b> Du erlernst <i>Fingerfertigkeit</i> und kannst winzige Uhrwerk-Vorrichtungen erschaffen." 
+          "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Klein | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Dunkelsicht:</b> 60 Fuß.<br>• <b>Gnomische List:</b> Vorteil bei INT-, WEIS- und CHA-Rettungswürfen gegen Magie.<br>• <b>Gnomische Abstammung (Felsgnom):</b> Du erlernst <i>Ausbessern</i> und <i>Taschenspielerei</> und kannst winzige Uhrwerk-Vorrichtungen erschaffen." 
         },
         "Waldgnom": { 
           "speed": 30, 
-          "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Klein | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Dunkelsicht:</b> 60 Fuß.<br>• <b>Gnomische List:</b> Vorteil bei INT-, WEIS- und CHA-Rettungswürfen gegen Magie.<br>• <b>Gnomische Linie (Waldgnom):</b> Du erlernst <i>Geringe Illusion</i> und kannst <i>Mit Tieren sprechen</i> wirken (Übungsbonus-mal pro lange Rast)." 
+          "text": "<b>Kreaturentyp:</b> Humanoid | <b>Größe:</b> Klein | <b>Bewegungsrate:</b> 30 Fuß.<br>• <b>Dunkelsicht:</b> 60 Fuß.<br>• <b>Gnomische List:</b> Vorteil bei INT-, WEIS- und CHA-Rettungswürfen gegen Magie.<br>• <b>Gnomische Abstammung (Waldgnom):</b> Du erlernst <i>Geringe Illusion</i> und kannst <i>Mit Tieren sprechen</i> wirken (Übungsbonus-mal pro lange Rast)." 
         }
       },
       "spezial-attribut": {
