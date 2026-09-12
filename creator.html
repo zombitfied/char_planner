@@ -23,7 +23,7 @@
             display: flex;
             width: 200vw;
             transition: transform 0.4s ease-in-out;
-            pointer-events: auto;
+            pointer-events: none; /* Verhindert das Blockieren von Klicks auf den Footer */
         }
         .book-page {
             width: 100vw;
@@ -33,6 +33,7 @@
             padding-bottom: 105px;
             display: flex;
             justify-content: center;
+            pointer-events: auto; /* Erlaubt Interaktionen innerhalb der Seiten wieder */
         }
         .book-page .container {
             width: 100%;
@@ -92,6 +93,30 @@
             opacity: 0.35;
             cursor: not-allowed;
         }
+
+        /* Kleiner roter Käfer-Reset-Button neben dem Design-Button */
+        .btn-debug-reset {
+            position: fixed;
+            top: 16px;
+            right: 68px;
+            z-index: 1100;
+            background: var(--btn-back-bg);
+            border: 1.5px solid #8b0000;
+            color: #8b0000;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: all 0.2s;
+        }
+        .btn-debug-reset:hover {
+            background: #8b0000;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
@@ -111,6 +136,11 @@
         <i class="fa-solid fa-shield-halved"></i> Held
     </button>
 </div>
+
+<!-- Kleiner roter Käfer-Button oben links neben dem Design-Button -->
+<button class="btn-debug-reset" onclick="resetLocalStorage()" title="Speicher komplett leeren (Reset)">
+    <i class="fa-solid fa-bug"></i>
+</button>
 
 <button class="btn-theme-toggle" onclick="openThemeModal()" title="Design wählen">
     <i class="fa-solid fa-paintbrush"></i>
@@ -272,11 +302,8 @@
                 <div id="screen-out-spells" style="margin-bottom:20px;"></div>
 
                 <div style="display: flex; gap: 10px; margin-top: 15px;">
-                    <button class="btn-gray-main" onclick="manualSaveCharacter()" style="margin-top:0; flex: 1;">
+                    <button class="btn-gray-main" onclick="manualSaveCharacter()" style="margin-top:0; width: 100%;">
                         <i class="fa-solid fa-floppy-disk"></i> Held speichern
-                    </button>
-                    <button class="btn-gray-main" onclick="resetLocalStorage()" style="margin-top:0; flex: 1; background: #8b0000; color: #fff; border-color: #5c0000;">
-                        <i class="fa-solid fa-trash-can"></i> Speicher leeren (Reset)
                     </button>
                 </div>
             </div>
