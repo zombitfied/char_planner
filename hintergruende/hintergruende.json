@@ -1,0 +1,323 @@
+{
+  "Wegfinder": {
+    "attributes": ["Geschicklichkeit", "Konstitution", "Weisheit"],
+    "feats": ["Eingeweihter der Magie (Druide)"],
+    "skills": ["Heimlichkeit", "Überlebenskunst"],
+    "tools": ["Kartografenwerkzeug"],
+    "equipment": {
+      "choiceA": [
+        {"name": "Kurzbogen", "qty": 20, "unit": "Pfeile"},
+        {"name": "Kartografenwerkzeug", "qty": 1},
+        {"name": "Schlafsack", "qty": 1},
+        {"name": "Köcher", "qty": 1},
+        {"name": "Zelt", "qty": 1},
+        {"name": "Reisekleidung", "qty": 1},
+        {"name": "GM", "qty": 3}
+      ],
+      "choiceB": [
+        {"name": "GM", "qty": 50}
+      ]
+    },
+    "text": "Du bist in der freien Natur aufgewachsen, weit weg von besiedelten Gebieten. Dein Zuhause war stets dort, wo du deinen Schlafsack ausgerollt hast. Es gibt viele Wunder in der Wildnis: merkwürdige Monster, unberührte Wälder und Flüsse, überwucherte Ruinen und gigantischer Hallen, in denen einst die Riesen wandelten. Bei deinen Erkundungen hast du gelernt, auf dich aufzupassen. Bisweilen hast du freundlichen Naturpriestern den Weg gewiesen, die dir im Gegenzug beigebracht haben, wie man die Magie der Wildnis kanalisiert."
+  },
+  "Weiser": {
+    "attributes": ["Konstitution", "Intelligenz", "Weisheit"],
+    "feats": ["Eingeweihter der Magie (Magier)"],
+    "skills": ["Arkane Kunde", "Geschichte"],
+    "tools": ["Kalligrafenwerkzeug"],
+    "equipment": {
+      "choiceA": [
+        {"name": "Kampfstab", "qty": 1},
+        {"name": "Kalligrafenwerkzeug", "qty": 1},
+        {"name": "Buch (Geschichte)", "qty": 1},
+        {"name": "Pergament", "qty": 8, "unit": "Blätter"},
+        {"name": "Robe", "qty": 1},
+        {"name": "GM", "qty": 8}
+      ],
+      "choiceB": [
+        {"name": "GM", "qty": 50}
+      ]
+    },
+    "text": "Du hast deine jungen Jahre damit verbracht, zu Herrenhäusern und Klöstern zu reisen und dir mit verschiedenen Gelegenheitsarbeiten und Dienstleistungen Zugang zu den Bibliotheken zu erarbeiten. Lange Abende hast du mit dem Studium von Büchern und Schriftrollen verbracht und dir Wissen über das Multiversum und die Grundlagen der Magie angeeignet. Und dein Geist verlangt nach mehr."
+  },
+  "Unterhaltungskünstler": {
+    "attributes": ["Stärke", "Geschicklichkeit", "Charisma"],
+    "feats": ["Musiker"],
+    "skills": ["Akrobatik", "Auftreten"],
+    "tools": ["Musikinstrument"],
+    "equipment": {
+      "choiceA": [
+        {"name": "Musikinstrument", "qty": 1},
+        {"name": "Kostüm", "qty": 2},
+        {"name": "Spiegel", "qty": 1},
+        {"name": "Parfüm", "qty": 1},
+        {"name": "Reisekleidung", "qty": 1},
+        {"name": "GM", "qty": 11}
+      ],
+      "choiceB": [
+        {"name": "GM", "qty": 50}
+      ]
+    },
+    "text": "Du hast einen Großteil deiner Jugend auf Jahrmärkten und in Zirkussen verbracht, warst als Gelegenheitsarbeiter für Musiker und Akrobaten tätig und hast dafür Unterricht erhalten. Vielleicht hast du Seiltanz gelernt, oder wie man in bestimmter Weise Laute spielt oder in tadelloser Diktion Gedichte vorträgt. Bis heute liebst du den Applaus und stehst gerne auf der Bühne."
+  },
+  "Wache": {
+    "attributes": ["Stärke", "Intelligenz", "Weisheit"],
+    "feats": ["Wachsam"],
+    "skills": ["Athletik", "Wahrnehmung"],
+    "tools": ["Spielset"],
+    "equipment": {
+      "choiceA": [
+        {"name": "Speer", "qty": 1},
+        {"name": "leichte Armbrust", "qty": 1},
+        {"name": "Bolzen", "qty": 20},
+        {"name": "Spielset", "qty": 1},
+        {"name": "abdeckbare Laterne", "qty": 1},
+        {"name": "Handschellen", "qty": 1},
+        {"name": "Köcher", "qty": 1},
+        {"name": "Reisekleidung", "qty": 1},
+        {"name": "GM", "qty": 12}
+      ],
+      "choiceB": [
+        {"name": "GM", "qty": 50}
+      ]
+    },
+    "text": "Deine Füße schmerzen, wenn du nur an die zahllosen Stunden denkst, die du auf deinem Posten im Wachturm verbracht hast. Du hast gelernt, mit dem einem Auge nach Plünderern außerhalb der Mauern Ausschau zu halten, die womöglich aus dem nahen Wald hervorbrechen, und mit dem anderen nach Beutelschneidern und Tunichtguten innerhalb der Festung zu suchen."
+  },
+  "Seemann": {
+    "attributes": ["Stärke", "Geschicklichkeit", "Weisheit"],
+    "feats": ["Kneipenschläger"],
+    "skills": ["Akrobatik", "Wahrnehmung"],
+    "tools": ["Navigationswerkzeug"],
+    "equipment": {
+      "choiceA": [
+        {"name": "Dolch", "qty": 1},
+        {"name": "Navigationswerkzeug", "qty": 1},
+        {"name": "Seil", "qty": 1},
+        {"name": "Reisekleidung", "qty": 1},
+        {"name": "GM", "qty": 20}
+      ],
+      "choiceB": [
+        {"name": "GM", "qty": 50}
+      ]
+    },
+    "text": "Du hast als Seefahrer gelebt, den Wind im Rücken und das Deck schwankend unter deinen Füßen. In zahllosen Häfen hast du an Tavernentheken gehockt. Du hast mächtige Stürme überstanden und Geschichten mit Leuten ausgetauscht, die unter den Wellen wohnen."
+  },
+  "Soldat": {
+    "attributes": ["Stärke", "Geschicklichkeit", "Konstitution"],
+    "feats": ["Wilder Angreifer"],
+    "skills": ["Athletik", "Einschüchtern"],
+    "tools": ["Spielset"],
+    "equipment": {
+      "choiceA": [
+        {"name": "Speer", "qty": 1},
+        {"name": "Kurzbogen", "qty": 1},
+        {"name": "Pfeile", "qty": 20},
+        {"name": "Spielset", "qty": 1},
+        {"name": "Heilerausrüstung", "qty": 1},
+        {"name": "Köcher", "qty": 1},
+        {"name": "Reisekleidung", "qty": 1},
+        {"name": "GM", "qty": 14}
+      ],
+      "choiceB": [
+        {"name": "GM", "qty": 50}
+      ]
+    },
+    "text": "Du hast deine Ausbildung für den Krieg begonnen, sowie du erwachsen warst. Erinnerungen an dein Leben vor den Waffen sind rar. Der Kampf liegt dir im Blut. Manchmal ertappst du dich dabei, wie du reflexhaft die Kampfübungen deiner Grundausbildung wiederholst. Schließlich hast du deine Ausbildung auf dem Schlachtfeld genutzt und das Reich beschützt, indem du Krieg geführt hast."
+  },
+  "Scharlatan": {
+    "attributes": ["Geschicklichkeit", "Konstitution", "Charisma"],
+    "feats": ["Begabt"],
+    "skills": ["Fingerfertigkeit", "Täuschen"],
+    "tools": ["Fälscherausrüstung"],
+    "equipment": {
+      "choiceA": [
+        {"name": "Fälscherausrüstung", "qty": 1},
+        {"name": "Kostüm", "qty": 1},
+        {"name": "feine Kleidung", "qty": 1},
+        {"name": "GM", "qty": 15}
+      ],
+      "choiceB": [
+        {"name": "GM", "qty": 50}
+      ]
+    },
+    "text": "Sowie du alt genug warst, um ein Bier zu bestellen, hattest du im Nu in jeder Taverne in Reichweite deinen Lieblingsplatz. Während deiner Tavenrentouren hast du gelernt, jene Pechvögel auszukehren, die auf der Suche nach einer schönen Lüge waren – vielleicht hast du ihnen mit gefälschten Zaubertränken oder Stammbäumen das Geld aus der Tasche gezogen."
+  },
+  "Schreiber": {
+    "attributes": ["Geschicklichkeit", "Intelligenz", "Weisheit"],
+    "feats": ["Begabt"],
+    "skills": ["Nachforschungen", "Wahrnehmung"],
+    "tools": ["Kalligrafenwerkzeug"],
+    "equipment": {
+      "choiceA": [
+        {"name": "Kalligrafenwerkzeug", "qty": 1},
+        {"name": "feine Kleidung", "qty": 1},
+        {"name": "Lampe", "qty": 1},
+        {"name": "Öl", "qty": 3, "unit": "Flaschen"},
+        {"name": "Pergament", "qty": 12, "unit": "Blätter"},
+        {"name": "GM", "qty": 23}
+      ],
+      "choiceB": [
+        {"name": "GM", "qty": 50}
+      ]
+    },
+    "text": "Du hast deine prägenden Jahre in einem Skriptorium verbracht, einem Kloster zur Bewahrung von Wissen oder einer staatlichen Behörde, wo du gelernt hast, in klarer Schrift fügsliche Texte zu verfassen. Vielleicht hast du Regierungsdokumente geschrieben oder viele Wälzer an Literatur kopiert. Möglicherweise hast du Erfahrung als Autor von Gedichten, Prosa oder wissenschaftlichen Arbeiten. Du achtest auf Details, damit du keine Fehler in die Dokumente einschleppst, die du erstellst oder kopierst."
+  },
+  "Krimineller": {
+    "attributes": ["Geschicklichkeit", "Konstitution", "Intelligenz"],
+    "feats": ["Wachsam"],
+    "skills": ["Fingerfertigkeit", "Heimlichkeit"],
+    "tools": ["Diebeswerkzeug"],
+    "equipment": {
+      "choiceA": [
+        {"name": "Dolche", "qty": 2},
+        {"name": "Diebeswerkzeug", "qty": 1},
+        {"name": "Brechstange", "qty": 1},
+        {"name": "Beutel", "qty": 2},
+        {"name": "Reisekleidung", "qty": 1},
+        {"name": "GM", "qty": 16}
+      ],
+      "choiceB": [
+        {"name": "GM", "qty": 50}
+      ]
+    },
+    "text": "Du hast dich in dunklen Gassen durchgeschlagen und mit Taschendiebählen und Einbrüchen über Wasser gehalten. Vielleicht hat du einer kleinen Bande von gleichgesinnten Halunken angehört, die aufeinander aufpassten. Oder vielleicht warst du ein Einzelgänger und hast dich gegen die örtliche Diebesgilde oder noch fürchterlichere Gesetzesbrecher behauptet."
+  },
+  "Reisender": {
+    "attributes": ["Geschicklichkeit", "Weisheit", "Charisma"],
+    "feats": ["Glückspilz"],
+    "skills": ["Motiv erkennen", "Heimlichkeit"],
+    "tools": ["Diebeswerkzeug"],
+    "equipment": {
+      "choiceA": [
+        {"name": "Dolche", "qty": 2},
+        {"name": "Diebeswerkzeug", "qty": 1},
+        {"name": "Spielset", "qty": 1},
+        {"name": "Schlafsack", "qty": 1},
+        {"name": "Beutel", "qty": 2},
+        {"name": "Reisekleidung", "qty": 1},
+        {"name": "GM", "qty": 16}
+      ],
+      "choiceB": [
+        {"name": "GM", "qty": 50}
+      ]
+    },
+    "text": "Du bist auf der Straße in Gesellschaft ähnlich glückloser Außenseiter aufgewachsen, manche von ihnen Freunde, manche von ihnen Rivalen. Du hast geschlafen, wo es sich angeboten hat, und so manche merkwürdige Arbeit getan, um etwas zu Essen zu kriegen. Wenn der Hunger unerträglich wurde, blieb dir nur Diebstahl. Dennoch hast du weder deinen Stolz noch die Hoffnung verloren. Das Schicksal ist noch nicht fertig mit dir."
+  },
+  "Bauer": {
+    "attributes": ["Stärke", "Konstitution", "Weisheit"],
+    "feats": ["Zäh"],
+    "skills": ["Mit Tieren umgehen", "Naturkunde"],
+    "tools": ["Schreinerwerkzeug"],
+    "equipment": {
+      "choiceA": [
+        {"name": "Sichel", "qty": 1},
+        {"name": "Schreinerwerkzeug", "qty": 1},
+        {"name": "Heilerausrüstung", "qty": 1},
+        {"name": "Eisentopf", "qty": 1},
+        {"name": "Schaufel", "qty": 1},
+        {"name": "Reisekleidung", "qty": 1},
+        {"name": "GM", "qty": 30}
+      ],
+      "choiceB": [
+        {"name": "GM", "qty": 50}
+      ]
+    },
+    "text": "Du bist auf dem Land aufgewachsen. Jahrelang hast du Tiere versorgt und den Boden kultiviert, und dafür bist du mit Geduld und guter Gesundheit belohnt worden. Du schätzt die Gaben der Natur und hast zugleich gesunden Respekt vor ihrem Zorn."
+  },
+  "Einsiedler": {
+    "attributes": ["Konstitution", "Weisheit", "Charisma"],
+    "feats": ["Heiler"],
+    "skills": ["Heilkunde", "Religion"],
+    "tools": ["Kräuterkundeausrüstung"],
+    "equipment": {
+      "choiceA": [
+        {"name": "Kampfstab", "qty": 1},
+        {"name": "Kräuterkundeausrüstung", "qty": 1},
+        {"name": "Schlafsack", "qty": 1},
+        {"name": "Buch (Philosophie)", "qty": 1},
+        {"name": "Lampe", "qty": 1},
+        {"name": "Öl", "qty": 3, "unit": "Flaschen"},
+        {"name": "Reisekleidung", "qty": 1},
+        {"name": "GM", "qty": 16}
+      ],
+      "choiceB": [
+        {"name": "GM", "qty": 50}
+      ]
+    },
+    "text": "Du hast deine jungen Jahre abgeschieden in einer Hütte oder einem Kloster fern aller Ansiedlungen verbracht. Deine einzige Gesellschaft bestand aus den Kreaturen des Waldes und gelegentlichen Besuchern, die Vorräte und Nachrichten brachten. In deiner Abgeschiedenheit hast du zahlreiche Stunden damit verbracht, über die Mysterien der Schöpfung nachzusinnen."
+  },
+  "Adeliger": {
+    "attributes": ["Stärke", "Intelligenz", "Charisma"],
+    "feats": ["Begabt"],
+    "skills": ["Geschichte", "Überzeugen"],
+    "tools": ["Spielset"],
+    "equipment": {
+      "choiceA": [
+        {"name": "Spielset", "qty": 1},
+        {"name": "feine Kleidung", "qty": 1},
+        {"name": "Parfüm", "qty": 1},
+        {"name": "GM", "qty": 29}
+      ],
+      "choiceB": [
+        {"name": "GM", "qty": 50}
+      ]
+    },
+    "text": "Du bist in einer Burg aufgewachsen, umgeben von Reichtum, Macht und Privilegien. Deine Familie ist von niederem Adel und hat dir erstklassige Bildung angedeihen lassen, die du zum Teil genossen und zum Teil verabscheut hast. Deine Zeit in der Burg – vor allem die vielen Stunden, die du deine Familie am Hof beobachtet hast – hat dich vieles über das Herrschen gelehrt."
+  },
+  "Akolyth": {
+    "attributes": ["Intelligenz", "Weisheit", "Charisma"],
+    "feats": ["Eingeweihter der Magie (Kleriker)"],
+    "skills": ["Motiv erkennen", "Religion"],
+    "tools": ["Kalligrafenwerkzeug"],
+    "equipment": {
+      "choiceA": [
+        {"name": "Kalligrafenwerkzeug", "qty": 1},
+        {"name": "Buch (Gebete)", "qty": 1},
+        {"name": "Heiliges Symbol", "qty": 1},
+        {"name": "Pergament", "qty": 10, "unit": "Blätter"},
+        {"name": "Robe", "qty": 1},
+        {"name": "GM", "qty": 8}
+      ],
+      "choiceB": [
+        {"name": "GM", "qty": 50}
+      ]
+    },
+    "text": "Du hast dich dem Dienst in einem Tempel verschrieben, der sich in einer Stadt oder verborgen in einem heiligen Hain befinden kann. Dort hast du Riten zu Ehren eines Gottes oder eines Pantheons ausgeführt. Du hast unter einem Priester gedient und Religion studiert. Dank der Unterweisung des Priesters und deines eigenen Einsatzes hast du außerdem gelernt, im Dienst an deinem Ort der Anbetung und an den Gläubigen dort ein gewisses Maß an göttlichen Energien zu kanalisieren."
+  },
+  "Händler": {
+    "attributes": ["Weisheit", "Intelligenz", "Charisma"],
+    "feats": ["Geschäftssinn"],
+    "skills": ["Nachforschungen", "Überzeugen"],
+    "tools": ["Handelsware"],
+    "equipment": {
+      "choiceA": [
+        {"name": "Handelsware", "qty": 1},
+        {"name": "feine Kleidung", "qty": 1},
+        {"name": "Tasche", "qty": 1},
+        {"name": "GM", "qty": 15}
+      ],
+      "choiceB": [
+        {"name": "GM", "qty": 50}
+      ]
+    },
+    "text": "Du warst bei einem Händler, einem Privatunternehmer oder Ladenhändler in der Lehre und hast das Grundlagen des Handels und Handelns von A-Z gelernt, von Verkauf von Handelswaren bis hin zum Aufbau und Verwaltung eines Lagerbestands. Vielleicht bist du ein erfahrener Warentransporteur und kennst die Straßen wie deine Westentasche oder hast dir deinen eigenen Wagen gekauft und betreibst einen mobilen Laden."
+  },
+  "Handwerker": {
+    "attributes": ["Stärke", "Geschicklichkeit", "Intelligenz"],
+    "feats": ["Meisterhafter Handwerker"],
+    "skills": ["Nachforschungen", "Handwerk"],
+    "tools": ["Handwerkszeug"],
+    "equipment": {
+      "choiceA": [
+        {"name": "Handwerkszeug", "qty": 1},
+        {"name": "feine Kleidung", "qty": 1},
+        {"name": "Reisekleidung", "qty": 1},
+        {"name": "GM", "qty": 10}
+      ],
+      "choiceB": [
+        {"name": "GM", "qty": 50}
+      ]
+    },
+    "text": "Du hast in einem Handwerkerviertel für ein paar Spätgeld auf die Tage voller positiver und negativer Gefühle acht, sowie dir groß genug warst um einen Hammer in die Hand zu nehmen. In diesem Leben hast du gelernt, grundsolide handwerkliche Arbeiten auszuführen und schwierige Kunden zu behandeln. Außerdem hast du ein gutes Auge für Detailarbeit."
+  }
+}
