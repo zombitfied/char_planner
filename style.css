@@ -600,3 +600,9 @@ select:focus, input:focus {
 .custom-option.selected:hover {
     color: var(--bg);
 }
+/* Klasse, falls das Dropdown automatisch nach oben aufklappt */
+.custom-select-wrapper.drop-up .custom-options {
+    top: auto;
+    bottom: calc(100% + 4px);
+}
+
