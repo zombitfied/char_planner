@@ -52,7 +52,7 @@
             display: flex;
             justify-content: space-around;
             align-items: center;
-            z-index: 100000; /* Höher als alle Dropdowns, damit Footer sicher unten bleibt */
+            z-index: 100000;
             box-shadow: 0 -4px 15px rgba(0,0,0,0.15);
             padding: 10px 16px;
             box-sizing: border-box;
@@ -430,7 +430,7 @@ function setTheme(themeName) {
 
 window.addEventListener('click', function(e) {
     if (!e.target.closest('.custom-select-wrapper')) {
-        document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open'));
+        document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open', 'drop-up'));
     }
 });
 
@@ -463,7 +463,7 @@ function makeCustomSelect(selectId) {
             item.onclick = function() {
                 sel.value = opt.value;
                 updateDisplay();
-                wrapper.classList.remove('open');
+                wrapper.classList.remove('open', 'drop-up');
                 if (sel.onchange) sel.onchange();
             };
             optionsDiv.appendChild(item);
@@ -472,9 +472,19 @@ function makeCustomSelect(selectId) {
 
     displayDiv.onclick = function(e) {
         e.stopPropagation();
+        
         document.querySelectorAll('.custom-select-wrapper').forEach(w => {
-            if (w !== wrapper) w.classList.remove('open');
+            if (w !== wrapper) w.classList.remove('open', 'drop-up');
         });
+
+        let rect = displayDiv.getBoundingClientRect();
+        let spaceBelow = window.innerHeight - rect.bottom;
+        if (spaceBelow < 230) {
+            wrapper.classList.add('drop-up');
+        } else {
+            wrapper.classList.remove('drop-up');
+        }
+
         wrapper.classList.toggle('open');
     };
 
@@ -511,7 +521,7 @@ function makeDynamicSelectCustom(sel) {
             item.onclick = function() {
                 sel.value = opt.value;
                 updateDisplay();
-                wrapper.classList.remove('open');
+                wrapper.classList.remove('open', 'drop-up');
                 if (sel.onchange) sel.onchange();
             };
             optionsDiv.appendChild(item);
@@ -520,9 +530,19 @@ function makeDynamicSelectCustom(sel) {
 
     displayDiv.onclick = function(e) {
         e.stopPropagation();
+        
         document.querySelectorAll('.custom-select-wrapper').forEach(w => {
-            if (w !== wrapper) w.classList.remove('open');
+            if (w !== wrapper) w.classList.remove('open', 'drop-up');
         });
+
+        let rect = displayDiv.getBoundingClientRect();
+        let spaceBelow = window.innerHeight - rect.bottom;
+        if (spaceBelow < 230) {
+            wrapper.classList.add('drop-up');
+        } else {
+            wrapper.classList.remove('drop-up');
+        }
+
         wrapper.classList.toggle('open');
     };
 
