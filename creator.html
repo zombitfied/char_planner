@@ -163,18 +163,18 @@
                         <label for="main-race">Volk</label>
                         <div class="input-row">
                             <select id="main-race" onchange="onMainRaceChange()"></select>
+                            <button type="button" class="info-btn" onclick="showRaceModal()">ℹ</button>
                         </div>
                     </div>
                     <div id="subrace-container" style="display: none;">
                         <label for="sub-race">Abstammung</label>
                         <div class="input-row">
                             <select id="sub-race" onchange="updateSubraceOptions()"></select>
-                            <button type="button" class="info-btn" onclick="showRaceModal()">ℹ</button>
                         </div>
                     </div>
                 </div>
-                <div id="special-attr-container" class="special-attribute-box">
-                    <label id="special-attr-label">Spezial-Attribut wählen:</label>
+                <div id="special-attr-container" class="special-attribute-box" style="display: none; margin-top:10px;">
+                    <label id="special-attr-label">Spezial-Attribut / Option wählen:</label>
                     <select id="special-attr-select"></select>
                 </div>
             </div>
@@ -433,8 +433,9 @@ function setTheme(themeName) {
     closeThemeModal();
 }
 
-const COMPENDIUM_JSON_URL = "./compendium.json";
+const RACES_JSON_URL = "./rassen.json";
 const BACKGROUNDS_JSON_URL = "./backgrounds.json";
+const COMPENDIUM_JSON_URL = "./compendium.json";
 const SPELLS_HTML_URL = "./spells-parsed.html";
 const SPELL_LISTS_HTML_URL = "./spelllists-parsed.html";
 
@@ -484,7 +485,7 @@ const classHpData = {
     "Schurke": { die: 8, base: 8 }, "Zauberer": { die: 6, base: 6 }, "Hexenmeister": { die: 8, base: 8 }, "Magier": { die: 6, base: 6 }
 };
 
-let speciesData = {};
+let racesData = {};
 let backgrounds = {};
 let skillDescriptions = {};
 let spellCompendium = { cantrips: {}, level1: {} };
@@ -492,23 +493,24 @@ let classSpellLists = {};
 
 window.onload = async function() {
     try {
+        const racesResponse = await fetch(RACES_JSON_URL + "?t=" + new Date().getTime());
+        if (!racesResponse.ok) throw new Error(`HTTP Fehlerstatus rassen.json: ${racesResponse.status}`);
+        const rJson = await racesResponse.json();
+        racesData = rJson.races || rJson;
+
         const compResponse = await fetch(COMPENDIUM_JSON_URL + "?t=" + new Date().getTime());
-        if (!compResponse.ok) throw new Error(`HTTP Fehlerstatus compendium.json: ${compResponse.status}`);
-        const compData = await compResponse.json();
-        speciesData = compData.speciesData;
-        skillDescriptions = compData.skills || {};
+        if (compResponse.ok) {
+            const compData = await compResponse.json();
+            skillDescriptions = compData.skills || {};
+        }
 
         try {
             const bgResponse = await fetch(BACKGROUNDS_JSON_URL + "?t=" + new Date().getTime());
             if (bgResponse.ok) {
                 const bgData = await bgResponse.json();
                 backgrounds = bgData.backgrounds ? bgData.backgrounds : bgData;
-            } else {
-                backgrounds = compData.backgrounds || {};
             }
-        } catch (e) {
-            backgrounds = compData.backgrounds || {};
-        }
+        } catch (e) {}
 
         try {
             const spellResponse = await fetch(SPELLS_HTML_URL + "?t=" + new Date().getTime());
@@ -529,7 +531,7 @@ window.onload = async function() {
 
 function handleUrlModeAndStartup() {
     const urlParams = new URLSearchParams(window.location.search);
-    const mode = urlParams.get('mode'); // Entweder "create" oder "sheet"
+    const mode = urlParams.get('mode');
 
     if (mode === 'create') {
         localStorage.removeItem('dnd_active_character');
@@ -610,11 +612,15 @@ function buildCharacterAndSave() {
     }
 
     const name = document.getElementById('char-name').value || "Unbenannter Held";
-    const mainRace = document.getElementById('main-race').value || Object.keys(speciesData)[0];
-    const subRace = document.getElementById('sub-race').value || Object.keys(speciesData[mainRace]?.subraces || {})[0];
+    const mainRace = document.getElementById('main-race').value || Object.keys(racesData)[0];
+    const subRaceSelect = document.getElementById('sub-race');
+    const subRace = subRaceSelect && subRaceSelect.options.length > 0 ? subRaceSelect.value : mainRace;
     const clsName = document.getElementById('class-select').value || "Kämpfer";
     const bg = document.getElementById('bg-select').value || Object.keys(backgrounds)[0];
-    const subInfo = speciesData[mainRace]?.subraces[subRace] || { bonus: {}, speed: 30 };
+    
+    const raceObj = racesData[mainRace] || {};
+    let speedMeters = raceObj.speed?.qty || 9;
+    let speedFt = Math.round(speedMeters * 3.28084 / 5) * 5; // Umrechnung Meter in Fuß für den Bogen
 
     let rawStats = {
         STR: parseInt(document.getElementById('str-val')?.value) || 15,
@@ -625,12 +631,10 @@ function buildCharacterAndSave() {
         CHA: parseInt(document.getElementById('cha-val')?.value) || 8
     };
 
-    let speciesBonuses = subInfo.bonus || {};
     let bgBonuses = getBgBonuses();
 
     let stats = { ...rawStats };
     for (let s in stats) {
-        if (speciesBonuses[s]) stats[s] += speciesBonuses[s];
         if (bgBonuses[s]) stats[s] += bgBonuses[s];
     }
 
@@ -651,14 +655,14 @@ function buildCharacterAndSave() {
         id: charId, 
         name, 
         class: clsName, 
-        species: subRace, 
+        species: subRace !== mainRace ? `${mainRace} (${subRace})` : mainRace, 
         mainRace: mainRace,
         background: bg,
         level: 1, 
         hp, 
         maxHp: hp, 
         ac, 
-        speed: subInfo.speed || 30, 
+        speed: speedFt, 
         stats, 
         mods, 
         rawStats,
@@ -709,7 +713,7 @@ function renderCharacterToSheet(charData) {
 
     document.getElementById('screen-out-features').innerHTML = `
         <li><b>Fertigkeiten:</b> ${charData.skills.join(', ')}</li>
-        <li><b>Volksmerkmale:</b> Geladener Charakter</li>
+        <li><b>Volksmerkmale:</b> Geladener Charakter (2024 Standard)</li>
         <li><b>Talent:</b> ${bgObj.feat || ''}</li>
         <li><b>Werkzeuge:</b> ${toolsStr}</li>
         <li><b>Hintergrund-Ausrüstung:</b> ${eqStr}</li>
@@ -764,7 +768,7 @@ function parseSpellListsHtml(htmlText) {
 }
 
 function initApp() {
-    populateSelect('main-race', Object.keys(speciesData));
+    populateSelect('main-race', Object.keys(racesData));
     
     const classSel = document.getElementById('class-select');
     classSel.innerHTML = '';
@@ -819,8 +823,34 @@ function closeModal() {
 
 function showRaceModal() {
     const mainRace = document.getElementById('main-race').value;
-    const subRace = document.getElementById('sub-race').value;
-    openModal(subRace, speciesData[mainRace].subraces[subRace].text, "fa-child");
+    const subRaceElem = document.getElementById('sub-race');
+    const subRace = subRaceElem ? subRaceElem.value : null;
+    const raceObj = racesData[mainRace];
+
+    if (!raceObj) return;
+
+    let content = `<p><b>Kreaturentyp:</b> ${raceObj.creatureType || 'Humanoid'}</p>`;
+    content += `<p><b>Größe:</b> ${raceObj.size || 'Mittelgroß'} (${raceObj.sizeDetails?.from || 150}–${raceObj.sizeDetails?.to || 180} ${raceObj.sizeDetails?.unit || 'cm'})</p>`;
+    content += `<p><b>Bewegungsrate:</b> ${raceObj.speed?.qty || 9} ${raceObj.speed?.unit || 'Meter'}</p>`;
+    content += `<p style="margin-top:10px;">${raceObj.description || ''}</p>`;
+
+    if (raceObj.traits && raceObj.traits.length > 0) {
+        content += `<h4 style="color:var(--accent); margin-top:15px;">Merkmale:</h4><ul>`;
+        raceObj.traits.forEach(t => {
+            content += `<li><b>${t.name}:</b> ${t.description}</li>`;
+        });
+        content += `</ul>`;
+    }
+
+    if (subRace && raceObj.subtypes?.choice?.options) {
+        const subOpt = raceObj.subtypes.choice.options.find(o => o.name === subRace);
+        if (subOpt) {
+            content += `<h4 style="color:var(--accent); margin-top:15px;">Abstammung (${subOpt.name}):</h4>`;
+            content += `<p>${subOpt.description || ''}</p>`;
+        }
+    }
+
+    openModal(mainRace + (subRace && subRace !== mainRace ? ` (${subRace})` : ''), content, "fa-child");
 }
 
 async function showClassModal() {
@@ -919,32 +949,49 @@ function updateClassIconDisplay() {
 
 function onMainRaceChange() {
     const mainRace = document.getElementById('main-race').value;
+    const raceObj = racesData[mainRace];
     const subContainer = document.getElementById('subrace-container');
     const subSelect = document.getElementById('sub-race');
 
-    if (!subSelect) return;
-    subSelect.innerHTML = '';
-    Object.keys(speciesData[mainRace].subraces).forEach(subKey => {
-        subSelect.innerHTML += `<option value="${subKey}">${subKey}</option>`;
-    });
-    if (subContainer) subContainer.style.display = 'block';
+    if (!subSelect || !subContainer) return;
+
+    if (raceObj && raceObj.subtypes && raceObj.subtypes.choice && raceObj.subtypes.choice.options) {
+        subSelect.innerHTML = '';
+        raceObj.subtypes.choice.options.forEach(sub => {
+            subSelect.innerHTML += `<option value="${sub.name}">${sub.name}</option>`;
+        });
+        subContainer.style.display = 'block';
+    } else {
+        subSelect.innerHTML = `<option value="${mainRace}">${mainRace}</option>`;
+        subContainer.style.display = 'none';
+    }
     updateSubraceOptions();
 }
 
 function updateSubraceOptions() {
     const mainRace = document.getElementById('main-race').value;
-    const raceData = speciesData[mainRace];
+    const raceObj = racesData[mainRace];
+    const subSelect = document.getElementById('sub-race');
     const specialContainer = document.getElementById('special-attr-container');
     const specialSelect = document.getElementById('special-attr-select');
 
-    if (raceData && raceData["spezial-attribut"] && raceData["spezial-attribut"].spellcasting) {
-        if (specialSelect) {
-            specialSelect.innerHTML = '';
-            raceData["spezial-attribut"].spellcasting.forEach(opt => specialSelect.innerHTML += `<option value="${opt}">${opt}</option>`);
-        }
-        if (specialContainer) specialContainer.style.display = 'block';
-    } else {
-        if (specialContainer) specialContainer.style.display = 'none';
+    let hasSpecialChoice = false;
+    if (raceObj && raceObj.traits) {
+        raceObj.traits.forEach(trait => {
+            if (trait.choice && trait.choice.options) {
+                if (specialSelect && specialContainer) {
+                    specialSelect.innerHTML = '';
+                    trait.choice.options.forEach(opt => specialSelect.innerHTML += `<option value="${opt}">${opt}</option>`);
+                    document.getElementById('special-attr-label').innerText = trait.choice.text || 'Wähle eine Option:';
+                    specialContainer.style.display = 'block';
+                    hasSpecialChoice = true;
+                }
+            }
+        });
+    }
+
+    if (!hasSpecialChoice && specialContainer) {
+        specialContainer.style.display = 'none';
     }
     updateSpellsUI();
 }
