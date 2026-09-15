@@ -331,23 +331,60 @@
         "qty": 9,
         "unit": "Meter"
       },
-      "description": "Tieflinge stammen entweder selbst von den Unteren Ebenen oder haben unholdische Ahnen, die von dort stammen. Sie sind mit Teufeln, Dämonen oder anderen Unholden blutsverwandt. Diese Verbindung mit den Unteren Ebenen ist das unholdische Erbe der Tieflinge.",
+      "description": "Tieflinge stammen entweder selbst von den Unteren Ebenen oder haben unholdische Ahnen, die von dort stammen. Sie sind mit Teufeln, Dämonen oder anderen Unholden blutsverwandt. Diese Verbindung mit den Unteren Ebenen ist das unholdische Erbe der Tieflinge. Jeder Tiefling wählt selbst aus, ob er sein unholdisches Erbe begrüßt oder beklagt. Die drei unholdischen Varianten werden im Folgenden beschrieben: Abyssisch (Erbe des Abyss und Pandäoniums), Chthonisch (Erbe von Carceri und Hades) und Infernalisch (Erbe von Gehenna und den Neun Höllen).",
       "traits": [
         {
           "name": "Dunkelsicht",
           "description": "Du hast Dunkelsicht mit einer Reichweite von 18 Metern."
         },
         {
-          "name": "Unheiliges Vermächtnis",
-          "description": "Du bist mit den Unteren Ebenen verbunden und erhältst dadurch magische Fähigkeiten. Wähle eine Art des Erbes aus (Abyssisch, Chthonisch oder Infernalisch).",
+          "name": "Außergewöhnliche Präsenz",
+          "description": "Du kennst den Zaubertrick Thaumaturgie. Wenn du ihn mit diesem Merkmal wirkst, verwendest du das gleiche Attribut zum Zauberwirken wie bei deinem Merkmal Unholdisches Erbe."
+        },
+        {
+          "name": "Unholdisches Erbe",
+          "description": "Du bist mit den Unteren Ebenen verbunden und erhältst dadurch magische Fähigkeiten. Wähle eine Art des Erbes aus (Abyssisch, Chthonisch oder Infernalisch). Du erhältst durch dieses Erbe den Vorzug für die 1. Stufe. Wenn du die 3. und 5. Charakterstufe erreichst, erlernst du einen Zauber eines höheren Grades wie in der Tabelle angegeben. Du hast diesen Zauber stets vorbereitet. Intelligenz oder Weisheit ist dein Attribut zum Wirken der Zauber dieser Abstammungslinie (wähle das Attribut aus, wenn du dich für ein Erbe entscheidest).",
           "choice": {
             "text": "Wähle das unholdische Vermächtnis:",
             "options": [
-              "Abyssisch: Erbe des Abyss und des Pandäoniums.",
-              "Chthonisch: Erbe von Carceri und Hades.",
-              "Infernalisch: Erbe von Gehenna und den Neun Höllen."
+              "Abyssisch (1. Stufe: Gift spritzen | 3. Stufe: Strahl der Übelkeit | 5. Stufe: Person festhalten)",
+              "Chthonisch (1. Stufe: Falsches Leben | 3. Stufe: Schwächestrahl | 5. Stufe: Höllischer Tadel)",
+              "Infernalisch (1. Stufe: Feuerschaden resistent, Zaubertrick Feuerpfeil | 3. Stufe: Höllischer Tadel | 5. Stufe: Dunkelheit)"
             ]
           }
+        }
+      ],
+      "subtypes": null
+    },
+    "Zwerg": {
+      "creatureType": "Humanoid",
+      "size": "Mittelgroß",
+      "sizeDetails": {
+        "from": 120,
+        "to": 150,
+        "unit": "cm"
+      },
+      "speed": {
+        "qty": 9,
+        "unit": "Meter"
+      },
+      "description": "Zwerge wurden in den alten Tagen von einer Gottheit der Schmiede aus der Erde erschaffen. Sie haben in den unterschiedlichen Welten verschiedene Namen – Moradin, Reorx und weitere. Die Gottheit hat ihnen eine Affinität zu Gestein, Metallen und einem unterirdischen Dasein mitgegeben. Außerdem sind sie zäh wie Gebirge und verfügen über eine Lebenserspanne von etwa 350 Jahren.",
+      "traits": [
+        {
+          "name": "Dunkelsicht",
+          "description": "Du hast Dunkelsicht mit einer Reichweite von 36 Metern."
+        },
+        {
+          "name": "Steingespür",
+          "description": "Als Bonusaktion erhältst du zehn Minuten lang Erschütterungssinn mit einer Reichweite von 18 Metern. Du musst dich auf einer steinernen Oberfläche befinden oder eine solche berühren, um sich auf den Erschütterungssinn nutzen zu können. Es kann sich um oberflächliche oder bearbeiteten Stein handeln. Die Häufigkeit, mit der du diese Bonusaktion ausführen kannst, entspricht deinem Übungsbonus. Du erhältst alle verbrauchten Anwendungen nach einer langen Rast zurück."
+        },
+        {
+          "name": "Zwergische Unverwüstlichkeit",
+          "description": "Du bist bei Rettungswürfen zum Vermeiden oder Beenden des Zustands Vergiftet im Vorteil. Außerdem bist du gegen Giftschaden resistent."
+        },
+        {
+          "name": "Zwergische Zähigkeit",
+          "description": "Dein Trefferpunktemaximum wird um 1 und bei jedem Stufenaufstieg um 1 weiteren Punkt erhöht."
         }
       ],
       "subtypes": null
