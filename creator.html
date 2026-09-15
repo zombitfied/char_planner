@@ -115,45 +115,6 @@
             background: #8b0000;
             color: #fff;
         }
-
-        /* Einheitliches, passendes Design für alle Dropdown-Menüs (Selects) */
-        select {
-            background-color: var(--card) !important;
-            color: var(--text) !important;
-            border: 1.5px solid var(--border) !important;
-            border-radius: 8px !important;
-            padding: 10px 14px !important;
-            font-family: serif !important;
-            font-size: 0.95rem !important;
-            appearance: none !important;
-            -webkit-appearance: none !important;
-            -moz-appearance: none !important;
-            background-image: url("data:image/svg+xml;utf8,<svg fill='%238b5a2b' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>") !important;
-            background-repeat: no-repeat !important;
-            background-position: right 10px center !important;
-            background-size: 16px !important;
-            padding-right: 35px !important;
-            cursor: pointer;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
-            transition: all 0.2s ease;
-        }
-
-        select:hover {
-            border-color: var(--accent) !important;
-        }
-
-        select:focus {
-            outline: none !important;
-            border-color: var(--accent) !important;
-            box-shadow: 0 0 5px rgba(139, 90, 43, 0.3);
-        }
-
-        select option {
-            background-color: var(--card);
-            color: var(--text);
-            font-family: serif;
-            padding: 8px;
-        }
     </style>
 </head>
 <body>
@@ -201,20 +162,20 @@
                     <div style="flex: 1.2;">
                         <label for="main-race">Volk</label>
                         <div class="input-row">
-                            <select id="main-race" onchange="onMainRaceChange()"></select>
+                            <select id="main-race" onchange="onMainRaceChange()" style="display:none;"></select>
                             <button type="button" class="info-btn" onclick="showRaceModal()">ℹ</button>
                         </div>
                     </div>
                     <div id="subrace-container" style="flex: 1.8; display: none;">
                         <label for="sub-race">Abstammung</label>
                         <div class="input-row">
-                            <select id="sub-race" onchange="updateSubraceOptions()"></select>
+                            <select id="sub-race" onchange="updateSubraceOptions()" style="display:none;"></select>
                         </div>
                     </div>
                 </div>
                 <div id="special-attr-container" class="special-attribute-box" style="display: none; margin-top:10px;">
                     <label id="special-attr-label">Spezial-Attribut / Option wählen:</label>
-                    <select id="special-attr-select"></select>
+                    <select id="special-attr-select" style="display:none;"></select>
                 </div>
             </div>
 
@@ -223,7 +184,7 @@
                 <div>
                     <label for="class-select">Klasse</label>
                     <div class="input-row">
-                        <select id="class-select" onchange="onClassChange()"></select>
+                        <select id="class-select" onchange="onClassChange()" style="display:none;"></select>
                         <button type="button" class="info-btn" id="class-info-btn" onclick="showClassModal()"><i class="fa-solid fa-wrench" id="class-icon-indicator"></i></button>
                     </div>
                 </div>
@@ -234,32 +195,26 @@
                 <div>
                     <label for="bg-select">Hintergrund</label>
                     <div class="input-row">
-                        <select id="bg-select" onchange="onBgChange()"></select>
+                        <select id="bg-select" onchange="onBgChange()" style="display:none;"></select>
                         <button type="button" class="info-btn" onclick="showBgModal()">ℹ</button>
                     </div>
                 </div>
 
                 <div style="margin-top: 12px; background: var(--btn-back-bg); padding: 10px; border-radius: 8px; border: 1.5px solid var(--border);">
                     <label for="bg-asi-mode" style="margin-top:0; color:var(--accent);">Hintergrund-Attributsbonus (+3 Punkte):</label>
-                    <select id="bg-asi-mode" onchange="onBgAsiModeChange()" style="margin-top:4px; margin-bottom:8px;">
-                        <option value="2_1">+2 auf ein Attribut, +1 auf ein anderes</option>
-                        <option value="1_1_1">+1 auf drei verschiedene Attribute</option>
-                    </select>
-                    <div id="bg-asi-slots" class="grid-3" style="gap:6px;"></div>
+                    <select id="bg-asi-mode" onchange="onBgAsiModeChange()" style="display:none;"></select>
+                    <div id="bg-asi-slots" class="grid-3" style="gap:6px; margin-top:6px;"></div>
                     <div id="bg-asi-error" class="error" style="display:none;">Wähle unterschiedliche Attribute ohne Dopplungen innerhalb der Boni!</div>
                 </div>
 
                 <div id="bg-dynamic-options-container" style="margin-top: 12px; display: none; background: var(--btn-back-bg); padding: 10px; border-radius: 8px; border: 1.5px solid var(--border);">
                     <div id="bg-tool-choice-wrapper" style="margin-bottom: 8px; display: none;">
                         <label id="bg-tool-label" style="margin-top:0; color:var(--accent);">Werkzeug-Wahl:</label>
-                        <select id="bg-tool-select" style="margin-top:4px;"></select>
+                        <select id="bg-tool-select" style="display:none;"></select>
                     </div>
                     <div id="bg-eq-choice-wrapper" style="display: none;">
                         <label id="bg-eq-label" style="margin-top:0; color:var(--accent);">Startausrüstung (Paket wählen):</label>
-                        <select id="bg-eq-select" style="margin-top:4px;">
-                            <option value="A">Option A (Ausrüstungspaket + Gold)</option>
-                            <option value="B">Option B (50 Goldstücke)</option>
-                        </select>
+                        <select id="bg-eq-select" style="display:none;"></select>
                     </div>
                 </div>
             </div>
@@ -267,12 +222,12 @@
             <div class="step-card">
                 <div class="step-title">Start-Attribute zuweisen</div>
                 <div class="grid-3">
-                    <div><label>Stärke</label><select class="array-select" id="str-val" onchange="onStatsChange()"></select></div>
-                    <div><label>Geschicklichkeit</label><select class="array-select" id="dex-val" onchange="onStatsChange()"></select></div>
-                    <div><label>Konstitution</label><select class="array-select" id="con-val" onchange="onStatsChange()"></select></div>
-                    <div><label>Intelligenz</label><select class="array-select" id="int-val" onchange="onStatsChange()"></select></div>
-                    <div><label>Weisheit</label><select class="array-select" id="wis-val" onchange="onStatsChange()"></select></div>
-                    <div><label>Charisma</label><select class="array-select" id="cha-val" onchange="onStatsChange()"></select></div>
+                    <div><label>Stärke</label><select class="array-select" id="str-val" onchange="onStatsChange()" style="display:none;"></select></div>
+                    <div><label>Geschicklichkeit</label><select class="array-select" id="dex-val" onchange="onStatsChange()" style="display:none;"></select></div>
+                    <div><label>Konstitution</label><select class="array-select" id="con-val" onchange="onStatsChange()" style="display:none;"></select></div>
+                    <div><label>Intelligenz</label><select class="array-select" id="int-val" onchange="onStatsChange()" style="display:none;"></select></div>
+                    <div><label>Weisheit</label><select class="array-select" id="wis-val" onchange="onStatsChange()" style="display:none;"></select></div>
+                    <div><label>Charisma</label><select class="array-select" id="cha-val" onchange="onStatsChange()" style="display:none;"></select></div>
                 </div>
                 <div id="array-error" class="error">Wähle 15, 14, 13, 12, 10, 8 ohne Dopplungen!</div>
             </div>
@@ -283,14 +238,14 @@
                     <div>
                         <label for="skill1">Fertigkeit 1</label>
                         <div class="input-row">
-                            <select id="skill1" onchange="validateSkills()"></select>
+                            <select id="skill1" onchange="validateSkills()" style="display:none;"></select>
                             <button type="button" class="info-btn" onclick="showSkillModal('skill1')">ℹ</button>
                         </div>
                     </div>
                     <div>
                         <label for="skill2">Fertigkeit 2</label>
                         <div class="input-row">
-                            <select id="skill2" onchange="validateSkills()"></select>
+                            <select id="skill2" onchange="validateSkills()" style="display:none;"></select>
                             <button type="button" class="info-btn" onclick="showSkillModal('skill2')">ℹ</button>
                         </div>
                     </div>
@@ -474,6 +429,110 @@ function setTheme(themeName) {
     closeThemeModal();
 }
 
+window.addEventListener('click', function(e) {
+    if (!e.target.closest('.custom-select-wrapper')) {
+        document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open'));
+    }
+});
+
+function makeCustomSelect(selectId) {
+    const sel = document.getElementById(selectId);
+    if (!sel) return;
+
+    let parent = sel.parentNode;
+    let existingWrapper = parent.querySelector('.custom-select-wrapper');
+    if (existingWrapper) existingWrapper.remove();
+
+    let wrapper = document.createElement('div');
+    wrapper.className = 'custom-select-wrapper';
+    
+    let displayDiv = document.createElement('div');
+    displayDiv.className = 'custom-select';
+    
+    let optionsDiv = document.createElement('div');
+    optionsDiv.className = 'custom-options';
+
+    function updateDisplay() {
+        let selectedOpt = sel.options[sel.selectedIndex];
+        displayDiv.innerText = selectedOpt ? selectedOpt.text : '-- Wählen --';
+        
+        optionsDiv.innerHTML = '';
+        Array.from(sel.options).forEach(opt => {
+            let item = document.createElement('div');
+            item.className = 'custom-option' + (opt.selected ? ' selected' : '');
+            item.innerText = opt.text;
+            item.onclick = function() {
+                sel.value = opt.value;
+                updateDisplay();
+                wrapper.classList.remove('open');
+                if (sel.onchange) sel.onchange();
+            };
+            optionsDiv.appendChild(item);
+        });
+    }
+
+    displayDiv.onclick = function(e) {
+        e.stopPropagation();
+        document.querySelectorAll('.custom-select-wrapper').forEach(w => {
+            if (w !== wrapper) w.classList.remove('open');
+        });
+        wrapper.classList.toggle('open');
+    };
+
+    wrapper.appendChild(displayDiv);
+    wrapper.appendChild(optionsDiv);
+    parent.insertBefore(wrapper, sel);
+    updateDisplay();
+}
+
+function makeDynamicSelectCustom(sel) {
+    let parent = sel.parentNode;
+    let existingWrapper = parent.querySelector('.custom-select-wrapper');
+    if (existingWrapper) existingWrapper.remove();
+
+    let wrapper = document.createElement('div');
+    wrapper.className = 'custom-select-wrapper';
+    wrapper.style.flex = "1";
+    
+    let displayDiv = document.createElement('div');
+    displayDiv.className = 'custom-select';
+    
+    let optionsDiv = document.createElement('div');
+    optionsDiv.className = 'custom-options';
+
+    function updateDisplay() {
+        let selectedOpt = sel.options[sel.selectedIndex];
+        displayDiv.innerText = selectedOpt && selectedOpt.value ? selectedOpt.text : '-- Wählen --';
+        
+        optionsDiv.innerHTML = '';
+        Array.from(sel.options).forEach(opt => {
+            let item = document.createElement('div');
+            item.className = 'custom-option' + (opt.selected ? ' selected' : '');
+            item.innerText = opt.text;
+            item.onclick = function() {
+                sel.value = opt.value;
+                updateDisplay();
+                wrapper.classList.remove('open');
+                if (sel.onchange) sel.onchange();
+            };
+            optionsDiv.appendChild(item);
+        });
+    }
+
+    displayDiv.onclick = function(e) {
+        e.stopPropagation();
+        document.querySelectorAll('.custom-select-wrapper').forEach(w => {
+            if (w !== wrapper) w.classList.remove('open');
+        });
+        wrapper.classList.toggle('open');
+    };
+
+    wrapper.appendChild(displayDiv);
+    wrapper.appendChild(optionsDiv);
+    parent.insertBefore(wrapper, sel);
+    updateDisplay();
+}
+
 const RACES_JSON_URL = "./rassen.json";
 const BACKGROUNDS_JSON_URL = "./backgrounds.json";
 const COMPENDIUM_JSON_URL = "./compendium.json";
@@ -644,6 +703,7 @@ function loadCharacterIntoCreator(char) {
         if (customSkills[0] && document.getElementById('skill1')) document.getElementById('skill1').value = customSkills[0];
         if (customSkills[1] && document.getElementById('skill2')) document.getElementById('skill2').value = customSkills[1];
     }
+    refreshAllCustomSelects();
 }
 
 function silentBuildCharacter() {
@@ -877,6 +937,7 @@ function initApp() {
         sel.innerHTML = '<option value="">--</option>';
         standardArray.forEach(val => sel.innerHTML += `<option value="${val}">${val}</option>`);
         sel.selectedIndex = idx + 1;
+        makeCustomSelect(sel.id);
     });
 
     onMainRaceChange();
@@ -889,6 +950,16 @@ function populateSelect(id, items) {
     if (!sel) return;
     sel.innerHTML = '';
     items.forEach(i => sel.innerHTML += `<option value="${i}">${i}</option>`);
+    makeCustomSelect(id);
+}
+
+function refreshAllCustomSelects() {
+    document.querySelectorAll('select').forEach(sel => {
+        if (sel.id) makeCustomSelect(sel.id);
+        else if (sel.className.includes('char-cantrip-select') || sel.className.includes('char-spell-select')) {
+            makeDynamicSelectCustom(sel);
+        }
+    });
 }
 
 function openModal(title, text, iconClass = null, subtitle = null) {
@@ -1059,6 +1130,7 @@ function onMainRaceChange() {
         subSelect.innerHTML = `<option value="${mainRace}">${mainRace}</option>`;
         subContainer.style.display = 'none';
     }
+    makeCustomSelect('sub-race');
     updateSubraceOptions();
 }
 
@@ -1077,6 +1149,7 @@ function updateSubraceOptions() {
                     trait.choice.options.forEach(opt => specialSelect.innerHTML += `<option value="${opt}">${opt}</option>`);
                     document.getElementById('special-attr-label').innerText = trait.choice.text || 'Wähle eine Option:';
                     specialContainer.style.display = 'block';
+                    makeCustomSelect('special-attr-select');
                     hasSpecialChoice = true;
                 }
             }
@@ -1106,6 +1179,9 @@ function onClassChange() {
     });
     s1.selectedIndex = 0;
     s2.selectedIndex = skills.length > 1 ? 1 : 0;
+
+    makeCustomSelect('skill1');
+    makeCustomSelect('skill2');
 
     validateSkills();
     updateSpellsUI();
@@ -1137,20 +1213,26 @@ function updateBgAsiUI() {
 
     if (mode === "2_1") {
         slotsContainer.innerHTML = `
-            <div><label style="font-size:0.75rem;">+2 Attribut</label><select id="bg-asi-2" onchange="validateBgAsi()">${optionsHtml}</select></div>
-            <div><label style="font-size:0.75rem;">+1 Attribut</label><select id="bg-asi-1a" onchange="validateBgAsi()">${optionsHtml}</select></div>
+            <div><label style="font-size:0.75rem;">+2 Attribut</label><select id="bg-asi-2" onchange="validateBgAsi()" style="display:none;"></select></div>
+            <div><label style="font-size:0.75rem;">+1 Attribut</label><select id="bg-asi-1a" onchange="validateBgAsi()" style="display:none;"></select></div>
             <div></div>`;
+        document.getElementById('bg-asi-2').innerHTML = optionsHtml;
+        document.getElementById('bg-asi-1a').innerHTML = optionsHtml;
+        makeCustomSelect('bg-asi-2');
+        makeCustomSelect('bg-asi-1a');
         const sel1a = document.getElementById('bg-asi-1a');
         if (sel1a && bgObj.attributes.length > 1) sel1a.selectedIndex = 1;
     } else {
         slotsContainer.innerHTML = `
-            <div><label style="font-size:0.75rem;">+1</label><select id="bg-asi-1a" onchange="validateBgAsi()">${optionsHtml}</select></div>
-            <div><label style="font-size:0.75rem;">+1</label><select id="bg-asi-1b" onchange="validateBgAsi()">${optionsHtml}</select></div>
-            <div><label style="font-size:0.75rem;">+1</label><select id="bg-asi-1c" onchange="validateBgAsi()">${optionsHtml}</select></div>`;
-        const sel1a = document.getElementById('bg-asi-1a'), sel1b = document.getElementById('bg-asi-1b'), sel1c = document.getElementById('bg-asi-1c');
-        if (sel1a && bgObj.attributes.length > 0) sel1a.selectedIndex = 0;
-        if (sel1b && bgObj.attributes.length > 1) sel1b.selectedIndex = 1;
-        if (sel1c && bgObj.attributes.length > 2) sel1c.selectedIndex = 2;
+            <div><label style="font-size:0.75rem;">+1</label><select id="bg-asi-1a" onchange="validateBgAsi()" style="display:none;"></select></div>
+            <div><label style="font-size:0.75rem;">+1</label><select id="bg-asi-1b" onchange="validateBgAsi()" style="display:none;"></select></div>
+            <div><label style="font-size:0.75rem;">+1</label><select id="bg-asi-1c" onchange="validateBgAsi()" style="display:none;"></select></div>`;
+        document.getElementById('bg-asi-1a').innerHTML = optionsHtml;
+        document.getElementById('bg-asi-1b').innerHTML = optionsHtml;
+        document.getElementById('bg-asi-1c').innerHTML = optionsHtml;
+        makeCustomSelect('bg-asi-1a');
+        makeCustomSelect('bg-asi-1b');
+        makeCustomSelect('bg-asi-1c');
     }
     validateBgAsi();
 }
@@ -1162,6 +1244,7 @@ function updateBgToolAndEquipmentUI() {
     const toolWrapper = document.getElementById('bg-tool-choice-wrapper');
     const toolSelect = document.getElementById('bg-tool-select');
     const eqWrapper = document.getElementById('bg-eq-choice-wrapper');
+    const eqSelect = document.getElementById('bg-eq-select');
 
     if (!container) return;
     if (!bgObj) { container.style.display = 'none'; return; }
@@ -1171,12 +1254,14 @@ function updateBgToolAndEquipmentUI() {
         if (toolSelect) {
             toolSelect.innerHTML = '';
             bgObj.tools.choiceA.options.forEach(opt => toolSelect.innerHTML += `<option value="${opt}">${opt}</option>`);
+            makeCustomSelect('bg-tool-select');
         }
         if (toolWrapper) toolWrapper.style.display = 'block';
         hasChoices = true;
     } else { if (toolWrapper) toolWrapper.style.display = 'none'; }
 
     if (bgObj.equipment && bgObj.equipment.choiceA && bgObj.equipment.choiceB) {
+        if (eqSelect) makeCustomSelect('bg-eq-select');
         if (eqWrapper) eqWrapper.style.display = 'block';
         hasChoices = true;
     } else { if (eqWrapper) eqWrapper.style.display = 'none'; }
@@ -1285,7 +1370,12 @@ function updateSpellsUI() {
     if (cantripLabel) cantripLabel.innerText = `Wähle ${maxCantrips} Zaubertricks:`;
     for (let i = 0; i < maxCantrips; i++) {
         let opts = allowedCantrips.map(c => `<option value="${c}">${c}</option>`).join('');
-        cantripGroup.innerHTML += `<div class="input-row"><select class="char-cantrip-select"><option value="">-- Wählen --</option>${opts}</select><button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling)">✨</button></div>`;
+        let row = document.createElement('div');
+        row.className = 'input-row';
+        row.innerHTML = `<select class="char-cantrip-select" style="display:none;"><option value="">-- Wählen --</option>${opts}</select><button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling.querySelector('select') || this.previousElementSibling)">✨</button>`;
+        cantripGroup.appendChild(row);
+        let sel = row.querySelector('.char-cantrip-select');
+        makeDynamicSelectCustom(sel);
     }
 
     let allowedLvl1 = classSpellLists[clsName]?.level1?.length ? classSpellLists[clsName].level1 : Object.keys(spellCompendium.level1);
@@ -1294,7 +1384,12 @@ function updateSpellsUI() {
 
     for (let i = 0; i < maxPrep; i++) {
         let opts = allowedLvl1.map(s => `<option value="${s}">${s}</option>`).join('');
-        lvl1Group.innerHTML += `<div class="input-row"><select class="char-spell-select"><option value="">-- Wählen --</option>${opts}</select><button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling)">I</button></div>`;
+        let row = document.createElement('div');
+        row.className = 'input-row';
+        row.innerHTML = `<select class="char-spell-select" style="display:none;"><option value="">-- Wählen --</option>${opts}</select><button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling.querySelector('select') || this.previousElementSibling)">I</button>`;
+        lvl1Group.appendChild(row);
+        let sel = row.querySelector('.char-spell-select');
+        makeDynamicSelectCustom(sel);
     }
 }
 
