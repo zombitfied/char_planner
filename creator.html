@@ -386,7 +386,8 @@ function requestSwitchToSheet() {
 function confirmPageSwitch(doSave) {
     document.getElementById('change-confirm-modal').style.display = 'none';
     if (doSave) {
-        buildCharacterAndSave();
+        // Hier wird nun aktiv validiert und bei Fehlern gewarnt
+        if (!buildCharacterAndSave()) return; 
     } else {
         loadExistingOrFallbackCharacter();
     }
@@ -551,7 +552,8 @@ function handleUrlModeAndStartup() {
                 return;
             } catch (e) {}
         }
-        buildCharacterAndSave();
+        // Beim Start OHNE aktiven Helden stumm initialisieren, ohne Alert
+        silentBuildCharacter();
         executePageSwitch('create');
     }
 }
@@ -565,7 +567,7 @@ function loadExistingOrFallbackCharacter() {
             return;
         } catch (e) {}
     }
-    buildCharacterAndSave();
+    silentBuildCharacter();
 }
 
 function loadCharacterIntoCreator(char) {
@@ -607,10 +609,62 @@ function loadCharacterIntoCreator(char) {
     }
 }
 
+function silentBuildCharacter() {
+    const name = document.getElementById('char-name').value || "Gimble";
+    const mainRace = document.getElementById('main-race').value || Object.keys(racesData)[0];
+    const subRaceSelect = document.getElementById('sub-race');
+    const subRace = subRaceSelect && subRaceSelect.options.length > 0 ? subRaceSelect.value : mainRace;
+    const clsName = document.getElementById('class-select').value || "Kämpfer";
+    const bg = document.getElementById('bg-select').value || Object.keys(backgrounds)[0];
+    
+    const raceObj = racesData[mainRace] || {};
+    let speedMeters = raceObj.speed?.qty || 9;
+    let speedFt = Math.round(speedMeters * 3.28084 / 5) * 5;
+
+    let rawStats = {
+        STR: parseInt(document.getElementById('str-val')?.value) || 15,
+        DEX: parseInt(document.getElementById('dex-val')?.value) || 14,
+        CON: parseInt(document.getElementById('con-val')?.value) || 13,
+        INT: parseInt(document.getElementById('int-val')?.value) || 12,
+        WIS: parseInt(document.getElementById('wis-val')?.value) || 10,
+        CHA: parseInt(document.getElementById('cha-val')?.value) || 8
+    };
+
+    let stats = { ...rawStats };
+    let mods = {};
+    for (let s in stats) mods[s] = getMod(stats[s]);
+
+    const hpBase = classHpData[clsName]?.base || 8;
+    const hp = hpBase + mods.CON;
+    const ac = 10 + mods.DEX;
+
+    lastBuiltCharacter = {
+        id: 'char_' + Date.now(), 
+        name, 
+        class: clsName, 
+        species: subRace !== mainRace ? `${mainRace} (${subRace})` : mainRace, 
+        mainRace: mainRace,
+        background: bg,
+        level: 1, 
+        hp, 
+        maxHp: hp, 
+        ac, 
+        speed: speedFt, 
+        stats, 
+        mods, 
+        rawStats,
+        skills: [], 
+        cantrips: [], 
+        spells: [], 
+        lastAccess: new Date().toISOString()
+    };
+    renderCharacterToSheet(lastBuiltCharacter);
+}
+
 function buildCharacterAndSave() {
     if (!validateArray() || !validateSkills() || !validateBgAsi()) {
         showCustomAlert("Bitte behebe alle Validierungsfehler im Formular!", "Achtung");
-        return;
+        return false;
     }
 
     const name = document.getElementById('char-name').value || "Unbenannter Held";
@@ -686,6 +740,7 @@ function buildCharacterAndSave() {
     localStorage.setItem('dnd_active_character', JSON.stringify(lastBuiltCharacter));
 
     renderCharacterToSheet(lastBuiltCharacter);
+    return true;
 }
 
 function renderCharacterToSheet(charData) {
