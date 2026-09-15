@@ -507,12 +507,18 @@ select:focus, input:focus {
     color: var(--accent); 
     margin-top: 0; 
 }
-/* --- ECHTES CUSTOM DROPDOWN DESIGN --- */
+/* --- ECHTES CUSTOM DROPDOWN DESIGN (Fix für Z-Index & Überlagerung) --- */
 .custom-select-wrapper {
     position: relative;
     user-select: none;
     width: 100%;
     font-family: serif;
+    z-index: 50; /* Erhöht, damit Boxen nicht überlappen */
+}
+
+/* Wenn das Menü offen ist, liegt es ganz oben über allen nachfolgenden Sektionen */
+.custom-select-wrapper.open {
+    z-index: 99999;
 }
 
 .custom-select {
@@ -557,9 +563,9 @@ select:focus, input:focus {
     background-color: var(--card);
     border: 1.5px solid var(--border);
     border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    z-index: 999;
-    max-height: 220px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    z-index: 999999;
+    max-height: 200px;
     overflow-y: auto;
     display: none;
 }
