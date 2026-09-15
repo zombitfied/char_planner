@@ -40,7 +40,6 @@
             max-width: 600px;
         }
 
-        /* Permanenter Footer mit abgerundeter, rauer SVG-Kante oben */
         .page-footer-nav {
             position: fixed;
             bottom: 0;
@@ -53,7 +52,7 @@
             display: flex;
             justify-content: space-around;
             align-items: center;
-            z-index: 1000;
+            z-index: 100000; /* Höher als alle Dropdowns, damit Footer sicher unten bleibt */
             box-shadow: 0 -4px 15px rgba(0,0,0,0.15);
             padding: 10px 16px;
             box-sizing: border-box;
@@ -97,7 +96,7 @@
             position: fixed;
             top: 16px;
             right: 68px;
-            z-index: 1100;
+            z-index: 110000;
             background: var(--btn-back-bg);
             border: 1.5px solid #8b0000;
             color: #8b0000;
@@ -152,7 +151,7 @@
 
             <div class="page-title">Held/in erstellen</div>
 
-            <div class="step-card">
+            <div class="step-card" style="position: relative; z-index: 40;">
                 <div class="step-title">Identität & Volk</div>
                 <div>
                     <label for="char-name">Name</label>
@@ -179,7 +178,7 @@
                 </div>
             </div>
 
-            <div class="step-card">
+            <div class="step-card" style="position: relative; z-index: 35;">
                 <div class="step-title">Klasse</div>
                 <div>
                     <label for="class-select">Klasse</label>
@@ -190,7 +189,7 @@
                 </div>
             </div>
 
-            <div class="step-card">
+            <div class="step-card" style="position: relative; z-index: 30;">
                 <div class="step-title">Hintergrund</div>
                 <div>
                     <label for="bg-select">Hintergrund</label>
@@ -203,7 +202,7 @@
                 <div style="margin-top: 12px; background: var(--btn-back-bg); padding: 10px; border-radius: 8px; border: 1.5px solid var(--border);">
                     <label for="bg-asi-mode" style="margin-top:0; color:var(--accent);">Hintergrund-Attributsbonus (+3 Punkte):</label>
                     <select id="bg-asi-mode" onchange="onBgAsiModeChange()" style="display:none;"></select>
-                    <div id="bg-asi-slots" class="grid-3" style="gap:6px; margin-top:6px;"></div>
+                    <div id="bg-asi-slots" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 6px;"></div>
                     <div id="bg-asi-error" class="error" style="display:none;">Wähle unterschiedliche Attribute ohne Dopplungen innerhalb der Boni!</div>
                 </div>
 
@@ -219,7 +218,7 @@
                 </div>
             </div>
 
-            <div class="step-card">
+            <div class="step-card" style="position: relative; z-index: 20;">
                 <div class="step-title">Start-Attribute zuweisen</div>
                 <div class="grid-3">
                     <div><label>Stärke</label><select class="array-select" id="str-val" onchange="onStatsChange()" style="display:none;"></select></div>
@@ -232,7 +231,7 @@
                 <div id="array-error" class="error">Wähle 15, 14, 13, 12, 10, 8 ohne Dopplungen!</div>
             </div>
 
-            <div class="step-card">
+            <div class="step-card" style="position: relative; z-index: 10;">
                 <div class="step-title">Fertigkeiten wählen</div>
                 <div style="display: flex; flex-direction: column; gap: 10px;">
                     <div>
@@ -253,7 +252,7 @@
                 <div id="skill-error" class="error">Wähle 2 verschiedene Fertigkeiten, die sich nicht mit deinem Hintergrund überschneiden!</div>
             </div>
 
-            <div class="step-card" id="spells-step-card" style="margin-bottom: 20px;">
+            <div class="step-card" id="spells-step-card" style="margin-bottom: 20px; position: relative; z-index: 5;">
                 <div class="step-title">Klassen-Zauber wählen</div>
                 <label id="cantrip-label">Zaubertricks wählen</label>
                 <div class="spell-container" id="cantrips-group"></div>
@@ -551,8 +550,8 @@ const attributeDescriptions = {
 };
 
 const attrNamesDE = {
-    "STR": "Stärke", "DEX": "Geschicklichkeit", "CON": "Konstitution",
-    "INT": "Intelligenz", "WIS": "Weisheit", "CHA": "Charisma"
+    "STR": "Stärke", "DEX": "Gewandtheit", "CON": "Konst.",
+    "INT": "Intell.", "WIS": "Weisheit", "CHA": "Charisma"
 };
 
 const classFileMap = {
@@ -929,8 +928,13 @@ function initApp() {
     Object.keys(classFileMap).forEach(clsName => {
         classSel.innerHTML += `<option value="${clsName}">${clsName}</option>`;
     });
+    makeCustomSelect('class-select');
 
     populateSelect('bg-select', Object.keys(backgrounds));
+    populateSelect('bg-asi-mode', [
+        { value: "2_1", text: "+2 auf einen Wert, +1 auf einen anderen" },
+        { value: "1_1_1", text: "+1 auf drei verschiedene Werte" }
+    ]);
 
     const arraySelects = document.querySelectorAll('.array-select');
     arraySelects.forEach((sel, idx) => {
@@ -949,7 +953,13 @@ function populateSelect(id, items) {
     const sel = document.getElementById(id);
     if (!sel) return;
     sel.innerHTML = '';
-    items.forEach(i => sel.innerHTML += `<option value="${i}">${i}</option>`);
+    items.forEach(i => {
+        if (typeof i === 'object') {
+            sel.innerHTML += `<option value="${i.value}">${i.text}</option>`;
+        } else {
+            sel.innerHTML += `<option value="${i}">${i}</option>`;
+        }
+    });
     makeCustomSelect(id);
 }
 
@@ -1213,8 +1223,8 @@ function updateBgAsiUI() {
 
     if (mode === "2_1") {
         slotsContainer.innerHTML = `
-            <div><label style="font-size:0.75rem;">+2 Attribut</label><select id="bg-asi-2" onchange="validateBgAsi()" style="display:none;"></select></div>
-            <div><label style="font-size:0.75rem;">+1 Attribut</label><select id="bg-asi-1a" onchange="validateBgAsi()" style="display:none;"></select></div>
+            <div><label style="font-size:0.7rem;">+2 Wert</label><select id="bg-asi-2" onchange="validateBgAsi()" style="display:none;"></select></div>
+            <div><label style="font-size:0.7rem;">+1 Wert</label><select id="bg-asi-1a" onchange="validateBgAsi()" style="display:none;"></select></div>
             <div></div>`;
         document.getElementById('bg-asi-2').innerHTML = optionsHtml;
         document.getElementById('bg-asi-1a').innerHTML = optionsHtml;
@@ -1224,9 +1234,9 @@ function updateBgAsiUI() {
         if (sel1a && bgObj.attributes.length > 1) sel1a.selectedIndex = 1;
     } else {
         slotsContainer.innerHTML = `
-            <div><label style="font-size:0.75rem;">+1</label><select id="bg-asi-1a" onchange="validateBgAsi()" style="display:none;"></select></div>
-            <div><label style="font-size:0.75rem;">+1</label><select id="bg-asi-1b" onchange="validateBgAsi()" style="display:none;"></select></div>
-            <div><label style="font-size:0.75rem;">+1</label><select id="bg-asi-1c" onchange="validateBgAsi()" style="display:none;"></select></div>`;
+            <div><label style="font-size:0.7rem;">+1 Wert</label><select id="bg-asi-1a" onchange="validateBgAsi()" style="display:none;"></select></div>
+            <div><label style="font-size:0.7rem;">+1 Wert</label><select id="bg-asi-1b" onchange="validateBgAsi()" style="display:none;"></select></div>
+            <div><label style="font-size:0.7rem;">+1 Wert</label><select id="bg-asi-1c" onchange="validateBgAsi()" style="display:none;"></select></div>`;
         document.getElementById('bg-asi-1a').innerHTML = optionsHtml;
         document.getElementById('bg-asi-1b').innerHTML = optionsHtml;
         document.getElementById('bg-asi-1c').innerHTML = optionsHtml;
@@ -1261,7 +1271,13 @@ function updateBgToolAndEquipmentUI() {
     } else { if (toolWrapper) toolWrapper.style.display = 'none'; }
 
     if (bgObj.equipment && bgObj.equipment.choiceA && bgObj.equipment.choiceB) {
-        if (eqSelect) makeCustomSelect('bg-eq-select');
+        if (eqSelect) {
+            eqSelect.innerHTML = `
+                <option value="A">Option A (Ausrüstungspaket)</option>
+                <option value="B">Option B (50 Goldstücke)</option>
+            `;
+            makeCustomSelect('bg-eq-select');
+        }
         if (eqWrapper) eqWrapper.style.display = 'block';
         hasChoices = true;
     } else { if (eqWrapper) eqWrapper.style.display = 'none'; }
