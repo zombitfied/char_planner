@@ -115,6 +115,45 @@
             background: #8b0000;
             color: #fff;
         }
+
+        /* Einheitliches, passendes Design für alle Dropdown-Menüs (Selects) */
+        select {
+            background-color: var(--card) !important;
+            color: var(--text) !important;
+            border: 1.5px solid var(--border) !important;
+            border-radius: 8px !important;
+            padding: 10px 14px !important;
+            font-family: serif !important;
+            font-size: 0.95rem !important;
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+            background-image: url("data:image/svg+xml;utf8,<svg fill='%238b5a2b' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>") !important;
+            background-repeat: no-repeat !important;
+            background-position: right 10px center !important;
+            background-size: 16px !important;
+            padding-right: 35px !important;
+            cursor: pointer;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+
+        select:hover {
+            border-color: var(--accent) !important;
+        }
+
+        select:focus {
+            outline: none !important;
+            border-color: var(--accent) !important;
+            box-shadow: 0 0 5px rgba(139, 90, 43, 0.3);
+        }
+
+        select option {
+            background-color: var(--card);
+            color: var(--text);
+            font-family: serif;
+            padding: 8px;
+        }
     </style>
 </head>
 <body>
@@ -386,7 +425,6 @@ function requestSwitchToSheet() {
 function confirmPageSwitch(doSave) {
     document.getElementById('change-confirm-modal').style.display = 'none';
     if (doSave) {
-        // Hier wird nun aktiv validiert und bei Fehlern gewarnt
         if (!buildCharacterAndSave()) return; 
     } else {
         loadExistingOrFallbackCharacter();
@@ -552,7 +590,6 @@ function handleUrlModeAndStartup() {
                 return;
             } catch (e) {}
         }
-        // Beim Start OHNE aktiven Helden stumm initialisieren, ohne Alert
         silentBuildCharacter();
         executePageSwitch('create');
     }
