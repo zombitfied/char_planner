@@ -250,9 +250,7 @@
           "description": "Du verkörperst Urmacht. Deine Werte für Stärke und Konstitution werden um 4 erhöht (auf höchtens 25)."
         }
       ]
-    }
-  }
-}
+    },
     "Barde": {
       "summary": "Inspirierender Musiker, Magiewirker und Tänzer",
       "hitDice": "d8",
@@ -446,8 +444,7 @@
           "9th": {"17": 1, "18": 1, "19": 1, "20": 1}
         }
       }
-    }
-    ,
+    },
     "Druide": {
       "summary": "Priester der Natur mit Urmacht",
       "hitDice": "d8",
@@ -652,8 +649,7 @@
           "9th": {"17": 1, "18": 1, "19": 1, "20": 1}
         }
       }
-    }
-    ,
+    },
     "Hexenmeister": {
       "summary": "Ein Okkultist, durch außerweltliche Pakte ermächtigt",
       "hitDice": "d8",
@@ -840,8 +836,7 @@
           }
         }
       }
-    }
-    ,
+    },
     "Kämpfer": {
       "summary": "Meister aller Waffen und Rüstungen",
       "hitDice": "d10",
@@ -1034,8 +1029,7 @@
           "4th": {"19": 1, "20": 1}
         }
       }
-    }
-    ,
+    },
     "Kleriker": {
       "summary": "Wundertätiger Priester mit göttlichen Kräften",
       "hitDice": "d8",
@@ -1223,8 +1217,7 @@
           "9th": {"17": 1, "18": 1, "19": 1, "20": 1}
         }
       }
-    }
-    ,
+    },
     "Magier": {
       "summary": "Glehrter Magieanwender von arkaner Macht",
       "hitDice": "d6",
@@ -1400,8 +1393,7 @@
           "9th": {"17": 1, "18": 1, "19": 1, "20": 1}
         }
       }
-    }
-    ,
+    },
     "Mönch": {
       "summary": "Kampfkünstler mit übernatürlichem Fokus",
       "hitDice": "d8",
@@ -1600,8 +1592,7 @@
           "description": "Erhöhe deine Werte für Geschicklichkeit und Weisheit um je 4 (auf höchstens 25)."
         }
       ]
-    }
-    ,
+    },
     "Paladin": {
       "summary": "Ein ergebener Krieger der Heiligen Schwüre",
       "hitDice": "d10",
@@ -1663,7 +1654,7 @@
         {
           "level": 2,
           "name": "Paladin-Niederstrecken",
-          "description": "Der Zauber Göttliches Niederstrecken ist stets vorbereitet und kann ohne Zauberplatz (einmal pro langer Rast) gewirkt werden."
+          "description": "Der Zauber Göttliches Niederstrecken ist stets vorbereitet und kann mehrfach ohne Zauberplatz (einmal pro langer Rast) gewirkt werden."
         },
         {
           "level": 3,
@@ -1805,8 +1796,7 @@
           "5th": {"17": 1, "18": 1, "19": 2, "20": 2}
         }
       }
-    }
-    ,
+    },
     "Schurke": {
       "summary": "Geschickter Spezialist in Heimlichkeit und Täuschung",
       "hitDice": "d8",
@@ -2012,8 +2002,7 @@
           "4th": {"19": 1, "20": 1}
         }
       }
-    }
-    ,
+    },
     "Waldläufer": {
       "summary": "Fahrender Krieger der urtümlichen Magie",
       "hitDice": "d10",
@@ -2218,8 +2207,7 @@
           "5th": {"17": 1, "18": 1, "19": 2, "20": 2}
         }
       }
-    }
-    ,
+    },
     "Zauberer": {
       "summary": "Schillernder Zauberwirker voll intuitiver Magie",
       "hitDice": "d6",
@@ -2395,8 +2383,7 @@
           "9th": {"17": 1, "18": 1, "19": 1, "20": 1}
         }
       }
-    }
-    ,
+    },
     "Artificer": {
       "summary": "A Magical Crafter and an Inventor of Wonders",
       "hitDice": "d8",
@@ -2471,7 +2458,7 @@
                 "name": "Armorer",
                 "features": [
                   {"level": 3, "name": "Tools of the Trade", "description": "Übung mit Smith's Tools und schwerer Rüstung; halbe Handwerkszeit für nicht-magische Rüstung."},
-                  {"level": 3, "name": "Arcane Armor", "description": "Verwandle Rüstung in Arcane Armor als magische Aktion (ohne Stärkevoraussetzung, integrierter Fokus)."},
+                  {"level": 3, "name": "Arcane Armor", "description": "Verwende Rüstung in Arcane Armor als magische Aktion (ohne Stärkevoraussetzung, integrierter Fokus)."},
                   {"level": 3, "name": "Armor Model", "description": "Wähle ein Rüstungsmodell: Dreadnought, Guardian oder Infiltrator."},
                   {"level": 5, "name": "Extra Attack", "description": "Führe zwei Angriffe bei einer Angriffsaktion aus."},
                   {"level": 9, "name": "Improved Armorer", "description": "Erhalte Rüstungs-Replikationspläne und verbesserte Boni."},
@@ -2614,4 +2601,5 @@
         }
       }
     }
+  }
 }
