@@ -2396,3 +2396,222 @@
         }
       }
     }
+    ,
+    "Artificer": {
+      "summary": "A Magical Crafter and an Inventor of Wonders",
+      "hitDice": "d8",
+      "hpAt1stLevel": "8 + Konstitutionsmodifikator",
+      "hpPerLevel": "5 + Konstitutionsmodifikator",
+      "primaryAbility": "Intelligenz",
+      "savingThrows": ["Konstitution", "Intelligenz"],
+      "proficiencies": {
+        "armor": ["Leichte Rüstung", "Mittlere Rüstung", "Schilde"],
+        "weapons": ["Einfache Waffen"],
+        "tools": ["Diebeswerkzeug", "Tinker's Tools", "Ein Handwerkszeug nach Wahl"],
+        "skills": {
+          "from": [
+            "Arkane Kunde", "Geschichte", "Heilkunde", "Naturkunde",
+            "Nachforschungen", "Wahrnehmung", "Fingerfertigkeit"
+          ],
+          "choose": 2
+        }
+      },
+      "startingEquipment": {
+        "choiceA": [
+          {"name": "Studded Leather Armor", "qty": 1},
+          {"name": "Dolch", "qty": 1},
+          {"name": "Diebeswerkzeug", "qty": 1},
+          {"name": "Tinker's Tools", "qty": 1},
+          {"name": "Dungeoneer's Pack", "qty": 1},
+          {"name": "Gold", "qty": 16, "unit": "GM"}
+        ],
+        "choiceB": [
+          {"name": "Gold", "qty": 150, "unit": "GM"}
+        ]
+      },
+      "multiClassing": {
+        "prerequisites": {"INT": 13},
+        "proficienciesGranted": ["Tinker's Tools", "Übung in einer Fertigkeit deiner Wahl aus der Artificer-Liste", "Leichte und mittlere Rüstung", "Schilde"]
+      },
+      "features": [
+        {
+          "level": 1,
+          "name": "Spellcasting",
+          "description": "Wirke Artificer-Zauber unter Verwendung von Tools Required als arkaner Fokus. Intelligenz ist deine Zauberwirkfähigkeit."
+        },
+        {
+          "level": 1,
+          "name": "Tinker's Magic",
+          "description": "Du beherrschst den Zaubertrick Mending und kannst als magische Aktion kleine Objekte aus einer Liste erschaffen."
+        },
+        {
+          "level": 2,
+          "name": "Replicate Magic Item",
+          "description": "Erlerne arkane Pläne, um magische Gegenstände (Magic Item Plans) herzustellen."
+        },
+        {
+          "level": 3,
+          "name": "Artificer Subclass",
+          "description": "Du erhältst eine Artificer-Unterklasse deiner Wahl (Alchemist, Armorer, Artillerist, Battle Smith, Cartographer).",
+          "choice": {
+            "text": "Wähle deine Artificer-Unterklasse:",
+            "availableAtLevel": 3,
+            "options": [
+              {
+                "name": "Alchemist",
+                "features": [
+                  {"level": 3, "name": "Tools of the Trade", "description": "Übung in Alchemist's Supplies und dem Herbalism Kit."},
+                  {"level": 3, "name": "Experimental Elixir", "description": "Braue nach einer langen Rast magische Elixiere mit zufälligen oder gewählten Effekten."},
+                  {"level": 5, "name": "Alchemical Savant", "description": "Erhalte Boni auf Heilung oder Schaden bei Zaubern, die Alchemist's Supplies nutzen."},
+                  {"level": 9, "name": "Restorative Reagents", "description": "Wirke Lesser Restoration ohne Materialverbrauch."},
+                  {"level": 15, "name": "Chemical Mastery", "description": "Erhalte Alchemical Eruption, Resistenz gegen Säure/Gift/Feuer, Immunität gegen Vergiftung und Conjured Cauldron."}
+                ]
+              },
+              {
+                "name": "Armorer",
+                "features": [
+                  {"level": 3, "name": "Tools of the Trade", "description": "Übung mit Smith's Tools und schwerer Rüstung; halbe Handwerkszeit für nicht-magische Rüstung."},
+                  {"level": 3, "name": "Arcane Armor", "description": "Verwandle Rüstung in Arcane Armor als magische Aktion (ohne Stärkevoraussetzung, integrierter Fokus)."},
+                  {"level": 3, "name": "Armor Model", "description": "Wähle ein Rüstungsmodell: Dreadnought, Guardian oder Infiltrator."},
+                  {"level": 5, "name": "Extra Attack", "description": "Führe zwei Angriffe bei einer Angriffsaktion aus."},
+                  {"level": 9, "name": "Improved Armorer", "description": "Erhalte Rüstungs-Replikationspläne und verbesserte Boni."},
+                  {"level": 15, "name": "Perfected Armor", "description": "Erhalte stärkere Effekte für dein gewähltes Rüstungsmodell (Schaden, Teleportation, Reaktionsangriffe)."}
+                ]
+              },
+              {
+                "name": "Artillerist",
+                "features": [
+                  {"level": 3, "name": "Tools of the Trade", "description": "Übung mit Martial Weapons und Woodcarver's Tools."},
+                  {"level": 3, "name": "Eldritch Cannon", "description": "Erschaffe eine magische Eldritch Cannon (Flamethrower, Force Ballista oder Protector)."},
+                  {"level": 5, "name": "Arcane Firearm", "description": "Verwandle einen Stab, Zauberstab oder Zepter in ein Arcane Firearm für Bonusschaden."},
+                  {"level": 9, "name": "Explosive Cannon", "description": "Erhöhe den Schaden deiner Eldritch Cannon um 1W8 und erhalte die Detonations-Option."},
+                  {"level": 15, "name": "Fortified Position", "description": "Erschaffe zwei Kanonen gleichzeitig oder gewähre Verbündeten Halbedeckung."}
+                ]
+              },
+              {
+                "name": "Battle Smith",
+                "features": [
+                  {"level": 3, "name": "Tools of the Trade", "description": "Übung mit Smith's Tools und verringerte Handwerkszeit."},
+                  {"level": 3, "name": "Battle Ready", "description": "Greife mit Intelligenz statt Stärke/Geschicklichkeit bei magischen Waffen an und erhalte Kriegswaffen-Übung."},
+                  {"level": 3, "name": "Steel Defender", "description": "Erschaffe einen treuen Steel Defender, der im Kampf an deiner Seite agiert und Angriffe abfängt."},
+                  {"level": 5, "name": "Extra Attack", "description": "Führe zwei Angriffe bei einer Angriffsaktion aus (einer davon kann an den Steel Defender delegiert werden)."},
+                  {"level": 9, "name": "Arcane Jolt", "description": "Füge zusätzlichen Energieschaden bei Treffern hinzu oder heile Verbündete magisch."},
+                  {"level": 15, "name": "Improved Defender", "description": "Erhöhe den Schaden und die Heilung von Arcane Jolt sowie die Effektivität von Deflect Attack."}
+                ]
+              },
+              {
+                "name": "Cartographer",
+                "features": [
+                  {"level": 3, "name": "Tools of the Trade", "description": "Übung mit Calligrapher's Supplies und Cartographer's Tools sowie halbe Schriftrollen-Herstellungszeit."},
+                  {"level": 3, "name": "Adventurer's Atlas", "description": "Erstelle magische Karten für Verbündete, die Positions-Boni und Initiative-Vorteile (1W4) gewähren."},
+                  {"level": 3, "name": "Mapping Magic", "description": "Wirke Faerie Fire kostenlos und nutze Portal Jump zur Teleportation."},
+                  {"level": 5, "name": "Guided Precision", "description": "Füge Boni auf Schadens- oder Angriffswürfe basierend auf Karten hinzu."},
+                  {"level": 9, "name": "Ingenious Movement", "description": "Verwende Flash of Genius, um Verbündete zu versetzen."},
+                  {"level": 15, "name": "Superior Atlas", "description": "Erhalte Safe Haven, Unerring Path und kostenloses Find the Path."}
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "level": 4,
+          "name": "Ability Score Improvement",
+          "description": "Erhöhe einen Attributswert um 2 oder zwei um je 1 (wiederholt sich auf Stufe 8, 12 und 16)."
+        },
+        {
+          "level": 6,
+          "name": "Magic Item Tinker",
+          "description": "Erweiterung der Replicate-Magic-Item-Funktionen."
+        },
+        {
+          "level": 7,
+          "name": "Flash of Genius",
+          "description": "Addiere deinen Intelligenzmodifikator per Reaktion auf einen misslungenen Attributs- oder Rettungswurf von dir oder Verbündeten."
+        },
+        {
+          "level": 10,
+          "name": "Magic Item Adept",
+          "description": "Du kannst dich nun auf bis zu vier magische Gegenstände gleichzeitig einstimmen (Attunement)."
+        },
+        {
+          "level": 11,
+          "name": "Spell-Storing Item",
+          "description": "Speichere einen Zauber der Stufe 1 oder 2 in einem Gegenstand, um ihn mehrfach ohne Zauberplätze zu wirken."
+        },
+        {
+          "level": 14,
+          "name": "Advanced Artifice",
+          "description": "Einstimmung auf bis zu fünf Gegenstände und verkürzte Rast-Erholung für Flash of Genius."
+        },
+        {
+          "level": 18,
+          "name": "Magic Item Master",
+          "description": "Du kannst dich nun auf bis zu sechs magische Gegenstände gleichzeitig einstimmen."
+        },
+        {
+          "level": 19,
+          "name": "Epic Boon",
+          "description": "Erhalte ein Epic Boon Talent oder ein anderes Talent deiner Wahl."
+        },
+        {
+          "level": 20,
+          "name": "Soul of Artifice",
+          "description": "Erhalte Boni auf Rettungswürfe pro eingestimmtem Gegenstand und Cheat-Death-Mechaniken bei 0 Trefferpunkten."
+        }
+      ],
+      "spellcasting": {
+        "ability": "Intelligenz",
+        "cantripsKnown": [
+          {"level": 1, "count": 2},
+          {"level": 2, "count": 2},
+          {"level": 3, "count": 2},
+          {"level": 4, "count": 2},
+          {"level": 5, "count": 2},
+          {"level": 6, "count": 2},
+          {"level": 7, "count": 2},
+          {"level": 8, "count": 2},
+          {"level": 9, "count": 2},
+          {"level": 10, "count": 3},
+          {"level": 11, "count": 3},
+          {"level": 12, "count": 3},
+          {"level": 13, "count": 3},
+          {"level": 14, "count": 3},
+          {"level": 15, "count": 4},
+          {"level": 16, "count": 4},
+          {"level": 17, "count": 4},
+          {"level": 18, "count": 4},
+          {"level": 19, "count": 4},
+          {"level": 20, "count": 4}
+        ],
+        "spellsPrepared": [
+          {"level": 1, "count": 2},
+          {"level": 2, "count": 3},
+          {"level": 3, "count": 4},
+          {"level": 4, "count": 5},
+          {"level": 5, "count": 6},
+          {"level": 6, "count": 6},
+          {"level": 7, "count": 7},
+          {"level": 8, "count": 7},
+          {"level": 9, "count": 9},
+          {"level": 10, "count": 9},
+          {"level": 11, "count": 10},
+          {"level": 12, "count": 10},
+          {"level": 13, "count": 11},
+          {"level": 14, "count": 11},
+          {"level": 15, "count": 12},
+          {"level": 16, "count": 12},
+          {"level": 17, "count": 14},
+          {"level": 18, "count": 14},
+          {"level": 19, "count": 15},
+          {"level": 20, "count": 15}
+        ],
+        "spellSlotsByLevel": {
+          "1st": {"1": 2, "2": 2, "3": 3, "4": 3, "5": 4, "6": 4, "7": 4, "8": 4, "9": 4, "10": 4, "11": 4, "12": 4, "13": 4, "14": 4, "15": 4, "16": 4, "17": 4, "18": 4, "19": 4, "20": 4},
+          "2nd": {"3": 2, "4": 2, "5": 2, "6": 2, "7": 3, "8": 3, "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "3rd": {"5": 2, "6": 2, "7": 2, "8": 2, "9": 2, "10": 2, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "4th": {"7": 1, "8": 1, "9": 1, "10": 1, "11": 1, "12": 1, "13": 1, "14": 1, "15": 2, "16": 2, "17": 3, "18": 3, "19": 3, "20": 3},
+          "5th": {"13": 1, "14": 1, "15": 1, "16": 1, "17": 2, "18": 2, "19": 2, "20": 2}
+        }
+      }
+    }
+}
