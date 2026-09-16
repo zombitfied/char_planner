@@ -178,9 +178,9 @@
                 </div>
             </div>
 
-            <!-- KLASSE KASTEN (Inkl. Zauberwahl, die zur Klasse gehört) -->
+            <!-- KLASSE KASTEN (Inkl. klassenspezifischer Ausrüstung & Zauber) -->
             <div class="step-card">
-                <div class="step-title">Klasse & Klassen-Optionen</div>
+                <div class="step-title">Klasse & Optionen</div>
                 <div style="display: flex; flex-direction: column; gap: 10px;">
                     <div>
                         <label for="class-select">Klasse wählen</label>
@@ -188,6 +188,22 @@
                             <select id="class-select" onchange="onClassChange()"></select>
                             <button type="button" class="info-btn" id="class-info-btn" onclick="showClassModal()"><i class="fa-solid fa-wrench" id="class-icon-indicator"></i></button>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Dynamische klassenspezifische Wahlen (Instrumente, Werkzeuge etc.) -->
+                <div id="class-dynamic-options-container" style="margin-top: 12px; display: none; background: var(--btn-back-bg); padding: 10px; border-radius: 8px; border: 1.5px solid var(--border);">
+                    <div id="class-choice-wrapper-1" style="margin-bottom: 8px; display: none;">
+                        <label id="class-label-1" style="margin-top:0; color:var(--accent);">Wahl 1:</label>
+                        <select id="class-select-1" style="margin-top:4px;"></select>
+                    </div>
+                    <div id="class-choice-wrapper-2" style="margin-bottom: 8px; display: none;">
+                        <label id="class-label-2" style="margin-top:0; color:var(--accent);">Wahl 2:</label>
+                        <select id="class-select-2" style="margin-top:4px;"></select>
+                    </div>
+                    <div id="class-choice-wrapper-3" style="display: none;">
+                        <label id="class-label-3" style="margin-top:0; color:var(--accent);">Wahl 3:</label>
+                        <select id="class-select-3" style="margin-top:4px;"></select>
                     </div>
                 </div>
 
@@ -251,8 +267,9 @@
                 <div id="array-error" class="error">Wähle 15, 14, 13, 12, 10, 8 ohne Dopplungen!</div>
             </div>
 
+            <!-- FERTIGKEITEN GANZ UNTEN -->
             <div class="step-card">
-                <div class="step-title">Fertigkeiten wählen (Klasse)</div>
+                <div class="step-title">Fertigkeiten wählen</div>
                 <div style="display: flex; flex-direction: column; gap: 10px;">
                     <div>
                         <label for="skill1">Fertigkeit 1</label>
@@ -481,6 +498,18 @@ const classSkillsData = {
     "Zauberer": ["Arkane Kunde", "Einschüchtern", "Motiv erkennen", "Religion", "Täuschen", "Überzeugen"],
     "Hexenmeister": ["Arkankunde", "Einschüchtern", "Geschichte", "Investigation", "Naturkunde", "Religion", "Täuschen"],
     "Magier": ["Arkankunde", "Einblick", "Geschichte", "Investigation", "Medizin", "Religion"]
+};
+
+// Klassenspezifische Auswahlen (z. B. Musikinstrumente für Barden, Werkzeuge für Mönche)
+const classChoicesData = {
+    "Barde": [
+        { label: "Musikinstrument 1", options: ["Laute", "Flöte", "Harfe", "Trommel", "Lyra"] },
+        { label: "Musikinstrument 2", options: ["Laute", "Flöte", "Harfe", "Trommel", "Lyra"] },
+        { label: "Musikinstrument 3", options: ["Laute", "Flöte", "Harfe", "Trommel", "Lyra"] }
+    ],
+    "Mönch": [
+        { label: "Werkzeug oder Musikinstrument", options: ["Tüftlerwerkzeuge", "Alchemistenbedarf", "Laute", "Flöte", "Satz Spielkarten"] }
+    ]
 };
 
 const classHpData = {
@@ -968,22 +997,52 @@ function onClassChange() {
     const clsName = document.getElementById('class-select').value;
     updateClassIconDisplay();
 
+    // Fertigkeiten aktualisieren
     const s1 = document.getElementById('skill1');
     const s2 = document.getElementById('skill2');
-    if (!s1 || !s2) return;
+    if (s1 && s2) {
+        s1.innerHTML = ''; s2.innerHTML = '';
+        const skills = classSkillsData[clsName] || ["Akrobatik", "Athletik", "Einblick", "Wahrnehmung"];
+        skills.forEach(sk => {
+            s1.innerHTML += `<option value="${sk}">${sk}</option>`;
+            s2.innerHTML += `<option value="${sk}">${sk}</option>`;
+        });
+        s1.selectedIndex = 0;
+        s2.selectedIndex = skills.length > 1 ? 1 : 0;
+        validateSkills();
+    }
 
-    s1.innerHTML = ''; s2.innerHTML = '';
-
-    const skills = classSkillsData[clsName] || ["Akrobatik", "Athletik", "Einblick", "Wahrnehmung"];
-    skills.forEach(sk => {
-        s1.innerHTML += `<option value="${sk}">${sk}</option>`;
-        s2.innerHTML += `<option value="${sk}">${sk}</option>`;
-    });
-    s1.selectedIndex = 0;
-    s2.selectedIndex = skills.length > 1 ? 1 : 0;
-
-    validateSkills();
+    updateClassChoicesUI();
     updateSpellsUI();
+}
+
+function updateClassChoicesUI() {
+    const clsName = document.getElementById('class-select').value;
+    const container = document.getElementById('class-dynamic-options-container');
+    const choices = classChoicesData[clsName];
+
+    if (!container) return;
+    if (!choices || choices.length === 0) {
+        container.style.display = 'none';
+        return;
+    }
+
+    container.style.display = 'block';
+    for (let i = 1; i <= 3; i++) {
+        let wrapper = document.getElementById(`class-choice-wrapper-${i}`);
+        let label = document.getElementById(`class-label-${i}`);
+        let select = document.getElementById(`class-select-${i}`);
+        let choiceConfig = choices[i - 1];
+
+        if (choiceConfig) {
+            label.innerText = choiceConfig.label;
+            select.innerHTML = '';
+            choiceConfig.options.forEach(opt => select.innerHTML += `<option value="${opt}">${opt}</option>`);
+            wrapper.style.display = 'block';
+        } else {
+            wrapper.style.display = 'none';
+        }
+    }
 }
 
 function onBgChange() {
@@ -1255,12 +1314,22 @@ function renderEquipmentSectionInSheet(clsName, bgCustomData) {
     let classItems = [];
     if (clsName === "Artifizier") classItems = ["1 Dolch", "1 Schuppenpanzer", "1 Tüftlerwerkzeuge", "1 Materialkomponentenbeutel"];
     else if (clsName === "Barbar") classItems = ["1 Zweihandaxt", "4 Wurfspeer", "1 Entdeckerausrüstung"];
-    else if (clsName === "Barde") classItems = ["1 Rapier", "1 Laute", "1 Diplomatenausrüstung", "1 Leder"];
+    else if (clsName === "Barde") classItems = ["1 Laute", "1 Diplomatenausrüstung", "1 Leder"];
     else if (clsName === "Kleriker") classItems = ["1 Streitkolben", "1 Kettenhemd", "1 Heiliges Symbol", "1 Entdeckerausrüstung"];
     else if (clsName === "Kämpfer") classItems = ["1 Langschwert", "1 Plattenpanzer", "1 Schild", "1 Gewölbeforscherausrüstung"];
     else classItems = ["1 Dolch", "1 Entdeckerausrüstung"];
 
-    let rawList = [...classItems, bgCustomData.equipment, bgCustomData.tools];
+    // Zusätzliche klassenspezifische Auswahlen mit einbeziehen
+    let classChoices = [];
+    for (let i = 1; i <= 3; i++) {
+        let sel = document.getElementById(`class-select-${i}`);
+        let wrapper = document.getElementById(`class-choice-wrapper-${i}`);
+        if (wrapper && wrapper.style.display !== 'none' && sel) {
+            classChoices.push(sel.value);
+        }
+    }
+
+    let rawList = [...classItems, ...classChoices, bgCustomData.equipment, bgCustomData.tools];
     let accumulated = accumulateItems(rawList);
 
     let rowsHtml = accumulated.map(item => `
