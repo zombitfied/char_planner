@@ -134,7 +134,6 @@
             border-radius: 4px;
         }
 
-        /* Custom Dropdown im Seiten-Design (absoluter Fix gegen Überdeckung) */
         .custom-dropdown-wrapper {
             position: relative;
             width: 100%;
@@ -155,7 +154,6 @@
             box-sizing: border-box;
             font-size: 0.95rem;
         }
-        /* Zentrales Dropdown-Menü wird per JS absolut an den Viewport / Body oder absolut mit hohem Z-Index geheftet */
         .custom-dropdown-menu {
             position: fixed;
             background: var(--card, #fff);
@@ -167,6 +165,7 @@
             max-height: 250px;
             overflow-y: auto;
             box-sizing: border-box;
+            -webkit-overflow-scrolling: touch;
         }
         .custom-dropdown-item {
             padding: 12px 14px;
@@ -465,8 +464,8 @@
     </div>
 </div>
 
-<!-- Globaler Container für das aktive Dropdown-Menü (verhindert Abgeschnittenwerden durch overflow:hidden) -->
-<div id="global-dropdown-menu" class="custom-dropdown-menu"></div>
+<!-- Globaler Container für das aktive Dropdown-Menü -->
+<div id="global-dropdown-menu" class="custom-dropdown-menu" onclick="event.stopPropagation()"></div>
 
 <!-- MODAL: Änderungen übernehmen Abfrage -->
 <div id="change-confirm-modal" class="modal-overlay" style="display:none;">
@@ -579,14 +578,14 @@ window.onload = async function() {
     }
 };
 
-// Schließt das globale Dropdown bei Klick außerhalb
+// Schließt das Menü nur bei Klick außerhalb des Triggers und außerhalb des Menüs
 window.addEventListener('click', function(e) {
     if (!e.target.closest('.custom-dropdown-wrapper') && !e.target.closest('#global-dropdown-menu')) {
         closeGlobalDropdown();
     }
 });
 
-// Bei Scrollen oder Resize das Menü ebenfalls schließen, um Darstellungsfehler zu vermeiden
+// Verhindert das versehentliche Schließen beim Scrollen auf Touch-Geräten
 window.addEventListener('scroll', function() { closeGlobalDropdown(); }, true);
 
 function closeGlobalDropdown() {
@@ -618,7 +617,6 @@ function toggleCustomDropdown(id, event) {
     });
     globalMenu.innerHTML = html;
 
-    // Position absolut zum Viewport berechnen, damit nichts abgeschnitten wird und unten kein Platzproblem entsteht
     const rect = trigger.getBoundingClientRect();
     const spaceBelow = window.innerHeight - rect.bottom;
     const menuHeight = Math.min(sel.options.length * 44, 250);
@@ -627,10 +625,8 @@ function toggleCustomDropdown(id, event) {
     globalMenu.style.left = rect.left + 'px';
 
     if (spaceBelow < menuHeight && rect.top > menuHeight) {
-        // Nach oben aufklappen, wenn unten nicht genug Platz ist
         globalMenu.style.top = (rect.top - menuHeight - 4) + 'px';
     } else {
-        // Standardmäßig nach unten aufklappen
         globalMenu.style.top = (rect.bottom + 4) + 'px';
     }
 
@@ -1191,7 +1187,7 @@ function renderClassDynamicOptions(clsObj) {
 
         if (clsObj.startingEquipment.additionalItems) {
             const addStr = clsObj.startingEquipment.additionalItems.map(i => `${i.qty || 1}x ${i.name}`).join(', ');
-            html += `<div style="margin-top:6px; font-size:0.85rem; color:var(--text-muted);"><strong>Zusätzlich enthalten:</strong> ${addStr}</div>`;
+            html += `<div style="margin-top:6px; font-size:0.85rem; color:var(--text-muted);"><b>Zusätzlich enthalten:</b> ${addStr}</div>`;
         }
         html += `</div>`;
     }
