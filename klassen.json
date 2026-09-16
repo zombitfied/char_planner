@@ -1,0 +1,255 @@
+{
+  "classes": {
+    "Barbar": {
+      "summary": "Wilder Krieger des urtümlichen Kampfrauschs",
+      "hitDice": "d12",
+      "hpAt1stLevel": "12 + Konstitutionsmodifikator",
+      "hpPerLevel": "7 + Konstitutionsmodifikator",
+      "primaryAbility": "Stärke",
+      "savingThrows": ["Stärke", "Konstitution"],
+      "proficiencies": {
+        "armor": ["Leichte Rüstungen", "Mittlere Rüstungen", "Schilde"],
+        "weapons": ["Einfache Waffen", "Kriegswaffen"],
+        "tools": [],
+        "skills": {
+          "from": ["Athletik", "Einschüchtern", "Mit Tieren umgehen", "Naturkunde", "Überlebenskunst", "Wahrnehmung"],
+          "choose": 2
+        }
+      },
+      "startingEquipment": {
+        "choiceA": [
+          {"name": "Zweihandaxt", "qty": 1},
+          {"name": "Beil", "qty": 4}
+        ],
+        "choiceB": [
+          {"name": "Gold", "qty": 75, "unit": "GM"}
+        ],
+        "additionalItems": [
+          {"name": "Entdeckerausrüstung", "qty": 1}
+        ]
+      },
+      "multiClassing": {
+        "prerequisites": {"STR": 13},
+        "proficienciesGranted": ["Leichte Rüstungen", "Mittlere Rüstungen", "Schilde", "Einfache Waffen", "Kriegswaffen"]
+      },
+      "features": [
+        {
+          "level": 1,
+          "name": "Kampfrausch",
+          "description": "Du kannst dich mit einer Urmacht namens Kampfrausch versehen, die dir außergewöhnliche Macht und Zähigkeit gewährt. Du kannst dich als Bonusaktion in Kampfrausch versetzen, sofern du keine schwere Rüstung trägst. Bietet Schadensresistenz gegen Hieb-, Stich- und Wuchtschaden, Kampfrausch-Schaden, Stärkevorteil und keine Konzentration/Zauber."
+        },
+        {
+          "level": 1,
+          "name": "Ungerüstete Verteidigung",
+          "description": "Wenn du keine Rüstung trägst, beträgt deine Basis-Rüstungsklasse 10 plus dein Geschicklichkeitsmodifikator plus dein Konstitutionsmodifikator. Du kannst auch einen Schild verwenden."
+        },
+        {
+          "level": 1,
+          "name": "Waffenmeisterung",
+          "description": "Deine Vertrautheit mit Waffen gestattet dir, die Meisterschaftseigenschaften von einfachen Nahkampfwaffen oder Nahkampf-Kriegswaffen zu verwenden."
+        },
+        {
+          "level": 2,
+          "name": "Gefahrengespür",
+          "description": "Du bekommst einen untrüglichen Sinn dafür, ob die Dinge so sind, wie sie sein sollten, sodass du Gefahren besser ausweichen kannst. Du bist bei Geschicklichkeitsrettungswürfen im Vorteil, sofern du nicht kampfunfähig bist."
+        },
+        {
+          "level": 2,
+          "name": "Rücksichtsloser Angriff",
+          "description": "Du kannst deine Verteidigung völlig außer Acht lassen und mit noch mehr Wucht angreifen. Bei deinem ersten Angriffswurf in deinem Zug kannst du einen Rücksichtslosen Angriff ausführen. Damit sind deine Angriffswürfe, die Stärke erfordern, bis zum Beginn deines nächsten Zuges im Vorteil, doch Angriffswürfe gegen dich sind in dieser Zeit ebenfalls im Vorteil."
+        },
+        {
+          "level": 3,
+          "name": "Barbaren-Unterklasse",
+          "description": "Du erhältst eine Barbaren-Unterklasse deiner Wahl (Pfad des Berserkers, Pfad des Eifersers, Pfad des Weltenbaums, Pfad des Wilden Herzens).",
+          "choice": {
+            "text": "Wähle eine Barbaren-Unterklasse:",
+            "availableAtLevel": 3,
+            "options": [
+              {
+                "name": "Pfad des Berserkers",
+                "features": [
+                  {
+                    "level": 3,
+                    "name": "Raserei",
+                    "description": "Wenn du im Kampfrausch deinen Rücksichtslosen Angriff einsetzt, fügst du dem ersten Ziel zusätzlichen Schaden zu (W6 in Höhe deiner Kampfrausch-Schadenswürfel + Fähigkeitsbonus)."
+                  },
+                  {
+                    "level": 6,
+                    "name": "Geistloser Kampfrausch",
+                    "description": "Während du im Kampfrausch bist, bist du gegen die Zustände Bezaubert und Verängstigt immun."
+                  },
+                  {
+                    "level": 10,
+                    "name": "Vergeltung",
+                    "description": "Wenn du Schaden durch eine Kreatur erleidest, die im Abstand von bis zu 1,5 Metern von dir ist, kannst du als Reaktion einen Nahkampfangriff gegen diese Kreatur ausführen."
+                  },
+                  {
+                    "level": 14,
+                    "name": "Einschüchternde Präsenz",
+                    "description": "Als Bonusaktion kannst du andere mit deiner bedrohlichen Präsenz und Urmacht in Panik versetzen (Weisheitsrettungswurf)."
+                  }
+                ]
+              },
+              {
+                "name": "Pfad des Eifersers",
+                "features": [
+                  {
+                    "level": 3,
+                    "name": "Göttliche Wut",
+                    "description": "In jedem deiner Züge im Kampfrausch erleidet die erste Kreatur zusätzlichen Schaden in Höhe von 1W6 plus der Hälfte deiner Barbarenstufe (nekrotisch oder gleißend)."
+                  },
+                  {
+                    "level": 3,
+                    "name": "Krieger der Götter",
+                    "description": "Du hast einen Vorrat von 4W12, den du verbrauchen kannst, um dich zu heilen (erhöht sich mit Barbarenstufen)."
+                  },
+                  {
+                    "level": 6,
+                    "name": "Fanatischer Fokus",
+                    "description": "Einmal pro Kampfrausch kannst du, wenn dein Rettungswurf scheitert, mit einem Bonus in Höhe deines Kampfrausch-Schadensbonus erneut würfeln."
+                  },
+                  {
+                    "level": 10,
+                    "name": "Hingebungsvolle Präsenz",
+                    "description": "Als Bonusaktion entfesselst du einen Schlachtruf, der bis zu zehn andere Kreaturen bei ihren Angriffs- und Rettungswürfen im Vorteil sein lässt."
+                  },
+                  {
+                    "level": 14,
+                    "name": "Kampfrausch der Götter",
+                    "description": "Du nimmst die Gestalt eines heiligen Kriegers an (Flugbewegung, Schweben, Resistenzen)."
+                  }
+                ]
+              },
+              {
+                "name": "Pfad des Weltenbaums",
+                "features": [
+                  {
+                    "level": 3,
+                    "name": "Lebenskraft des Baums",
+                    "description": "Erhalte temporäre Trefferpunkte beim Start des Kampfrauschs und verteile temporäre Trefferpunkte an Verbündete."
+                  },
+                  {
+                    "level": 6,
+                    "name": "Äste des Baums",
+                    "description": "Beschwöre als Reaktion geisterhafte Äste des Weltenbaums, um Ziele zu greifen und zu teleportieren oder ihre Bewegung auf 0 zu reduzieren."
+                  },
+                  {
+                    "level": 10,
+                    "name": "Schlagende Wurzeln",
+                    "description": "Deine Reichweite mit Nahkampfwaffen (schwer/vielseitig) erhöht sich um drei Meter."
+                  },
+                  {
+                    "level": 14,
+                    "name": "Am Baum entlanggreifen",
+                    "description": "Teleportiere dich im Kampfrausch bis zu 18 Meter weit (oder bis zu 45 Meter inklusive Verbündeter)."
+                  }
+                ]
+              },
+              {
+                "name": "Pfad des Wilden Herzens",
+                "features": [
+                  {
+                    "level": 3,
+                    "name": "Kampfrausch der Wildnis",
+                    "description": "Wähle beim Kampfrausch eine Tieroption (Adler: Rückzug/Spurt als Bonusaktion; Bär: Resistenz gegen fast alle Schadensarten; Wolf: Vorteil für Verbündete im Nahbereich)."
+                  },
+                  {
+                    "level": 3,
+                    "name": "Tierflüsterer",
+                    "description": "Du kannst die Zauber Tiersinn und Mit Tieren sprechen als Ritual wirken."
+                  },
+                  {
+                    "level": 6,
+                    "name": "Aspekt der Wildnis",
+                    "description": "Wähle eine Tier-Eigenschaft (Eule, Lachs oder Panther für Sinne/Bewegungsarten)."
+                  },
+                  {
+                    "level": 10,
+                    "name": "Naturflüsterer",
+                    "description": "Du kannst den Zauber Einswerden mit der Natur als Ritual wirken."
+                  },
+                  {
+                    "level": 14,
+                    "name": "Macht der Wildnis",
+                    "description": "Wähle eine mächtige Tieroption im Kampfrausch (Falke: Flugbewegung; Löwe: Nachteil für Gegner; Ramme: Kreaturen umstoßen)."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "level": 3,
+          "name": "Urwissen",
+          "description": "Du erhältst Übung in einer weiteren Fertigkeit deiner Wahl und kannst im Kampfrausch Stärkewürfe anstelle von bestimmten anderen Attributswürfen (Akrobatik, Einschüchtern, Heimlichkeit, Überlebenskunst, Wahrnehmung) ablegen."
+        },
+        {
+          "level": 4,
+          "name": "Attributswerterhöhung",
+          "description": "Du erhältst das Talent Attributswerterhöhung oder ein anderes Talent deiner Wahl. Wiederholung auf Stufe 8, 12 und 16."
+        },
+        {
+          "level": 5,
+          "name": "Schnelle Bewegung",
+          "description": "Deine Bewegungsrate erhöht sich um drei Meter, sofern du keine schwere Rüstung trägst."
+        },
+        {
+          "level": 5,
+          "name": "Zusätzlicher Angriff",
+          "description": "Du kannst jetzt zweimal angreifen, wenn du in deinem Zug eine Angriffsaktion ausführst."
+        },
+        {
+          "level": 7,
+          "name": "Instinktiver Sprung",
+          "description": "Als Teil der Bonusaktion, mit der du dich in Kampfrausch versetzt, kannst du bis zur Hälfte deiner Bewegungsrate zurücklegen."
+        },
+        {
+          "level": 7,
+          "name": "Wilder Instinkt",
+          "description": "Deine Instinkte sind derart geschärft, dass du bei Initiativewürfen im Vorteil bist."
+        },
+        {
+          "level": 9,
+          "name": "Brutaler Hieb",
+          "description": "Verzichte beim Rücksichtslosen Angriff auf Vorteil, um bei einem Treffer zusätzlich 1W10 Schaden und einen Zusatzeffekt (Kraftvoller Hieb, Schenkelhieb oder Wankendmachender Hieb) zu wirken."
+        },
+        {
+          "level": 11,
+          "name": "Unerbittlicher Kampfrausch",
+          "description": "Wenn deine Trefferpunkte auf 0 sinken, während du im Kampfrausch bist, stirbst du nicht sofort, sondern führst einen SG-10-Konstitutionsrettungswurf aus (erfolgreich = TP auf das Doppelte der Barbarenstufe setzen)."
+        },
+        {
+          "level": 13,
+          "name": "Verbesserter Brutaler Hieb",
+          "description": "Zusätzliche Optionen für den Brutalen Hieb (z. B. Entweihender Hieb)."
+        },
+        {
+          "level": 15,
+          "name": "Anhaltender Kampfrausch",
+          "description": "Wenn du die Initiative auswürfst, kannst du alle verbrauchten Anwendungen von Kampfrausch zurückhalten/wiederherstellen. Dein Kampfrausch dauert nun bis zu zehn Minuten."
+        },
+        {
+          "level": 17,
+          "name": "Verbesserter Brutaler Hieb (II)",
+          "description": "Der zusätzliche Schaden deines Brutalen Hiebs wird auf 2W10 erhöht und du kannst zwei verschiedene Effekte gleichzeitig einsetzen."
+        },
+        {
+          "level": 18,
+          "name": "Unbändige Stärke",
+          "description": "Wenn das Gesamtergebnis deines Stärkewurfs oder Stärkerettungswurfs unter deinem Stärkewert liegt, kannst du diesen stattdessen verwenden."
+        },
+        {
+          "level": 19,
+          "name": "Epische Gabe",
+          "description": "Du erhältst eine Epische-Gabe-Talent oder ein anderes Talent deiner Wahl."
+        },
+        {
+          "level": 20,
+          "name": "Meister der Wildnis",
+          "description": "Du verkörperst Urmacht. Deine Werte für Stärke und Konstitution werden um 4 erhöht (auf höchtens 25)."
+        }
+      ]
+    }
+  }
+}
