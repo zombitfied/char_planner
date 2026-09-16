@@ -104,6 +104,20 @@
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
+
+        .checkbox-grid, .radio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .selection-group {
+            margin-top: 10px;
+            padding: 8px;
+            background: var(--btn-back-bg);
+            border-left: 3px solid var(--accent);
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -165,6 +179,9 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Dynamischer Bereich für klassenbasierte Wahlen (Skills, Tools, Equipment) -->
+                <div id="class-dynamic-options-container" style="display: none; margin-top: 10px;"></div>
 
                 <div id="spells-step-card" style="margin-top: 15px; background: var(--btn-back-bg); padding: 10px; border-radius: 8px; border: 1.5px solid var(--border);">
                     <label id="cantrip-label" style="margin-top:0; color:var(--accent);">Zaubertricks wählen</label>
@@ -352,7 +369,6 @@ const attrNamesDE = {
 
 window.onload = async function() {
     try {
-        // Hier wurden die Ziffern in Klammern entfernt (rassen.json, klassen.json, hintergruende.json)
         const [raceRes, classRes, bgRes] = await Promise.all([
             fetch("rassen.json?t=" + new Date().getTime()),
             fetch("klassen.json?t=" + new Date().getTime()),
@@ -805,6 +821,7 @@ function showCalcModal(type) {
 
 function getClassIcon(className) {
     switch (className) {
+        case "Artificer":
         case "Artifizier": return "fa-wrench";
         case "Barbar": return "fa-hammer";
         case "Barde": return "fa-guitar";
@@ -873,7 +890,74 @@ function onClassChange() {
         validateSkills();
     }
 
+    renderClassDynamicOptions(clsObj);
     updateSpellsUI();
+}
+
+function renderClassDynamicOptions(clsObj) {
+    const container = document.getElementById('class-dynamic-options-container');
+    if (!container) return;
+
+    if (!clsObj || !clsObj.proficiencies) {
+        container.style.display = 'none';
+        container.innerHTML = '';
+        return;
+    }
+
+    let html = '';
+
+    // Werkzeug-Wahl aus Proficiencies (falls vorhanden, z.B. Barde, Druide, Mönch)
+    if (clsObj.proficiencies.tools && clsObj.proficiencies.tools.choice) {
+        const toolChoice = clsObj.proficiencies.tools.choice;
+        html += `<div class="selection-group">`;
+        html += `<label style="margin-top:0; color:var(--accent);">${toolChoice.text || 'Werkzeug-Wahl:'}</label>`;
+        
+        if (toolChoice.choose === 1) {
+            html += `<div class="radio-grid">`;
+            toolChoice.options.forEach(opt => {
+                html += `<label><input type="radio" name="class_tool_choice" value="${opt}" checked> ${opt}</label>`;
+            });
+            html += `</div>`;
+        } else {
+            html += `<p style="font-size:0.85rem; margin:4px 0;"><em>Wähle ${toolChoice.choose} aus:</em></p>`;
+            html += `<div class="checkbox-grid">`;
+            toolChoice.options.forEach(opt => {
+                html += `<label><input type="checkbox" name="class_tool_choice" value="${opt}"> ${opt}</label>`;
+            });
+            html += `</div>`;
+        }
+        html += `</div>`;
+    }
+
+    // Startausrüstung Optionen direkt im Kasten anzeigen (choiceA, choiceB, choiceC)
+    if (clsObj.startingEquipment) {
+        html += `<div class="selection-group">`;
+        html += `<label style="margin-top:0; color:var(--accent);">Startausrüstung wählen:</label>`;
+        
+        ['choiceA', 'choiceB', 'choiceC'].forEach((choiceKey, index) => {
+            if (clsObj.startingEquipment[choiceKey]) {
+                const labelChar = String.fromCharCode(65 + index); // A, B, C
+                const itemsStr = clsObj.startingEquipment[choiceKey].map(i => `${i.qty || 1}x ${i.name}${i.unit ? ' ' + i.unit : ''}`).join(', ');
+                html += `<div style="margin-top:6px;">`;
+                html += `<label style="font-weight:normal;"><input type="radio" name="class_eq_package" value="${choiceKey}" ${index === 0 ? 'checked' : ''}> <strong>Option ${labelChar}:</strong> ${itemsStr}</label>`;
+                html += `</div>`;
+            }
+        });
+
+        if (clsObj.startingEquipment.additionalItems) {
+            const addStr = clsObj.startingEquipment.additionalItems.map(i => `${i.qty || 1}x ${i.name}`).join(', ');
+            html += `<div style="margin-top:6px; font-size:0.85rem; color:var(--text-muted);"><strong>Zusätzlich enthalten:</strong> ${addStr}</div>`;
+        }
+        html += `</div>`;
+    }
+
+    if (html !== '') {
+        container.innerHTML = html;
+        container.style.display = 'block';
+    } else {
+        container.style.display = 'none';
+        container.innerHTML = '';
+    }
 }
 
 function onBgChange() {
@@ -1160,12 +1244,23 @@ function renderEquipmentSectionInSheet(clsName, bgCustomData) {
     const clsObj = classesData[clsName] || {};
     let startingEqList = [];
     if (clsObj.startingEquipment) {
-        if (clsObj.startingEquipment.choiceA) {
-            clsObj.startingEquipment.choiceA.forEach(it => startingEqList.push(`${it.qty || 1} ${it.name}`));
+        const selectedPackageKey = document.querySelector('input[name="class_eq_package"]:checked')?.value || 'choiceA';
+        const pkg = clsObj.startingEquipment[selectedPackageKey] || clsObj.startingEquipment.choiceA;
+        if (pkg) {
+            pkg.forEach(it => startingEqList.push(`${it.qty || 1} ${it.name}${it.unit ? ' ' + it.unit : ''}`));
+        }
+        if (clsObj.startingEquipment.additionalItems) {
+            clsObj.startingEquipment.additionalItems.forEach(it => startingEqList.push(`${it.qty || 1} ${it.name}`));
         }
     }
 
-    let rawList = [...startingEqList, bgCustomData.equipment, bgCustomData.tools];
+    // Gesammelte Klassentools aus der UI (Radio/Checkbox) ermitteln
+    let selectedClassTools = [];
+    document.querySelectorAll('input[name="class_tool_choice"]:checked').forEach(inp => {
+        selectedClassTools.push(inp.value);
+    });
+
+    let rawList = [...startingEqList, selectedClassTools, bgCustomData.equipment, bgCustomData.tools];
     let accumulated = accumulateItems(rawList);
 
     let rowsHtml = accumulated.map(item => `
