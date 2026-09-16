@@ -40,7 +40,6 @@
             max-width: 600px;
         }
 
-        /* Permanenter Footer mit abgerundeter, rauer SVG-Kante oben */
         .page-footer-nav {
             position: fixed;
             bottom: 0;
@@ -158,7 +157,7 @@
                     <label for="char-name">Name</label>
                     <input type="text" id="char-name" value="Gimble">
                 </div>
-                <div class="grid-race" style="margin-top: 8px;">
+                <div style="margin-top: 8px; display: flex; flex-direction: column; gap: 10px;">
                     <div>
                         <label for="main-race">Volk</label>
                         <div class="input-row">
@@ -179,18 +178,26 @@
                 </div>
             </div>
 
+            <!-- Eigener Kasten für Klasse -->
             <div class="step-card">
-                <div class="step-title">Klasse und Hintergrund</div>
+                <div class="step-title">Klasse</div>
                 <div style="display: flex; flex-direction: column; gap: 10px;">
                     <div>
-                        <label for="class-select">Klasse</label>
+                        <label for="class-select">Klasse wählen</label>
                         <div class="input-row">
                             <select id="class-select" onchange="onClassChange()"></select>
                             <button type="button" class="info-btn" id="class-info-btn" onclick="showClassModal()"><i class="fa-solid fa-wrench" id="class-icon-indicator"></i></button>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Eigener Kasten für Hintergrund -->
+            <div class="step-card">
+                <div class="step-title">Hintergrund</div>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
                     <div>
-                        <label for="bg-select">Hintergrund</label>
+                        <label for="bg-select">Hintergrund wählen</label>
                         <div class="input-row">
                             <select id="bg-select" onchange="onBgChange()"></select>
                             <button type="button" class="info-btn" onclick="showBgModal()">ℹ</button>
@@ -529,7 +536,7 @@ window.onload = async function() {
 
 function handleUrlModeAndStartup() {
     const urlParams = new URLSearchParams(window.location.search);
-    const mode = urlParams.get('mode'); // Entweder "create" oder "sheet"
+    const mode = urlParams.get('mode');
 
     if (mode === 'create') {
         localStorage.removeItem('dnd_active_character');
@@ -611,10 +618,11 @@ function buildCharacterAndSave() {
 
     const name = document.getElementById('char-name').value || "Unbenannter Held";
     const mainRace = document.getElementById('main-race').value || Object.keys(speciesData)[0];
-    const subRace = document.getElementById('sub-race').value || Object.keys(speciesData[mainRace]?.subraces || {})[0];
+    const subRaceSelect = document.getElementById('sub-race');
+    const subRace = (subRaceSelect && subRaceSelect.offsetParent !== null) ? subRaceSelect.value : mainRace;
     const clsName = document.getElementById('class-select').value || "Kämpfer";
     const bg = document.getElementById('bg-select').value || Object.keys(backgrounds)[0];
-    const subInfo = speciesData[mainRace]?.subraces[subRace] || { bonus: {}, speed: 30 };
+    const subInfo = speciesData[mainRace]?.subraces?.[subRace] || speciesData[mainRace] || { bonus: {}, speed: 30 };
 
     let rawStats = {
         STR: parseInt(document.getElementById('str-val')?.value) || 15,
@@ -820,7 +828,8 @@ function closeModal() {
 function showRaceModal() {
     const mainRace = document.getElementById('main-race').value;
     const subRace = document.getElementById('sub-race').value;
-    openModal(subRace, speciesData[mainRace].subraces[subRace].text, "fa-child");
+    const infoText = speciesData[mainRace].subraces?.[subRace]?.text || speciesData[mainRace].description || "Keine Beschreibung verfügbar.";
+    openModal(subRace, infoText, "fa-child");
 }
 
 async function showClassModal() {
@@ -921,13 +930,20 @@ function onMainRaceChange() {
     const mainRace = document.getElementById('main-race').value;
     const subContainer = document.getElementById('subrace-container');
     const subSelect = document.getElementById('sub-race');
+    const raceObj = speciesData[mainRace];
 
-    if (!subSelect) return;
-    subSelect.innerHTML = '';
-    Object.keys(speciesData[mainRace].subraces).forEach(subKey => {
-        subSelect.innerHTML += `<option value="${subKey}">${subKey}</option>`;
-    });
-    if (subContainer) subContainer.style.display = 'block';
+    if (!subSelect || !subContainer) return;
+
+    if (raceObj && raceObj.subraces && Object.keys(raceObj.subraces).length > 0) {
+        subSelect.innerHTML = '';
+        Object.keys(raceObj.subraces).forEach(subKey => {
+            subSelect.innerHTML += `<option value="${subKey}">${subKey}</option>`;
+        });
+        subContainer.style.display = 'block';
+    } else {
+        subSelect.innerHTML = '';
+        subContainer.style.display = 'none';
+    }
     updateSubraceOptions();
 }
 
