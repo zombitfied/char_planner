@@ -253,3 +253,2146 @@
     }
   }
 }
+    "Barde": {
+      "summary": "Inspirierender Musiker, Magiewirker und Tänzer",
+      "hitDice": "d8",
+      "hpAt1stLevel": "8 + Konstitutionsmodifikator",
+      "hpPerLevel": "5 + Konstitutionsmodifikator",
+      "primaryAbility": "Charisma",
+      "savingThrows": ["Geschicklichkeit", "Charisma"],
+      "proficiencies": {
+        "armor": ["Leichte Rüstung"],
+        "weapons": ["Einfache Waffen"],
+        "tools": {
+          "choice": {
+            "text": "Wähle drei Musikinstrumente:",
+            "options": ["Laute", "Flöte", "Harfe", "Trommel", "Lyra", "Dudelsack", "Horn", "Pande", "Schalmei", "Violine"],
+            "choose": 3
+          }
+        },
+        "skills": {
+          "from": [
+            "Akrobatik", "Auftreten", "Athletik", "Einblick", "Geschichte",
+            "Heimlichkeit", "Medizin", "Naturkunde", "Religion", "Täuschen",
+            "Überzeugen", "Wahrnehmung"
+          ],
+          "choose": 3
+        }
+      },
+      "startingEquipment": {
+        "choiceA": [
+          {"name": "Lederrüstung", "qty": 1},
+          {"name": "Dolch", "qty": 2},
+          {"name": "Musikinstrument", "qty": 1},
+          {"name": "Unterhaltungskünstler-Ausrüstung", "qty": 1},
+          {"name": "Gold", "qty": 19, "unit": "GM"}
+        ],
+        "choiceB": [
+          {"name": "Gold", "qty": 90, "unit": "GM"}
+        ]
+      },
+      "multiClassing": {
+        "prerequisites": {"CHA": 13},
+        "proficienciesGranted": ["Leichte Rüstung", "Eine Fertigkeit deiner Wahl", "Ein Musikinstrument deiner Wahl"]
+      },
+      "features": [
+        {
+          "level": 1,
+          "name": "Bardische Inspiration",
+          "description": "Du kannst andere durch Worte, Musik oder Tänze inspirieren. Du hast eine Anzahl von Verwendungen gleich deinem Charisma-Modifikator (mindestens 1), die sich nach einer langen Rast erneuern. Ein Verbündeter kann den Bardische-Inspiration-Würfel nutzen, um einen verfehlten W20-Prüfungserfolg zu erzielen.",
+          "dieSize": {
+            "1-4": "W6",
+            "5-9": "W8",
+            "10-14": "W10",
+            "15+": "W12"
+          }
+        },
+        {
+          "level": 1,
+          "name": "Zauberwirken",
+          "description": "Du kannst arkane Zauber wirken. Charisma ist deine Zauberwirkfähigkeit. Du beherrschst Zaubertricks und vorbereitete Stufe-1-Zauber."
+        },
+        {
+          "level": 2,
+          "name": "Alleskönner",
+          "description": "Du kannst die Hälfte deines Übungsbonus (abgerundet) jedem Attributswurf hinzufügen, der eine Fertigkeit verwendet, in der du nicht geübt bist."
+        },
+        {
+          "level": 2,
+          "name": "Expertise",
+          "description": "Du erhältst Expertise in zwei Fertigkeiten deiner Wahl, in denen du geübt bist. Auf Stufe 9 erhältst du zwei weitere."
+        },
+        {
+          "level": 3,
+          "name": "Barden-Unterklasse",
+          "description": "Du erhältst eine Barden-Unterklasse deiner Wahl (Schule des Wagemuts, Schule des Wissens, Schule des Tanzes, Schule des Zauberbanns).",
+          "choice": {
+            "text": "Wähle eine Barden-Schule:",
+            "availableAtLevel": 3,
+            "options": [
+              {
+                "name": "Schule des Tanzes",
+                "features": [
+                  {"level": 3, "name": "Blendende Beinarbeit", "description": "Erhalte ungerüstete Verteidigung (10 + GES + CHA), virtuoser Tänzer (Vorteil auf Auftreten) und finke Schläge / waffenloser Kampfrausch."},
+                  {"level": 6, "name": "Inspirierende Bewegung", "description": "Verbrauche Bardische Inspiration als Reaktion, um dich zu bewegen, wenn ein Gegner sich nähert."},
+                  {"level": 6, "name": "Tandem-Beinarbeit", "description": "Füge Mitstreitern beim Initiativewurf deinen Bardische-Inspiration-Würfel hinzu."},
+                  {"level": 14, "name": "Führendes Entrinnen", "description": "Teile Geschicklichkeitsrettungswurf-Vorteile und Schadenshalbierung mit nahen Verbündeten."}
+                ]
+              },
+              {
+                "name": "Schule des Wagemuts",
+                "features": [
+                  {"level": 3, "name": "Kampfinspiration", "description": "Bardische Inspiration kann für zusätzlichen Schaden oder Rüstungsklasse (Verteidigung) genutzt werden."},
+                  {"level": 3, "name": "Kampfkunst-Vertrautheit", "description": "Erhalte Übung mit Kriegswaffen und mittelschweren Rüstungen sowie Schilden."},
+                  {"level": 6, "name": "Zusätzlicher Angriff", "description": "Greife zweimal an oder wirke einen Zaubertrick anstelle eines Angriffs."},
+                  {"level": 14, "name": "Kampfmagie", "description": "Führe nach dem Wirken eines Zaubers einen Bonusangriff mit einer Waffe aus."}
+                ]
+              },
+              {
+                "name": "Schule des Wissens",
+                "features": [
+                  {"level": 3, "name": "Schneidende Worte", "description": "Nutze eine Reaktion und Bardische Inspiration, um den Attributswurf, Angriffswurf oder Schaden eines Gegners zu verringern."},
+                  {"level": 3, "name": "Zusätzliches Wissen", "description": "Erhalte Übung in drei Fertigkeiten deiner Wahl."},
+                  {"level": 6, "name": "Magische Entdeckungen", "description": "Erlerne zwei Zauber von den Listen des Druiden, Klerikers oder Magiers."},
+                  {"level": 14, "name": "Grenzenlose Begabung", "description": "Füge bei gescheiterten Würfen Bardische Inspiration hinzu, ohne sie bei Erfolg zu verbrauchen."}
+                ]
+              },
+              {
+                "name": "Schule des Zauberbanns",
+                "features": [
+                  {"level": 3, "name": "Betörende Magie", "description": "Verzauberungs- und Illusionszauber erzwingen Weisheitsrettungswürfe oder bezaubern/verängstigen Gegner."},
+                  {"level": 3, "name": "Mantel der Inspiration", "description": "Verleihe Verbündeten temporäre Trefferpunkte und Gratis-Bewegung via Inspiration."},
+                  {"level": 6, "name": "Mantel der Erhabenheit", "description": "Wirke den Zauber Befehl als Bonusaktion ohne Zauberplatzverbrauch."},
+                  {"level": 14, "name": "Stete Erhabenheit", "description": "Erschaffe eine erhabene Präsenz, die Angreifer per Charismarettungswurf abschreckt."}
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "level": 4,
+          "name": "Attributswerterhöhung",
+          "description": "Erhöhe einen Attributswert um 2 oder zwei um je 1 (wiederholt sich auf Stufe 8, 12 und 16)."
+        },
+        {
+          "level": 5,
+          "name": "Quelle der Inspiration",
+          "description": "Erhalte verbrauchte Anwendungen von Bardische Inspiration nach einer kurzen oder langen Rast zurück. Du kannst auch einen Zauberplatz opfern, um Inspiration zurückzuerhalten."
+        },
+        {
+          "level": 7,
+          "name": "Bannlied",
+          "description": "Nutze Musik/Worte als Reaktion, um verpatzte Rettungswürfe gegen Bezaubert oder Verängstigt zu wiederholen (mit Vorteil)."
+        },
+        {
+          "level": 10,
+          "name": "Magische Geheimnisse",
+          "description": "Erweitere deine vorbereiteten Zauber um beliebige Zauber aus den Listen des Barden, Druiden, Klerikers oder Magiers."
+        },
+        {
+          "level": 18,
+          "name": "Überlegene Inspiration",
+          "description": "Erhalte beim Auswürfeln der Initiative verbrauchte Anwendungen Bardischer Inspiration zurück (bis zu zwei)."
+        },
+        {
+          "level": 19,
+          "name": "Epische Gabe",
+          "description": "Erhalte eine Epische-Gabe-Talent oder ein anderes Talent deiner Wahl."
+        },
+        {
+          "level": 20,
+          "name": "Worte der Schöpfung",
+          "description": "Du hast die Worte von Leben und Tod gemeistert (Heilung und Tod). Wenn du einen Zauber wirkst, kannst du damit eine zweite Kreatur im Nahbereich ins Visier nehmen."
+        }
+      ],
+      "spellcasting": {
+        "ability": "Charisma",
+        "cantripsKnown": [
+          {"level": 1, "count": 2},
+          {"level": 4, "count": 3},
+          {"level": 10, "count": 4}
+        ],
+        "spellsPrepared": [
+          {"level": 1, "count": 4},
+          {"level": 2, "count": 5},
+          {"level": 3, "count": 6},
+          {"level": 4, "count": 7},
+          {"level": 5, "count": 9},
+          {"level": 6, "count": 10},
+          {"level": 7, "count": 11},
+          {"level": 8, "count": 12},
+          {"level": 9, "count": 13},
+          {"level": 10, "count": 14},
+          {"level": 11, "count": 15},
+          {"level": 12, "count": 16},
+          {"level": 13, "count": 17},
+          {"level": 14, "count": 17},
+          {"level": 15, "count": 18},
+          {"level": 16, "count": 18},
+          {"level": 17, "count": 19},
+          {"level": 18, "count": 20},
+          {"level": 19, "count": 21},
+          {"level": 20, "count": 22}
+        ],
+        "spellSlotsByLevel": {
+          "1st": {"1": 2, "2": 3, "3": 4, "4": 4, "5": 4, "6": 4, "7": 4, "8": 4, "9": 4, "10": 4, "11": 4, "12": 4, "13": 4, "14": 4, "15": 4, "16": 4, "17": 4, "18": 4, "19": 4, "20": 4},
+          "2nd": {"3": 2, "4": 3, "5": 3, "6": 3, "7": 3, "8": 3, "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "3rd": {"5": 2, "6": 3, "7": 3, "8": 3, "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "4th": {"7": 1, "8": 2, "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "5th": {"9": 1, "10": 2, "11": 2, "12": 2, "13": 2, "14": 2, "15": 2, "16": 2, "17": 2, "18": 2, "19": 2, "20": 2},
+          "6th": {"11": 1, "12": 1, "13": 1, "14": 1, "15": 2, "16": 2, "17": 2, "18": 3, "19": 3, "20": 3},
+          "7th": {"13": 1, "14": 1, "15": 1, "16": 1, "17": 2, "18": 2, "19": 2, "20": 2},
+          "8th": {"15": 1, "16": 1, "17": 1, "18": 1, "19": 1, "20": 2},
+          "9th": {"17": 1, "18": 1, "19": 1, "20": 1}
+        }
+      }
+    }
+    ,
+    "Druide": {
+      "summary": "Priester der Natur mit Urmacht",
+      "hitDice": "d8",
+      "hpAt1stLevel": "8 + Konstitutionsmodifikator",
+      "hpPerLevel": "5 + Konstitutionsmodifikator",
+      "primaryAbility": "Weisheit",
+      "savingThrows": ["Intelligenz", "Weisheit"],
+      "proficiencies": {
+        "armor": ["Leichte Rüstung", "Mittlere Rüstung", "Schilde"],
+        "weapons": ["Einfache Waffen"],
+        "tools": {
+          "choice": {
+            "text": "Werkzeug-Wahl:",
+            "options": ["Kräuterkundeausrüstung"],
+            "choose": 1
+          }
+        },
+        "skills": {
+          "from": [
+            "Arkane Kunde", "Heilkunde", "Mit Tieren umgehen", "Motiv erkennen",
+            "Naturkunde", "Religion", "Überlebenskunst", "Wahrnehmung"
+          ],
+          "choose": 2
+        }
+      },
+      "startingEquipment": {
+        "choiceA": [
+          {"name": "Lederrüstung", "qty": 1},
+          {"name": "Schild", "qty": 1},
+          {"name": "Sichel", "qty": 1},
+          {"name": "Druidischer Fokus", "qty": 1},
+          {"name": "Entdeckerausrüstung", "qty": 1},
+          {"name": "Kräuterkundeausrüstung", "qty": 1},
+          {"name": "Gold", "qty": 9, "unit": "GM"}
+        ],
+        "choiceB": [
+          {"name": "Gold", "qty": 50, "unit": "GM"}
+        ]
+      },
+      "multiClassing": {
+        "prerequisites": {"WIS": 13},
+        "proficienciesGranted": ["Leichte Rüstung", "Mittlere Rüstung", "Schilde"]
+      },
+      "features": [
+        {
+          "level": 1,
+          "name": "Zauberwirken",
+          "description": "Du hast gelernt, Zauber zu wirken, indem du die mystischen Kräfte der Natur studierst. Weisheit ist deine Zauberwirkfähigkeit. Du beherrschst Zaubertricks und vorbereitete Zauber."
+        },
+        {
+          "level": 1,
+          "name": "Druidisch",
+          "description": "Du beherrschst Druidisch, die Geheimsprache der Druiden, um mit Tieren zu kommunizieren (Zauber Mit Tieren sprechen stets vorbereitet) und verborgene Botschaften zu hinterlassen."
+        },
+        {
+          "level": 1,
+          "name": "Urtümliche Ordnung",
+          "description": "Wähle zwischen Magier (zusätzlicher Zaubertrick & Bonus auf INT-Würfe wie Arkane Kunde/Naturkunde) oder Wächter (Kriegswaffen und mittelschwere Rüstung).",
+          "choice": {
+            "text": "Wähle deine urtümliche Ordnung:",
+            "options": [
+              {"name": "Magier", "description": "Erhalte einen zusätzlichen Zaubertrick und einen Bonus auf Intelligenzwürfe (Arkane Kunde oder Naturkunde) in Höhe deines Weisheitsmodifikators."},
+              {"name": "Wächter", "description": "Erhalte Übung mit Kriegswaffen und Vertrautheit mit mittelschwerer Rüstung."}
+            ]
+          }
+        },
+        {
+          "level": 2,
+          "name": "Tiergestalt",
+          "description": "Nimm als Bonusaktion die Gestalt eines Tieres an (Dauer: halbe Druidenstufe in Stunden). Erhalte temporäre Trefferpunkte und behalte deine geistigen Werte, Fertigkeiten und Rettungswürfe bei."
+        },
+        {
+          "level": 2,
+          "name": "Wilder Gefährte",
+          "description": "Du kannst einen Naturgeist beschwören, der eine Tiergestalt annimmt und dich unterstützt (verbraucht einen Zauberplatz oder eine Tiergestalt-Anwendung)."
+        },
+        {
+          "level": 3,
+          "name": "Druiden-Unterklasse",
+          "description": "Du erhältst eine Druiden-Unterklasse deiner Wahl (Zirkel des Landes, Zirkel des Meeres, Zirkel des Mondes, Zirkel der Sterne).",
+          "choice": {
+            "text": "Wähle deinen Druiden-Zirkel:",
+            "availableAtLevel": 3,
+            "options": [
+              {
+                "name": "Zirkel des Landes",
+                "features": [
+                  {"level": 3, "name": "Beistand des Landes", "description": "Verbrauche Tiergestalt, um eine Kugel aus Blumen/Dornen zu erschaffen, die nekrotischen Schaden zufügt und Verbündete heilt."},
+                  {"level": 3, "name": "Zirkelzauber des Landes", "description": "Erhalte nach langer Rast stets vorbereitete Zauber basierend auf deiner gewählten Landart (Gemäßigt, Polar, Trocken, Tropisch)."},
+                  {"level": 6, "name": "Natürliche Erholung", "description": "Wirke einen vorbereiteten Stufe-1-Zauber ohne Zauberplatz oder stelle verbrauchte Zauberplätze nach kurzer Rast wieder her."},
+                  {"level": 10, "name": "Schutz der Natur", "description": "Immunität gegen den Zustand Vergiftet und Resistenz gegen eine Schadensart passend zu deinem Land-Typ."},
+                  {"level": 14, "name": "Heiligtum der Natur", "description": "Beschwöre magische Bäume und Ranken, die dir und Verbündeten Teildeckung und Resistenz gewähren."}
+                ]
+              },
+              {
+                "name": "Zirkel des Meeres",
+                "features": [
+                  {"level": 3, "name": "Grimm der See", "description": "Manifestiere als Bonusaktion eine Ausströmung aus Gischt (Kälteschaden und Gegner wegstoßen)."},
+                  {"level": 3, "name": "Zirkelzauber des Meeres", "description": "Erhalte über deine Stufen hinweg stets vorbereitete Meeres-Zauber (Donnerwoge, Kältestrand etc.)."},
+                  {"level": 6, "name": "Aquatische Affinität", "description": "Die Größe deiner Ausströmung vergrößert sich und du erhältst eine Schwimmbewegungsrate."},
+                  {"level": 10, "name": "Sturmgeboren", "description": "Erhalte eine Flugbewegungsrate sowie Resistenzen gegen Blitz-, Kälte- und Schallschaden."},
+                  {"level": 14, "name": "Geschenk des Ozeans", "description": "Manifestiere die Ausströmung um eine befreundete Kreatur oder verbrauche zwei Anwendungen für dich und einen Verbündeten gleichzeitig."}
+                ]
+              },
+              {
+                "name": "Zirkel des Mondes",
+                "features": [
+                  {"level": 3, "name": "Tiergestalten des Zirkels", "description": "Mondmagie verstärkt deine Tiergestalt: höherer Herausforderungsgrad, verbesserte RK (13 + Weisheitsmodifikator) und dreifache Druidenstufe als temporäre Trefferpunkte."},
+                  {"level": 3, "name": "Zirkelzauber des Mondes", "description": "Erhalte stets vorbereitete Mond-Zauber (Mondstrahl, Sternefunke etc.) und wirke sie auch in Tiergestalt."},
+                  {"level": 6, "name": "Verbesserte Tiergestalten des Zirkels", "description": "Füge mit Tierangriffen zusätzlichen gleißenden Schaden zu und rechne deinen Weisheitsmodifikator auf Konstitutionsrettungswürfe an."},
+                  {"level": 10, "name": "Mondscheinschritt", "description": "Teleportiere dich magisch als Bonusaktion in einem Ausbruch von Mondlicht."},
+                  {"level": 14, "name": "Mondgestalt", "description": "Teleportiere Verbündete beim Mondscheinschritt mit und erhalte verbesserte Macht."}
+                ]
+              },
+              {
+                "name": "Zirkel der Sterne",
+                "features": [
+                  {"level": 3, "name": "Sterngestalt", "description": "Nimm eine leuchtende Sterngestalt anstelle einer Tiergestalt an. Wähle eine Konstellation: Bogenschütze (Fernkampf-Angriff), Drache (Vorteil auf Konzentration/Würfe unter 10 auf W20 = 10) oder Kelch (Heilung bei Zauberwirkung)."},
+                  {"level": 3, "name": "Sternkarte", "description": "Erschaffe eine Sternkarte als Zauberfokus, mit der du die Zauber Göttliche Führung und Lenkendes Geschoss ohne Zauberplatz vorbereitest/wirkst."},
+                  {"level": 6, "name": "Kosmisches Omen", "description": "Ziehe nach langer Rast Omen von deiner Karte, um die Würfe von Verbündeten oder Gegnern per Reaktion mit 1W6 zu verbessern oder zu verschlechtern."},
+                  {"level": 10, "name": "Funkelnde Sternbilder", "description": "Deine Sterngestalt wird stärker (Bogenschütze/Kelch zu 2W8 Schaden/Heilung, Drache erhält Schweben/Flug). Wechsle das Sternbild zu Beginn deiner Züge."},
+                  {"level": 14, "name": "Voller Sterne", "description": "Werde in der Sterngestalt teilweise körperlos und erhalte Resistenz gegen Hieb-, Stich- und Wuchtschaden."}
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "level": 4,
+          "name": "Attributswerterhöhung",
+          "description": "Erhöhe einen Attributswert um 2 oder zwei um je 1 (wiederholt sich auf Stufe 8, 12 und 16)."
+        },
+        {
+          "level": 5,
+          "name": "Wilde Wiederkehr",
+          "description": "Verbrauche bei keinen Tiergestalt-Anwendungen stattdessen einen Zauberplatz, um Tiergestalt zu aktivieren, oder erhalte einen Stufe-1-Zauberplatz zurück."
+        },
+        {
+          "level": 7,
+          "name": "Elementare Wut",
+          "description": "Füge einmal pro Zug bei einem erfolgreichen Angriff mit Waffe oder Tiergestalt zusätzlich 1W8 Blitz-, Feuer-, Kälte- oder Schallschaden zu. Verstärke zudem Druidenzaubertricks um deinen Weisheitsmodifikator."
+        },
+        {
+          "level": 15,
+          "name": "Verbesserte Elementare Wut",
+          "description": "Der zusätzliche Schaden erhöht sich auf 2W8 und die Reichweite deiner Druidenzaubertricks erhöht sich auf 90 Meter."
+        },
+        {
+          "level": 18,
+          "name": "In Tiergestalt zaubern",
+          "description": "Du kannst in Tiergestalt Zauber wirken, sofern diese keine teuren Materialkomponenten erfordern."
+        },
+        {
+          "level": 19,
+          "name": "Epische Gabe",
+          "description": "Erhalte eine Epische-Gabe-Talent (z. B. Gabe des Dimensionsreisens) oder ein anderes Talent deiner Wahl."
+        },
+        {
+          "level": 20,
+          "name": "Erzdruide",
+          "description": "Erhalte Ausdauernde Tiergestalt (automatische Rückgewinnung bei Initiative), Naturmagier (Tiergestalten in Zauberplätze umwandeln) und Langlebigkeit (zehn Jahre verlangsamen den Alterungsprozess auf ein Jahr)."
+        }
+      ],
+      "spellcasting": {
+        "ability": "Weisheit",
+        "cantripsKnown": [
+          {"level": 1, "count": 2},
+          {"level": 4, "count": 3},
+          {"level": 10, "count": 4}
+        ],
+        "spellsPrepared": [
+          {"level": 1, "count": 4},
+          {"level": 2, "count": 5},
+          {"level": 3, "count": 6},
+          {"level": 4, "count": 7},
+          {"level": 5, "count": 9},
+          {"level": 6, "count": 10},
+          {"level": 7, "count": 11},
+          {"level": 8, "count": 12},
+          {"level": 9, "count": 14},
+          {"level": 10, "count": 15},
+          {"level": 11, "count": 16},
+          {"level": 12, "count": 16},
+          {"level": 13, "count": 17},
+          {"level": 14, "count": 17},
+          {"level": 15, "count": 18},
+          {"level": 16, "count": 18},
+          {"level": 17, "count": 19},
+          {"level": 18, "count": 20},
+          {"level": 19, "count": 21},
+          {"level": 20, "count": 22}
+        ],
+        "spellSlotsByLevel": {
+          "1st": {"1": 2, "2": 3, "3": 4, "4": 4, "5": 4, "6": 4, "7": 4, "8": 4, "9": 4, "10": 4, "11": 4, "12": 4, "13": 4, "14": 4, "15": 4, "16": 4, "17": 4, "18": 4, "19": 4, "20": 4},
+          "2nd": {"3": 2, "4": 3, "5": 3, "6": 3, "7": 3, "8": 3, "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "3rd": {"5": 2, "6": 3, "7": 3, "8": 3, "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "4th": {"7": 1, "8": 2, "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "5th": {"9": 1, "10": 2, "11": 2, "12": 2, "13": 2, "14": 2, "15": 2, "16": 2, "17": 2, "18": 2, "19": 2, "20": 2},
+          "6th": {"11": 1, "12": 1, "13": 1, "14": 1, "15": 2, "16": 2, "17": 2, "18": 3, "19": 3, "20": 3},
+          "7th": {"13": 1, "14": 1, "15": 1, "16": 1, "17": 2, "18": 2, "19": 2, "20": 2},
+          "8th": {"15": 1, "16": 1, "17": 1, "18": 1, "19": 1, "20": 2},
+          "9th": {"17": 1, "18": 1, "19": 1, "20": 1}
+        }
+      }
+    }
+    ,
+    "Hexenmeister": {
+      "summary": "Ein Okkultist, durch außerweltliche Pakte ermächtigt",
+      "hitDice": "d8",
+      "hpAt1stLevel": "8 + Konstitutionsmodifikator",
+      "hpPerLevel": "5 + Konstitutionsmodifikator",
+      "primaryAbility": "Charisma",
+      "savingThrows": ["Weisheit", "Charisma"],
+      "proficiencies": {
+        "armor": ["Leichte Rüstung"],
+        "weapons": ["Einfache Waffen"],
+        "tools": [],
+        "skills": {
+          "from": [
+            "Arkane Kunde", "Einschüchtern", "Geschichte", "Nachforschungen",
+            "Naturkunde", "Religion", "Täuschen"
+          ],
+          "choose": 2
+        }
+      },
+      "startingEquipment": {
+        "choiceA": [
+          {"name": "Lederrüstung", "qty": 1},
+          {"name": "Sichel", "qty": 1},
+          {"name": "Dolch", "qty": 2},
+          {"name": "Arkaner Fokus (Kugel)", "qty": 1},
+          {"name": "Buch (okkulte Überlieferungen)", "qty": 1},
+          {"name": "Gelehrtenausrüstung", "qty": 1},
+          {"name": "Gold", "qty": 15, "unit": "GM"}
+        ],
+        "choiceB": [
+          {"name": "Gold", "qty": 100, "unit": "GM"}
+        ]
+      },
+      "multiClassing": {
+        "prerequisites": {"CHA": 13},
+        "proficienciesGranted": ["Leichte Rüstung", "Einfache Waffen"]
+      },
+      "features": [
+        {
+          "level": 1,
+          "name": "Paktmagie",
+          "description": "Durch einen Pakt mit einer Wesenheit erhältst du Paktmagie-Zauberplätze, die sich nach einer kurzen oder langen Rast komplett erneuern."
+        },
+        {
+          "level": 1,
+          "name": "Schauerliche Anrufungen",
+          "description": "Du hast verbotenes Wissen erlangt und erhältst schauerliche Anrufungen (z. B. Pakt des Buches, Pakt der Klinge), die dir permanente Modifikatoren oder Gratis-Zauber gewähren."
+        },
+        {
+          "level": 2,
+          "name": "Magische Raffinesse",
+          "description": "Führe einen Ritual-Ritus aus, um verbrauchte Paktmagie-Zauberplätze zurückzuerhalten (höchstens in Höhe der Hälfte deiner Hexenmeisterstufe, einmal pro langer Rast)."
+        },
+        {
+          "level": 3,
+          "name": "Hexenmeister-Unterklasse",
+          "description": "Du erhältst eine Hexenmeister-Unterklasse (Schutzherr) deiner Wahl (Celestischer Schutzherr, Erzfee-Schutzherr, Großes-Alter-Schutzherr, Unhold-Schutzherr).",
+          "choice": {
+            "text": "Wähle deinen Schutzherrn:",
+            "availableAtLevel": 3,
+            "options": [
+              {
+                "name": "Celestischer Schutzherr",
+                "features": [
+                  {"level": 3, "name": "Celestische Zauber", "description": "Erhalte stets vorbereitete Celestische Zauber (Beistand, Heilige Flamme etc.)."},
+                  {"level": 3, "name": "Heilendes Licht", "description": "Heile Verbündete über einen Vorrat von W6-Würfeln als Bonusaktion."},
+                  {"level": 6, "name": "Gleitende Seele", "description": "Erhalte Resistenz gegen gleißenden Schaden und füge Zaubern zusätzlichen Schaden hinzu."},
+                  {"level": 10, "name": "Celestische Widerstandskraft", "description": "Erhalte temporäre Treppepunkte bei Raffinesse/Rast und verleihe Verbündeten ebenfalls temporäre Trefferpunkte."},
+                  {"level": 14, "name": "Sengende Rache", "description": "Entfessle bei Todesrettungswürfen gleißende Energie zur Heilung und um Gegner zu schädigen/blenden."}
+                ]
+              },
+              {
+                "name": "Erzfee-Schutzherr",
+                "features": [
+                  {"level": 3, "name": "Erzfeenzauber", "description": "Erhalte stets vorbereitete Erzfeenzauber (Feenfeuer, Nebelschritt etc.)."},
+                  {"level": 3, "name": "Schritte der Feenwesen", "description": "Nutze Nebelschritt per Pakt-Platz und erhalte temporäre Trefferpunkte oder belege Gegner mit Nachteilen."},
+                  {"level": 6, "name": "Neblige Flucht", "description": "Wirke Nebelschritt als Reaktion bei erlittenem Schaden mit zusätzlichen Schreckenstricks."},
+                  {"level": 10, "name": "Betörende Abwehr", "description": "Immunität gegen den Zustand Bezaubert und erzwinge bei Treffern Weisheitsrettungswürfe zur Schadenshalbierung."},
+                  {"level": 14, "name": "Verhexende Magie", "description": "Wirke Nebelschritt direkt zusammen mit Verzauberungs- oder Illusionszaubern ohne Extra-Aktion."}
+                ]
+              },
+              {
+                "name": "Großer-Alter-Schutzherr",
+                "features": [
+                  {"level": 3, "name": "Erwachter Geist", "description": "Kommuniziere telepathisch auf bis zu 9 Meter Entfernung."},
+                  {"level": 3, "name": "Großer-Alter-Zauber", "description": "Erhalte stets vorbereitete Zauber (Dissonantes Flüstern, Gedankenwahrnehmen etc.)."},
+                  {"level": 3, "name": "Psychische Zauber", "description": "Ändere den Schaden deiner Hexenmeisterzauber in psychischen Schaden und wirke Verzauberungen/Illusionen ohne Verbal- oder Gestenkomponenten."},
+                  {"level": 6, "name": "Hellsichtiger Kämpfer", "description": "Zwinge telepathisch verbundene Kreaturen zu Rettungswürfen mit Nachteil und erhalte Vorteile gegen sie."},
+                  {"level": 10, "name": "Gedankenschild", "description": "Schütze deine Gedanken vor Telepathie, erhalte Psychoresistenz und reflektiere psychischen Schaden."},
+                  {"level": 10, "name": "Schauerliches Verwünschen", "description": "Erhalte den Zauber Verwünschen stets vorbereitet mit Nachteil für das Ziel bei Rettungswürfen."},
+                  {"level": 14, "name": "Diener erschaffen", "description": "Modifiziere Beschwörungen von Aberrationen ohne Konzentration mit temporären Trefferpunkten und Extraschaden."}
+                ]
+              },
+              {
+                "name": "Unhold-Schutzherr",
+                "features": [
+                  {"level": 3, "name": "Segen des dunklen Meisters", "description": "Erhalte temporäre Trefferpunkte, wenn du die Trefferpunkte eines Gegners auf 0 reduzierst."},
+                  {"level": 3, "name": "Unhold-Zauber", "description": "Erhalte stets vorbereitete Unhold-Zauber (Befehl, Brennende Hände, Feuerball etc.)."},
+                  {"level": 6, "name": "Schicksal des dunklen Meisters", "description": "Füge deinen Attributs- oder Rettungswürfen 1W10 hinzu, um das Schicksal zu deinen Gunsten zu ändern."},
+                  {"level": 10, "name": "Widerstandskraft des Unholds", "description": "Wähle nach kurzer oder langer Rast eine Schadensart aus, gegen die du resistent bist."},
+                  {"level": 14, "name": "Schlund des Wahnsinns", "description": "Schleudere eine Kreatur per Angriff in die Unteren Ebenen, wo sie 8W10 psychischen Schaden erleidet."}
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "level": 4,
+          "name": "Attributswerterhöhung",
+          "description": "Erhöhe einen Attributswert um 2 oder zwei um je 1 (wiederholt sich auf Stufe 8, 12 und 16)."
+        },
+        {
+          "level": 9,
+          "name": "Schutzherrn kontaktieren",
+          "description": "Wirke den Zauber Kontakt zu anderen Ebenen ohne Zauberplatz und bestehe den Rettungswurf automatisch."
+        },
+        {
+          "level": 11,
+          "name": "Mystisches Arkanum (Stufe 6)",
+          "description": "Erhalte die Fähigkeit, einen Hexenmeisterzauber des 6. Grades einmal pro langer Rast ohne Zauberplatz zu wirken (weitere Grade folgen auf Stufe 13, 15 und 17)."
+        },
+        {
+          "level": 19,
+          "name": "Epische Gabe",
+          "description": "Erhalte eine Epische-Gabe-Talent (z. B. Gabe des Schicksals) oder ein anderes Talent deiner Wahl."
+        },
+        {
+          "level": 20,
+          "name": "Mystischer Meister",
+          "description": "Setze Magische Raffinesse ein, um alle verbrauchten Paktmagie-Zauberplätze augenblicklich wiederzuerhalten."
+        }
+      ],
+      "spellcasting": {
+        "ability": "Charisma",
+        "cantripsKnown": [
+          {"level": 1, "count": 2},
+          {"level": 4, "count": 3},
+          {"level": 10, "count": 4}
+        ],
+        "spellsPrepared": [
+          {"level": 1, "count": 2},
+          {"level": 2, "count": 3},
+          {"level": 3, "count": 4},
+          {"level": 4, "count": 5},
+          {"level": 5, "count": 6},
+          {"level": 6, "count": 7},
+          {"level": 7, "count": 8},
+          {"level": 8, "count": 9},
+          {"level": 9, "count": 10},
+          {"level": 10, "count": 10},
+          {"level": 11, "count": 11},
+          {"level": 12, "count": 12},
+          {"level": 13, "count": 12},
+          {"level": 14, "count": 13},
+          {"level": 15, "count": 13},
+          {"level": 16, "count": 14},
+          {"level": 17, "count": 14},
+          {"level": 18, "count": 15},
+          {"level": 19, "count": 15},
+          {"level": 20, "count": 15}
+        ],
+        "spellSlotsByLevel": {
+          "pactMagicSlots": {
+            "1": {"slots": 1, "slotLevel": 1},
+            "2": {"slots": 2, "slotLevel": 1},
+            "3": {"slots": 2, "slotLevel": 2},
+            "4": {"slots": 2, "slotLevel": 2},
+            "5": {"slots": 2, "slotLevel": 3},
+            "6": {"slots": 2, "slotLevel": 3},
+            "7": {"slots": 2, "slotLevel": 4},
+            "8": {"slots": 2, "slotLevel": 4},
+            "9": {"slots": 2, "slotLevel": 5},
+            "10": {"slots": 2, "slotLevel": 5},
+            "11": {"slots": 3, "slotLevel": 5},
+            "12": {"slots": 3, "slotLevel": 5},
+            "13": {"slots": 3, "slotLevel": 5},
+            "14": {"slots": 3, "slotLevel": 5},
+            "15": {"slots": 3, "slotLevel": 5},
+            "16": {"slots": 3, "slotLevel": 5},
+            "17": {"slots": 4, "slotLevel": 5},
+            "18": {"slots": 4, "slotLevel": 5},
+            "19": {"slots": 4, "slotLevel": 5},
+            "20": {"slots": 4, "slotLevel": 5}
+          }
+        }
+      }
+    }
+    ,
+    "Kämpfer": {
+      "summary": "Meister aller Waffen und Rüstungen",
+      "hitDice": "d10",
+      "hpAt1stLevel": "10 + Konstitutionsmodifikator",
+      "hpPerLevel": "6 + Konstitutionsmodifikator",
+      "primaryAbility": "Stärke oder Geschicklichkeit",
+      "savingThrows": ["Stärke", "Konstitution"],
+      "proficiencies": {
+        "armor": ["Leichte Rüstung", "Mittlere Rüstung", "Schwere Rüstung", "Schilde"],
+        "weapons": ["Einfache Waffen", "Kriegswaffen"],
+        "tools": [],
+        "skills": {
+          "from": [
+            "Akrobatik", "Athletik", "Einschüchtern", "Geschichte",
+            "Mit Tieren umgehen", "Motiv erkennen", "Überlebenskunst",
+            "Überzeugen", "Wahrnehmung"
+          ],
+          "choose": 2
+        }
+      },
+      "startingEquipment": {
+        "choiceA": [
+          {"name": "Kettenpanzer", "qty": 1},
+          {"name": "Zweihandschwert", "qty": 1},
+          {"name": "Flegel", "qty": 1},
+          {"name": "Wurfspeer", "qty": 8},
+          {"name": "Gewölbeforscherausrüstung", "qty": 1},
+          {"name": "Gold", "qty": 4, "unit": "GM"}
+        ],
+        "choiceB": [
+          {"name": "Beschlagene Lederrüstung", "qty": 1},
+          {"name": "Krummsäbel", "qty": 1},
+          {"name": "Kurzschwert", "qty": 1},
+          {"name": "Langbogen", "qty": 1},
+          {"name": "Pfeile", "qty": 20, "unit": "Stück"},
+          {"name": "Köcher", "qty": 1},
+          {"name": "Gewölbeforscherausrüstung", "qty": 1},
+          {"name": "Gold", "qty": 11, "unit": "GM"}
+        ],
+        "choiceC": [
+          {"name": "Gold", "qty": 155, "unit": "GM"}
+        ]
+      },
+      "multiClassing": {
+        "prerequisites": {"STR": 13, "DEX": 13},
+        "proficienciesGranted": ["Leichte Rüstung", "Mittlere Rüstung", "Schwere Rüstung", "Schilde", "Einfache Waffen", "Kriegswaffen"]
+      },
+      "features": [
+        {
+          "level": 1,
+          "name": "Durchschnaufen",
+          "description": "Du hast einen Vorrat an körperlicher und geistiger Ausdauer (1W10 + Kämpferstufe TP als Bonusaktion). Anzahl der Anwendungen steigt mit höheren Stufen."
+        },
+        {
+          "level": 1,
+          "name": "Kampfstil",
+          "description": "Du erhältst ein Kampfstil-Talent deiner Wahl (Verteidigung wird empfohlen)."
+        },
+        {
+          "level": 1,
+          "name": "Waffenmeisterung",
+          "description": "Verwende die Meisterschaftseigenschaften von anfangs drei Waffenarten deiner Wahl (steigt auf höheren Stufen an)."
+        },
+        {
+          "level": 2,
+          "name": "Taktisches Verständnis",
+          "description": "Verbrauche Durchschnaufen bei gescheiterten Attributswürfen nicht, sondern füge stattdessen 1W10 hinzu."
+        },
+        {
+          "level": 2,
+          "name": "Tatendrang",
+          "description": "Führe in deinem Zug eine zusätzliche Aktion (außer der magischen Aktion) aus."
+        },
+        {
+          "level": 3,
+          "name": "Kämpfer-Unterklasse",
+          "description": "Du erhältst eine Kämpfer-Unterklasse deiner Wahl (Champion, Kampfmeister, Mystischer Ritter, Psi-Krieger).",
+          "choice": {
+            "text": "Wähle deine Kämpfer-Unterklasse:",
+            "availableAtLevel": 3,
+            "options": [
+              {
+                "name": "Champion",
+                "features": [
+                  {"level": 3, "name": "Bemerkenswerter Athlet", "description": "Vorteil bei Initiative- und Stärkewürfen (Athletik) sowie verbesserte Sprungbewegung."},
+                  {"level": 3, "name": "Verbesserter kritischer Treffer", "description": "Kritische Treffer bei einem W20-Ergebnis von 19 oder 20."},
+                  {"level": 7, "name": "Weiterer Kampfstil", "description": "Erhalte ein zusätzliches Kampfstil-Talent."},
+                  {"level": 10, "name": "Heldenhafter Krieger", "description": "Erhalte im Kampf Heldenhafte Inspiration, wenn du zu Beginn deines Zuges keine hast."},
+                  {"level": 15, "name": "Überlegener kritischer Treffer", "description": "Kritische Treffer bei einem W20-Ergebnis von 18 bis 20."},
+                  {"level": 18, "name": "Der Überlebende", "description": "Erhalte Vorteile bei Todesrettungswürfen und automatische TP-Regeneration im blutigen Zustand."}
+                ]
+              },
+              {
+                "name": "Kampfmeister",
+                "features": [
+                  {"level": 3, "name": "Kampfüberlegenheit", "description": "Beherrsche Manöver, die von Überlegenheitswürfeln (W8) gespeist werden."},
+                  {"level": 3, "name": "Adept des Krieges", "description": "Erhalte Übung mit einer Art Handwerkszeug und einer Kämpferfertigkeit."},
+                  {"level": 7, "name": "Kenne deinen Feind", "description": "Schätze als Bonusaktion Stärken und Schwächen einer Kreatur ein."},
+                  {"level": 10, "name": "Verbesserte Kampfüberlegenheit", "description": "Deine Überlegenheitswürfel werden zu W10 (und auf Stufe 18 zu W12)."},
+                  {"level": 15, "name": "Unermüdlich", "description": "Setze einmal pro Zug einen W8-Überlegenheitswürfel ein, ohne einen echten Würfel zu verbrauchen."}
+                ]
+              },
+              {
+                "name": "Mystischer Ritter",
+                "features": [
+                  {"level": 3, "name": "Kriegsbindung", "description": "Erschaffe eine magische Bindung zu bis zu zwei Waffen, wodurch sie unentwaffnbar sind und herbeibeschworen werden können."},
+                  {"level": 3, "name": "Zauberwirken", "description": "Erlerne Magierzauber (Intelligenz als Zauberwirkfähigkeit) mit Zaubertricks und vorbereiteten Zaubern."},
+                  {"level": 7, "name": "Kriegsmagie", "description": "Ersetze bei der Angriffsaktion einen Angriff durch einen Magierzaupertrick mit Zeitaufwand einer Aktion."},
+                  {"level": 10, "name": "Mystischer Schlag", "description": "Getroffene Kreaturen sind im Nachteil bei Rettungswürfen gegen deine Zauber."},
+                  {"level": 15, "name": "Arkaner Sturmangriff", "description": "Teleportiere dich beim Tatendrang bis zu 9 Meter weit."},
+                  {"level": 18, "name": "Verbesserte Kriegsmagie", "description": "Ersetze zwei Angriffe in der Angriffsaktion durch einen Magierzauber des 1. oder 2. Grades."}
+                ]
+              },
+              {
+                "name": "Psi-Krieger",
+                "features": [
+                  {"level": 3, "name": "Psionische Kraft", "description": "Verfüge über Psi-Energie-Würfel (anfangs W6, steigen bis W12), um psionische Effekte zu erzeugen."},
+                  {"level": 3, "name": "Psionischer Schlag", "description": "Füge Treffern zusätzlichen psionischen Schaden per Psi-Energie-Würfel hinzu."},
+                  {"level": 3, "name": "Schützende Barriere", "description": "Reduziere erlittenen Schaden per Reaktion und Psi-Energie-Würfel."},
+                  {"level": 3, "name": "Telekinese", "description": "Bewege Gegenstände und Kreaturen gedanklich."},
+                  {"level": 7, "name": "Adept der Telekinese", "description": "Erhalte Psi-Sprung und telekinetischen Stoß."},
+                  {"level": 10, "name": "Bewachter Wille", "description": "Psychische Resistenz und automatische Befreiung von Bezaubert/Verängstigt zu Beginn des Zugs."},
+                  {"level": 15, "name": "Mentaler Schutzwall", "description": "Verleihe dir und Verbündeten Teildeckung durch telekinetische Kraft."},
+                  {"level": 18, "name": "Meister der Telekinese", "description": "Wirke den Zauber Telekinese stets vorbereitet ohne Zauberplatz und mit parallelem Waffenangriff."}
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "level": 4,
+          "name": "Attributswerterhöhung",
+          "description": "Erhöhe einen Attributswert um 2 oder zwei um je 1 (wiederholt sich auf Stufe 6, 8, 12, 14 und 16)."
+        },
+        {
+          "level": 5,
+          "name": "Taktikwechsel",
+          "description": "Bewege dich bei Aktivierung von Durchschnaufen um die Hälfte deiner Bewegungsrate, ohne Gelegenheitsangriffe zu provozieren."
+        },
+        {
+          "level": 5,
+          "name": "Zusätzlicher Angriff",
+          "description": "Greife jetzt zweimal an, wenn du eine Angriffsaktion ausführst (steigt auf 3 Angriffe auf Stufe 11 und 4 Angriffe auf Stufe 20)."
+        },
+        {
+          "level": 9,
+          "name": "Taktischer Meister",
+          "description": "Ersetze bei Waffenangriffen die Meisterschaftseigenschaft durch Auslaugen, Stoßen oder Verlangsamen."
+        },
+        {
+          "level": 9,
+          "name": "Unbeugsamkeit",
+          "description": "Wiederhole verpatzte Rettungswürfe mit einem Bonus in Höhe deiner Kämpferstufe (steigt auf mehrmalige Anwendung pro langer Rast)."
+        },
+        {
+          "level": 13,
+          "name": "Angriffsstudien",
+          "description": "Erhalte Vorteile bei Angriffswürfen gegen Kreaturen, gegen die du im vorherigen Zug verfehlt hast."
+        },
+        {
+          "level": 19,
+          "name": "Epische Gabe",
+          "description": "Erhalte eine Epische-Gabe-Talent (z. B. Gabe der Kampffertigkeit) oder ein anderes Talent deiner Wahl."
+        }
+      ],
+      "spellcasting": {
+        "ability": "Intelligenz",
+        "restriction": "Nur für die Unterklasse 'Mystischer Ritter'",
+        "cantripsKnown": [
+          {"level": 3, "count": 2},
+          {"level": 10, "count": 3}
+        ],
+        "spellsPrepared": [
+          {"level": 3, "count": 3},
+          {"level": 4, "count": 4},
+          {"level": 7, "count": 5},
+          {"level": 8, "count": 6},
+          {"level": 10, "count": 7},
+          {"level": 11, "count": 8},
+          {"level": 13, "count": 9},
+          {"level": 14, "count": 10},
+          {"level": 16, "count": 11},
+          {"level": 19, "count": 12},
+          {"level": 20, "count": 13}
+        ],
+        "spellSlotsByLevel": {
+          "1st": {"3": 2, "4": 3, "5": 3, "6": 3, "7": 4, "8": 4, "9": 4, "10": 4, "11": 4, "12": 4, "13": 4, "14": 4, "15": 4, "16": 4, "17": 4, "18": 4, "19": 4, "20": 4},
+          "2nd": {"7": 2, "8": 2, "9": 2, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "3rd": {"13": 2, "14": 2, "15": 2, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "4th": {"19": 1, "20": 1}
+        }
+      }
+    }
+    ,
+    "Kleriker": {
+      "summary": "Wundertätiger Priester mit göttlichen Kräften",
+      "hitDice": "d8",
+      "hpAt1stLevel": "8 + Konstitutionsmodifikator",
+      "hpPerLevel": "5 + Konstitutionsmodifikator",
+      "primaryAbility": "Weisheit",
+      "savingThrows": ["Weisheit", "Charisma"],
+      "proficiencies": {
+        "armor": ["Leichte Rüstung", "Mittlere Rüstung", "Schilde"],
+        "weapons": ["Einfache Waffen"],
+        "tools": [],
+        "skills": {
+          "from": [
+            "Geschichte", "Heilkunde", "Motiv erkennen",
+            "Religion", "Überzeugen"
+          ],
+          "choose": 2
+        }
+      },
+      "startingEquipment": {
+        "choiceA": [
+          {"name": "Kettenhemd", "qty": 1},
+          {"name": "Schild", "qty": 1},
+          {"name": "Streitkolben", "qty": 1},
+          {"name": "Heiliges Symbol", "qty": 1},
+          {"name": "Priesterausrüstung", "qty": 1},
+          {"name": "Gold", "qty": 7, "unit": "GM"}
+        ],
+        "choiceB": [
+          {"name": "Gold", "qty": 110, "unit": "GM"}
+        ]
+      },
+      "multiClassing": {
+        "prerequisites": {"WIS": 13},
+        "proficienciesGranted": ["Leichte Rüstung", "Mittlere Rüstung", "Schilde"]
+      },
+      "features": [
+        {
+          "level": 1,
+          "name": "Zauberwirken",
+          "description": "Du hast gelernt, durch Gebete und Meditation göttliche Zauber zu wirken. Weisheit ist deine Zauberwirkfähigkeit."
+        },
+        {
+          "level": 1,
+          "name": "Göttliche Ordnung",
+          "description": "Wähle zwischen Beschützer (Kriegswaffen und schwere Rüstung) oder Thaumaturgie (zusätzlicher Zaubertrick und Bonus auf Intelligenzwürfe wie Arkane Kunde oder Religion).",
+          "choice": {
+            "text": "Wähle deine göttliche Ordnung:",
+            "options": [
+              {"name": "Beschützer", "description": "Erhalte Übung mit Kriegswaffen und Vertrautheit mit schwerer Rüstung."},
+              {"name": "Thaumaturgie", "description": "Erhalte einen zusätzlichen Zaubertrick und einen Bonus auf Intelligenzwürfe (Arkane Kunde oder Religion) in Höhe deines Weisheitsmodifikators."}
+            ]
+          }
+        },
+        {
+          "level": 2,
+          "name": "Göttliche Macht fokussieren",
+          "description": "Kanalisiere göttliche Energie für magische Effekte. Beinhaltet anfangs Göttlicher Funke und Untote vertreiben. Anzahl der Nutzungen steigt mit Kämpfer-/Klerikerstufen und regeneriert sich nach kurzer oder langer Rast."
+        },
+        {
+          "level": 3,
+          "name": "Kleriker-Unterklasse",
+          "description": "Du erhältst eine Kleriker-Unterklasse (Domäne) deiner Wahl (Domäne des Krieges, Domäne des Lebens, Domäne des Lichts, Domäne der List).",
+          "choice": {
+            "text": "Wähle deine göttliche Domäne:",
+            "availableAtLevel": 3,
+            "options": [
+              {
+                "name": "Domäne des Krieges",
+                "features": [
+                  {"level": 3, "name": "Domänenzauber des Krieges", "description": "Erhalte stets vorbereitete Kriegszäuber (Lenkendes Geschoss, Magische Waffe etc.)."},
+                  {"level": 3, "name": "Geführter Schlag", "description": "Verleihe verfehlten Angriffswürfen von dir oder Verbündeten per Göttlicher Macht +10 Bonus."},
+                  {"level": 3, "name": "Kriegspriester", "description": "Führe als Bonusaktion einen zusätzlichen Waffenangriff oder waffenlosen Angriff aus."},
+                  {"level": 6, "name": "Segen des Kriegsgottes", "description": "Wirke Schild des Glaubens oder Waffe des Glaubens als Göttliche Macht ohne Konzentration."},
+                  {"level": 17, "name": "Verkörperung der Schlacht", "description": "Erhalte Resistenzen gegen Hieb-, Stich- und Wuchtschaden."}
+                ]
+              },
+              {
+                "name": "Domäne des Lebens",
+                "features": [
+                  {"level": 3, "name": "Domänenzauber des Lebens", "description": "Erhalte stets vorbereitete Lebenszauber (Segnen, Wunden heilen etc.)."},
+                  {"level": 3, "name": "Jünger des Lebens", "description": "Heilungszauber stellen zusätzliche Trefferpunkte (2 + Zauberplatzgrad) wieder her."},
+                  {"level": 3, "name": "Leben erhalten", "description": "Fokussiere Göttliche Macht, um massenhaft Trefferpunkte an nahe Kreaturen zu verteilen."},
+                  {"level": 6, "name": "Gesegneter Heiler", "description": "Heilungszauber an anderen heilen auch dich selbst um denselben Wert."},
+                  {"level": 17, "name": "Höchste Heilung", "description": "Erziele bei Heilungswürfen automatisch die maximal möglichen Ergebnisse."}
+                ]
+              },
+              {
+                "name": "Domäne des Lichts",
+                "features": [
+                  {"level": 3, "name": "Domänenzauber des Lichts", "description": "Erhalte stets vorbereitete Lichtzauber (Brennende Hände, Feenfeuer etc.)."},
+                  {"level": 3, "name": "Schützendes Flackern", "description": "Zwinge Angreifer per Reaktion und Weisheitsmodifikator in den Nachteil."},
+                  {"level": 3, "name": "Strahlen des Sonnenaufgangs", "description": "Erschaffe einen gleißenden Lichtblitz, der Schaden zufügt und Dunkelheit auflöst."},
+                  {"level": 6, "name": "Verbessertes schützendes Flackern", "description": "Verleihe beim Flackern zusätzlich temporäre Trefferpunkte (2W6 + Weisheitsmodifikator)."},
+                  {"level": 17, "name": "Korona des Lichts", "description": "Erschaffe eine Aura aus Sonnenlicht, die helles Licht spendet und Gegner bei Rettungswürfen gegen Feuer- oder gleißenden Schaden in den Nachteil versetzt."}
+                ]
+              },
+              {
+                "name": "Domäne der List",
+                "features": [
+                  {"level": 3, "name": "Abbild beschwören", "description": "Erschaffe eine visuell perfekte Illusion per Göttlicher Macht, die ablenkt und bewegt werden kann."},
+                  {"level": 3, "name": "Die Segen der List", "description": "Verleihe dir oder Verbündeten Vorteil bei Geschicklichkeitswürfen (Heimlichkeit)."},
+                  {"level": 3, "name": "Domänenzauber der List", "description": "Erhalte stets vorbereitete Listzauber (Person bezaubern, Unsichtbarkeit etc.)."},
+                  {"level": 6, "name": "Listige Transposition", "description": "Teleportiere dich und tausche den Platz mit deiner Illusion."},
+                  {"level": 17, "name": "Verbessertes Abbild", "description": "Verbessere das Abbild durch gegenseitige Angriffsvorteile und heilende Illusionen."}
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "level": 4,
+          "name": "Attributswerterhöhung",
+          "description": "Erhöhe einen Attributswert um 2 oder zwei um je 1 (wiederholt sich auf Stufe 8, 12 und 16)."
+        },
+        {
+          "level": 5,
+          "name": "Untote versengen",
+          "description": "Füge Untoten bei erfolgreichem Untote-vertreiben-Effekt zusätzlichen gleißenden Schaden in Höhe deines Weisheitsmodifikators zu."
+        },
+        {
+          "level": 7,
+          "name": "Gesegnete Schläge",
+          "description": "Wähle zwischen Göttlicher Schlag (zusätzlicher nekrotischer/gleißender Schaden bei Waffenangriffen) oder Verstärkte Zaubertricks (Weisheitsmodifikator zu Zaubertricks addieren)."
+        },
+        {
+          "level": 10,
+          "name": "Göttliche Intervention",
+          "description": "Rufe deine Gottheit an, um einen beliebigen Klerikerzauber des 5. Grades oder niedriger ohne Zauberplatz zu wirken (einmal pro langer Rast)."
+        },
+        {
+          "level": 14,
+          "name": "Verbesserte gesegnete Schläge",
+          "description": "Erhöhe den Zusatzschaden deines Göttlichen Schlags auf 2W8 oder erzeuge zusätzliche temporäre Trefferpunkte bei Zaubertricks."
+        },
+        {
+          "level": 19,
+          "name": "Epische Gabe",
+          "description": "Erhalte eine Epische-Gabe-Talent (z. B. Gabe des Schicksals) oder ein anderes Talent deiner Wahl."
+        },
+        {
+          "level": 20,
+          "name": "Mächtige Göttliche Intervention",
+          "description": "Setze Göttliche Intervention ein, um den mächtigen Wunsch-Zauber zu wirken (benötigt 2W4 lange Rasten zur Wiederaufladung)."
+        }
+      ],
+      "spellcasting": {
+        "ability": "Weisheit",
+        "cantripsKnown": [
+          {"level": 1, "count": 3},
+          {"level": 4, "count": 4},
+          {"level": 10, "count": 5}
+        ],
+        "spellsPrepared": [
+          {"level": 1, "count": 4},
+          {"level": 2, "count": 5},
+          {"level": 3, "count": 6},
+          {"level": 4, "count": 7},
+          {"level": 5, "count": 9},
+          {"level": 6, "count": 10},
+          {"level": 7, "count": 11},
+          {"level": 8, "count": 12},
+          {"level": 9, "count": 14},
+          {"level": 10, "count": 15},
+          {"level": 11, "count": 16},
+          {"level": 12, "count": 16},
+          {"level": 13, "count": 17},
+          {"level": 14, "count": 17},
+          {"level": 15, "count": 18},
+          {"level": 16, "count": 18},
+          {"level": 17, "count": 19},
+          {"level": 18, "count": 20},
+          {"level": 19, "count": 21},
+          {"level": 20, "count": 22}
+        ],
+        "spellSlotsByLevel": {
+          "1st": {"1": 2, "2": 3, "3": 4, "4": 4, "5": 4, "6": 4, "7": 4, "8": 4, "9": 4, "10": 4, "11": 4, "12": 4, "13": 4, "14": 4, "15": 4, "16": 4, "17": 4, "18": 4, "19": 4, "20": 4},
+          "2nd": {"3": 2, "4": 3, "5": 3, "6": 3, "7": 3, "8": 3, "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "3rd": {"5": 2, "6": 3, "7": 3, "8": 3, "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "4th": {"7": 1, "8": 2, "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "5th": {"9": 1, "10": 2, "11": 2, "12": 2, "13": 2, "14": 2, "15": 2, "16": 2, "17": 2, "18": 2, "19": 2, "20": 2},
+          "6th": {"11": 1, "12": 1, "13": 1, "14": 1, "15": 2, "16": 2, "17": 2, "18": 3, "19": 3, "20": 3},
+          "7th": {"13": 1, "14": 1, "15": 1, "16": 1, "17": 2, "18": 2, "19": 2, "20": 2},
+          "8th": {"15": 1, "16": 1, "17": 1, "18": 1, "19": 1, "20": 2},
+          "9th": {"17": 1, "18": 1, "19": 1, "20": 1}
+        }
+      }
+    }
+    ,
+    "Magier": {
+      "summary": "Glehrter Magieanwender von arkaner Macht",
+      "hitDice": "d6",
+      "hpAt1stLevel": "6 + Konstitutionsmodifikator",
+      "hpPerLevel": "4 + Konstitutionsmodifikator",
+      "primaryAbility": "Intelligenz",
+      "savingThrows": ["Intelligenz", "Weisheit"],
+      "proficiencies": {
+        "armor": [],
+        "weapons": ["Einfache Waffen"],
+        "tools": [],
+        "skills": {
+          "from": [
+            "Arkane Kunde", "Geschichte", "Heilkunde", "Motiv erkennen",
+            "Nachforschungen", "Naturkunde", "Religion"
+          ],
+          "choose": 2
+        }
+      },
+      "startingEquipment": {
+        "choiceA": [
+          {"name": "Dolch", "qty": 2},
+          {"name": "Arkaner Fokus (Kampfstab)", "qty": 1},
+          {"name": "Robe", "qty": 1},
+          {"name": "Zauberbuch", "qty": 1},
+          {"name": "Gelehrtenausrüstung", "qty": 1},
+          {"name": "Gold", "qty": 5, "unit": "GM"}
+        ],
+        "choiceB": [
+          {"name": "Gold", "qty": 55, "unit": "GM"}
+        ]
+      },
+      "multiClassing": {
+        "prerequisites": {"INT": 13},
+        "proficienciesGranted": []
+      },
+      "features": [
+        {
+          "level": 1,
+          "name": "Zauberwirken",
+          "description": "Als Student arkaner Magie wirkst du Zauber aus deinem Zauberbuch. Intelligenz ist deine Zauberwirkfähigkeit."
+        },
+        {
+          "level": 1,
+          "name": "Ritual-Adept",
+          "description": "Wirke jeden Zauber als Ritual, sofern er als Ritual gekennzeichnet ist und in deinem Zauberbuch steht."
+        },
+        {
+          "level": 1,
+          "name": "Arkane Erholung",
+          "description": "Stelle nach einer kurzen Rast verbrauchte Zauberplätze wieder her (deren summierte Gradzahl höchstens der Hälfte deiner Magierstufe entspricht)."
+        },
+        {
+          "level": 2,
+          "name": "Gelehrter",
+          "description": "Spezialisiere dich auf ein Fachgebiet (erhalte Expertise in einer entsprechenden Fertigkeit)."
+        },
+        {
+          "level": 3,
+          "name": "Magier-Unterklasse",
+          "description": "Du erhältst eine Magier-Unterklasse deiner Wahl (Bannmagier, Hervorrufer, Illusionist, Seher).",
+          "choice": {
+            "text": "Wähle deine Magier-Unterklasse:",
+            "availableAtLevel": 3,
+            "options": [
+              {
+                "name": "Bannmagier",
+                "features": [
+                  {"level": 3, "name": "Arkaner Schutz", "description": "Erschaffe einen magischen Schutz (Trefferpunkte in Höhe von 2 x Magierstufe + Intelligenzmodifikator), der Schaden für dich abfängt."},
+                  {"level": 3, "name": "Gelehrter der Bannmagie", "description": "Füge gratis zwei Bannmagie-Zauber des Höchstens 2. Grades deinem Zauberbuch hinzu."},
+                  {"level": 6, "name": "Projizierter Schutz", "description": "Lass deinen arkaner Schutz den Schaden abfangen, den eine nahe Kreatur erleidet."},
+                  {"level": 10, "name": "Zauberbrecher", "description": "Habe Gegenzauber und Magie bannen stets vorbereitet und wirke sie als Bonusaktion mit Bonus."},
+                  {"level": 14, "name": "Zauberresistenz", "description": "Vorteil bei Rettungswürfen gegen Zauber und Resistenz gegen Schaden durch Zauber."}
+                ]
+              },
+              {
+                "name": "Hervorrufer",
+                "features": [
+                  {"level": 3, "name": "Gelehrter der Hervorrufungsmagie", "description": "Füge gratis zwei Hervorrufungsmagie-Zauber des Höchstens 2. Grades deinem Zauberbuch hinzu."},
+                  {"level": 3, "name": "Kraftvoller Zaubertrick", "description": "Schadenszaubertricks verursachen halben Schaden, selbst wenn das Ziel ausweicht."},
+                  {"level": 6, "name": "Zauber formen", "description": "Erschaffe Sicherheitsbereiche bei Hervorrufungszaubern, sodass Verbündete keinen Schaden erleiden."},
+                  {"level": 10, "name": "Mächtige Hervorrufung", "description": "Addiere deinen Intelligenzmodifikator zum Schadenswurf deiner Hervorrufungszauber."},
+                  {"level": 14, "name": "Überladen", "description": "Verursache maximalen Schaden mit Zaubern der Stufe 1 bis 5 (skaliert mit Risiken für nekrotischen Schaden bei wiederholter Nutzung)."}
+                ]
+              },
+              {
+                "name": "Illusionist",
+                "features": [
+                  {"level": 3, "name": "Gelehrter der Illusionsmagie", "description": "Füge gratis zwei Illusionsmagie-Zauber des Höchstens 2. Grades deinem Zauberbuch hinzu."},
+                  {"level": 3, "name": "Verbesserte Illusionen", "description": "Wirke Illusionszauber ohne Verbalkomponenten, erhöhe Reichweiten und erhalte den Zaubertrick Einfache Illusion."},
+                  {"level": 6, "name": "Geisterhafte Kreaturen", "description": "Beschwöre geisterhafte Versionen von Feenwesen oder Tieren mit Illusionsmagie."},
+                  {"level": 10, "name": "Illusorisches Selbst", "description": "Platziere per Reaktion eine illusorische Kopie, damit feindliche Angriffe automatisch scheitern."},
+                  {"level": 14, "name": "Illusorische Realität", "description": "Webe Semirealität in deine Illusionen ein, sodass sie für eine Minute physisch real werden."}
+                ]
+              },
+              {
+                "name": "Seher",
+                "features": [
+                  {"level": 3, "name": "Gelehrter der Erkenntnismagie", "description": "Füge gratis zwei Erkenntnismagie-Zauber des Höchstens 2. Grades deinem Zauberbuch hinzu."},
+                  {"level": 3, "name": "Omen", "description": "Würfle nach jeder langen Rast 2W20 und ersetze damit beliebige W20-Prüfungen von dir oder anderen."},
+                  {"level": 6, "name": "Ausgezeichnete Erkenntnismagie", "description": "Erhalte einen verbrauchten Zauberplatz zurück, wenn du einen Erkenntniszauber ab Grad 2 wirkst."},
+                  {"level": 10, "name": "Das Dritte Auge", "description": "Verstärke Wahrnehmungskräfte (Dunkelsicht, Unsichtbares sehen oder Sprachen lesen)."},
+                  {"level": 14, "name": "Mächtige Omen", "description": "Deine Omen-Visionen werden intensiver; du würfelst nun mit 3W20 statt 2W20."}
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "level": 4,
+          "name": "Attributswerterhöhung",
+          "description": "Erhöhe einen Attributswert um 2 oder zwei um je 1 (wiederholt sich auf Stufe 8, 12 und 16)."
+        },
+        {
+          "level": 5,
+          "name": "Zauber auswendig lernen",
+          "description": "Tausche nach einer kurzen Rast einen vorbereiteten Zauber gegen einen anderen aus deinem Zauberbuch aus."
+        },
+        {
+          "level": 18,
+          "name": "Zaubermeisterschaft",
+          "description": "Wirke je einen ausgewählten Zauber des 1. und 2. Grades aus deinem Zauberbuch ohne Zauberplatz."
+        },
+        {
+          "level": 19,
+          "name": "Epische Gabe",
+          "description": "Erhalte eine Epische-Gabe-Talent (z. B. Gabe der Zaubererinnerung) oder ein anderes Talent deiner Wahl."
+        },
+        {
+          "level": 20,
+          "name": "Lieblingszauber",
+          "description": "Wähle zwei Zauber des 3. Grades als Lieblingszauber, die du stets vorbereitet hast und einmal pro kurzer Rast gratis wirkst."
+        }
+      ],
+      "spellcasting": {
+        "ability": "Intelligenz",
+        "cantripsKnown": [
+          {"level": 1, "count": 3},
+          {"level": 4, "count": 4},
+          {"level": 10, "count": 5}
+        ],
+        "spellsPrepared": [
+          {"level": 1, "count": 4},
+          {"level": 2, "count": 5},
+          {"level": 3, "count": 6},
+          {"level": 4, "count": 9},
+          {"level": 5, "count": 10},
+          {"level": 6, "count": 11},
+          {"level": 7, "count": 12},
+          {"level": 8, "count": 14},
+          {"level": 9, "count": 15},
+          {"level": 10, "count": 16},
+          {"level": 11, "count": 16},
+          {"level": 12, "count": 17},
+          {"level": 13, "count": 18},
+          {"level": 14, "count": 18},
+          {"level": 15, "count": 19},
+          {"level": 16, "count": 21},
+          {"level": 17, "count": 22},
+          {"level": 18, "count": 23},
+          {"level": 19, "count": 24},
+          {"level": 20, "count": 25}
+        ],
+        "spellSlotsByLevel": {
+          "1st": {"1": 2, "2": 3, "3": 4, "4": 4, "5": 4, "6": 4, "7": 4, "8": 4, "9": 4, "10": 4, "11": 4, "12": 4, "13": 4, "14": 4, "15": 4, "16": 4, "17": 4, "18": 4, "19": 4, "20": 4},
+          "2nd": {"3": 2, "4": 3, "5": 3, "6": 3, "7": 3, "8": 3, "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "3rd": {"5": 2, "6": 3, "7": 3, "8": 3, "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "4th": {"7": 1, "8": 2, "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "5th": {"9": 1, "10": 2, "11": 2, "12": 2, "13": 2, "14": 2, "15": 2, "16": 2, "17": 2, "18": 2, "19": 2, "20": 2},
+          "6th": {"11": 1, "12": 1, "13": 1, "14": 1, "15": 2, "16": 2, "17": 2, "18": 3, "19": 3, "20": 3},
+          "7th": {"13": 1, "14": 1, "15": 1, "16": 1, "17": 2, "18": 2, "19": 2, "20": 2},
+          "8th": {"15": 1, "16": 1, "17": 1, "18": 1, "19": 1, "20": 2},
+          "9th": {"17": 1, "18": 1, "19": 1, "20": 1}
+        }
+      }
+    }
+    ,
+    "Mönch": {
+      "summary": "Kampfkünstler mit übernatürlichem Fokus",
+      "hitDice": "d8",
+      "hpAt1stLevel": "8 + Konstitutionsmodifikator",
+      "hpPerLevel": "5 + Konstitutionsmodifikator",
+      "primaryAbility": "Geschicklichkeit und Weisheit",
+      "savingThrows": ["Stärke", "Geschicklichkeit"],
+      "proficiencies": {
+        "armor": [],
+        "weapons": ["Einfache Waffen", "Kriegswaffen mit der Eigenschaft Leicht"],
+        "tools": {
+          "choice": {
+            "text": "Werkzeug- oder Instrumentenwahl:",
+            "options": ["Handwerkszeug", "Musikinstrument"],
+            "choose": 1
+          }
+        },
+        "skills": {
+          "from": [
+            "Akrobatik", "Athletik", "Einschüchtern", "Geschichte",
+            "Heimlichkeit", "Motiv erkennen", "Religion"
+          ],
+          "choose": 2
+        }
+      },
+      "startingEquipment": {
+        "choiceA": [
+          {"name": "Speer", "qty": 1},
+          {"name": "Dolch", "qty": 5},
+          {"name": "Handwerkszeug oder Musikinstrument", "qty": 1},
+          {"name": "Entdeckerausrüstung", "qty": 1},
+          {"name": "Gold", "qty": 11, "unit": "GM"}
+        ],
+        "choiceB": [
+          {"name": "Gold", "qty": 50, "unit": "GM"}
+        ]
+      },
+      "multiClassing": {
+        "prerequisites": {"DEX": 13, "WIS": 13},
+        "proficienciesGranted": ["Einfache Waffen", "Kriegswaffen mit der Eigenschaft Leicht"]
+      },
+      "features": [
+        {
+          "level": 1,
+          "name": "Kampfkünste",
+          "description": "Erhalte Boni beim unbewaffneten Kampf: Waffeloser Bonusangriff, skalierende Kampfünste-Würfel (beginnend mit 1W6) und Geschicklichkeit für Angriffe und Schaden."
+        },
+        {
+          "level": 1,
+          "name": "Ungerüstete Verteidigung",
+          "description": "Solange du weder Rüstung noch Schild trägst, entspricht deine Rüstungsklasse 10 + Geschicklichkeitsmodifikator + Weisheitsmodifikator."
+        },
+        {
+          "level": 2,
+          "name": "Mönchsfokus",
+          "description": "Verfüge über Fokuspunkte (Anzahl entspricht Mönchsstufe), um Spezialaktionen wie Geduldige Verteidigung, Schlaghagel und Windschritt einzusetzen."
+        },
+        {
+          "level": 2,
+          "name": "Unglaublicher Stoffwechsel",
+          "description": "Erhalte beim Auswürfeln der Initiative verbrauchte Fokuspunkte zurück (gewürfelt mit deinem Kampfkünste-Würfel + Mönchsstufe)."
+        },
+        {
+          "level": 2,
+          "name": "Ungerüstete Bewegung",
+          "description": "Deine Bewegungsrate erhöht sich ohne Rüstung oder Schild (beginnend mit +3 Metern)."
+        },
+        {
+          "level": 3,
+          "name": "Angriffe umleiten",
+          "description": "Verringere erlittenen Schaden bei Treffern mithilfe von Reaktion und Fokuspunkten und lenke Energie auf Angreifer oder Ziele zurück."
+        },
+        {
+          "level": 3,
+          "name": "Mönch-Unterklasse",
+          "description": "Du erhältst eine Mönch-Unterklasse deiner Wahl (Krieger der Elemente, Krieger der Gnade, Krieger der Offenen Hand, Krieger der Schatten).",
+          "choice": {
+            "text": "Wähle deinen Mönchs-Pfad (Unterklasse):",
+            "availableAtLevel": 3,
+            "options": [
+              {
+                "name": "Krieger der Elemente",
+                "features": [
+                  {"level": 3, "name": "Elementare Einstimmung", "description": "Verbrauche 1 Fokuspunkt, um elementare Energie zu kanalisieren (Reichweitenerhöhung, Elementarschaden und Zwang zu Stärkerettungswürfen)."},
+                  {"level": 3, "name": "Elemente manipulieren", "description": "Kennst den Zauber Elementalismus (Intelligenz als Zauberwirkfähigkeit)."},
+                  {"level": 6, "name": "Elementare Explosion", "description": "Lass elementare Energie in einer Kugel explodieren (verbraucht 2 Fokuspunkte)."},
+                  {"level": 11, "name": "Lauf der Elemente", "description": "Erhalte Flug- und Schwimmbewegungsrate in Höhe deiner Bewegungsrate bei aktiver Einstimmung."},
+                  {"level": 17, "name": "Elementarer Schritt", "description": "Zusätzlicher elementarer Schaden, Schadensresistenzen und zerstörerischer Windschritt."}
+                ]
+              },
+              {
+                "name": "Krieger der Gnade",
+                "features": [
+                  {"level": 3, "name": "Angewandte Barmherzigkeit", "description": "Erhalte Übung in Heilkunde und Motiv erkennen."},
+                  {"level": 3, "name": "Heilende Hand", "description": "Heile Verbündete als magische Aktion oder im Schlaghagel durch Fokuspunkte."},
+                  {"level": 3, "name": "Verletzende Hand", "description": "Füge Zielen zusätzlichen nekrotischen Schaden per Fokuspunkt zu."},
+                  {"level": 6, "name": "Medizinische Berührung", "description": "Heile oder beende zusätzliche Zustände (Betäubt, Blind etc.) mit deinen Händen."},
+                  {"level": 11, "name": "Schläge von Heilung und Leid", "description": "Kombiniere unbewaffnete Angriffe direkt mit Heilender oder Verletzender Hand ohne Fokuspunkt-Kosten."},
+                  {"level": 17, "name": "Hand der hohen Barmherzigkeit", "description": "Erwecke erst kürzlich verstorbene Kreaturen mit 4W10 + Weisheitsmodifikator Trefferpunkten zu neuem Leben."}
+                ]
+              },
+              {
+                "name": "Krieger der Offenen Hand",
+                "features": [
+                  {"level": 3, "name": "Technik der Offenen Hand", "description": "Füge im Schlaghagel Zusatzeffekte hinzu: Wegstoßen, Umstoßen oder Unterbinden von Gelegenheitsangriffen."},
+                  {"level": 6, "name": "Unversehrtheit des Körpers", "description": "Heile dich selbst als Bonusaktion per Kampfkünste-Würfel + Weisheitsmodifikator."},
+                  {"level": 11, "name": "Flinker Schritt", "description": "Führe den Windschritt sofort im Anschluss an andere Bonusaktionen aus."},
+                  {"level": 17, "name": "Vibrierende Handfläche", "description": "Pflanze tödliche Vibrationen im Körper des Gegners ein, die bei Auslösung massiven Energieschaden verursachen."}
+                ]
+              },
+              {
+                "name": "Krieger der Schatten",
+                "features": [
+                  {"level": 3, "name": "Schattenkünste", "description": "Wirke Dunkelheit per Fokuspunkt (mit eigener Sicht darin), erhalte verbesserte Dunkelsicht und den Zauber Einfache Illusion."},
+                  {"level": 6, "name": "Schattenschritt", "description": "Teleportiere dich als Bonusaktion von Dämmerung/Dunkelheit zu Dämmerung/Dunkelheit mit Vorteil beim nächsten Angriff."},
+                  {"level": 11, "name": "Verbesserter Schattenschritt", "description": "Entferne die Sichtbarkeitsbedingung bei Schatten-Teleportationen und erhalte einen gratis unbewaffneten Angriff."},
+                  {"level": 17, "name": "Schattenmantel", "description": "Hülle dich in Schatten, werde teilweise körperlos, erhalte Resistenzen und werde unsichtbar."}
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "level": 4,
+          "name": "Attributswerterhöhung",
+          "description": "Erhöhe einen Attributswert um 2 oder zwei um je 1 (wiederholt sich auf Stufe 8, 12 und 16)."
+        },
+        {
+          "level": 4,
+          "name": "Sturz abfedern",
+          "description": "Reduziere Sturzschaden als Reaktion um das Fünffache deiner Mönchsstufe."
+        },
+        {
+          "level": 5,
+          "name": "Betäubender Schlag",
+          "description": "Zwinge getroffene Ziele nach Einsatz eines Fokuspunkts zu einem Konstitutionsrettungswurf, um sie zu betäuben."
+        },
+        {
+          "level": 5,
+          "name": "Zusätzlicher Angriff",
+          "description": "Greife jetzt zweimal an, wenn du in deinem Zug eine Angriffsaktion ausführst."
+        },
+        {
+          "level": 6,
+          "name": "Mächtige Schläge",
+          "description": "Verleihe deinen unbewaffneten Angriffen wahlweise Energieschaden oder normale Schadensart."
+        },
+        {
+          "level": 7,
+          "name": "Entrinnen",
+          "description": "Erhalte bei Geschicklichkeitsrettungswürfen halben Schaden bei Misserfolg und gar keinen Schaden bei Erfolg."
+        },
+        {
+          "level": 9,
+          "name": "Akrobatische Bewegung",
+          "description": "Bewege dich ohne zu stürzen über vertikale Oberflächen oder Flüssigkeiten."
+        },
+        {
+          "level": 10,
+          "name": "Erhöhter Fokus",
+          "description": "Verstärke Geduldige Verteidigung und Schlaghagel mit temporären Trefferpunkten oder Zusatzangriffen."
+        },
+        {
+          "level": 10,
+          "name": "Selbstwiederherstellung",
+          "description": "Entferne Zustände (Bezaubert, Verängstigt, Vergiftet) durch reine Willenskraft zu Beginn deines Zuges."
+        },
+        {
+          "level": 13,
+          "name": "Energie umleiten",
+          "description": "Wende Angriffe umleiten nun auch gegen beliebige andere Schadensarten an."
+        },
+        {
+          "level": 14,
+          "name": "Der disziplinierte Überlebende",
+          "description": "Erhalte Übung in allen Rettungswürfen und wiederhole verpatzte Würfe per Fokuspunkt."
+        },
+        {
+          "level": 15,
+          "name": "Perfekter Fokus",
+          "description": "Erhalte verbrauchte Fokuspunkte bei gewürfelter Initiative zurück (bis zu 4 Punkte)."
+        },
+        {
+          "level": 18,
+          "name": "Überlegene Verteidigung",
+          "description": "Schütze dich für 1 Minute durch Einsatz von 3 Fokuspunkten gegen alle Schadensarten außer Energieschaden (Resistenz)."
+        },
+        {
+          "level": 19,
+          "name": "Epische Gabe",
+          "description": "Erhalte ein Epische-Gabe-Talent (z. B. Gabe des Unwiderstehlichen Angriffs) oder ein anderes Talent deiner Wahl."
+        },
+        {
+          "level": 20,
+          "name": "Körper und Geist",
+          "description": "Erhöhe deine Werte für Geschicklichkeit und Weisheit um je 4 (auf höchstens 25)."
+        }
+      ]
+    }
+    ,
+    "Paladin": {
+      "summary": "Ein ergebener Krieger der Heiligen Schwüre",
+      "hitDice": "d10",
+      "hpAt1stLevel": "10 + Konstitutionsmodifikator",
+      "hpPerLevel": "6 + Konstitutionsmodifikator",
+      "primaryAbility": "Stärke und Charisma",
+      "savingThrows": ["Weisheit", "Charisma"],
+      "proficiencies": {
+        "armor": ["Leichte Rüstung", "Mittlere Rüstung", "Schwere Rüstung", "Schilde"],
+        "weapons": ["Einfache Waffen", "Kriegswaffen"],
+        "tools": [],
+        "skills": {
+          "from": [
+            "Athletik", "Einschüchtern", "Heilkunde", "Motiv erkennen",
+            "Religion", "Überzeugen"
+          ],
+          "choose": 2
+        }
+      },
+      "startingEquipment": {
+        "choiceA": [
+          {"name": "Kettenpanzer", "qty": 1},
+          {"name": "Schild", "qty": 1},
+          {"name": "Langschwert", "qty": 1},
+          {"name": "Wurfspeer", "qty": 6},
+          {"name": "Heiliges Symbol", "qty": 1},
+          {"name": "Priesterausrüstung", "qty": 1},
+          {"name": "Gold", "qty": 9, "unit": "GM"}
+        ],
+        "choiceB": [
+          {"name": "Gold", "qty": 150, "unit": "GM"}
+        ]
+      },
+      "multiClassing": {
+        "prerequisites": {"STR": 13, "CHA": 13},
+        "proficienciesGranted": ["Leichte Rüstung", "Mittlere Rüstung", "Schwere Rüstung", "Schilde", "Einfache Waffen", "Kriegswaffen"]
+      },
+      "features": [
+        {
+          "level": 1,
+          "name": "Handauflegen",
+          "description": "Heile Wunden aus einem Vorrat an Heilkraft (5 x Paladinstufe Trefferpunkte pro langer Rast) oder entferne den Zustand Vergiftet (kostet 5 Punkte)."
+        },
+        {
+          "level": 1,
+          "name": "Waffenmeisterung",
+          "description": "Verwende die Meisterschaftseigenschaften von zwei Waffenarten deiner Wahl."
+        },
+        {
+          "level": 1,
+          "name": "Zauberwirken",
+          "description": "Wirke göttliche Paladinzauber. Charisma ist deine Zauberwirkfähigkeit."
+        },
+        {
+          "level": 2,
+          "name": "Kampfstil",
+          "description": "Erhalte ein Kampfstil-Talent (alternativ wählbar: Gesegneter Krieger für zwei Kleriker-Zaubertricks)."
+        },
+        {
+          "level": 2,
+          "name": "Paladin-Niederstrecken",
+          "description": "Der Zauber Göttliches Niederstrecken ist stets vorbereitet und kann ohne Zauberplatz (einmal pro langer Rast) gewirkt werden."
+        },
+        {
+          "level": 3,
+          "name": "Göttliche Macht fokussieren",
+          "description": "Kanalisiere göttliche Energie für magische Effekte (beginnend mit Göttliches Gespür). Anzahl der Nutzungen steigt mit Paladinstufen."
+        },
+        {
+          "level": 3,
+          "name": "Paladin-Unterklasse",
+          "description": "Du erhältst eine Paladin-Unterklasse (Heiliger Schwur) deiner Wahl (Schwur der Alten, Schwur der Hingabe, Schwur der Rache, Schwur des Ruhmes).",
+          "choice": {
+            "text": "Wähle deinen Heiligen Schwur (Unterklasse):",
+            "availableAtLevel": 3,
+            "options": [
+              {
+                "name": "Schwur der Alten",
+                "features": [
+                  {"level": 3, "name": "Schwurzauber der Alten", "description": "Erhalte stets vorbereitete Natur- und Schutzzauber."},
+                  {"level": 3, "name": "Zorn der Natur", "description": "Beschwöre geisterhafte Ranken per Göttlicher Macht, um Kreaturen festzusetzen."},
+                  {"level": 7, "name": "Aura der Abwehr", "description": "Gewähre dir und Verbündeten in deiner Aura Resistenz gegen nekrotischen, psychischen und gleißenden Schaden."},
+                  {"level": 15, "name": "Unsterblicher Wächter", "description": "Erhalte bei 0 Trefferpunkten stattdessen 1 Trefferpunkt zurück und verringere Alterung."},
+                  {"level": 20, "name": "Champion der Uralten", "description": "Nimm eine mächtige Avatar-Gestalt an mit Regeneration, Flinken Zaubern und Nachteil für Gegner in der Aura."}
+                ]
+              },
+              {
+                "name": "Schwur der Hingabe",
+                "features": [
+                  {"level": 3, "name": "Heilige Waffe", "description": "Verleihe deiner Waffe per Göttlicher Macht gleißenden Schaden und helles Licht."},
+                  {"level": 3, "name": "Schwurzauber der Hingabe", "description": "Erhalte stets vorbereitete Hingabezauber."},
+                  {"level": 7, "name": "Aura der Hingabe", "description": "Du und Verbündete in deiner Aura sind immun gegen den Zustand Bezaubert."},
+                  {"level": 15, "name": "Schützendes Niederstrecken", "description": "Verleihe dir und Verbündeten Teildeckung durch Göttliches Niederstrecken."},
+                  {"level": 20, "name": "Heiliger Nimbus", "description": "Hülle dich in gleißendes Sonnenlicht, das Gegner schädigt und dir Schutz gewährt."}
+                ]
+              },
+              {
+                "name": "Schwur der Rache",
+                "features": [
+                  {"level": 3, "name": "Eid der Feindschaft", "description": "Belege einen Gegner per Göttlicher Macht mit Vorteil auf Angriffswürfe."},
+                  {"level": 3, "name": "Schwurzauber der Rache", "description": "Erhalte stets vorbereitete Rachezauber."},
+                  {"level": 7, "name": "Unermüdlicher Rächer", "description": "Verringere die Bewegungsrate von fliehenden Gegnern bei Gelegenheitsangriffen auf 0."},
+                  {"level": 15, "name": "Seele der Rache", "description": "Führe sofort Reaktionen auf Angriffe von mit Eid belegten Zielen aus."},
+                  {"level": 20, "name": "Racheengel", "description": "Erhange geisterhafte Flügel mit Fluggeschwindigkeit und furchterregender Aura."}
+                ]
+              },
+              {
+                "name": "Schwur des Ruhmes",
+                "features": [
+                  {"level": 3, "name": "Beispielloser Athlet", "description": "Steigere Sportlichkeit, Athletik, Akrobatik und Sprungdistanz per Göttlicher Macht."},
+                  {"level": 3, "name": "Inspirierendes Niederstrecken", "description": "Verteile temporäre Trefferpunkte an Verbündete nach Einsatz von Göttlichem Niederstrecken."},
+                  {"level": 3, "name": "Schwurzauber des Ruhmes", "description": "Erhalte stets vorbereitete Ruhmeszauber."},
+                  {"level": 7, "name": "Aura des Eifers", "description": "Erhöhe deine Bewegungsrate und die deiner Verbündeten in der Aura."},
+                  {"level": 15, "name": "Glorreiche Verteidigung", "description": "Kontere feindliche Angriffe mit RK-Boni und automatischen Gegenangriffen."},
+                  {"level": 20, "name": "Lebende Legende", "description": "Erhalte übernatürliche Präsenz, unfehlbare Schläge und Rettungswurf-Wiederholungen."}
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "level": 4,
+          "name": "Attributswerterhöhung",
+          "description": "Erhöhe einen Attributswert um 2 oder zwei um je 1 (wiederholt sich auf Stufe 8, 12 und 16)."
+        },
+        {
+          "level": 5,
+          "name": "Treues Reittier",
+          "description": "Wirke den Zauber Reittier finden stets vorbereitet und einmal gratis ohne Zauberplatz."
+        },
+        {
+          "level": 5,
+          "name": "Zusätzlicher Angriff",
+          "description": "Greife jetzt zweimal an, wenn du in deinem Zug eine Angriffsaktion ausführst."
+        },
+        {
+          "level": 6,
+          "name": "Aura des Schutzes",
+          "description": "Verleihe dir und Verbündeten in deiner Aura (3 Meter Ausströmung) einen Bonus auf Rettungswürfe in Höhe deines Charismamodifikators."
+        },
+        {
+          "level": 9,
+          "name": "Gegner verdammen",
+          "description": "Flöße Gegnern per Göttlicher Macht in einem Umkreis Ehrfurcht und Furcht ein."
+        },
+        {
+          "level": 10,
+          "name": "Aura der Tapferkeit",
+          "description": "Du und Verbündete in deiner Aura sind immun gegen den Zustand Verängstigt."
+        },
+        {
+          "level": 11,
+          "name": "Gleitende Schläge",
+          "description": "Füge mit Nahkampf- oder waffenlosen Angriffen zusätzlich 1W8 gleißenden Schaden zu."
+        },
+        {
+          "level": 14,
+          "name": "Erquickende Berührung",
+          "description": "Entferne bei Handauflegen zusätzlich Zustände wie Betäubt, Bezaubert oder Vergiftet."
+        },
+        {
+          "level": 18,
+          "name": "Aura-Ausdehnung",
+          "description": "Die Reichweite deiner Aura des Schutzes vergrößert sich auf 9 Meter."
+        },
+        {
+          "level": 19,
+          "name": "Epische Gabe",
+          "description": "Erhalte eine Epische-Gabe-Talent (z. B. Gabe des Wahren Blicks) oder ein anderes Talent deiner Wahl."
+        }
+      ],
+      "spellcasting": {
+        "ability": "Charisma",
+        "spellsPrepared": [
+          {"level": 1, "count": 2},
+          {"level": 2, "count": 3},
+          {"level": 3, "count": 4},
+          {"level": 4, "count": 5},
+          {"level": 5, "count": 6},
+          {"level": 6, "count": 6},
+          {"level": 7, "count": 7},
+          {"level": 8, "count": 7},
+          {"level": 9, "count": 9},
+          {"level": 10, "count": 9},
+          {"level": 11, "count": 10},
+          {"level": 12, "count": 10},
+          {"level": 13, "count": 11},
+          {"level": 14, "count": 11},
+          {"level": 15, "count": 12},
+          {"level": 16, "count": 12},
+          {"level": 17, "count": 14},
+          {"level": 18, "count": 14},
+          {"level": 19, "count": 15},
+          {"level": 20, "count": 15}
+        ],
+        "spellSlotsByLevel": {
+          "1st": {"2": 2, "3": 3, "4": 3, "5": 4, "6": 4, "7": 4, "8": 4, "9": 4, "10": 4, "11": 4, "12": 4, "13": 4, "14": 4, "15": 4, "16": 4, "17": 4, "18": 4, "19": 4, "20": 4},
+          "2nd": {"5": 2, "6": 2, "7": 3, "8": 3, "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "3rd": {"9": 2, "10": 2, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "4th": {"13": 1, "14": 1, "15": 2, "16": 2, "17": 3, "18": 3, "19": 3, "20": 3},
+          "5th": {"17": 1, "18": 1, "19": 2, "20": 2}
+        }
+      }
+    }
+    ,
+    "Schurke": {
+      "summary": "Geschickter Spezialist in Heimlichkeit und Täuschung",
+      "hitDice": "d8",
+      "hpAt1stLevel": "8 + Konstitutionsmodifikator",
+      "hpPerLevel": "5 + Konstitutionsmodifikator",
+      "primaryAbility": "Geschicklichkeit",
+      "savingThrows": ["Geschicklichkeit", "Intelligenz"],
+      "proficiencies": {
+        "armor": ["Leichte Rüstung"],
+        "weapons": ["Einfache Waffen", "Kriegswaffen mit der Eigenschaft Finesse oder Leicht"],
+        "tools": ["Diebeswerkzeug"],
+        "skills": {
+          "from": [
+            "Akrobatik", "Athletik", "Einschüchtern", "Fingerfertigkeit",
+            "Heimlichkeit", "Motiv erkennen", "Nachforschungen", "Täuschen",
+            "Überzeugen", "Wahrnehmung"
+          ],
+          "choose": 4
+        }
+      },
+      "startingEquipment": {
+        "choiceA": [
+          {"name": "Lederrüstung", "qty": 1},
+          {"name": "Dolch", "qty": 2},
+          {"name": "Kurzschwert", "qty": 1},
+          {"name": "Kurzbogen", "qty": 1},
+          {"name": "Pfeile", "qty": 20, "unit": "Stück"},
+          {"name": "Köcher", "qty": 1},
+          {"name": "Diebeswerkzeug", "qty": 1},
+          {"name": "Einbrecherausrüstung", "qty": 1},
+          {"name": "Gold", "qty": 8, "unit": "GM"}
+        ],
+        "choiceB": [
+          {"name": "Gold", "qty": 100, "unit": "GM"}
+        ]
+      },
+      "multiClassing": {
+        "prerequisites": {"DEX": 13},
+        "proficienciesGranted": ["Leichte Rüstung", "Diebeswerkzeug", "Übung in einer Fertigkeit deiner Wahl"]
+      },
+      "features": [
+        {
+          "level": 1,
+          "name": "Diebessprache",
+          "description": "Du beherrschst die Geheimsprache der Unterwelt (Diebessprache) sowie eine weitere Sprache deiner Wahl."
+        },
+        {
+          "level": 1,
+          "name": "Expertise",
+          "description": "Erhalte doppelten Übungsbonus (Expertise) für zwei deiner geübten Fertigkeiten (z. B. Heimlichkeit oder Fingerfertigkeit; zwei weitere auf Stufe 6)."
+        },
+        {
+          "level": 1,
+          "name": "Hinterhältiger Angriff",
+          "description": "Füge einmal pro Zug zusätzlichen Schaden (beginnend mit 1W6) zu, wenn du im Vorteil bist oder ein Verbündeter im Umkreis von 1,5 Metern zum Ziel steht (mit Finesse- oder Fernkampfwaffe)."
+        },
+        {
+          "level": 1,
+          "name": "Waffenmeisterung",
+          "description": "Verwende die Meisterschaftseigenschaften von zwei Waffenarten deiner Wahl (z. B. Dolche und Kurzbögen)."
+        },
+        {
+          "level": 2,
+          "name": "Raffinierte Aktion",
+          "description": "Führe Rückzug, Spurt oder Verstecken als Bonusaktion in deinem Zug aus."
+        },
+        {
+          "level": 3,
+          "name": "Schurken-Unterklasse",
+          "description": "Du erhältst eine Schurken-Unterklasse deiner Wahl (Arkaner Betrüger, Assassine, Dieb, Seelenmesser).",
+          "choice": {
+            "text": "Wähle deine Schurken-Unterklasse:",
+            "availableAtLevel": 3,
+            "options": [
+              {
+                "name": "Arkaner Betrüger",
+                "features": [
+                  {"level": 3, "name": "Magierhand-Kniff", "description": "Wirke Magierhand als Bonusaktion, steuere sie unsichtbar und führe Fingerfertigkeitswürfe damit aus."},
+                  {"level": 3, "name": "Zauberwirken", "description": "Erlerne Magierzauber (Intelligenz als Attribut) aus den Schulen Illusion und Verzauberung."},
+                  {"level": 9, "name": "Magischer Hinterhalt", "description": "Ziele haben Nachteil bei Rettungswürfen gegen deine Zauber, während du unsichtbar bist."},
+                  {"level": 13, "name": "Vielseitiger Trickser", "description": "Ablenkung mit Magierhand oder Kombination von Fallen-Optionen mit der Magierhand."},
+                  {"level": 17, "name": "Zauberdieb", "description": "Stiehle das Wissen über einen Zauber, den eine Kreatur auf dich wirkt, und präge ihn dir ein."}
+                ]
+              },
+              {
+                "name": "Assassine",
+                "features": [
+                  {"level": 3, "name": "Assassinenwerkzeug", "description": "Erhalte Verkleidungs- und Giftmischerausrüstung sowie Übung darin."},
+                  {"level": 3, "name": "Attentat", "description": "Vorteil bei Initiative, Überraschungsschläge in der ersten Runde mit automatischem Zusatzschaden."},
+                  {"level": 9, "name": "Infiltrationsexperte", "description": "Meistere das Nachahmen von Stimmen und Handschriften sowie spurenloses Verreisen."},
+                  {"level": 13, "name": "Waffen vergiften", "description": "Füge mit der Gift-Option zusätzliche 2W6 Giftschaden zu und ignoriere Resistenzen."},
+                  {"level": 17, "name": "Todesstoss", "description": "Zwinge getroffene Ziele in Runde 1 zu einem Konstitutionsrettungswurf oder verdopple den Schaden."}
+                ]
+              },
+              {
+                "name": "Dieb",
+                "features": [
+                  {"level": 3, "name": "Flinke Finger", "description": "Nutze Gegenstände verwenden, Fingerfertigkeit oder Diebeswerkzeug als Bonusaktion."},
+                  {"level": 3, "name": "Kletteraffe", "description": "Erhalte eine Kletterbewegungsrate und verbesserte Sprungdistanz."},
+                  {"level": 9, "name": "Ausserordentliches Schleichen", "description": "Erhalte die Option 'Heimlicher Angriff', um nach dem Verstecken unsichtbar zu bleiben."},
+                  {"level": 13, "name": "Magischen Gegenstand verwenden", "description": "Erleichterte Einstimmung, Schriftrollen-Nutzung und verringerte Ladungsverbräuche."},
+                  {"level": 17, "name": "Reflexe eines Diebes", "description": "Führe zu Beginn des Kampfes zwei Züge aus (mit regulärer Initiative und Initiative minus 10)."}
+                ]
+              },
+              {
+                "name": "Seelenmesser",
+                "features": [
+                  {"level": 3, "name": "Psionische Kraft", "description": "Verfüge über Seelenmesser-Energie-Würfel (Psi-Energie-Würfel), um psionische Effekte zu speisen."},
+                  {"level": 3, "name": "Psychische Klingen", "description": "Manifestiere schimmernde Klingen aus psychischer Energie für Angriffe und Bonusangriffe."},
+                  {"level": 9, "name": "Seelenklingen", "description": "Erhalte Psi-Teleportation und Zielsuchhiebe mit psychischen Klingen."},
+                  {"level": 13, "name": "Psychischer Schleier", "description": "Hülle dich per Psi-Würfel in einen unsichtbaren Schleier aus psychischer Energie."},
+                  {"level": 17, "name": "Geist zerfetzen", "description": "Greife den Geist einer Kreatur an, füge psychischen Schaden zu und betäube das Ziel."}
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "level": 3,
+          "name": "Zielsicher",
+          "description": "Erhalte als Bonusaktion Vorteil auf den nächsten Angriffswurf im aktuellen Zug, sofern du dich noch nicht bewegt hast (setzt Bewegungsrate auf 0)."
+        },
+        {
+          "level": 4,
+          "name": "Attributswerterhöhung",
+          "description": "Erhöhe einen Attributswert um 2 oder zwei um je 1 (wiederholt sich auf Stufe 8, 10, 12 und 16)."
+        },
+        {
+          "level": 5,
+          "name": "Raffinierter Schlag",
+          "description": "Modifiziere deinen Hinterhältigen Angriff durch den Einsatz von Würfeln für Spezialeffekte wie 'Fällen', 'Gift' oder 'Zurückziehen'."
+        },
+        {
+          "level": 5,
+          "name": "Unglaubliches Ausweichen",
+          "description": "Halbiere den Schaden eines erlittenen Angrufs von sichtbaren Angreifern per Reaktion."
+        },
+        {
+          "level": 7,
+          "name": "Entrinnen",
+          "description": "Erhalte bei Geschicklichkeitsrettungswürfen halben Schaden bei Misserfolg und gar keinen Schaden bei Erfolg."
+        },
+        {
+          "level": 7,
+          "name": "Verlässliches Talent",
+          "description": "Werten Sie Würfe bei geübten Fertigkeiten oder Werkzeugen mit einem W20-Ergebnis von 9 oder darunter als 10 auf."
+        },
+        {
+          "level": 11,
+          "name": "Verbesserter raffinierter Schlag",
+          "description": "Füge bis zu zwei Effekte von Raffinierter Schlag gleichzeitig hinzu."
+        },
+        {
+          "level": 14,
+          "name": "Hinterhältige Schläge",
+          "description": "Erweitere deine Raffinierter-Schlag-Optionen um mächtige Effekte wie 'Irritieren', 'Lahmlegen' oder 'Verunkeln'."
+        },
+        {
+          "level": 15,
+          "name": "Entschlüpfender Geist",
+          "description": "Erhalte Übung in Weisheits- und Charismarettungswürfen."
+        },
+        {
+          "level": 18,
+          "name": "Schwer zu fassen",
+          "description": "Gegner haben niemals Vorteil bei Angriffswürfen gegen dich, solange du nicht kampfunfähig bist."
+        },
+        {
+          "level": 19,
+          "name": "Epische Gabe",
+          "description": "Erhalte ein Epische-Gabe-Talent (z. B. Gabe des Nachtgeists) oder ein anderes Talent deiner Wahl."
+        },
+        {
+          "level": 20,
+          "name": "Glückstreffer",
+          "description": "Verwandel bei einer verpatzten W20-Prüfung das Ergebnis direkt in eine 20 (einmal pro kurzer oder langer Rast)."
+        }
+      ],
+      "spellcasting": {
+        "ability": "Intelligenz",
+        "restriction": "Nur für die Unterklasse 'Arkaner Betrüger'",
+        "cantripsKnown": [
+          {"level": 3, "count": 3},
+          {"level": 10, "count": 4}
+        ],
+        "spellsPrepared": [
+          {"level": 3, "count": 3},
+          {"level": 4, "count": 4},
+          {"level": 7, "count": 5},
+          {"level": 8, "count": 6},
+          {"level": 10, "count": 7},
+          {"level": 11, "count": 8},
+          {"level": 13, "count": 9},
+          {"level": 14, "count": 10},
+          {"level": 16, "count": 11},
+          {"level": 19, "count": 12},
+          {"level": 20, "count": 13}
+        ],
+        "spellSlotsByLevel": {
+          "1st": {"3": 2, "4": 3, "5": 3, "6": 3, "7": 4, "8": 4, "9": 4, "10": 4, "11": 4, "12": 4, "13": 4, "14": 4, "15": 4, "16": 4, "17": 4, "18": 4, "19": 4, "20": 4},
+          "2nd": {"7": 2, "8": 2, "9": 2, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "3rd": {"13": 2, "14": 2, "15": 2, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "4th": {"19": 1, "20": 1}
+        }
+      }
+    }
+    ,
+    "Waldläufer": {
+      "summary": "Fahrender Krieger der urtümlichen Magie",
+      "hitDice": "d10",
+      "hpAt1stLevel": "10 + Konstitutionsmodifikator",
+      "hpPerLevel": "6 + Konstitutionsmodifikator",
+      "primaryAbility": "Geschicklichkeit und Weisheit",
+      "savingThrows": ["Stärke", "Geschicklichkeit"],
+      "proficiencies": {
+        "armor": ["Leichte Rüstung", "Mittlere Rüstung", "Schilde"],
+        "weapons": ["Einfache Waffen", "Kriegswaffen"],
+        "tools": [],
+        "skills": {
+          "from": [
+            "Athletik", "Heimlichkeit", "Mit Tieren umgehen", "Motiv erkennen",
+            "Nachforschungen", "Naturkunde", "Überlebenskunst", "Wahrnehmung"
+          ],
+          "choose": 3
+        }
+      },
+      "startingEquipment": {
+        "choiceA": [
+          {"name": "Beschlagene Lederrüstung", "qty": 1},
+          {"name": "Krummsäbel", "qty": 1},
+          {"name": "Kurzschwert", "qty": 1},
+          {"name": "Langbogen", "qty": 1},
+          {"name": "Pfeile", "qty": 20, "unit": "Stück"},
+          {"name": "Köcher", "qty": 1},
+          {"name": "Druidischer Fokus (Mistelzweig)", "qty": 1},
+          {"name": "Entdeckerausrüstung", "qty": 1},
+          {"name": "Gold", "qty": 7, "unit": "GM"}
+        ],
+        "choiceB": [
+          {"name": "Gold", "qty": 150, "unit": "GM"}
+        ]
+      },
+      "multiClassing": {
+        "prerequisites": {"DEX": 13, "WIS": 13},
+        "proficienciesGranted": ["Leichte Rüstung", "Mittlere Rüstung", "Schilde", "Einfache Waffen", "Kriegswaffen", "Übung in einer Fertigkeit der Waldläuferliste"]
+      },
+      "features": [
+        {
+          "level": 1,
+          "name": "Zauberwirken",
+          "description": "Kanalisiere die magische Essenz der Natur, um Waldläuferzauber zu wirken. Weisheit ist deine Zauberwirkfähigkeit."
+        },
+        {
+          "level": 1,
+          "name": "Erzfeind",
+          "description": "Der Zauber Zeichen des Jägers ist stets vorbereitet und kann mehrfach ohne Zauberplatz gewirkt werden (Anzahl steigt mit Stufen)."
+        },
+        {
+          "level": 1,
+          "name": "Waffenmeisterung",
+          "description": "Verwende die Meisterschaftseigenschaften von zwei Waffenarten deiner Wahl."
+        },
+        {
+          "level": 2,
+          "name": "Geschickte Erkundung",
+          "description": "Erhalte Expertise in einer deiner geübten Fertigkeiten und lerne zwei zusätzliche Sprachen."
+        },
+        {
+          "level": 2,
+          "name": "Kampfstil",
+          "description": "Erhalte ein Kampfstil-Talent (alternativ wählbar: Druidischer Krieger für zwei Druiden-Zaubertricks)."
+        },
+        {
+          "level": 3,
+          "name": "Waldläufer-Unterklasse",
+          "description": "Du erhältst eine Waldläufer-Unterklasse deiner Wahl (Düsterpirscher, Feenwanderer, Herr der Tiere, Jäger).",
+          "choice": {
+            "text": "Wähle deine Waldläufer-Unterklasse:",
+            "availableAtLevel": 3,
+            "options": [
+              {
+                "name": "Düsterpirscher",
+                "features": [
+                  {"level": 3, "name": "Fürchterlicher Lauerjäger", "description": "Füge Zielen zusätzliche psychische Schläge zu, erhalte Initiative-Boni und Bewegungstempo in Runde 1."},
+                  {"level": 3, "name": "Schattenansicht", "description": "Erhalte erweiterte Dunkelsicht und Unsichtbarkeit für Kreaturen, die auf Dunkelsicht angewiesen sind."},
+                  {"level": 3, "name": "Zauber des Düsterpirschers", "description": "Erhalte stets vorbereitete Schatten- und Illusionszauber."},
+                  {"level": 7, "name": "Stählerner Verstand", "description": "Erhalte Übung in Weisheitsrettungswürfen (oder Intelligenz/Charisma)."},
+                  {"level": 11, "name": "Schlaghagel des Pirschers", "description": "Erhöhe den psychischen Schaden deiner Schläge und löse Zusatzangriffe oder Massenfurcht aus."},
+                  {"level": 15, "name": "Schattenhaftes Ausweichen", "description": "Reagiere auf Angriffe im Nachteil mit Teleportation in Sicherheit."}
+                ]
+              },
+              {
+                "name": "Feenwanderer",
+                "features": [
+                  {"level": 3, "name": "Außergewöhnlicher Glanz", "description": "Addiere deinen Weisheitsmodifikator zu Charismawürfen und erhalte eine Feen-Fertigkeit."},
+                  {"level": 3, "name": "Grässliche Schläge", "description": "Füge Zielen mit Waffen zusätzlichen psychischen Schaden zu."},
+                  {"level": 3, "name": "Zauber des Feenwanderers", "description": "Erhalte stets vorbereitete Feenzauber und profitiere von den Feenwildnis-Gaben."},
+                  {"level": 7, "name": "Betörende Verdrehung", "description": "Vorteil bei Rettungswürfen gegen Bezaubert/Verängstigt und Möglichkeit, Zustände per Reaktion umzulenken."},
+                  {"level": 11, "name": "Feenverstärkung", "description": "Wirke Feenwesen beschwören einmal gratis ohne Materialkomponente und mit Aktionsdauer von einer Minute."},
+                  {"level": 15, "name": "Nebelwanderer", "description": "Wirke Nebelschritt gratis und nimm eine bereitwillige Kreatur mit."}
+                ]
+              },
+              {
+                "name": "Herr der Tiere",
+                "features": [
+                  {"level": 3, "name": "Urbegleiter", "description": "Rufe ein magisches Urtier (Himmels-, Landes- oder Meeres-Urtier) herbei, das an deiner Seite kämpft."},
+                  {"level": 7, "name": "Außergewöhnliches Training", "description": "Befehle dem Urtier Bonusaktionen (Ausweichen, Helfen etc.) und verleihe ihm Elementarschaden."},
+                  {"level": 11, "name": "Tierische Wut", "description": "Urtier-Angriffe werden stärker und fügen markierten Zielen Bonusschaden zu."},
+                  {"level": 15, "name": "Zauber teilen", "description": "Wirke Zauber auf dich selbst und lasse sie automatisch auf deinen Urbegleiter wirken."}
+                ]
+              },
+              {
+                "name": "Jäger",
+                "features": [
+                  {"level": 3, "name": "Beute des Jägers", "description": "Wähle eine Taktik wie Hordenbrecher oder Kolossschlächter."},
+                  {"level": 3, "name": "Jägerkunde", "description": "Erkenne Resistenzen, Schwächen und Immunitäten markierter Ziele."},
+                  {"level": 7, "name": "Defensive Taktiken", "description": "Wähle Schutzmechanismen gegen Gelegenheitsangriffe oder Mehrfachangriffe."},
+                  {"level": 11, "name": "Beute des überlegenen Jägers", "description": "Triff mit markierten Zaubern zusätzliche Kreaturen im Umkreis."},
+                  {"level": 15, "name": "Verteidigung des überlegenen Jägers", "description": "Erhalte per Reaktion temporäre Resistenzen gegen erlittenen Schaden."}
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "level": 4,
+          "name": "Attributswerterhöhung",
+          "description": "Erhöhe einen Attributswert um 2 oder zwei um je 1 (wiederholt sich auf Stufe 8, 12 und 16)."
+        },
+        {
+          "level": 5,
+          "name": "Zusätzlicher Angriff",
+          "description": "Greife jetzt zweimal an, wenn du in deinem Zug eine Angriffsaktion ausführst."
+        },
+        {
+          "level": 6,
+          "name": "Vagabund",
+          "description": "Erhöhe deine Bewegungsrate um 3 Meter (ohne schwere Rüstung) und erhalte Kletter- und Schwimmbewegungsraten."
+        },
+        {
+          "level": 9,
+          "name": "Expertise",
+          "description": "Wähle zwei weitere Fertigkeiten für Expertise aus."
+        },
+        {
+          "level": 10,
+          "name": "Unermüdlichkeit",
+          "description": "Verleihe dir als Bonusaktion temporäre Trefferpunkte (1W8 + Weisheitsmodifikator) und baue Erschöpfungsstufen ab."
+        },
+        {
+          "level": 13,
+          "name": "Unermüdlicher Jäger",
+          "description": "Deine Konzentration auf den Zauber Zeichen des Jägers bricht bei erlittenem Schaden nicht mehr ab."
+        },
+        {
+          "level": 14,
+          "name": "Naturschleier",
+          "description": "Verstecke dich magisch als Bonusaktion und erhalte den Zustand Unsichtbar."
+        },
+        {
+          "level": 17,
+          "name": "Präziser Jäger",
+          "description": "Vorteil bei Angriffswürfen gegen Kreaturen, die von deinem Zauber Zeichen des Jägers markiert sind."
+        },
+        {
+          "level": 18,
+          "name": "Wildes Gespür",
+          "description": "Erhalte Blindsicht mit einer Reichweite von 9 Metern."
+        },
+        {
+          "level": 19,
+          "name": "Epische Gabe",
+          "description": "Erhalte eine Epische-Gabe-Talent (z. B. Gabe des Dimensionsreisens) oder ein anderes Talent deiner Wahl."
+        },
+        {
+          "level": 20,
+          "name": "Feindestöter",
+          "description": "Der Schadenswürfel deines Zaubers Zeichen des Jägers erhöht sich auf 1W10 statt 1W6."
+        }
+      ],
+      "spellcasting": {
+        "ability": "Weisheit",
+        "spellsPrepared": [
+          {"level": 2, "count": 2},
+          {"level": 3, "count": 3},
+          {"level": 4, "count": 4},
+          {"level": 5, "count": 5},
+          {"level": 6, "count": 6},
+          {"level": 7, "count": 6},
+          {"level": 8, "count": 7},
+          {"level": 9, "count": 7},
+          {"level": 10, "count": 9},
+          {"level": 11, "count": 9},
+          {"level": 12, "count": 10},
+          {"level": 13, "count": 10},
+          {"level": 14, "count": 11},
+          {"level": 15, "count": 11},
+          {"level": 16, "count": 12},
+          {"level": 17, "count": 12},
+          {"level": 18, "count": 14},
+          {"level": 19, "count": 14},
+          {"level": 20, "count": 15}
+        ],
+        "spellSlotsByLevel": {
+          "1st": {"2": 2, "3": 3, "4": 3, "5": 4, "6": 4, "7": 4, "8": 4, "9": 4, "10": 4, "11": 4, "12": 4, "13": 4, "14": 4, "15": 4, "16": 4, "17": 4, "18": 4, "19": 4, "20": 4},
+          "2nd": {"5": 2, "6": 2, "7": 3, "8": 3, "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "3rd": {"9": 2, "10": 2, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "4th": {"13": 1, "14": 1, "15": 2, "16": 2, "17": 3, "18": 3, "19": 3, "20": 3},
+          "5th": {"17": 1, "18": 1, "19": 2, "20": 2}
+        }
+      }
+    }
+    ,
+    "Zauberer": {
+      "summary": "Schillernder Zauberwirker voll intuitiver Magie",
+      "hitDice": "d6",
+      "hpAt1stLevel": "6 + Konstitutionsmodifikator",
+      "hpPerLevel": "4 + Konstitutionsmodifikator",
+      "primaryAbility": "Charisma",
+      "savingThrows": ["Konstitution", "Charisma"],
+      "proficiencies": {
+        "armor": [],
+        "weapons": ["Einfache Waffen"],
+        "tools": [],
+        "skills": {
+          "from": [
+            "Arkane Kunde", "Einschüchtern", "Motiv erkennen",
+            "Religion", "Täuschen", "Überzeugen"
+          ],
+          "choose": 2
+        }
+      },
+      "startingEquipment": {
+        "choiceA": [
+          {"name": "Speer", "qty": 1},
+          {"name": "Dolch", "qty": 2},
+          {"name": "Arkaner Fokus (Kristall)", "qty": 1},
+          {"name": "Gewölbeforscherausrüstung", "qty": 1},
+          {"name": "Gold", "qty": 28, "unit": "GM"}
+        ],
+        "choiceB": [
+          {"name": "Gold", "qty": 50, "unit": "GM"}
+        ]
+      },
+      "multiClassing": {
+        "prerequisites": {"CHA": 13},
+        "proficienciesGranted": []
+      },
+      "features": [
+        {
+          "level": 1,
+          "name": "Zauberwirken",
+          "description": "Wirke intuitive Zauber. Charisma ist deine Zauberwirkfähigkeit."
+        },
+        {
+          "level": 1,
+          "name": "Intuitive Zauberei",
+          "description": "Erhöhe Zauber-SG oder erhalte Vorteil bei Angriffswürfen per Bonusaktion (begrenzte Anwendungen, regeneriert bei langer Rast)."
+        },
+        {
+          "level": 2,
+          "name": "Metamagie",
+          "description": "Modifiziere deine Zauber durch den Einsatz von Zaubereipunkten (beginnend mit zwei Optionen)."
+        },
+        {
+          "level": 2,
+          "name": "Quelle der Magie",
+          "description": "Verfüge über Zaubereipunkte, die magische Effekte ermöglichen, in Zauberplätze umgewandelt werden können oder umgekehrt."
+        },
+        {
+          "level": 3,
+          "name": "Zauberer-Unterklasse",
+          "description": "Du erhältst eine Zauberer-Unterklasse deiner Wahl (Aberrante Zauberei, Drakonische Zauberei, Uhrwerk-Zauberei, Wilde-Magie-Zauberei).",
+          "choice": {
+            "text": "Wähle deine Zauberer-Unterklasse:",
+            "availableAtLevel": 3,
+            "options": [
+              {
+                "name": "Aberrante Zauberei",
+                "features": [
+                  {"level": 3, "name": "Psionische Zauber", "description": "Erhalte stets vorbereitete psionische Zauber."},
+                  {"level": 3, "name": "Telepathische Sprache", "description": "Kommuniziere telepathisch mit anderen Kreaturen über große Distanzen hinweg."},
+                  {"level": 6, "name": "Psionische Zauberei", "description": "Wirke psionische Zauber ohne verbale, gestische oder Materialkomponenten per Zaubereipunkten."},
+                  {"level": 6, "name": "Psychische Verteidigung", "description": "Resistenz gegen psychischen Schaden und Vorteil bei Rettungswürfen gegen Bezaubert/Verängstigt."},
+                  {"level": 14, "name": "Offenbarung in Fleisch", "description": "Verändere deinen Körper temporär (Schwimmen, Unsichtbarkeit, Fliegen, Zwangsentfesselung)."},
+                  {"level": 18, "name": "Verzerrende Implosion", "description": "Entfessle eine Raum-Anomalie, die Gegner heranzieht und massiven Energieschaden verursacht."}
+                ]
+              },
+              {
+                "name": "Drakonische Zauberei",
+                "features": [
+                  {"level": 3, "name": "Drakonische Zauber", "description": "Erhalte stets vorbereitete Drachenzauber."},
+                  {"level": 3, "name": "Drakonische Widerstandskraft", "description": "Erhöhe Trefferpunkte und erhalte natürliche Drachenschuppen als Basis-RK (10 + DEX + CHA)."},
+                  {"level": 6, "name": "Elementare Affinität", "description": "Erhalte Resistenz gegen ein gewähltes Drachen-Element und addiere CHA-Modifikator zum Schaden."},
+                  {"level": 14, "name": "Drachenflügel", "description": "Lass dir als Bonusaktion Drachenflügel mit Fluggeschwindigkeit wachsen."},
+                  {"level": 18, "name": "Drachengefährte", "description": "Wirke Drachen beschwören ohne Materialkomponente und Konzentration einmal gratis."}
+                ]
+              },
+              {
+                "name": "Uhrwerk-Zauberei",
+                "features": [
+                  {"level": 3, "name": "Gleichgewicht wiederherstellen", "description": "Gleiche chaotische Situationen durch Neutralisieren von Vor- oder Nachteilen bei W20-Würfen aus."},
+                  {"level": 3, "name": "Uhrwerkzauber", "description": "Erhalte stets vorbereitete Ordnungszauber."},
+                  {"level": 6, "name": "Bastion des Gesetzes", "description": "Erschaffe einen schimmernden Schild aus Ordnung, der Schaden durch verbrauchte Zaubereipunkte abfängt."},
+                  {"level": 14, "name": "Trance der Ordnung", "description": "Richte dein Bewusstsein an Mechanus aus, um W20-Prüfungen unter 10 als 10 zu werten und Schutz gegen Angriffe zu erhalten."},
+                  {"level": 18, "name": "Uhrwerkkavalkade", "description": "Beschwöre Geister der Ordnung, die heilen, reparieren und feindliche Zauber bannen."}
+                ]
+              },
+              {
+                "name": "Wilde-Magie-Zauberei",
+                "features": [
+                  {"level": 3, "name": "Gezeiten des Chaos", "description": "Erhalte Vorteil bei W20-Prüfungen und erzwinge sofortige Wilde-Magie-Wellen."},
+                  {"level": 3, "name": "Woge der wilden Magie", "description": "Würfle nach dem Wirken von Zaubern mit 1W20; bei einer 20 wird die Wilde-Magie-Tabelle ausgelöst."},
+                  {"level": 6, "name": "Schicksal zurechtbiegen", "description": "Beeinflusse das Schicksal anderer per Reaktion und Zaubereipunkten mit 1W4 Bonus oder Malus."},
+                  {"level": 14, "name": "Kontrolliertes Chaos", "description": "Würfle bei Wogen der wilden Magie zweimal und suche dir das bessere Ergebnis aus."},
+                  {"level": 18, "name": "Gezähmte Woge", "description": "Wähle einen gewünschten Effekt aus der Woge-Tabelle direkt aus, statt zu würfeln."}
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "level": 4,
+          "name": "Attributswerterhöhung",
+          "description": "Erhöhe einen Attributswert um 2 oder zwei um je 1 (wiederholt sich auf Stufe 8, 12 und 16)."
+        },
+        {
+          "level": 5,
+          "name": "Zaubereiauffrischung",
+          "description": "Erhalte nach einer kurzen Rast verbrauchte Zaubereipunkte zurück (bis zur Hälfte deiner Zaubererstufe)."
+        },
+        {
+          "level": 7,
+          "name": "Zauberei-Inkrnat",
+          "description": "Setze Intuitive Zauberei auch ohne verbleibende Anwendungen ein (kostet 2 Zaubereipunkte) und nutze zwei Metamagie-Optionen gleichzeitig."
+        },
+        {
+          "level": 19,
+          "name": "Epische Gabe",
+          "description": "Erhalte ein Epische-Gabe-Talent (z. B. Gabe des Dimensionsreisens) oder ein anderes Talent deiner Wahl."
+        },
+        {
+          "level": 20,
+          "name": "Arkane Vergöttlichung",
+          "description": "Wende bei aktiver Intuiziver Zauberei in jedem Zug eine Metamagie-Option ohne Zaubereipunkte an."
+        }
+      ],
+      "spellcasting": {
+        "ability": "Charisma",
+        "cantripsKnown": [
+          {"level": 1, "count": 4},
+          {"level": 4, "count": 5},
+          {"level": 10, "count": 6}
+        ],
+        "spellsPrepared": [
+          {"level": 1, "count": 2},
+          {"level": 2, "count": 4},
+          {"level": 3, "count": 6},
+          {"level": 4, "count": 7},
+          {"level": 5, "count": 9},
+          {"level": 6, "count": 10},
+          {"level": 7, "count": 11},
+          {"level": 8, "count": 12},
+          {"level": 9, "count": 14},
+          {"level": 10, "count": 15},
+          {"level": 11, "count": 16},
+          {"level": 12, "count": 16},
+          {"level": 13, "count": 17},
+          {"level": 14, "count": 17},
+          {"level": 15, "count": 18},
+          {"level": 16, "count": 18},
+          {"level": 17, "count": 19},
+          {"level": 18, "count": 20},
+          {"level": 19, "count": 21},
+          {"level": 20, "count": 22}
+        ],
+        "spellSlotsByLevel": {
+          "1st": {"1": 2, "2": 3, "3": 4, "4": 4, "5": 4, "6": 4, "7": 4, "8": 4, "9": 4, "10": 4, "11": 4, "12": 4, "13": 4, "14": 4, "15": 4, "16": 4, "17": 4, "18": 4, "19": 4, "20": 4},
+          "2nd": {"3": 2, "4": 3, "5": 3, "6": 3, "7": 3, "8": 3, "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "3rd": {"5": 2, "6": 3, "7": 3, "8": 3, "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "4th": {"7": 1, "8": 2, "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+          "5th": {"9": 1, "10": 2, "11": 2, "12": 2, "13": 2, "14": 2, "15": 2, "16": 2, "17": 2, "18": 2, "19": 2, "20": 2},
+          "6th": {"11": 1, "12": 1, "13": 1, "14": 1, "15": 2, "16": 2, "17": 2, "18": 3, "19": 3, "20": 3},
+          "7th": {"13": 1, "14": 1, "15": 1, "16": 1, "17": 2, "18": 2, "19": 2, "20": 2},
+          "8th": {"15": 1, "16": 1, "17": 1, "18": 1, "19": 1, "20": 2},
+          "9th": {"17": 1, "18": 1, "19": 1, "20": 1}
+        }
+      }
+    }
