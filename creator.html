@@ -465,8 +465,8 @@
     </div>
 </div>
 
-<!-- Globales Dropdown-Menü mit umfassender Event-Isolation gegen Schließen beim Scrollen -->
-<div id="global-dropdown-menu" class="custom-dropdown-menu" ontouchstart="event.stopPropagation()" onmousedown="event.stopPropagation()"></div>
+<!-- Globales Dropdown-Menü -->
+<div id="global-dropdown-menu" class="custom-dropdown-menu"></div>
 
 <!-- MODAL: Änderungen übernehmen Abfrage -->
 <div id="change-confirm-modal" class="modal-overlay" style="display:none;">
@@ -579,14 +579,13 @@ window.onload = async function() {
     }
 };
 
-// Schließt das Dropdown nur bei echten Klicks außerhalb
+// Globaler Klick-Handler zum Schließen des Menüs bei Klick außerhalb
 window.addEventListener('click', function(e) {
     if (!e.target.closest('.custom-dropdown-wrapper') && !e.target.closest('#global-dropdown-menu')) {
         closeGlobalDropdown();
     }
 });
 
-// Schließen bei echtem Scrollen im Hauptdokument
 window.addEventListener('scroll', function() { closeGlobalDropdown(); }, true);
 
 function closeGlobalDropdown() {
@@ -616,7 +615,7 @@ function toggleCustomDropdown(id, event) {
     let html = '';
     Array.from(sel.options).forEach(opt => {
         let isSelected = sel.value === opt.value;
-        html += `<div class="custom-dropdown-item ${isSelected ? 'selected' : ''}" ontouchend="selectCustomOption('${id}', '${opt.value.replace(/'/g, "\\'")}', event)" onclick="selectCustomOption('${id}', '${opt.value.replace(/'/g, "\\'")}', event)">${opt.text}</div>`;
+        html += `<div class="custom-dropdown-item ${isSelected ? 'selected' : ''}" onmousedown="event.preventDefault(); selectCustomOption('${id}', '${opt.value.replace(/'/g, "\\'")}')" ontouchstart="event.preventDefault(); selectCustomOption('${id}', '${opt.value.replace(/'/g, "\\'")}')">${opt.text}</div>`;
     });
     globalMenu.innerHTML = html;
 
@@ -636,11 +635,7 @@ function toggleCustomDropdown(id, event) {
     globalMenu.style.display = 'block';
 }
 
-function selectCustomOption(id, val, event) {
-    if (event) {
-        event.stopPropagation();
-        event.preventDefault();
-    }
+function selectCustomOption(id, val) {
     const sel = document.getElementById(id);
     if (sel) {
         sel.value = val;
@@ -1564,7 +1559,7 @@ function renderEquipmentSectionInSheet(clsName, bgCustomData) {
         const selectedPackageKey = document.querySelector('input[name="class_eq_package"]:checked')?.value || 'choiceA';
         const pkg = clsObj.startingEquipment[selectedPackageKey] || clsObj.startingEquipment.choiceA;
         if (pkg) {
-            pkg.forEach(it => startingEqList.path?.push(`${it.qty || 1} ${it.name}${it.unit ? ' ' + it.unit : ''}`) || startingEqList.push(`${it.qty || 1} ${it.name}${it.unit ? ' ' + it.unit : ''}`));
+            pkg.forEach(it => startingEqList.push(`${it.qty || 1} ${it.name}${it.unit ? ' ' + it.unit : ''}`));
         }
         if (clsObj.startingEquipment.additionalItems) {
             clsObj.startingEquipment.additionalItems.forEach(it => startingEqList.push(`${it.qty || 1} ${it.name}`));
