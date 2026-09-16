@@ -40,6 +40,7 @@
             max-width: 600px;
         }
 
+        /* Permanenter Footer mit abgerundeter, rauer SVG-Kante oben */
         .page-footer-nav {
             position: fixed;
             bottom: 0;
@@ -52,7 +53,7 @@
             display: flex;
             justify-content: space-around;
             align-items: center;
-            z-index: 100000;
+            z-index: 1000;
             box-shadow: 0 -4px 15px rgba(0,0,0,0.15);
             padding: 10px 16px;
             box-sizing: border-box;
@@ -96,7 +97,7 @@
             position: fixed;
             top: 16px;
             right: 68px;
-            z-index: 110000;
+            z-index: 1100;
             background: var(--btn-back-bg);
             border: 1.5px solid #8b0000;
             color: #8b0000;
@@ -151,100 +152,104 @@
 
             <div class="page-title">Held/in erstellen</div>
 
-            <div class="step-card" style="position: relative; z-index: 40;">
+            <div class="step-card">
                 <div class="step-title">Identität & Volk</div>
                 <div>
                     <label for="char-name">Name</label>
                     <input type="text" id="char-name" value="Gimble">
                 </div>
-                <div style="display: flex; gap: 10px; margin-top: 8px;">
-                    <div style="flex: 1.2;">
+                <div class="grid-race" style="margin-top: 8px;">
+                    <div>
                         <label for="main-race">Volk</label>
                         <div class="input-row">
-                            <select id="main-race" onchange="onMainRaceChange()" style="display:none;"></select>
+                            <select id="main-race" onchange="onMainRaceChange()"></select>
+                        </div>
+                    </div>
+                    <div id="subrace-container" style="display: none;">
+                        <label for="sub-race">Abstammung</label>
+                        <div class="input-row">
+                            <select id="sub-race" onchange="updateSubraceOptions()"></select>
                             <button type="button" class="info-btn" onclick="showRaceModal()">ℹ</button>
                         </div>
                     </div>
-                    <div id="subrace-container" style="flex: 1.8; display: none;">
-                        <label for="sub-race">Abstammung</label>
+                </div>
+                <div id="special-attr-container" class="special-attribute-box">
+                    <label id="special-attr-label">Spezial-Attribut wählen:</label>
+                    <select id="special-attr-select"></select>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-title">Klasse und Hintergrund</div>
+                <div class="grid-2">
+                    <div>
+                        <label for="class-select">Klasse</label>
                         <div class="input-row">
-                            <select id="sub-race" onchange="updateSubraceOptions()" style="display:none;"></select>
+                            <select id="class-select" onchange="onClassChange()"></select>
+                            <button type="button" class="info-btn" id="class-info-btn" onclick="showClassModal()"><i class="fa-solid fa-wrench" id="class-icon-indicator"></i></button>
                         </div>
                     </div>
-                </div>
-                <div id="special-attr-container" class="special-attribute-box" style="display: none; margin-top:10px;">
-                    <label id="special-attr-label">Spezial-Attribut / Option wählen:</label>
-                    <select id="special-attr-select" style="display:none;"></select>
-                </div>
-            </div>
-
-            <div class="step-card" style="position: relative; z-index: 35;">
-                <div class="step-title">Klasse</div>
-                <div>
-                    <label for="class-select">Klasse</label>
-                    <div class="input-row">
-                        <select id="class-select" onchange="onClassChange()" style="display:none;"></select>
-                        <button type="button" class="info-btn" id="class-info-btn" onclick="showClassModal()"><i class="fa-solid fa-wrench" id="class-icon-indicator"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="step-card" style="position: relative; z-index: 30;">
-                <div class="step-title">Hintergrund</div>
-                <div>
-                    <label for="bg-select">Hintergrund</label>
-                    <div class="input-row">
-                        <select id="bg-select" onchange="onBgChange()" style="display:none;"></select>
-                        <button type="button" class="info-btn" onclick="showBgModal()">ℹ</button>
+                    <div>
+                        <label for="bg-select">Hintergrund</label>
+                        <div class="input-row">
+                            <select id="bg-select" onchange="onBgChange()"></select>
+                            <button type="button" class="info-btn" onclick="showBgModal()">ℹ</button>
+                        </div>
                     </div>
                 </div>
 
                 <div style="margin-top: 12px; background: var(--btn-back-bg); padding: 10px; border-radius: 8px; border: 1.5px solid var(--border);">
                     <label for="bg-asi-mode" style="margin-top:0; color:var(--accent);">Hintergrund-Attributsbonus (+3 Punkte):</label>
-                    <select id="bg-asi-mode" onchange="onBgAsiModeChange()" style="display:none;"></select>
-                    <div id="bg-asi-slots" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 6px;"></div>
+                    <select id="bg-asi-mode" onchange="onBgAsiModeChange()" style="margin-top:4px; margin-bottom:8px;">
+                        <option value="2_1">+2 auf ein Attribut, +1 auf ein anderes</option>
+                        <option value="1_1_1">+1 auf drei verschiedene Attribute</option>
+                    </select>
+                    <div id="bg-asi-slots" class="grid-3" style="gap:6px;"></div>
                     <div id="bg-asi-error" class="error" style="display:none;">Wähle unterschiedliche Attribute ohne Dopplungen innerhalb der Boni!</div>
                 </div>
 
                 <div id="bg-dynamic-options-container" style="margin-top: 12px; display: none; background: var(--btn-back-bg); padding: 10px; border-radius: 8px; border: 1.5px solid var(--border);">
                     <div id="bg-tool-choice-wrapper" style="margin-bottom: 8px; display: none;">
                         <label id="bg-tool-label" style="margin-top:0; color:var(--accent);">Werkzeug-Wahl:</label>
-                        <select id="bg-tool-select" style="display:none;"></select>
+                        <select id="bg-tool-select" style="margin-top:4px;"></select>
                     </div>
                     <div id="bg-eq-choice-wrapper" style="display: none;">
                         <label id="bg-eq-label" style="margin-top:0; color:var(--accent);">Startausrüstung (Paket wählen):</label>
-                        <select id="bg-eq-select" style="display:none;"></select>
+                        <select id="bg-eq-select" style="margin-top:4px;">
+                            <option value="A">Option A (Ausrüstungspaket + Gold)</option>
+                            <option value="B">Option B (50 Goldstücke)</option>
+                        </select>
                     </div>
                 </div>
             </div>
 
-            <div class="step-card" style="position: relative; z-index: 20;">
+            <div class="step-card">
                 <div class="step-title">Start-Attribute zuweisen</div>
                 <div class="grid-3">
-                    <div><label>Stärke</label><select class="array-select" id="str-val" onchange="onStatsChange()" style="display:none;"></select></div>
-                    <div><label>Geschicklichkeit</label><select class="array-select" id="dex-val" onchange="onStatsChange()" style="display:none;"></select></div>
-                    <div><label>Konstitution</label><select class="array-select" id="con-val" onchange="onStatsChange()" style="display:none;"></select></div>
-                    <div><label>Intelligenz</label><select class="array-select" id="int-val" onchange="onStatsChange()" style="display:none;"></select></div>
-                    <div><label>Weisheit</label><select class="array-select" id="wis-val" onchange="onStatsChange()" style="display:none;"></select></div>
-                    <div><label>Charisma</label><select class="array-select" id="cha-val" onchange="onStatsChange()" style="display:none;"></select></div>
+                    <div><label>Stärke</label><select class="array-select" id="str-val" onchange="onStatsChange()"></select></div>
+                    <div><label>Geschicklichkeit</label><select class="array-select" id="dex-val" onchange="onStatsChange()"></select></div>
+                    <div><label>Konstitution</label><select class="array-select" id="con-val" onchange="onStatsChange()"></select></div>
+                    <div><label>Intelligenz</label><select class="array-select" id="int-val" onchange="onStatsChange()"></select></div>
+                    <div><label>Weisheit</label><select class="array-select" id="wis-val" onchange="onStatsChange()"></select></div>
+                    <div><label>Charisma</label><select class="array-select" id="cha-val" onchange="onStatsChange()"></select></div>
                 </div>
                 <div id="array-error" class="error">Wähle 15, 14, 13, 12, 10, 8 ohne Dopplungen!</div>
             </div>
 
-            <div class="step-card" style="position: relative; z-index: 10;">
+            <div class="step-card">
                 <div class="step-title">Fertigkeiten wählen</div>
                 <div style="display: flex; flex-direction: column; gap: 10px;">
                     <div>
                         <label for="skill1">Fertigkeit 1</label>
                         <div class="input-row">
-                            <select id="skill1" onchange="validateSkills()" style="display:none;"></select>
+                            <select id="skill1" onchange="validateSkills()"></select>
                             <button type="button" class="info-btn" onclick="showSkillModal('skill1')">ℹ</button>
                         </div>
                     </div>
                     <div>
                         <label for="skill2">Fertigkeit 2</label>
                         <div class="input-row">
-                            <select id="skill2" onchange="validateSkills()" style="display:none;"></select>
+                            <select id="skill2" onchange="validateSkills()"></select>
                             <button type="button" class="info-btn" onclick="showSkillModal('skill2')">ℹ</button>
                         </div>
                     </div>
@@ -252,7 +257,7 @@
                 <div id="skill-error" class="error">Wähle 2 verschiedene Fertigkeiten, die sich nicht mit deinem Hintergrund überschneiden!</div>
             </div>
 
-            <div class="step-card" id="spells-step-card" style="margin-bottom: 20px; position: relative; z-index: 5;">
+            <div class="step-card" id="spells-step-card" style="margin-bottom: 20px;">
                 <div class="step-title">Klassen-Zauber wählen</div>
                 <label id="cantrip-label">Zaubertricks wählen</label>
                 <div class="spell-container" id="cantrips-group"></div>
@@ -379,7 +384,7 @@ function requestSwitchToSheet() {
 function confirmPageSwitch(doSave) {
     document.getElementById('change-confirm-modal').style.display = 'none';
     if (doSave) {
-        if (!buildCharacterAndSave()) return; 
+        buildCharacterAndSave();
     } else {
         loadExistingOrFallbackCharacter();
     }
@@ -428,133 +433,8 @@ function setTheme(themeName) {
     closeThemeModal();
 }
 
-window.addEventListener('click', function(e) {
-    if (!e.target.closest('.custom-select-wrapper')) {
-        document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open', 'drop-up'));
-    }
-});
-
-function makeCustomSelect(selectId) {
-    const sel = document.getElementById(selectId);
-    if (!sel) return;
-
-    let parent = sel.parentNode;
-    let existingWrapper = parent.querySelector('.custom-select-wrapper');
-    if (existingWrapper) existingWrapper.remove();
-
-    let wrapper = document.createElement('div');
-    wrapper.className = 'custom-select-wrapper';
-    
-    let displayDiv = document.createElement('div');
-    displayDiv.className = 'custom-select';
-    
-    let optionsDiv = document.createElement('div');
-    optionsDiv.className = 'custom-options';
-
-    function updateDisplay() {
-        let selectedOpt = sel.options[sel.selectedIndex];
-        displayDiv.innerText = selectedOpt ? selectedOpt.text : '-- Wählen --';
-        
-        optionsDiv.innerHTML = '';
-        Array.from(sel.options).forEach(opt => {
-            let item = document.createElement('div');
-            item.className = 'custom-option' + (opt.selected ? ' selected' : '');
-            item.innerText = opt.text;
-            item.onclick = function() {
-                sel.value = opt.value;
-                updateDisplay();
-                wrapper.classList.remove('open', 'drop-up');
-                if (sel.onchange) sel.onchange();
-            };
-            optionsDiv.appendChild(item);
-        });
-    }
-
-    displayDiv.onclick = function(e) {
-        e.stopPropagation();
-        
-        document.querySelectorAll('.custom-select-wrapper').forEach(w => {
-            if (w !== wrapper) w.classList.remove('open', 'drop-up');
-        });
-
-        let rect = displayDiv.getBoundingClientRect();
-        let spaceBelow = window.innerHeight - rect.bottom;
-        if (spaceBelow < 230) {
-            wrapper.classList.add('drop-up');
-        } else {
-            wrapper.classList.remove('drop-up');
-        }
-
-        wrapper.classList.toggle('open');
-    };
-
-    wrapper.appendChild(displayDiv);
-    wrapper.appendChild(optionsDiv);
-    parent.insertBefore(wrapper, sel);
-    updateDisplay();
-}
-
-function makeDynamicSelectCustom(sel) {
-    let parent = sel.parentNode;
-    let existingWrapper = parent.querySelector('.custom-select-wrapper');
-    if (existingWrapper) existingWrapper.remove();
-
-    let wrapper = document.createElement('div');
-    wrapper.className = 'custom-select-wrapper';
-    wrapper.style.flex = "1";
-    
-    let displayDiv = document.createElement('div');
-    displayDiv.className = 'custom-select';
-    
-    let optionsDiv = document.createElement('div');
-    optionsDiv.className = 'custom-options';
-
-    function updateDisplay() {
-        let selectedOpt = sel.options[sel.selectedIndex];
-        displayDiv.innerText = selectedOpt && selectedOpt.value ? selectedOpt.text : '-- Wählen --';
-        
-        optionsDiv.innerHTML = '';
-        Array.from(sel.options).forEach(opt => {
-            let item = document.createElement('div');
-            item.className = 'custom-option' + (opt.selected ? ' selected' : '');
-            item.innerText = opt.text;
-            item.onclick = function() {
-                sel.value = opt.value;
-                updateDisplay();
-                wrapper.classList.remove('open', 'drop-up');
-                if (sel.onchange) sel.onchange();
-            };
-            optionsDiv.appendChild(item);
-        });
-    }
-
-    displayDiv.onclick = function(e) {
-        e.stopPropagation();
-        
-        document.querySelectorAll('.custom-select-wrapper').forEach(w => {
-            if (w !== wrapper) w.classList.remove('open', 'drop-up');
-        });
-
-        let rect = displayDiv.getBoundingClientRect();
-        let spaceBelow = window.innerHeight - rect.bottom;
-        if (spaceBelow < 230) {
-            wrapper.classList.add('drop-up');
-        } else {
-            wrapper.classList.remove('drop-up');
-        }
-
-        wrapper.classList.toggle('open');
-    };
-
-    wrapper.appendChild(displayDiv);
-    wrapper.appendChild(optionsDiv);
-    parent.insertBefore(wrapper, sel);
-    updateDisplay();
-}
-
-const RACES_JSON_URL = "./rassen.json";
-const BACKGROUNDS_JSON_URL = "./backgrounds.json";
 const COMPENDIUM_JSON_URL = "./compendium.json";
+const BACKGROUNDS_JSON_URL = "./backgrounds.json";
 const SPELLS_HTML_URL = "./spells-parsed.html";
 const SPELL_LISTS_HTML_URL = "./spelllists-parsed.html";
 
@@ -570,8 +450,8 @@ const attributeDescriptions = {
 };
 
 const attrNamesDE = {
-    "STR": "Stärke", "DEX": "Gewandtheit", "CON": "Konst.",
-    "INT": "Intell.", "WIS": "Weisheit", "CHA": "Charisma"
+    "STR": "STR", "DEX": "GES", "CON": "KON",
+    "INT": "INT", "WIS": "WEI", "CHA": "CHA"
 };
 
 const classFileMap = {
@@ -604,7 +484,7 @@ const classHpData = {
     "Schurke": { die: 8, base: 8 }, "Zauberer": { die: 6, base: 6 }, "Hexenmeister": { die: 8, base: 8 }, "Magier": { die: 6, base: 6 }
 };
 
-let racesData = {};
+let speciesData = {};
 let backgrounds = {};
 let skillDescriptions = {};
 let spellCompendium = { cantrips: {}, level1: {} };
@@ -612,24 +492,23 @@ let classSpellLists = {};
 
 window.onload = async function() {
     try {
-        const racesResponse = await fetch(RACES_JSON_URL + "?t=" + new Date().getTime());
-        if (!racesResponse.ok) throw new Error(`HTTP Fehlerstatus rassen.json: ${racesResponse.status}`);
-        const rJson = await racesResponse.json();
-        racesData = rJson.races || rJson;
-
         const compResponse = await fetch(COMPENDIUM_JSON_URL + "?t=" + new Date().getTime());
-        if (compResponse.ok) {
-            const compData = await compResponse.json();
-            skillDescriptions = compData.skills || {};
-        }
+        if (!compResponse.ok) throw new Error(`HTTP Fehlerstatus compendium.json: ${compResponse.status}`);
+        const compData = await compResponse.json();
+        speciesData = compData.speciesData;
+        skillDescriptions = compData.skills || {};
 
         try {
             const bgResponse = await fetch(BACKGROUNDS_JSON_URL + "?t=" + new Date().getTime());
             if (bgResponse.ok) {
                 const bgData = await bgResponse.json();
                 backgrounds = bgData.backgrounds ? bgData.backgrounds : bgData;
+            } else {
+                backgrounds = compData.backgrounds || {};
             }
-        } catch (e) {}
+        } catch (e) {
+            backgrounds = compData.backgrounds || {};
+        }
 
         try {
             const spellResponse = await fetch(SPELLS_HTML_URL + "?t=" + new Date().getTime());
@@ -650,7 +529,7 @@ window.onload = async function() {
 
 function handleUrlModeAndStartup() {
     const urlParams = new URLSearchParams(window.location.search);
-    const mode = urlParams.get('mode');
+    const mode = urlParams.get('mode'); // Entweder "create" oder "sheet"
 
     if (mode === 'create') {
         localStorage.removeItem('dnd_active_character');
@@ -668,7 +547,7 @@ function handleUrlModeAndStartup() {
                 return;
             } catch (e) {}
         }
-        silentBuildCharacter();
+        buildCharacterAndSave();
         executePageSwitch('create');
     }
 }
@@ -682,7 +561,7 @@ function loadExistingOrFallbackCharacter() {
             return;
         } catch (e) {}
     }
-    silentBuildCharacter();
+    buildCharacterAndSave();
 }
 
 function loadCharacterIntoCreator(char) {
@@ -722,77 +601,20 @@ function loadCharacterIntoCreator(char) {
         if (customSkills[0] && document.getElementById('skill1')) document.getElementById('skill1').value = customSkills[0];
         if (customSkills[1] && document.getElementById('skill2')) document.getElementById('skill2').value = customSkills[1];
     }
-    refreshAllCustomSelects();
-}
-
-function silentBuildCharacter() {
-    const name = document.getElementById('char-name').value || "Gimble";
-    const mainRace = document.getElementById('main-race').value || Object.keys(racesData)[0];
-    const subRaceSelect = document.getElementById('sub-race');
-    const subRace = subRaceSelect && subRaceSelect.options.length > 0 ? subRaceSelect.value : mainRace;
-    const clsName = document.getElementById('class-select').value || "Kämpfer";
-    const bg = document.getElementById('bg-select').value || Object.keys(backgrounds)[0];
-    
-    const raceObj = racesData[mainRace] || {};
-    let speedMeters = raceObj.speed?.qty || 9;
-    let speedFt = Math.round(speedMeters * 3.28084 / 5) * 5;
-
-    let rawStats = {
-        STR: parseInt(document.getElementById('str-val')?.value) || 15,
-        DEX: parseInt(document.getElementById('dex-val')?.value) || 14,
-        CON: parseInt(document.getElementById('con-val')?.value) || 13,
-        INT: parseInt(document.getElementById('int-val')?.value) || 12,
-        WIS: parseInt(document.getElementById('wis-val')?.value) || 10,
-        CHA: parseInt(document.getElementById('cha-val')?.value) || 8
-    };
-
-    let stats = { ...rawStats };
-    let mods = {};
-    for (let s in stats) mods[s] = getMod(stats[s]);
-
-    const hpBase = classHpData[clsName]?.base || 8;
-    const hp = hpBase + mods.CON;
-    const ac = 10 + mods.DEX;
-
-    lastBuiltCharacter = {
-        id: 'char_' + Date.now(), 
-        name, 
-        class: clsName, 
-        species: subRace !== mainRace ? `${mainRace} (${subRace})` : mainRace, 
-        mainRace: mainRace,
-        background: bg,
-        level: 1, 
-        hp, 
-        maxHp: hp, 
-        ac, 
-        speed: speedFt, 
-        stats, 
-        mods, 
-        rawStats,
-        skills: [], 
-        cantrips: [], 
-        spells: [], 
-        lastAccess: new Date().toISOString()
-    };
-    renderCharacterToSheet(lastBuiltCharacter);
 }
 
 function buildCharacterAndSave() {
     if (!validateArray() || !validateSkills() || !validateBgAsi()) {
         showCustomAlert("Bitte behebe alle Validierungsfehler im Formular!", "Achtung");
-        return false;
+        return;
     }
 
     const name = document.getElementById('char-name').value || "Unbenannter Held";
-    const mainRace = document.getElementById('main-race').value || Object.keys(racesData)[0];
-    const subRaceSelect = document.getElementById('sub-race');
-    const subRace = subRaceSelect && subRaceSelect.options.length > 0 ? subRaceSelect.value : mainRace;
+    const mainRace = document.getElementById('main-race').value || Object.keys(speciesData)[0];
+    const subRace = document.getElementById('sub-race').value || Object.keys(speciesData[mainRace]?.subraces || {})[0];
     const clsName = document.getElementById('class-select').value || "Kämpfer";
     const bg = document.getElementById('bg-select').value || Object.keys(backgrounds)[0];
-    
-    const raceObj = racesData[mainRace] || {};
-    let speedMeters = raceObj.speed?.qty || 9;
-    let speedFt = Math.round(speedMeters * 3.28084 / 5) * 5;
+    const subInfo = speciesData[mainRace]?.subraces[subRace] || { bonus: {}, speed: 30 };
 
     let rawStats = {
         STR: parseInt(document.getElementById('str-val')?.value) || 15,
@@ -803,10 +625,12 @@ function buildCharacterAndSave() {
         CHA: parseInt(document.getElementById('cha-val')?.value) || 8
     };
 
+    let speciesBonuses = subInfo.bonus || {};
     let bgBonuses = getBgBonuses();
 
     let stats = { ...rawStats };
     for (let s in stats) {
+        if (speciesBonuses[s]) stats[s] += speciesBonuses[s];
         if (bgBonuses[s]) stats[s] += bgBonuses[s];
     }
 
@@ -827,14 +651,14 @@ function buildCharacterAndSave() {
         id: charId, 
         name, 
         class: clsName, 
-        species: subRace !== mainRace ? `${mainRace} (${subRace})` : mainRace, 
+        species: subRace, 
         mainRace: mainRace,
         background: bg,
         level: 1, 
         hp, 
         maxHp: hp, 
         ac, 
-        speed: speedFt, 
+        speed: subInfo.speed || 30, 
         stats, 
         mods, 
         rawStats,
@@ -856,7 +680,6 @@ function buildCharacterAndSave() {
     localStorage.setItem('dnd_active_character', JSON.stringify(lastBuiltCharacter));
 
     renderCharacterToSheet(lastBuiltCharacter);
-    return true;
 }
 
 function renderCharacterToSheet(charData) {
@@ -886,7 +709,7 @@ function renderCharacterToSheet(charData) {
 
     document.getElementById('screen-out-features').innerHTML = `
         <li><b>Fertigkeiten:</b> ${charData.skills.join(', ')}</li>
-        <li><b>Volksmerkmale:</b> Geladener Charakter (2024 Standard)</li>
+        <li><b>Volksmerkmale:</b> Geladener Charakter</li>
         <li><b>Talent:</b> ${bgObj.feat || ''}</li>
         <li><b>Werkzeuge:</b> ${toolsStr}</li>
         <li><b>Hintergrund-Ausrüstung:</b> ${eqStr}</li>
@@ -941,27 +764,21 @@ function parseSpellListsHtml(htmlText) {
 }
 
 function initApp() {
-    populateSelect('main-race', Object.keys(racesData));
+    populateSelect('main-race', Object.keys(speciesData));
     
     const classSel = document.getElementById('class-select');
     classSel.innerHTML = '';
     Object.keys(classFileMap).forEach(clsName => {
         classSel.innerHTML += `<option value="${clsName}">${clsName}</option>`;
     });
-    makeCustomSelect('class-select');
 
     populateSelect('bg-select', Object.keys(backgrounds));
-    populateSelect('bg-asi-mode', [
-        { value: "2_1", text: "+2 auf einen Wert, +1 auf einen anderen" },
-        { value: "1_1_1", text: "+1 auf drei verschiedene Werte" }
-    ]);
 
     const arraySelects = document.querySelectorAll('.array-select');
     arraySelects.forEach((sel, idx) => {
         sel.innerHTML = '<option value="">--</option>';
         standardArray.forEach(val => sel.innerHTML += `<option value="${val}">${val}</option>`);
         sel.selectedIndex = idx + 1;
-        makeCustomSelect(sel.id);
     });
 
     onMainRaceChange();
@@ -973,23 +790,7 @@ function populateSelect(id, items) {
     const sel = document.getElementById(id);
     if (!sel) return;
     sel.innerHTML = '';
-    items.forEach(i => {
-        if (typeof i === 'object') {
-            sel.innerHTML += `<option value="${i.value}">${i.text}</option>`;
-        } else {
-            sel.innerHTML += `<option value="${i}">${i}</option>`;
-        }
-    });
-    makeCustomSelect(id);
-}
-
-function refreshAllCustomSelects() {
-    document.querySelectorAll('select').forEach(sel => {
-        if (sel.id) makeCustomSelect(sel.id);
-        else if (sel.className.includes('char-cantrip-select') || sel.className.includes('char-spell-select')) {
-            makeDynamicSelectCustom(sel);
-        }
-    });
+    items.forEach(i => sel.innerHTML += `<option value="${i}">${i}</option>`);
 }
 
 function openModal(title, text, iconClass = null, subtitle = null) {
@@ -1018,34 +819,8 @@ function closeModal() {
 
 function showRaceModal() {
     const mainRace = document.getElementById('main-race').value;
-    const subRaceElem = document.getElementById('sub-race');
-    const subRace = subRaceElem ? subRaceElem.value : null;
-    const raceObj = racesData[mainRace];
-
-    if (!raceObj) return;
-
-    let content = `<p><b>Kreaturentyp:</b> ${raceObj.creatureType || 'Humanoid'}</p>`;
-    content += `<p><b>Größe:</b> ${raceObj.size || 'Mittelgroß'} (${raceObj.sizeDetails?.from || 150}–${raceObj.sizeDetails?.to || 180} ${raceObj.sizeDetails?.unit || 'cm'})</p>`;
-    content += `<p><b>Bewegungsrate:</b> ${raceObj.speed?.qty || 9} ${raceObj.speed?.unit || 'Meter'}</p>`;
-    content += `<p style="margin-top:10px;">${raceObj.description || ''}</p>`;
-
-    if (raceObj.traits && raceObj.traits.length > 0) {
-        content += `<h4 style="color:var(--accent); margin-top:15px;">Merkmale:</h4><ul>`;
-        raceObj.traits.forEach(t => {
-            content += `<li><b>${t.name}:</b> ${t.description}</li>`;
-        });
-        content += `</ul>`;
-    }
-
-    if (subRace && raceObj.subtypes?.choice?.options) {
-        const subOpt = raceObj.subtypes.choice.options.find(o => o.name === subRace);
-        if (subOpt) {
-            content += `<h4 style="color:var(--accent); margin-top:15px;">Abstammung (${subOpt.name}):</h4>`;
-            content += `<p>${subOpt.description || ''}</p>`;
-        }
-    }
-
-    openModal(mainRace + (subRace && subRace !== mainRace ? ` (${subRace})` : ''), content, "fa-child");
+    const subRace = document.getElementById('sub-race').value;
+    openModal(subRace, speciesData[mainRace].subraces[subRace].text, "fa-child");
 }
 
 async function showClassModal() {
@@ -1144,50 +919,32 @@ function updateClassIconDisplay() {
 
 function onMainRaceChange() {
     const mainRace = document.getElementById('main-race').value;
-    const raceObj = racesData[mainRace];
     const subContainer = document.getElementById('subrace-container');
     const subSelect = document.getElementById('sub-race');
 
-    if (!subSelect || !subContainer) return;
-
-    if (raceObj && raceObj.subtypes && raceObj.subtypes.choice && raceObj.subtypes.choice.options) {
-        subSelect.innerHTML = '';
-        raceObj.subtypes.choice.options.forEach(sub => {
-            subSelect.innerHTML += `<option value="${sub.name}">${sub.name}</option>`;
-        });
-        subContainer.style.display = 'block';
-    } else {
-        subSelect.innerHTML = `<option value="${mainRace}">${mainRace}</option>`;
-        subContainer.style.display = 'none';
-    }
-    makeCustomSelect('sub-race');
+    if (!subSelect) return;
+    subSelect.innerHTML = '';
+    Object.keys(speciesData[mainRace].subraces).forEach(subKey => {
+        subSelect.innerHTML += `<option value="${subKey}">${subKey}</option>`;
+    });
+    if (subContainer) subContainer.style.display = 'block';
     updateSubraceOptions();
 }
 
 function updateSubraceOptions() {
     const mainRace = document.getElementById('main-race').value;
-    const raceObj = racesData[mainRace];
+    const raceData = speciesData[mainRace];
     const specialContainer = document.getElementById('special-attr-container');
     const specialSelect = document.getElementById('special-attr-select');
 
-    let hasSpecialChoice = false;
-    if (raceObj && raceObj.traits) {
-        raceObj.traits.forEach(trait => {
-            if (trait.choice && trait.choice.options) {
-                if (specialSelect && specialContainer) {
-                    specialSelect.innerHTML = '';
-                    trait.choice.options.forEach(opt => specialSelect.innerHTML += `<option value="${opt}">${opt}</option>`);
-                    document.getElementById('special-attr-label').innerText = trait.choice.text || 'Wähle eine Option:';
-                    specialContainer.style.display = 'block';
-                    makeCustomSelect('special-attr-select');
-                    hasSpecialChoice = true;
-                }
-            }
-        });
-    }
-
-    if (!hasSpecialChoice && specialContainer) {
-        specialContainer.style.display = 'none';
+    if (raceData && raceData["spezial-attribut"] && raceData["spezial-attribut"].spellcasting) {
+        if (specialSelect) {
+            specialSelect.innerHTML = '';
+            raceData["spezial-attribut"].spellcasting.forEach(opt => specialSelect.innerHTML += `<option value="${opt}">${opt}</option>`);
+        }
+        if (specialContainer) specialContainer.style.display = 'block';
+    } else {
+        if (specialContainer) specialContainer.style.display = 'none';
     }
     updateSpellsUI();
 }
@@ -1209,9 +966,6 @@ function onClassChange() {
     });
     s1.selectedIndex = 0;
     s2.selectedIndex = skills.length > 1 ? 1 : 0;
-
-    makeCustomSelect('skill1');
-    makeCustomSelect('skill2');
 
     validateSkills();
     updateSpellsUI();
@@ -1243,26 +997,20 @@ function updateBgAsiUI() {
 
     if (mode === "2_1") {
         slotsContainer.innerHTML = `
-            <div><label style="font-size:0.7rem;">+2 Wert</label><select id="bg-asi-2" onchange="validateBgAsi()" style="display:none;"></select></div>
-            <div><label style="font-size:0.7rem;">+1 Wert</label><select id="bg-asi-1a" onchange="validateBgAsi()" style="display:none;"></select></div>
+            <div><label style="font-size:0.75rem;">+2 Wert</label><select id="bg-asi-2" onchange="validateBgAsi()">${optionsHtml}</select></div>
+            <div><label style="font-size:0.75rem;">+1 Wert</label><select id="bg-asi-1a" onchange="validateBgAsi()">${optionsHtml}</select></div>
             <div></div>`;
-        document.getElementById('bg-asi-2').innerHTML = optionsHtml;
-        document.getElementById('bg-asi-1a').innerHTML = optionsHtml;
-        makeCustomSelect('bg-asi-2');
-        makeCustomSelect('bg-asi-1a');
         const sel1a = document.getElementById('bg-asi-1a');
         if (sel1a && bgObj.attributes.length > 1) sel1a.selectedIndex = 1;
     } else {
         slotsContainer.innerHTML = `
-            <div><label style="font-size:0.7rem;">+1 Wert</label><select id="bg-asi-1a" onchange="validateBgAsi()" style="display:none;"></select></div>
-            <div><label style="font-size:0.7rem;">+1 Wert</label><select id="bg-asi-1b" onchange="validateBgAsi()" style="display:none;"></select></div>
-            <div><label style="font-size:0.7rem;">+1 Wert</label><select id="bg-asi-1c" onchange="validateBgAsi()" style="display:none;"></select></div>`;
-        document.getElementById('bg-asi-1a').innerHTML = optionsHtml;
-        document.getElementById('bg-asi-1b').innerHTML = optionsHtml;
-        document.getElementById('bg-asi-1c').innerHTML = optionsHtml;
-        makeCustomSelect('bg-asi-1a');
-        makeCustomSelect('bg-asi-1b');
-        makeCustomSelect('bg-asi-1c');
+            <div><label style="font-size:0.75rem;">+1</label><select id="bg-asi-1a" onchange="validateBgAsi()">${optionsHtml}</select></div>
+            <div><label style="font-size:0.75rem;">+1</label><select id="bg-asi-1b" onchange="validateBgAsi()">${optionsHtml}</select></div>
+            <div><label style="font-size:0.75rem;">+1</label><select id="bg-asi-1c" onchange="validateBgAsi()">${optionsHtml}</select></div>`;
+        const sel1a = document.getElementById('bg-asi-1a'), sel1b = document.getElementById('bg-asi-1b'), sel1c = document.getElementById('bg-asi-1c');
+        if (sel1a && bgObj.attributes.length > 0) sel1a.selectedIndex = 0;
+        if (sel1b && bgObj.attributes.length > 1) sel1b.selectedIndex = 1;
+        if (sel1c && bgObj.attributes.length > 2) sel1c.selectedIndex = 2;
     }
     validateBgAsi();
 }
@@ -1274,7 +1022,6 @@ function updateBgToolAndEquipmentUI() {
     const toolWrapper = document.getElementById('bg-tool-choice-wrapper');
     const toolSelect = document.getElementById('bg-tool-select');
     const eqWrapper = document.getElementById('bg-eq-choice-wrapper');
-    const eqSelect = document.getElementById('bg-eq-select');
 
     if (!container) return;
     if (!bgObj) { container.style.display = 'none'; return; }
@@ -1284,20 +1031,12 @@ function updateBgToolAndEquipmentUI() {
         if (toolSelect) {
             toolSelect.innerHTML = '';
             bgObj.tools.choiceA.options.forEach(opt => toolSelect.innerHTML += `<option value="${opt}">${opt}</option>`);
-            makeCustomSelect('bg-tool-select');
         }
         if (toolWrapper) toolWrapper.style.display = 'block';
         hasChoices = true;
     } else { if (toolWrapper) toolWrapper.style.display = 'none'; }
 
     if (bgObj.equipment && bgObj.equipment.choiceA && bgObj.equipment.choiceB) {
-        if (eqSelect) {
-            eqSelect.innerHTML = `
-                <option value="A">Option A (Ausrüstungspaket)</option>
-                <option value="B">Option B (50 Goldstücke)</option>
-            `;
-            makeCustomSelect('bg-eq-select');
-        }
         if (eqWrapper) eqWrapper.style.display = 'block';
         hasChoices = true;
     } else { if (eqWrapper) eqWrapper.style.display = 'none'; }
@@ -1406,12 +1145,7 @@ function updateSpellsUI() {
     if (cantripLabel) cantripLabel.innerText = `Wähle ${maxCantrips} Zaubertricks:`;
     for (let i = 0; i < maxCantrips; i++) {
         let opts = allowedCantrips.map(c => `<option value="${c}">${c}</option>`).join('');
-        let row = document.createElement('div');
-        row.className = 'input-row';
-        row.innerHTML = `<select class="char-cantrip-select" style="display:none;"><option value="">-- Wählen --</option>${opts}</select><button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling.querySelector('select') || this.previousElementSibling)">✨</button>`;
-        cantripGroup.appendChild(row);
-        let sel = row.querySelector('.char-cantrip-select');
-        makeDynamicSelectCustom(sel);
+        cantripGroup.innerHTML += `<div class="input-row"><select class="char-cantrip-select"><option value="">-- Wählen --</option>${opts}</select><button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling)">✨</button></div>`;
     }
 
     let allowedLvl1 = classSpellLists[clsName]?.level1?.length ? classSpellLists[clsName].level1 : Object.keys(spellCompendium.level1);
@@ -1420,12 +1154,7 @@ function updateSpellsUI() {
 
     for (let i = 0; i < maxPrep; i++) {
         let opts = allowedLvl1.map(s => `<option value="${s}">${s}</option>`).join('');
-        let row = document.createElement('div');
-        row.className = 'input-row';
-        row.innerHTML = `<select class="char-spell-select" style="display:none;"><option value="">-- Wählen --</option>${opts}</select><button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling.querySelector('select') || this.previousElementSibling)">I</button>`;
-        lvl1Group.appendChild(row);
-        let sel = row.querySelector('.char-spell-select');
-        makeDynamicSelectCustom(sel);
+        lvl1Group.innerHTML += `<div class="input-row"><select class="char-spell-select"><option value="">-- Wählen --</option>${opts}</select><button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling)">I</button></div>`;
     }
 }
 
