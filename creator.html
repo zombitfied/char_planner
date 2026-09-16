@@ -137,6 +137,14 @@
 </head>
 <body>
 
+<!-- SVG Rough-Edge Filter für den handgezeichneten Kanten-Look -->
+<svg style="display:none;" aria-hidden="true">
+    <filter id="rough-edge">
+        <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="3" result="noise" />
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+</svg>
+
 <div class="page-footer-nav" id="footerNavContainer">
     <button type="button" class="footer-tab-btn" onclick="requestSwitchToSheet()">
         <i class="fa-solid fa-shield-halved"></i> Zum Heldenbogen
@@ -198,7 +206,7 @@
                 <!-- Dynamischer Bereich für klassenbasierte Wahlen über Modal-Buttons -->
                 <div id="class-dynamic-options-container" style="display: none; margin-top: 10px;"></div>
 
-                <div id="spells-step-card" style="margin-top: 15px; background: var(--btn-back-bg); padding: 10px; border-radius: 8px; border: 1.5px solid var(--border);">
+                <div id="spells-step-card" class="step-card" style="margin-top: 15px; box-shadow: none;">
                     <label id="cantrip-label" style="margin-top:0; color:var(--accent);">Zaubertricks wählen</label>
                     <div class="spell-container" id="cantrips-group"></div>
 
@@ -220,7 +228,7 @@
                     </div>
                 </div>
 
-                <div style="margin-top: 12px; background: var(--btn-back-bg); padding: 10px; border-radius: 8px; border: 1.5px solid var(--border);">
+                <div class="step-card" style="margin-top: 12px; box-shadow: none;">
                     <label for="bg-asi-mode" style="margin-top:0; color:var(--accent);">Hintergrund-Attributsbonus (+3 Punkte):</label>
                     <select id="bg-asi-mode" onchange="onBgAsiModeChange()" style="margin-top:4px; margin-bottom:8px;">
                         <option value="2_1">+2 auf ein Attribut, +1 auf ein anderes</option>
@@ -230,7 +238,7 @@
                     <div id="bg-asi-error" class="error" style="display:none; color: darkred; font-size: 0.85rem;">Wähle unterschiedliche Attribute ohne Dopplungen innerhalb der Boni!</div>
                 </div>
 
-                <div id="bg-dynamic-options-container" style="margin-top: 12px; display: none; background: var(--btn-back-bg); padding: 10px; border-radius: 8px; border: 1.5px solid var(--border);">
+                <div id="bg-dynamic-options-container" class="step-card" style="margin-top: 12px; display: none; box-shadow: none;">
                     <div id="bg-tool-choice-wrapper" style="margin-bottom: 8px; display: none;">
                         <label id="bg-tool-label" style="margin-top:0; color:var(--accent);">Werkzeug-Wahl:</label>
                         <select id="bg-tool-select" style="margin-top:4px;"></select>
@@ -304,7 +312,7 @@
                 <ul id="screen-out-features" style="margin-bottom:15px;"></ul>
 
                 <h3 style="color:var(--accent);">Ausrüstung & Waffen-Konfiguration</h3>
-                <div id="sheet-equipment-controls" style="background:var(--btn-back-bg); padding:12px; border-radius:6px; border:1.5px solid var(--border); margin-bottom:15px;"></div>
+                <div id="sheet-equipment-controls" class="step-card" style="padding:12px; box-shadow:none; margin-bottom:15px;"></div>
 
                 <h3 style="color:var(--accent);">Zauber & Zaubertricks Übersicht</h3>
                 <div id="screen-out-spells" style="margin-bottom:20px;"></div>
@@ -348,7 +356,7 @@
     </div>
 </div>
 
-<!-- MODAL: Auswahlfenster (Checkboxen / Radio Buttons per Pop-up im Original-Look) -->
+<!-- MODAL: Auswahlfenster (Checkboxen / Radio Buttons per Pop-up) -->
 <div id="selection-modal" class="modal-overlay" style="display:none;" onclick="closeSelectionModal()">
     <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 400px; width: 90%;">
         <div class="modal-title" id="selection-modal-title">Auswahl</div>
