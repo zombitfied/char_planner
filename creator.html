@@ -352,15 +352,16 @@ const attrNamesDE = {
 
 window.onload = async function() {
     try {
+        // Hier wurden die Ziffern in Klammern entfernt (rassen.json, klassen.json, hintergründe.json)
         const [raceRes, classRes, bgRes] = await Promise.all([
-            fetch("rassen (4).json?t=" + new Date().getTime()),
-            fetch("klassen (4).json?t=" + new Date().getTime()),
-            fetch("hintergründe (2).json?t=" + new Date().getTime())
+            fetch("rassen.json?t=" + new Date().getTime()),
+            fetch("klassen.json?t=" + new Date().getTime()),
+            fetch("hintergründe.json?t=" + new Date().getTime())
         ]);
 
-        if (!raceRes.ok) throw new Error(`Fehler beim Laden von rassen (4).json`);
-        if (!classRes.ok) throw new Error(`Fehler beim Laden von klassen (4).json`);
-        if (!bgRes.ok) throw new Error(`Fehler beim Laden von hintergründe (2).json`);
+        if (!raceRes.ok) throw new Error(`Fehler beim Laden von rassen.json (404)`);
+        if (!classRes.ok) throw new Error(`Fehler beim Laden von klassen.json (404)`);
+        if (!bgRes.ok) throw new Error(`Fehler beim Laden von hintergründe.json (404)`);
 
         const raceJson = await raceRes.json();
         speciesData = raceJson.races || raceJson;
