@@ -23,7 +23,6 @@
             display: flex;
             width: 200vw;
             transition: transform 0.4s ease-in-out;
-            pointer-events: none;
         }
         .book-page {
             width: 100vw;
@@ -33,7 +32,6 @@
             padding-bottom: 105px;
             display: flex;
             justify-content: center;
-            pointer-events: auto;
         }
         .book-page .container {
             width: 100%;
@@ -134,26 +132,11 @@
             border-radius: 4px;
         }
 
-        /* Das originale, saubere Dropdown-Design direkt im Flow */
+        /* Ursprüngliches Custom Dropdown Design */
         .custom-dropdown-wrapper {
             position: relative;
             width: 100%;
         }
-        
-        /* Wir legen das echte <select> transparent über den Button. 
-           So nutzt es auf jedem Smartphone die native, fehlerfreie System-Auswahlbox! */
-        .custom-dropdown-wrapper select.native-select-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-            z-index: 5;
-            font-size: 1rem;
-        }
-
         .custom-dropdown-trigger {
             background: var(--btn-back-bg, #f4f0ea);
             border: 1.5px solid var(--border, #b5a48b);
@@ -169,14 +152,41 @@
             align-items: center;
             box-sizing: border-box;
             font-size: 0.95rem;
-            position: relative;
-            z-index: 1;
+        }
+        .custom-dropdown-menu {
+            position: fixed;
+            background: var(--card, #fff);
+            border: 1.5px solid var(--border, #b5a48b);
+            border-radius: 6px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+            z-index: 99999;
+            display: none;
+            max-height: 250px;
+            overflow-y: auto;
+            box-sizing: border-box;
+            -webkit-overflow-scrolling: touch;
+        }
+        .custom-dropdown-item {
+            padding: 12px 14px;
+            cursor: pointer;
+            font-family: serif;
+            color: var(--text, #2c221e);
+            font-size: 0.95rem;
+            border-bottom: 1px solid var(--border, #eee);
+            background: var(--btn-back-bg, #f4f0ea);
+        }
+        .custom-dropdown-item:last-child {
+            border-bottom: none;
+        }
+        .custom-dropdown-item:hover, .custom-dropdown-item.selected {
+            background: var(--accent, #8b0000);
+            color: #fff;
         }
     </style>
 </head>
 <body>
 
-<!-- SVG Rough-Edge Filter für den handgezeichneten Kanten-Look -->
+<!-- SVG Rough-Edge Filter -->
 <svg style="display:none;" aria-hidden="true">
     <filter id="rough-edge">
         <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="3" result="noise" />
@@ -216,23 +226,23 @@
                     <div>
                         <label>Volk</label>
                         <div class="custom-dropdown-wrapper" id="wrap-main-race">
-                            <button type="button" class="custom-dropdown-trigger">
+                            <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('main-race', event)">
                                 <span id="val-main-race">Bitte wählen</span>
                                 <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
                             </button>
-                            <select id="main-race" class="native-select-overlay" onchange="onMainRaceChange()"></select>
                         </div>
+                        <select id="main-race" style="display:none;" onchange="onMainRaceChange()"></select>
                     </div>
                     <div id="subrace-container" style="display: none;">
                         <label>Abstammung</label>
                         <div class="input-row">
                             <div class="custom-dropdown-wrapper" id="wrap-sub-race" style="flex-grow:1;">
-                                <button type="button" class="custom-dropdown-trigger">
+                                <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('sub-race', event)">
                                     <span id="val-sub-race">Bitte wählen</span>
                                     <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
                                 </button>
-                                <select id="sub-race" class="native-select-overlay" onchange="updateSubraceOptions()"></select>
                             </div>
+                            <select id="sub-race" style="display:none;" onchange="updateSubraceOptions()"></select>
                             <button type="button" class="info-btn" onclick="showRaceModal()">ℹ</button>
                         </div>
                     </div>
@@ -247,12 +257,12 @@
                         <label>Klasse wählen</label>
                         <div class="input-row">
                             <div class="custom-dropdown-wrapper" id="wrap-class-select" style="flex-grow:1;">
-                                <button type="button" class="custom-dropdown-trigger">
+                                <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('class-select', event)">
                                     <span id="val-class-select">Bitte wählen</span>
                                     <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
                                 </button>
-                                <select id="class-select" class="native-select-overlay" onchange="onClassChange()"></select>
                             </div>
+                            <select id="class-select" style="display:none;" onchange="onClassChange()"></select>
                             <button type="button" class="info-btn" id="class-info-btn" onclick="showClassModal()"><i class="fa-solid fa-wrench" id="class-icon-indicator"></i></button>
                         </div>
                     </div>
@@ -277,12 +287,12 @@
                         <label>Hintergrund wählen</label>
                         <div class="input-row">
                             <div class="custom-dropdown-wrapper" id="wrap-bg-select" style="flex-grow:1;">
-                                <button type="button" class="custom-dropdown-trigger">
+                                <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('bg-select', event)">
                                     <span id="val-bg-select">Bitte wählen</span>
                                     <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
                                 </button>
-                                <select id="bg-select" class="native-select-overlay" onchange="onBgChange()"></select>
                             </div>
+                            <select id="bg-select" style="display:none;" onchange="onBgChange()"></select>
                             <button type="button" class="info-btn" onclick="showBgModal()">ℹ</button>
                         </div>
                     </div>
@@ -291,15 +301,15 @@
                 <div class="step-card" style="margin-top: 12px; box-shadow: none;">
                     <label style="margin-top:0; color:var(--accent);">Hintergrund-Attributsbonus (+3 Punkte):</label>
                     <div class="custom-dropdown-wrapper" id="wrap-bg-asi-mode" style="margin-top:4px; margin-bottom:8px;">
-                        <button type="button" class="custom-dropdown-trigger">
+                        <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('bg-asi-mode', event)">
                             <span id="val-bg-asi-mode">+2 auf ein Attribut, +1 auf ein anderes</span>
                             <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
                         </button>
-                        <select id="bg-asi-mode" class="native-select-overlay" onchange="onBgAsiModeChange()">
-                            <option value="2_1">+2 auf ein Attribut, +1 auf ein anderes</option>
-                            <option value="1_1_1">+1 auf drei verschiedene Attribute</option>
-                        </select>
                     </div>
+                    <select id="bg-asi-mode" style="display:none;" onchange="onBgAsiModeChange()">
+                        <option value="2_1">+2 auf ein Attribut, +1 auf ein anderes</option>
+                        <option value="1_1_1">+1 auf drei verschiedene Attribute</option>
+                    </select>
                     <div id="bg-asi-slots" class="grid-3" style="gap:6px;"></div>
                     <div id="bg-asi-error" class="error" style="display:none; color: darkred; font-size: 0.85rem;">Wähle unterschiedliche Attribute ohne Dopplungen innerhalb der Boni!</div>
                 </div>
@@ -308,25 +318,25 @@
                     <div id="bg-tool-choice-wrapper" style="margin-bottom: 8px; display: none;">
                         <label id="bg-tool-label" style="margin-top:0; color:var(--accent);">Werkzeug-Wahl:</label>
                         <div class="custom-dropdown-wrapper" id="wrap-bg-tool-select" style="margin-top:4px;">
-                            <button type="button" class="custom-dropdown-trigger">
+                            <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('bg-tool-select', event)">
                                 <span id="val-bg-tool-select">Bitte wählen</span>
                                 <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
                             </button>
-                            <select id="bg-tool-select" class="native-select-overlay"></select>
                         </div>
+                        <select id="bg-tool-select" style="display:none;"></select>
                     </div>
                     <div id="bg-eq-choice-wrapper" style="display: none;">
                         <label id="bg-eq-label" style="margin-top:0; color:var(--accent);">Startausrüstung (Paket wählen):</label>
                         <div class="custom-dropdown-wrapper" id="wrap-bg-eq-select" style="margin-top:4px;">
-                            <button type="button" class="custom-dropdown-trigger">
+                            <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('bg-eq-select', event)">
                                 <span id="val-bg-eq-select">Option A (Ausrüstungspaket + Werkzeug)</span>
                                 <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
                             </button>
-                            <select id="bg-eq-select" class="native-select-overlay">
-                                <option value="A">Option A (Ausrüstungspaket + Werkzeug)</option>
-                                <option value="B">Option B (50 Goldstücke)</option>
-                            </select>
                         </div>
+                        <select id="bg-eq-select" style="display:none;">
+                            <option value="A">Option A (Ausrüstungspaket + Werkzeug)</option>
+                            <option value="B">Option B (50 Goldstücke)</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -337,44 +347,44 @@
                     <div>
                         <label>Stärke</label>
                         <div class="custom-dropdown-wrapper" id="wrap-str-val">
-                            <button type="button" class="custom-dropdown-trigger"><span id="val-str-val">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
-                            <select class="array-select native-select-overlay" id="str-val" onchange="onStatsChange()"></select>
+                            <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('str-val', event)"><span id="val-str-val">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
                         </div>
+                        <select class="array-select" id="str-val" style="display:none;" onchange="onStatsChange()"></select>
                     </div>
                     <div>
                         <label>Geschicklichkeit</label>
                         <div class="custom-dropdown-wrapper" id="wrap-dex-val">
-                            <button type="button" class="custom-dropdown-trigger"><span id="val-dex-val">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
-                            <select class="array-select native-select-overlay" id="dex-val" onchange="onStatsChange()"></select>
+                            <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('dex-val', event)"><span id="val-dex-val">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
                         </div>
+                        <select class="array-select" id="dex-val" style="display:none;" onchange="onStatsChange()"></select>
                     </div>
                     <div>
                         <label>Konstitution</label>
                         <div class="custom-dropdown-wrapper" id="wrap-con-val">
-                            <button type="button" class="custom-dropdown-trigger"><span id="val-con-val">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
-                            <select class="array-select native-select-overlay" id="con-val" onchange="onStatsChange()"></select>
+                            <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('con-val', event)"><span id="val-con-val">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
                         </div>
+                        <select class="array-select" id="con-val" style="display:none;" onchange="onStatsChange()"></select>
                     </div>
                     <div>
                         <label>Intelligenz</label>
                         <div class="custom-dropdown-wrapper" id="wrap-int-val">
-                            <button type="button" class="custom-dropdown-trigger"><span id="val-int-val">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
-                            <select class="array-select native-select-overlay" id="int-val" onchange="onStatsChange()"></select>
+                            <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('int-val', event)"><span id="val-int-val">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
                         </div>
+                        <select class="array-select" id="int-val" style="display:none;" onchange="onStatsChange()"></select>
                     </div>
                     <div>
                         <label>Weisheit</label>
                         <div class="custom-dropdown-wrapper" id="wrap-wis-val">
-                            <button type="button" class="custom-dropdown-trigger"><span id="val-wis-val">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
-                            <select class="array-select native-select-overlay" id="wis-val" onchange="onStatsChange()"></select>
+                            <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('wis-val', event)"><span id="val-wis-val">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
                         </div>
+                        <select class="array-select" id="wis-val" style="display:none;" onchange="onStatsChange()"></select>
                     </div>
                     <div>
                         <label>Charisma</label>
                         <div class="custom-dropdown-wrapper" id="wrap-cha-val">
-                            <button type="button" class="custom-dropdown-trigger"><span id="val-cha-val">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
-                            <select class="array-select native-select-overlay" id="cha-val" onchange="onStatsChange()"></select>
+                            <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('cha-val', event)"><span id="val-cha-val">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
                         </div>
+                        <select class="array-select" id="cha-val" style="display:none;" onchange="onStatsChange()"></select>
                     </div>
                 </div>
                 <div id="array-error" class="error" style="display:none; color: darkred; font-size: 0.85rem; margin-top: 5px;">Wähle 15, 14, 13, 12, 10, 8 ohne Dopplungen!</div>
@@ -388,12 +398,12 @@
                         <label>Fertigkeit 1</label>
                         <div class="input-row">
                             <div class="custom-dropdown-wrapper" id="wrap-skill1" style="flex-grow:1;">
-                                <button type="button" class="custom-dropdown-trigger">
+                                <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('skill1', event)">
                                     <span id="val-skill1">Bitte wählen</span>
                                     <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
                                 </button>
-                                <select id="skill1" class="native-select-overlay" onchange="validateSkills()"></select>
                             </div>
+                            <select id="skill1" style="display:none;" onchange="validateSkills()"></select>
                             <button type="button" class="info-btn" onclick="showSkillModal('skill1')">ℹ</button>
                         </div>
                     </div>
@@ -401,12 +411,12 @@
                         <label>Fertigkeit 2</label>
                         <div class="input-row">
                             <div class="custom-dropdown-wrapper" id="wrap-skill2" style="flex-grow:1;">
-                                <button type="button" class="custom-dropdown-trigger">
+                                <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('skill2', event)">
                                     <span id="val-skill2">Bitte wählen</span>
                                     <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
                                 </button>
-                                <select id="skill2" class="native-select-overlay" onchange="validateSkills()"></select>
                             </div>
+                            <select id="skill2" style="display:none;" onchange="validateSkills()"></select>
                             <button type="button" class="info-btn" onclick="showSkillModal('skill2')">ℹ</button>
                         </div>
                     </div>
@@ -452,6 +462,9 @@
         </div>
     </div>
 </div>
+
+<!-- Globales Dropdown-Menü im Original-Layout -->
+<div id="global-dropdown-menu" class="custom-dropdown-menu"></div>
 
 <!-- MODAL: Änderungen übernehmen Abfrage -->
 <div id="change-confirm-modal" class="modal-overlay" style="display:none;">
@@ -499,6 +512,7 @@ let classesData = {};
 let skillDescriptions = {};
 let spellCompendium = { cantrips: {}, level1: {} };
 let classSpellLists = {};
+let activeDropdownId = null;
 
 const standardArray = [15, 14, 13, 12, 10, 8];
 
@@ -563,6 +577,77 @@ window.onload = async function() {
     }
 };
 
+// Globaler Klick-Handler zum Schließen des Menüs bei Klick außerhalb
+window.addEventListener('click', function(e) {
+    if (!e.target.closest('.custom-dropdown-wrapper') && !e.target.closest('#global-dropdown-menu')) {
+        closeGlobalDropdown();
+    }
+});
+
+window.addEventListener('scroll', function() { closeGlobalDropdown(); }, true);
+
+function closeGlobalDropdown() {
+    const globalMenu = document.getElementById('global-dropdown-menu');
+    if (globalMenu) {
+        globalMenu.style.display = 'none';
+        activeDropdownId = null;
+    }
+}
+
+function toggleCustomDropdown(id, event) {
+    event.stopPropagation();
+    event.preventDefault();
+    
+    const globalMenu = document.getElementById('global-dropdown-menu');
+    
+    if (activeDropdownId === id && globalMenu.style.display === 'block') {
+        closeGlobalDropdown();
+        return;
+    }
+
+    activeDropdownId = id;
+    const sel = document.getElementById(id);
+    const trigger = event.currentTarget;
+    if (!sel || !trigger) return;
+
+    let html = '';
+    Array.from(sel.options).forEach(opt => {
+        let isSelected = sel.value === opt.value;
+        html += `<div class="custom-dropdown-item ${isSelected ? 'selected' : ''}" onclick="selectCustomOption('${id}', '${opt.value.replace(/'/g, "\\'")}')">${opt.text}</div>`;
+    });
+    globalMenu.innerHTML = html;
+
+    const rect = trigger.getBoundingClientRect();
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const menuHeight = Math.min(sel.options.length * 44, 250);
+
+    globalMenu.style.width = rect.width + 'px';
+    globalMenu.style.left = rect.left + 'px';
+
+    if (spaceBelow < menuHeight && rect.top > menuHeight) {
+        globalMenu.style.top = (rect.top - menuHeight - 4) + 'px';
+    } else {
+        globalMenu.style.top = (rect.bottom + 4) + 'px';
+    }
+
+    globalMenu.style.display = 'block';
+}
+
+function selectCustomOption(id, val) {
+    const sel = document.getElementById(id);
+    if (sel) {
+        sel.value = val;
+        updateCustomDropdownLabel(id);
+        closeGlobalDropdown();
+
+        if (typeof sel.onchange === 'function') {
+            sel.onchange();
+        } else {
+            sel.dispatchEvent(new Event('change'));
+        }
+    }
+}
+
 function updateCustomDropdownLabel(id) {
     const sel = document.getElementById(id);
     const valSpan = document.getElementById('val-' + id);
@@ -577,13 +662,6 @@ function setSelectValue(id, val) {
     sel.value = val;
     updateCustomDropdownLabel(id);
 }
-
-// Globaler Event-Listener, der automatisch alle Select-Labels aktualisiert, sobald sich was ändert
-document.addEventListener('change', function(e) {
-    if (e.target && e.target.id) {
-        updateCustomDropdownLabel(e.target.id);
-    }
-});
 
 function showCustomAlert(text, title = "Hinweis") {
     document.getElementById('custom-alert-title').innerText = title;
@@ -1160,16 +1238,16 @@ function updateBgAsiUI() {
             <div>
                 <label style="font-size:0.75rem;">+2 Wert</label>
                 <div class="custom-dropdown-wrapper" id="wrap-bg-asi-2">
-                    <button type="button" class="custom-dropdown-trigger"><span id="val-bg-asi-2">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
-                    <select id="bg-asi-2" class="native-select-overlay" onchange="validateBgAsi()">${optionsHtml}</select>
+                    <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('bg-asi-2', event)"><span id="val-bg-asi-2">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
                 </div>
+                <select id="bg-asi-2" style="display:none;" onchange="validateBgAsi()">${optionsHtml}</select>
             </div>
             <div>
                 <label style="font-size:0.75rem;">+1 Wert</label>
                 <div class="custom-dropdown-wrapper" id="wrap-bg-asi-1a">
-                    <button type="button" class="custom-dropdown-trigger"><span id="val-bg-asi-1a">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
-                    <select id="bg-asi-1a" class="native-select-overlay" onchange="validateBgAsi()">${optionsHtml}</select>
+                    <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('bg-asi-1a', event)"><span id="val-bg-asi-1a">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
                 </div>
+                <select id="bg-asi-1a" style="display:none;" onchange="validateBgAsi()">${optionsHtml}</select>
             </div>
             <div></div>`;
         const sel1a = document.getElementById('bg-asi-1a');
@@ -1187,23 +1265,23 @@ function updateBgAsiUI() {
             <div>
                 <label style="font-size:0.75rem;">+1</label>
                 <div class="custom-dropdown-wrapper" id="wrap-bg-asi-1a">
-                    <button type="button" class="custom-dropdown-trigger"><span id="val-bg-asi-1a">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
-                    <select id="bg-asi-1a" class="native-select-overlay" onchange="validateBgAsi()">${optionsHtml}</select>
+                    <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('bg-asi-1a', event)"><span id="val-bg-asi-1a">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
                 </div>
+                <select id="bg-asi-1a" style="display:none;" onchange="validateBgAsi()">${optionsHtml}</select>
             </div>
             <div>
                 <label style="font-size:0.75rem;">+1</label>
                 <div class="custom-dropdown-wrapper" id="wrap-bg-asi-1b">
-                    <button type="button" class="custom-dropdown-trigger"><span id="val-bg-asi-1b">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
-                    <select id="bg-asi-1b" class="native-select-overlay" onchange="validateBgAsi()">${optionsHtml}</select>
+                    <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('bg-asi-1b', event)"><span id="val-bg-asi-1b">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
                 </div>
+                <select id="bg-asi-1b" style="display:none;" onchange="validateBgAsi()">${optionsHtml}</select>
             </div>
             <div>
                 <label style="font-size:0.75rem;">+1</label>
                 <div class="custom-dropdown-wrapper" id="wrap-bg-asi-1c">
-                    <button type="button" class="custom-dropdown-trigger"><span id="val-bg-asi-1c">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
-                    <select id="bg-asi-1c" class="native-select-overlay" onchange="validateBgAsi()">${optionsHtml}</select>
+                    <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('bg-asi-1c', event)"><span id="val-bg-asi-1c">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
                 </div>
+                <select id="bg-asi-1c" style="display:none;" onchange="validateBgAsi()">${optionsHtml}</select>
             </div>`;
         const sel1a = document.getElementById('bg-asi-1a'), sel1b = document.getElementById('bg-asi-1b'), sel1c = document.getElementById('bg-asi-1c');
         if (sel1a && bgObj.attributes.length > 0) { sel1a.selectedIndex = 0; updateCustomDropdownLabel('bg-asi-1a'); }
@@ -1382,9 +1460,12 @@ function updateSpellsUI() {
         cantripGroup.innerHTML += `
             <div class="input-row">
                 <div class="custom-dropdown-wrapper" id="wrap-${uniqueId}" style="flex-grow:1;">
-                    <button type="button" class="custom-dropdown-trigger"><span id="val-${uniqueId}">-- Wählen --</span><i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i></button>
-                    <select class="char-cantrip-select native-select-overlay" id="${uniqueId}"><option value="">-- Wählen --</option>${opts}</select>
+                    <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('${uniqueId}', event)">
+                        <span id="val-${uniqueId}">-- Wählen --</span>
+                        <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
+                    </button>
                 </div>
+                <select class="char-cantrip-select" id="${uniqueId}" style="display:none;"><option value="">-- Wählen --</option>${opts}</select>
                 <button type="button" class="info-btn" onclick="showSpellModalFromDropdown(document.getElementById('${uniqueId}'))">✨</button>
             </div>`;
     }
@@ -1399,9 +1480,12 @@ function updateSpellsUI() {
         lvl1Group.innerHTML += `
             <div class="input-row">
                 <div class="custom-dropdown-wrapper" id="wrap-${uniqueId}" style="flex-grow:1;">
-                    <button type="button" class="custom-dropdown-trigger"><span id="val-${uniqueId}">-- Wählen --</span><i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i></button>
-                    <select class="char-spell-select native-select-overlay" id="${uniqueId}"><option value="">-- Wählen --</option>${opts}</select>
+                    <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('${uniqueId}', event)">
+                        <span id="val-${uniqueId}">-- Wählen --</span>
+                        <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
+                    </button>
                 </div>
+                <select class="char-spell-select" id="${uniqueId}" style="display:none;"><option value="">-- Wählen --</option>${opts}</select>
                 <button type="button" class="info-btn" onclick="showSpellModalFromDropdown(document.getElementById('${uniqueId}'))">I</button>
             </div>`;
     }
@@ -1506,7 +1590,7 @@ function renderEquipmentSectionInSheet(clsName, bgCustomData) {
 }
 
 function manualSaveCharacter() {
-    buildCharacterAndScan();
+    buildCharacterAndSave();
     showCustomAlert("Held erfolgreich gespeichert!");
 }
 
