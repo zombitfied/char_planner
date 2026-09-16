@@ -246,7 +246,7 @@
                     <div id="bg-eq-choice-wrapper" style="display: none;">
                         <label id="bg-eq-label" style="margin-top:0; color:var(--accent);">Startausrüstung (Paket wählen):</label>
                         <select id="bg-eq-select" style="margin-top:4px;">
-                            <option value="A">Option A (Ausrüstungspaket + Gold)</option>
+                            <option value="A">Option A (Ausrüstungspaket + Werkzeug)</option>
                             <option value="B">Option B (50 Goldstücke)</option>
                         </select>
                     </div>
@@ -407,39 +407,23 @@ const attrNamesDE = {
     "INT": "INT", "WIS": "WEI", "CHA": "CHA"
 };
 
-const classFileMap = {
-    "Artifizier": "artifizier.html", "Barbar": "barbar.html", "Barde": "barde.html",
-    "Kleriker": "kleriker.html", "Druide": "druide.html", "Kämpfer": "kaempfer.html",
-    "Mönch": "moench.html", "Paladin": "paladin.html", "Waldläufer": "waldlaeufer.html",
-    "Schurke": "schurke.html", "Zauberer": "zauberer.html", "Hexenmeister": "hexenmeister.html", "Magier": "magier.html"
-};
-
 window.onload = async function() {
     try {
-        // Rassen direkt aus rassen (4).json laden
         const raceRes = await fetch("rassen (4).json?t=" + new Date().getTime());
         if (!raceRes.ok) throw new Error(`HTTP Fehler rassen (4).json: ${raceRes.status}`);
         const raceJson = await raceRes.json();
         speciesData = raceJson.races;
 
-        // Klassen direkt aus klassen (4).json laden
         const classRes = await fetch("klassen (4).json?t=" + new Date().getTime());
         if (!classRes.ok) throw new Error(`HTTP Fehler klassen (4).json: ${classRes.status}`);
         const classJson = await classRes.json();
         classesData = classJson.classes;
 
-        // Hintergrund aus backgrounds.json laden (Fallback auf Standardwerte)
-        try {
-            const bgRes = await fetch("backgrounds.json?t=" + new Date().getTime());
-            if (bgRes.ok) {
-                const bgData = await bgRes.json();
-                backgrounds = bgData.backgrounds || bgData;
-            }
-        } catch (e) {
-            backgrounds = {
-                "Weiser": { attributes: ["INT", "WIS", "CHA"], feat: "Gelehrter", skills: ["Arkane Kunde", "Geschichte"], text: "Du hast jahrelang studiert." }
-            };
-        }
+        // Lädt die korrekte hintergründe.json Datei als Quelle
+        const bgRes = await fetch("hintergründe (2).json?t=" + new Date().getTime());
+        if (!bgRes.ok) throw new Error(`HTTP Fehler hintergründe (2).json: ${bgRes.status}`);
+        const bgData = await bgRes.json();
+        backgrounds = bgData.backgrounds || bgData;
 
         skillDescriptions = {
             "Arkane Kunde": "Wissen über magische Traditionen.", "Geschichte": "Erinnerung an vergangene Ereignisse.",
@@ -1007,6 +991,7 @@ function updateBgToolAndEquipmentUI() {
     const bgObj = backgrounds[bgName];
     const container = document.getElementById('bg-dynamic-options-container');
     const toolWrapper = document.getElementById('bg-tool-choice-wrapper');
+    const toolLabel = document.getElementById('bg-tool-label');
     const toolSelect = document.getElementById('bg-tool-select');
     const eqWrapper = document.getElementById('bg-eq-choice-wrapper');
 
@@ -1014,19 +999,27 @@ function updateBgToolAndEquipmentUI() {
     if (!bgObj) { container.style.display = 'none'; return; }
 
     let hasChoices = false;
-    if (bgObj.tools && bgObj.tools.choiceA && bgObj.tools.choiceA.options) {
+
+    // Dynamische Prüfung für Choice-Werkzeuge (z.B. Handwerker, Unterhaltungskünstler, Wache etc.)
+    let toolsDef = bgObj.tools;
+    if (toolsDef && typeof toolsDef === 'object' && toolsDef.choiceA && toolsDef.choiceA.options) {
+        if (toolLabel) toolLabel.innerText = toolsDef.choiceA.text || "Werkzeug-Wahl:";
         if (toolSelect) {
             toolSelect.innerHTML = '';
-            bgObj.tools.choiceA.options.forEach(opt => toolSelect.innerHTML += `<option value="${opt}">${opt}</option>`);
+            toolsDef.choiceA.options.forEach(opt => toolSelect.innerHTML += `<option value="${opt}">${opt}</option>`);
         }
         if (toolWrapper) toolWrapper.style.display = 'block';
         hasChoices = true;
-    } else { if (toolWrapper) toolWrapper.style.display = 'none'; }
+    } else {
+        if (toolWrapper) toolWrapper.style.display = 'none';
+    }
 
     if (bgObj.equipment && bgObj.equipment.choiceA && bgObj.equipment.choiceB) {
         if (eqWrapper) eqWrapper.style.display = 'block';
         hasChoices = true;
-    } else { if (eqWrapper) eqWrapper.style.display = 'none'; }
+    } else {
+        if (eqWrapper) eqWrapper.style.display = 'none';
+    }
 
     container.style.display = hasChoices ? 'block' : 'none';
 }
@@ -1076,10 +1069,39 @@ function getSelectedBgEquipmentAndTools(bgName) {
     const bgObj = backgrounds[bgName];
     if (!bgObj) return { tools: [], equipment: [] };
 
-    let tools = bgObj.tools?.choiceA ? [document.getElementById('bg-tool-select')?.value] : (Array.isArray(bgObj.tools) ? bgObj.tools : [bgObj.tools]);
+    // Dynamische Extraktion der Werkzeuge (berücksichtigt Choice oder fixe Strings aus JSON)
+    let tools = [];
+    if (bgObj.tools) {
+        if (typeof bgObj.tools === 'object' && bgObj.tools.choiceA && bgObj.tools.choiceA.options) {
+            let selectedTool = document.getElementById('bg-tool-select')?.value;
+            if (selectedTool) tools.push(selectedTool);
+        } else if (Array.isArray(bgObj.tools)) {
+            tools = [...bgObj.tools];
+        } else if (typeof bgObj.tools === 'string') {
+            tools = [bgObj.tools];
+        }
+    }
+
     let eqMode = document.getElementById('bg-eq-select')?.value || 'A';
-    let equipment = eqMode === 'B' ? bgObj.equipment.choiceB : bgObj.equipment.choiceA;
-    return { tools: tools.filter(Boolean), equipment: Array.isArray(equipment) ? equipment : [equipment] };
+    let equipmentRaw = eqMode === 'B' ? bgObj.equipment.choiceB : bgObj.equipment.choiceA;
+    
+    let equipment = [];
+    if (equipmentRaw) {
+        // Falls ChoiceA ein Objekt mit options/additionalItems ist (wie beim Handwerker/Künstler in der JSON)
+        if (typeof equipmentRaw === 'object' && !Array.isArray(equipmentRaw)) {
+            if (equipmentRaw.options) {
+                let chosenTool = document.getElementById('bg-tool-select')?.value;
+                if (chosenTool) equipment.push({ name: chosenTool, qty: 1 });
+            }
+            if (equipmentRaw.additionalItems && Array.isArray(equipmentRaw.additionalItems)) {
+                equipment.push(...equipmentRaw.additionalItems);
+            }
+        } else if (Array.isArray(equipmentRaw)) {
+            equipment = [...equipmentRaw];
+        }
+    }
+
+    return { tools: tools.filter(Boolean), equipment: equipment };
 }
 
 function getMod(score) { return Math.floor((score - 10) / 2); }
@@ -1157,6 +1179,9 @@ function flattenEquipment(item) {
                 if (sub && sub.length > 2) result.push(sub);
             });
         }
+    } else if (item.name) {
+        let q = item.qty ? `${item.qty}x ` : '';
+        result.push(`${q}${item.name}`);
     } else if (Array.isArray(item)) {
         item.forEach(sub => result.push(...flattenEquipment(sub)));
     } else if (typeof item === 'object') {
