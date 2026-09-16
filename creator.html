@@ -134,7 +134,7 @@
             border-radius: 4px;
         }
 
-        /* Custom Dropdown im Seiten-Design */
+        /* Custom Dropdown im Seiten-Design (absoluter Fix gegen Überdeckung) */
         .custom-dropdown-wrapper {
             position: relative;
             width: 100%;
@@ -155,23 +155,21 @@
             box-sizing: border-box;
             font-size: 0.95rem;
         }
+        /* Zentrales Dropdown-Menü wird per JS absolut an den Viewport / Body oder absolut mit hohem Z-Index geheftet */
         .custom-dropdown-menu {
-            position: absolute;
-            top: calc(100% + 4px);
-            left: 0;
-            width: 100%;
+            position: fixed;
             background: var(--card, #fff);
             border: 1.5px solid var(--border, #b5a48b);
             border-radius: 6px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            z-index: 999;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+            z-index: 99999;
             display: none;
-            max-height: 220px;
+            max-height: 250px;
             overflow-y: auto;
             box-sizing: border-box;
         }
         .custom-dropdown-item {
-            padding: 10px 12px;
+            padding: 12px 14px;
             cursor: pointer;
             font-family: serif;
             color: var(--text, #2c221e);
@@ -234,7 +232,6 @@
                                 <span id="val-main-race">Bitte wählen</span>
                                 <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
                             </button>
-                            <div class="custom-dropdown-menu" id="menu-main-race"></div>
                         </div>
                         <select id="main-race" style="display:none;" onchange="onMainRaceChange()"></select>
                     </div>
@@ -246,7 +243,6 @@
                                     <span id="val-sub-race">Bitte wählen</span>
                                     <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
                                 </button>
-                                <div class="custom-dropdown-menu" id="menu-sub-race"></div>
                             </div>
                             <select id="sub-race" style="display:none;" onchange="updateSubraceOptions()"></select>
                             <button type="button" class="info-btn" onclick="showRaceModal()">ℹ</button>
@@ -267,7 +263,6 @@
                                     <span id="val-class-select">Bitte wählen</span>
                                     <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
                                 </button>
-                                <div class="custom-dropdown-menu" id="menu-class-select"></div>
                             </div>
                             <select id="class-select" style="display:none;" onchange="onClassChange()"></select>
                             <button type="button" class="info-btn" id="class-info-btn" onclick="showClassModal()"><i class="fa-solid fa-wrench" id="class-icon-indicator"></i></button>
@@ -298,7 +293,6 @@
                                     <span id="val-bg-select">Bitte wählen</span>
                                     <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
                                 </button>
-                                <div class="custom-dropdown-menu" id="menu-bg-select"></div>
                             </div>
                             <select id="bg-select" style="display:none;" onchange="onBgChange()"></select>
                             <button type="button" class="info-btn" onclick="showBgModal()">ℹ</button>
@@ -313,7 +307,6 @@
                             <span id="val-bg-asi-mode">+2 auf ein Attribut, +1 auf ein anderes</span>
                             <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
                         </button>
-                        <div class="custom-dropdown-menu" id="menu-bg-asi-mode"></div>
                     </div>
                     <select id="bg-asi-mode" style="display:none;" onchange="onBgAsiModeChange()">
                         <option value="2_1">+2 auf ein Attribut, +1 auf ein anderes</option>
@@ -331,7 +324,6 @@
                                 <span id="val-bg-tool-select">Bitte wählen</span>
                                 <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
                             </button>
-                            <div class="custom-dropdown-menu" id="menu-bg-tool-select"></div>
                         </div>
                         <select id="bg-tool-select" style="display:none;"></select>
                     </div>
@@ -342,7 +334,6 @@
                                 <span id="val-bg-eq-select">Option A (Ausrüstungspaket + Werkzeug)</span>
                                 <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
                             </button>
-                            <div class="custom-dropdown-menu" id="menu-bg-eq-select"></div>
                         </div>
                         <select id="bg-eq-select" style="display:none;">
                             <option value="A">Option A (Ausrüstungspaket + Werkzeug)</option>
@@ -359,7 +350,6 @@
                         <label>Stärke</label>
                         <div class="custom-dropdown-wrapper" id="wrap-str-val">
                             <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('str-val', event)"><span id="val-str-val">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
-                            <div class="custom-dropdown-menu" id="menu-str-val"></div>
                         </div>
                         <select class="array-select" id="str-val" style="display:none;" onchange="onStatsChange()"></select>
                     </div>
@@ -367,7 +357,6 @@
                         <label>Geschicklichkeit</label>
                         <div class="custom-dropdown-wrapper" id="wrap-dex-val">
                             <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('dex-val', event)"><span id="val-dex-val">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
-                            <div class="custom-dropdown-menu" id="menu-dex-val"></div>
                         </div>
                         <select class="array-select" id="dex-val" style="display:none;" onchange="onStatsChange()"></select>
                     </div>
@@ -375,7 +364,6 @@
                         <label>Konstitution</label>
                         <div class="custom-dropdown-wrapper" id="wrap-con-val">
                             <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('con-val', event)"><span id="val-con-val">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
-                            <div class="custom-dropdown-menu" id="menu-con-val"></div>
                         </div>
                         <select class="array-select" id="con-val" style="display:none;" onchange="onStatsChange()"></select>
                     </div>
@@ -383,7 +371,6 @@
                         <label>Intelligenz</label>
                         <div class="custom-dropdown-wrapper" id="wrap-int-val">
                             <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('int-val', event)"><span id="val-int-val">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
-                            <div class="custom-dropdown-menu" id="menu-int-val"></div>
                         </div>
                         <select class="array-select" id="int-val" style="display:none;" onchange="onStatsChange()"></select>
                     </div>
@@ -391,7 +378,6 @@
                         <label>Weisheit</label>
                         <div class="custom-dropdown-wrapper" id="wrap-wis-val">
                             <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('wis-val', event)"><span id="val-wis-val">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
-                            <div class="custom-dropdown-menu" id="menu-wis-val"></div>
                         </div>
                         <select class="array-select" id="wis-val" style="display:none;" onchange="onStatsChange()"></select>
                     </div>
@@ -399,7 +385,6 @@
                         <label>Charisma</label>
                         <div class="custom-dropdown-wrapper" id="wrap-cha-val">
                             <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('cha-val', event)"><span id="val-cha-val">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
-                            <div class="custom-dropdown-menu" id="menu-cha-val"></div>
                         </div>
                         <select class="array-select" id="cha-val" style="display:none;" onchange="onStatsChange()"></select>
                     </div>
@@ -419,7 +404,6 @@
                                     <span id="val-skill1">Bitte wählen</span>
                                     <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
                                 </button>
-                                <div class="custom-dropdown-menu" id="menu-skill1"></div>
                             </div>
                             <select id="skill1" style="display:none;" onchange="validateSkills()"></select>
                             <button type="button" class="info-btn" onclick="showSkillModal('skill1')">ℹ</button>
@@ -433,7 +417,6 @@
                                     <span id="val-skill2">Bitte wählen</span>
                                     <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
                                 </button>
-                                <div class="custom-dropdown-menu" id="menu-skill2"></div>
                             </div>
                             <select id="skill2" style="display:none;" onchange="validateSkills()"></select>
                             <button type="button" class="info-btn" onclick="showSkillModal('skill2')">ℹ</button>
@@ -482,6 +465,9 @@
     </div>
 </div>
 
+<!-- Globaler Container für das aktive Dropdown-Menü (verhindert Abgeschnittenwerden durch overflow:hidden) -->
+<div id="global-dropdown-menu" class="custom-dropdown-menu"></div>
+
 <!-- MODAL: Änderungen übernehmen Abfrage -->
 <div id="change-confirm-modal" class="modal-overlay" style="display:none;">
     <div class="modal-content" style="text-align: center; max-width: 340px;">
@@ -528,6 +514,7 @@ let classesData = {};
 let skillDescriptions = {};
 let spellCompendium = { cantrips: {}, level1: {} };
 let classSpellLists = {};
+let activeDropdownId = null;
 
 const standardArray = [15, 14, 13, 12, 10, 8];
 
@@ -592,38 +579,62 @@ window.onload = async function() {
     }
 };
 
-// Schließt alle offenen Dropdowns beim Klick irgendwo auf die Seite
+// Schließt das globale Dropdown bei Klick außerhalb
 window.addEventListener('click', function(e) {
-    if (!e.target.closest('.custom-dropdown-wrapper')) {
-        document.querySelectorAll('.custom-dropdown-menu').forEach(m => m.style.display = 'none');
+    if (!e.target.closest('.custom-dropdown-wrapper') && !e.target.closest('#global-dropdown-menu')) {
+        closeGlobalDropdown();
     }
 });
 
-function toggleCustomDropdown(id, event) {
-    event.stopPropagation();
-    const menu = document.getElementById('menu-' + id);
-    const isOpen = menu.style.display === 'block';
-    
-    // Alle anderen Menüs schließen
-    document.querySelectorAll('.custom-dropdown-menu').forEach(m => m.style.display = 'none');
-    
-    if (!isOpen) {
-        rebuildCustomDropdownMenu(id);
-        menu.style.display = 'block';
+// Bei Scrollen oder Resize das Menü ebenfalls schließen, um Darstellungsfehler zu vermeiden
+window.addEventListener('scroll', function() { closeGlobalDropdown(); }, true);
+
+function closeGlobalDropdown() {
+    const globalMenu = document.getElementById('global-dropdown-menu');
+    if (globalMenu) {
+        globalMenu.style.display = 'none';
+        activeDropdownId = null;
     }
 }
 
-function rebuildCustomDropdownMenu(id) {
+function toggleCustomDropdown(id, event) {
+    event.stopPropagation();
+    const globalMenu = document.getElementById('global-dropdown-menu');
+    
+    if (activeDropdownId === id && globalMenu.style.display === 'block') {
+        closeGlobalDropdown();
+        return;
+    }
+
+    activeDropdownId = id;
     const sel = document.getElementById(id);
-    const menu = document.getElementById('menu-' + id);
-    if (!sel || !menu) return;
+    const trigger = event.currentTarget;
+    if (!sel || !trigger) return;
 
     let html = '';
     Array.from(sel.options).forEach(opt => {
         let isSelected = sel.value === opt.value;
         html += `<div class="custom-dropdown-item ${isSelected ? 'selected' : ''}" onclick="selectCustomOption('${id}', '${opt.value.replace(/'/g, "\\'")}')">${opt.text}</div>`;
     });
-    menu.innerHTML = html;
+    globalMenu.innerHTML = html;
+
+    // Position absolut zum Viewport berechnen, damit nichts abgeschnitten wird und unten kein Platzproblem entsteht
+    const rect = trigger.getBoundingClientRect();
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const menuHeight = Math.min(sel.options.length * 44, 250);
+
+    globalMenu.style.width = rect.width + 'px';
+    globalMenu.style.left = rect.left + 'px';
+
+    if (spaceBelow < menuHeight && rect.top > menuHeight) {
+        // Nach oben aufklappen, wenn unten nicht genug Platz ist
+        globalMenu.style.top = (rect.top - menuHeight - 4) + 'px';
+    } else {
+        // Standardmäßig nach unten aufklappen
+        globalMenu.style.top = (rect.bottom + 4) + 'px';
+    }
+
+    globalMenu.style.display = 'block';
 }
 
 function selectCustomOption(id, val) {
@@ -631,7 +642,7 @@ function selectCustomOption(id, val) {
     if (sel) {
         sel.value = val;
         updateCustomDropdownLabel(id);
-        document.getElementById('menu-' + id).style.display = 'none';
+        closeGlobalDropdown();
 
         if (typeof sel.onchange === 'function') {
             sel.onchange();
@@ -1200,7 +1211,6 @@ function openToolSelectionModal(toolChoice) {
     activeToolChoiceData = toolChoice;
     const modal = document.getElementById('selection-modal');
     if (!modal) return;
-    // (Rest der Tool-Auswahl bleibt intakt)
 }
 
 function onBgChange() {
@@ -1233,7 +1243,6 @@ function updateBgAsiUI() {
                 <label style="font-size:0.75rem;">+2 Wert</label>
                 <div class="custom-dropdown-wrapper" id="wrap-bg-asi-2">
                     <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('bg-asi-2', event)"><span id="val-bg-asi-2">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
-                    <div class="custom-dropdown-menu" id="menu-bg-asi-2"></div>
                 </div>
                 <select id="bg-asi-2" style="display:none;" onchange="validateBgAsi()">${optionsHtml}</select>
             </div>
@@ -1241,7 +1250,6 @@ function updateBgAsiUI() {
                 <label style="font-size:0.75rem;">+1 Wert</label>
                 <div class="custom-dropdown-wrapper" id="wrap-bg-asi-1a">
                     <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('bg-asi-1a', event)"><span id="val-bg-asi-1a">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
-                    <div class="custom-dropdown-menu" id="menu-bg-asi-1a"></div>
                 </div>
                 <select id="bg-asi-1a" style="display:none;" onchange="validateBgAsi()">${optionsHtml}</select>
             </div>
@@ -1262,7 +1270,6 @@ function updateBgAsiUI() {
                 <label style="font-size:0.75rem;">+1</label>
                 <div class="custom-dropdown-wrapper" id="wrap-bg-asi-1a">
                     <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('bg-asi-1a', event)"><span id="val-bg-asi-1a">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
-                    <div class="custom-dropdown-menu" id="menu-bg-asi-1a"></div>
                 </div>
                 <select id="bg-asi-1a" style="display:none;" onchange="validateBgAsi()">${optionsHtml}</select>
             </div>
@@ -1270,7 +1277,6 @@ function updateBgAsiUI() {
                 <label style="font-size:0.75rem;">+1</label>
                 <div class="custom-dropdown-wrapper" id="wrap-bg-asi-1b">
                     <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('bg-asi-1b', event)"><span id="val-bg-asi-1b">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
-                    <div class="custom-dropdown-menu" id="menu-bg-asi-1b"></div>
                 </div>
                 <select id="bg-asi-1b" style="display:none;" onchange="validateBgAsi()">${optionsHtml}</select>
             </div>
@@ -1278,7 +1284,6 @@ function updateBgAsiUI() {
                 <label style="font-size:0.75rem;">+1</label>
                 <div class="custom-dropdown-wrapper" id="wrap-bg-asi-1c">
                     <button type="button" class="custom-dropdown-trigger" onclick="toggleCustomDropdown('bg-asi-1c', event)"><span id="val-bg-asi-1c">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;"></i></button>
-                    <div class="custom-dropdown-menu" id="menu-bg-asi-1c"></div>
                 </div>
                 <select id="bg-asi-1c" style="display:none;" onchange="validateBgAsi()">${optionsHtml}</select>
             </div>`;
@@ -1463,7 +1468,6 @@ function updateSpellsUI() {
                         <span id="val-${uniqueId}">-- Wählen --</span>
                         <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
                     </button>
-                    <div class="custom-dropdown-menu" id="menu-${uniqueId}"></div>
                 </div>
                 <select class="char-cantrip-select" id="${uniqueId}" style="display:none;"><option value="">-- Wählen --</option>${opts}</select>
                 <button type="button" class="info-btn" onclick="showSpellModalFromDropdown(document.getElementById('${uniqueId}'))">✨</button>
@@ -1484,7 +1488,6 @@ function updateSpellsUI() {
                         <span id="val-${uniqueId}">-- Wählen --</span>
                         <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
                     </button>
-                    <div class="custom-dropdown-menu" id="menu-${uniqueId}"></div>
                 </div>
                 <select class="char-spell-select" id="${uniqueId}" style="display:none;"><option value="">-- Wählen --</option>${opts}</select>
                 <button type="button" class="info-btn" onclick="showSpellModalFromDropdown(document.getElementById('${uniqueId}'))">I</button>
