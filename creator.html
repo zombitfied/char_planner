@@ -178,7 +178,7 @@
                 </div>
             </div>
 
-            <!-- KLASSE KASTEN (Inkl. klassenspezifischer Ausrüstung & Zauber) -->
+            <!-- KLASSE KASTEN -->
             <div class="step-card">
                 <div class="step-title">Klasse & Optionen</div>
                 <div style="display: flex; flex-direction: column; gap: 10px;">
@@ -191,7 +191,6 @@
                     </div>
                 </div>
 
-                <!-- Dynamische klassenspezifische Wahlen (Instrumente, Werkzeuge etc.) -->
                 <div id="class-dynamic-options-container" style="margin-top: 12px; display: none; background: var(--btn-back-bg); padding: 10px; border-radius: 8px; border: 1.5px solid var(--border);">
                     <div id="class-choice-wrapper-1" style="margin-bottom: 8px; display: none;">
                         <label id="class-label-1" style="margin-top:0; color:var(--accent);">Wahl 1:</label>
@@ -267,7 +266,7 @@
                 <div id="array-error" class="error">Wähle 15, 14, 13, 12, 10, 8 ohne Dopplungen!</div>
             </div>
 
-            <!-- FERTIGKEITEN GANZ UNTEN -->
+            <!-- FERTIGKEITEN -->
             <div class="step-card">
                 <div class="step-title">Fertigkeiten wählen</div>
                 <div style="display: flex; flex-direction: column; gap: 10px;">
@@ -344,7 +343,7 @@
     </div>
 </div>
 
-<!-- MODAL: Einheitlicher Hinweis-Dialog (Custom Alert) -->
+<!-- MODAL: Einheitlicher Hinweis-Dialog -->
 <div id="custom-alert-modal" class="modal-overlay" style="display:none; z-index: 10000;">
     <div class="modal-content" style="text-align: center; max-width: 320px;">
         <div class="modal-title" style="justify-content: center;">
@@ -359,10 +358,7 @@
 
 <div id="theme-modal" class="modal-overlay">
     <div class="modal-content">
-        <div class="modal-title">
-            <span>Design wählen</span>
-        </div>
-        
+        <div class="modal-title"><span>Design wählen</span></div>
         <div class="modal-body" style="overflow: visible;">
             <button class="theme-option-btn" onclick="setTheme('standard')">
                 <span><i class="fa-solid fa-scroll" style="color: var(--accent); margin-right: 8px;"></i> Standard (Pergament)</span>
@@ -373,7 +369,6 @@
                 <i class="fa-solid fa-check" id="check-dungeon" style="display:none; color: var(--accent);"></i>
             </button>
         </div>
-
         <button class="btn-gray-main" onclick="closeThemeModal()" style="margin-top: 10px;">Schließen</button>
     </div>
 </div>
@@ -389,6 +384,88 @@
 <script>
 let currentPage = 'create';
 let lastBuiltCharacter = null;
+let speciesData = {};
+let backgrounds = {};
+let classesData = {};
+let skillDescriptions = {};
+let spellCompendium = { cantrips: {}, level1: {} };
+let classSpellLists = {};
+
+const standardArray = [15, 14, 13, 12, 10, 8];
+
+const attributeDescriptions = {
+    "STR": "<b>Stärke:</b> Athletik, Nahkampfangriffe, Tragekapazität.",
+    "DEX": "<b>Geschicklichkeit:</b> Akrobatik, Fingerfertigkeit, Heimlichkeit, RK, Initiative.",
+    "CON": "<b>Konstitution:</b> Trefferpunkte, Konzentrationswürfe.",
+    "INT": "<b>Intelligenz:</b> Arkankunde, Geschichte, Untersuchung, Naturkunde, Religion.",
+    "WIS": "<b>Weisheit:</b> Tierumgang, Einblick, Heilkunde, Wahrnehmung, Überleben.",
+    "CHA": "<b>Charisma:</b> Täuschen, Einschüchtern, Auftreten, Überzeugen."
+};
+
+const attrNamesDE = {
+    "STR": "STR", "DEX": "GES", "CON": "KON",
+    "INT": "INT", "WIS": "WEI", "CHA": "CHA"
+};
+
+const classFileMap = {
+    "Artifizier": "artifizier.html", "Barbar": "barbar.html", "Barde": "barde.html",
+    "Kleriker": "kleriker.html", "Druide": "druide.html", "Kämpfer": "kaempfer.html",
+    "Mönch": "moench.html", "Paladin": "paladin.html", "Waldläufer": "waldlaeufer.html",
+    "Schurke": "schurke.html", "Zauberer": "zauberer.html", "Hexenmeister": "hexenmeister.html", "Magier": "magier.html"
+};
+
+window.onload = async function() {
+    try {
+        // Rassen direkt aus rassen (4).json laden
+        const raceRes = await fetch("rassen (4).json?t=" + new Date().getTime());
+        if (!raceRes.ok) throw new Error(`HTTP Fehler rassen (4).json: ${raceRes.status}`);
+        const raceJson = await raceRes.json();
+        speciesData = raceJson.races;
+
+        // Klassen direkt aus klassen (4).json laden
+        const classRes = await fetch("klassen (4).json?t=" + new Date().getTime());
+        if (!classRes.ok) throw new Error(`HTTP Fehler klassen (4).json: ${classRes.status}`);
+        const classJson = await classRes.json();
+        classesData = classJson.classes;
+
+        // Hintergrund aus backgrounds.json laden (Fallback auf Standardwerte)
+        try {
+            const bgRes = await fetch("backgrounds.json?t=" + new Date().getTime());
+            if (bgRes.ok) {
+                const bgData = await bgRes.json();
+                backgrounds = bgData.backgrounds || bgData;
+            }
+        } catch (e) {
+            backgrounds = {
+                "Weiser": { attributes: ["INT", "WIS", "CHA"], feat: "Gelehrter", skills: ["Arkane Kunde", "Geschichte"], text: "Du hast jahrelang studiert." }
+            };
+        }
+
+        skillDescriptions = {
+            "Arkane Kunde": "Wissen über magische Traditionen.", "Geschichte": "Erinnerung an vergangene Ereignisse.",
+            "Heilkunde": "Erste Hilfe und Medizin.", "Naturkunde": "Wissen über Natur und Tiere.",
+            "Religion": "Wissen über Gottheiten.", "Täuschen": "Lügen und Betrügen.",
+            "Überzeugen": "Freundliche Diplomatie.", "Einschüchtern": "Einschüchterung von Personen.",
+            "Motiv erkennen": "Absichten von Personen durchschauen.", "Athletik": "Körperliche Kraftakte.",
+            "Akrobatik": "Balance und Verwindungen.", "Heimlichkeit": "Leises Bewegen."
+        };
+
+        try {
+            const spellResponse = await fetch("spells-parsed.html?t=" + new Date().getTime());
+            if (spellResponse.ok) parseSpellsHtml(await spellResponse.text());
+        } catch (e) {}
+
+        try {
+            const listResponse = await fetch("spelllists-parsed.html?t=" + new Date().getTime());
+            if (listResponse.ok) parseSpellListsHtml(await listResponse.text());
+        } catch (e) {}
+
+        initApp();
+        handleUrlModeAndStartup();
+    } catch (err) {
+        showCustomAlert("Ladefehler: " + err.message, "Fehler");
+    }
+};
 
 function showCustomAlert(text, title = "Hinweis") {
     document.getElementById('custom-alert-title').innerText = title;
@@ -455,112 +532,6 @@ function setTheme(themeName) {
     document.documentElement.setAttribute('data-theme', themeName);
     closeThemeModal();
 }
-
-const COMPENDIUM_JSON_URL = "./compendium.json";
-const BACKGROUNDS_JSON_URL = "./backgrounds.json";
-const SPELLS_HTML_URL = "./spells-parsed.html";
-const SPELL_LISTS_HTML_URL = "./spelllists-parsed.html";
-
-const standardArray = [15, 14, 13, 12, 10, 8];
-
-const attributeDescriptions = {
-    "STR": "<b>Stärke:</b> Athletik, Nahkampfangriffe, Tragekapazität.",
-    "DEX": "<b>Geschicklichkeit:</b> Akrobatik, Fingerfertigkeit, Heimlichkeit, RK, Initiative.",
-    "CON": "<b>Konstitution:</b> Trefferpunkte, Konzentrationswürfe.",
-    "INT": "<b>Intelligenz:</b> Arkankunde, Geschichte, Untersuchung, Naturkunde, Religion.",
-    "WIS": "<b>Weisheit:</b> Tierumgang, Einblick, Heilkunde, Wahrnehmung, Überleben.",
-    "CHA": "<b>Charisma:</b> Täuschen, Einschüchtern, Auftreten, Überzeugen."
-};
-
-const attrNamesDE = {
-    "STR": "STR", "DEX": "GES", "CON": "KON",
-    "INT": "INT", "WIS": "WEI", "CHA": "CHA"
-};
-
-const classFileMap = {
-    "Artifizier": "artifizier.html", "Barbar": "barbar.html", "Barde": "barde.html",
-    "Kleriker": "kleriker.html", "Druide": "druide.html", "Kämpfer": "kaempfer.html",
-    "Mönch": "moench.html", "Paladin": "paladin.html", "Waldläufer": "waldlaeufer.html",
-    "Schurke": "schurke.html", "Zauberer": "zauberer.html", "Hexenmeister": "hexenmeister.html", "Magier": "magier.html"
-};
-
-const classSkillsData = {
-    "Artifizier": ["Arkankunde", "Geschichte", "Untersuchung", "Heilkunde", "Naturkunde", "Wahrnehmung", "Fingerfertigkeit"],
-    "Barbar": ["Athletik", "Einschüchtern", "Naturkunde", "Tierumgang", "Überleben", "Wahrnehmung"],
-    "Barde": ["Akrobatik", "Auftreten", "Athletik", "Einblick", "Geschichte", "Heimlichkeit", "Täuschen", "Überzeugen", "Wahrnehmung"],
-    "Kleriker": ["Einblick", "Geschichte", "Heilkunde", "Religion", "Überzeugen"],
-    "Druide": ["Einblick", "Heilkunde", "Naturkunde", "Religion", "Tierumgang", "Überleben", "Wahrnehmung"],
-    "Kämpfer": ["Akrobatik", "Athletik", "Einblick", "Einschüchtern", "Geschichte", "Tierumgang", "Überleben", "Wahrnehmung"],
-    "Mönch": ["Akrobatik", "Athletik", "Einblick", "Heimlichkeit", "Religion", "Verstohlenheit"],
-    "Paladin": ["Athletik", "Einschüchtern", "Heilkunde", "Motiv erkennen", "Religion", "Überzeugen"],
-    "Waldläufer": ["Athletik", "Heimlichkeit", "Mit Tieren umgehen", "Motiv erkennen", "Nachforschungen", "Naturkunde", "Überlebenskunst", "Wahrnehmung"],
-    "Schurke": ["Akrobatik", "Athletik", "Auftreten", "Einschüchtern", "Fingerfertigkeit", "Heimlichkeit", "Motiv erkennen", "Nachforschungen", "Täuschen", "Überzeugen", "Wahrnehmung"],
-    "Zauberer": ["Arkane Kunde", "Einschüchtern", "Motiv erkennen", "Religion", "Täuschen", "Überzeugen"],
-    "Hexenmeister": ["Arkankunde", "Einschüchtern", "Geschichte", "Investigation", "Naturkunde", "Religion", "Täuschen"],
-    "Magier": ["Arkankunde", "Einblick", "Geschichte", "Investigation", "Medizin", "Religion"]
-};
-
-// Klassenspezifische Auswahlen (z. B. Musikinstrumente für Barden, Werkzeuge für Mönche)
-const classChoicesData = {
-    "Barde": [
-        { label: "Musikinstrument 1", options: ["Laute", "Flöte", "Harfe", "Trommel", "Lyra"] },
-        { label: "Musikinstrument 2", options: ["Laute", "Flöte", "Harfe", "Trommel", "Lyra"] },
-        { label: "Musikinstrument 3", options: ["Laute", "Flöte", "Harfe", "Trommel", "Lyra"] }
-    ],
-    "Mönch": [
-        { label: "Werkzeug oder Musikinstrument", options: ["Tüftlerwerkzeuge", "Alchemistenbedarf", "Laute", "Flöte", "Satz Spielkarten"] }
-    ]
-};
-
-const classHpData = {
-    "Artifizier": { die: 8, base: 8 }, "Barbar": { die: 12, base: 12 }, "Barde": { die: 8, base: 8 },
-    "Kleriker": { die: 8, base: 8 }, "Druide": { die: 8, base: 8 }, "Kämpfer": { die: 10, base: 10 },
-    "Mönch": { die: 8, base: 8 }, "Paladin": { die: 10, base: 10 }, "Waldläufer": { die: 10, base: 10 },
-    "Schurke": { die: 8, base: 8 }, "Zauberer": { die: 6, base: 6 }, "Hexenmeister": { die: 8, base: 8 }, "Magier": { die: 6, base: 6 }
-};
-
-let speciesData = {};
-let backgrounds = {};
-let skillDescriptions = {};
-let spellCompendium = { cantrips: {}, level1: {} };
-let classSpellLists = {};
-
-window.onload = async function() {
-    try {
-        const compResponse = await fetch(COMPENDIUM_JSON_URL + "?t=" + new Date().getTime());
-        if (!compResponse.ok) throw new Error(`HTTP Fehlerstatus compendium.json: ${compResponse.status}`);
-        const compData = await compResponse.json();
-        speciesData = compData.speciesData;
-        skillDescriptions = compData.skills || {};
-
-        try {
-            const bgResponse = await fetch(BACKGROUNDS_JSON_URL + "?t=" + new Date().getTime());
-            if (bgResponse.ok) {
-                const bgData = await bgResponse.json();
-                backgrounds = bgData.backgrounds ? bgData.backgrounds : bgData;
-            } else {
-                backgrounds = compData.backgrounds || {};
-            }
-        } catch (e) {
-            backgrounds = compData.backgrounds || {};
-        }
-
-        try {
-            const spellResponse = await fetch(SPELLS_HTML_URL + "?t=" + new Date().getTime());
-            if (spellResponse.ok) parseSpellsHtml(await spellResponse.text());
-        } catch (e) {}
-
-        try {
-            const listResponse = await fetch(SPELL_LISTS_HTML_URL + "?t=" + new Date().getTime());
-            if (listResponse.ok) parseSpellListsHtml(await listResponse.text());
-        } catch (e) {}
-
-        initApp();
-        handleUrlModeAndStartup();
-    } catch (err) {
-        showCustomAlert("Ladefehler: " + err.message, "Fehler");
-    }
-};
 
 function handleUrlModeAndStartup() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -650,8 +621,7 @@ function buildCharacterAndSave() {
     const subRace = (subRaceSelect && subRaceSelect.offsetParent !== null) ? subRaceSelect.value : mainRace;
     const clsName = document.getElementById('class-select').value || "Kämpfer";
     const bg = document.getElementById('bg-select').value || Object.keys(backgrounds)[0];
-    const subInfo = speciesData[mainRace]?.subraces?.[subRace] || speciesData[mainRace] || { bonus: {}, speed: 30 };
-
+    
     let rawStats = {
         STR: parseInt(document.getElementById('str-val')?.value) || 15,
         DEX: parseInt(document.getElementById('dex-val')?.value) || 14,
@@ -661,19 +631,17 @@ function buildCharacterAndSave() {
         CHA: parseInt(document.getElementById('cha-val')?.value) || 8
     };
 
-    let speciesBonuses = subInfo.bonus || {};
     let bgBonuses = getBgBonuses();
-
     let stats = { ...rawStats };
     for (let s in stats) {
-        if (speciesBonuses[s]) stats[s] += speciesBonuses[s];
         if (bgBonuses[s]) stats[s] += bgBonuses[s];
     }
 
     let mods = {};
     for (let s in stats) mods[s] = getMod(stats[s]);
 
-    const hpBase = classHpData[clsName]?.base || 8;
+    const clsObj = classesData[clsName] || {};
+    const hpBase = clsObj.hitDice ? parseInt(clsObj.hitDice.replace('d', '')) : 8;
     const hp = hpBase + mods.CON;
     const ac = 10 + mods.DEX;
 
@@ -694,7 +662,7 @@ function buildCharacterAndSave() {
         hp, 
         maxHp: hp, 
         ac, 
-        speed: subInfo.speed || 30, 
+        speed: 9, 
         stats, 
         mods, 
         rawStats,
@@ -727,7 +695,7 @@ function renderCharacterToSheet(charData) {
     document.getElementById('screen-out-ac').innerText = `RK: ${charData.ac}`;
     document.getElementById('screen-out-init').innerText = `Initiative: ${charData.mods.DEX >= 0 ? '+' : ''}${charData.mods.DEX}`;
     document.getElementById('screen-out-prof').innerText = `Übungsbonus: +2`;
-    document.getElementById('screen-out-speed').innerText = `Bewegungsrate: ${charData.speed || 30} ft`;
+    document.getElementById('screen-out-speed').innerText = `Bewegungsrate: ${charData.speed || 9} Meter`;
 
     document.getElementById('screen-out-stats').innerHTML = Object.keys(charData.stats).map(s => `
         <div class="stat-box" onclick="openModal('${s} Wert', '${attributeDescriptions[s]}')">
@@ -745,7 +713,7 @@ function renderCharacterToSheet(charData) {
 
     document.getElementById('screen-out-features').innerHTML = `
         <li><b>Fertigkeiten:</b> ${charData.skills.join(', ')}</li>
-        <li><b>Volksmerkmale:</b> Geladener Charakter</li>
+        <li><b>Volksmerkmale:</b> Geladener Charakter aus rassen.json</li>
         <li><b>Talent:</b> ${bgObj.feat || ''}</li>
         <li><b>Werkzeuge:</b> ${toolsStr}</li>
         <li><b>Hintergrund-Ausrüstung:</b> ${eqStr}</li>
@@ -801,13 +769,7 @@ function parseSpellListsHtml(htmlText) {
 
 function initApp() {
     populateSelect('main-race', Object.keys(speciesData));
-    
-    const classSel = document.getElementById('class-select');
-    classSel.innerHTML = '';
-    Object.keys(classFileMap).forEach(clsName => {
-        classSel.innerHTML += `<option value="${clsName}">${clsName}</option>`;
-    });
-
+    populateSelect('class-select', Object.keys(classesData));
     populateSelect('bg-select', Object.keys(backgrounds));
 
     const arraySelects = document.querySelectorAll('.array-select');
@@ -855,23 +817,22 @@ function closeModal() {
 
 function showRaceModal() {
     const mainRace = document.getElementById('main-race').value;
-    const subRace = document.getElementById('sub-race').value;
-    const infoText = speciesData[mainRace].subraces?.[subRace]?.text || speciesData[mainRace].description || "Keine Beschreibung verfügbar.";
-    openModal(subRace, infoText, "fa-child");
+    const raceObj = speciesData[mainRace];
+    if (!raceObj) return;
+    let desc = raceObj.description || "Keine Beschreibung verfügbar.";
+    openModal(mainRace, desc, "fa-child");
 }
 
 async function showClassModal() {
     const clsName = document.getElementById('class-select').value;
-    const fileName = classFileMap[clsName];
-    if (!fileName) return openModal(clsName, `Keine Klassendatei für ${clsName} hinterlegt.`, getClassIcon(clsName));
+    const clsObj = classesData[clsName];
+    if (!clsObj) return openModal(clsName, "Keine Details vorhanden.", getClassIcon(clsName));
 
-    try {
-        const response = await fetch(`./klassen/${fileName}?t=` + new Date().getTime());
-        if (!response.ok) throw new Error(`HTTP Fehler: ${response.status}`);
-        openModal(clsName, await response.text(), getClassIcon(clsName));
-    } catch (err) {
-        openModal(clsName, `Konnte Datei "klassen/${fileName}" nicht laden!`, getClassIcon(clsName));
-    }
+    let html = `<b>Zusammenfassung:</b> ${clsObj.summary || ''}<br>`;
+    if (clsObj.hitDice) html += `<b>Trefferwürfel:</b> ${clsObj.hitDice}<br>`;
+    if (clsObj.primaryAbility) html += `<b>Primärattribut:</b> ${clsObj.primaryAbility}<br>`;
+    
+    openModal(clsName, html, getClassIcon(clsName));
 }
 
 function showBgModal() {
@@ -909,23 +870,18 @@ function showSpellModalByName(spellName) {
         }
     });
 
-    let html = temp.innerHTML;
-    ['Zeitaufwand:', 'Reichweite:', 'Komponenten:', 'Wirkungsdauer:'].forEach(k => {
-        html = html.replace(new RegExp(`(${k})`, 'gi'), '<b>$1</b>');
-    });
-
-    openModal(clean, html, "fa-wand-magic-sparkles", school);
+    openModal(clean, temp.innerHTML, "fa-wand-magic-sparkles", school);
 }
 
 function showCalcModal(type) {
     if (!lastBuiltCharacter) return;
     const c = lastBuiltCharacter;
     let text = "";
-    if (type === 'HP') text = `Basis (${c.class}): ${c.hp - c.mods.CON}<br>+ Konstitution (${c.mods.CON}): ${c.mods.CON}<br><b>Total: ${c.hp}</b>`;
+    if (type === 'HP') text = `Basis: ${c.hp - c.mods.CON}<br>+ Konstitution (${c.mods.CON}): ${c.mods.CON}<br><b>Total: ${c.hp}</b>`;
     else if (type === 'RK') text = `Basis: 10<br>+ Geschicklichkeit (${c.mods.DEX}): ${c.mods.DEX}<br><b>Total: ${c.ac}</b>`;
     else if (type === 'Initiative') text = `Geschicklichkeits-Modifikator: ${c.mods.DEX}`;
     else if (type === 'Übungsbonus') text = `Stufe 1–4 = +2`;
-    else if (type === 'Bewegungsrate') text = `${c.speed || 30} Fuß`;
+    else if (type === 'Bewegungsrate') text = `${c.speed || 9} Meter`;
     openModal(type, text, "fa-calculator");
 }
 
@@ -962,10 +918,10 @@ function onMainRaceChange() {
 
     if (!subSelect || !subContainer) return;
 
-    if (raceObj && raceObj.subraces && Object.keys(raceObj.subraces).length > 0) {
+    if (raceObj && raceObj.subtypes && raceObj.subtypes.choice && raceObj.subtypes.choice.options) {
         subSelect.innerHTML = '';
-        Object.keys(raceObj.subraces).forEach(subKey => {
-            subSelect.innerHTML += `<option value="${subKey}">${subKey}</option>`;
+        raceObj.subtypes.choice.options.forEach(subOpt => {
+            subSelect.innerHTML += `<option value="${subOpt.name}">${subOpt.name}</option>`;
         });
         subContainer.style.display = 'block';
     } else {
@@ -976,20 +932,6 @@ function onMainRaceChange() {
 }
 
 function updateSubraceOptions() {
-    const mainRace = document.getElementById('main-race').value;
-    const raceData = speciesData[mainRace];
-    const specialContainer = document.getElementById('special-attr-container');
-    const specialSelect = document.getElementById('special-attr-select');
-
-    if (raceData && raceData["spezial-attribut"] && raceData["spezial-attribut"].spellcasting) {
-        if (specialSelect) {
-            specialSelect.innerHTML = '';
-            raceData["spezial-attribut"].spellcasting.forEach(opt => specialSelect.innerHTML += `<option value="${opt}">${opt}</option>`);
-        }
-        if (specialContainer) specialContainer.style.display = 'block';
-    } else {
-        if (specialContainer) specialContainer.style.display = 'none';
-    }
     updateSpellsUI();
 }
 
@@ -997,12 +939,13 @@ function onClassChange() {
     const clsName = document.getElementById('class-select').value;
     updateClassIconDisplay();
 
-    // Fertigkeiten aktualisieren
     const s1 = document.getElementById('skill1');
     const s2 = document.getElementById('skill2');
-    if (s1 && s2) {
+    const clsObj = classesData[clsName];
+
+    if (s1 && s2 && clsObj && clsObj.proficiencies && clsObj.proficiencies.skills) {
         s1.innerHTML = ''; s2.innerHTML = '';
-        const skills = classSkillsData[clsName] || ["Akrobatik", "Athletik", "Einblick", "Wahrnehmung"];
+        const skills = clsObj.proficiencies.skills.from || ["Akrobatik", "Athletik"];
         skills.forEach(sk => {
             s1.innerHTML += `<option value="${sk}">${sk}</option>`;
             s2.innerHTML += `<option value="${sk}">${sk}</option>`;
@@ -1012,37 +955,7 @@ function onClassChange() {
         validateSkills();
     }
 
-    updateClassChoicesUI();
     updateSpellsUI();
-}
-
-function updateClassChoicesUI() {
-    const clsName = document.getElementById('class-select').value;
-    const container = document.getElementById('class-dynamic-options-container');
-    const choices = classChoicesData[clsName];
-
-    if (!container) return;
-    if (!choices || choices.length === 0) {
-        container.style.display = 'none';
-        return;
-    }
-
-    container.style.display = 'block';
-    for (let i = 1; i <= 3; i++) {
-        let wrapper = document.getElementById(`class-choice-wrapper-${i}`);
-        let label = document.getElementById(`class-label-${i}`);
-        let select = document.getElementById(`class-select-${i}`);
-        let choiceConfig = choices[i - 1];
-
-        if (choiceConfig) {
-            label.innerText = choiceConfig.label;
-            select.innerHTML = '';
-            choiceConfig.options.forEach(opt => select.innerHTML += `<option value="${opt}">${opt}</option>`);
-            wrapper.style.display = 'block';
-        } else {
-            wrapper.style.display = 'none';
-        }
-    }
 }
 
 function onBgChange() {
@@ -1214,7 +1127,7 @@ function updateSpellsUI() {
     }
 
     let allowedCantrips = classSpellLists[clsName]?.cantrips?.length ? classSpellLists[clsName].cantrips : Object.keys(spellCompendium.cantrips);
-    let maxCantrips = (clsName === "Barde" || clsName === "Zauberer" || clsName === "Hexenmeister" || clsName === "Magier" || clsName === "Artifizier" || clsName === "Kleriker" || clsName === "Druide") ? 2 : 0;
+    let maxCantrips = 2;
     
     if (cantripLabel) cantripLabel.innerText = `Wähle ${maxCantrips} Zaubertricks:`;
     for (let i = 0; i < maxCantrips; i++) {
@@ -1238,10 +1151,10 @@ function flattenEquipment(item) {
 
     if (typeof item === 'string') {
         let cleaned = item.trim();
-        if (cleaned && !cleaned.toLowerCase().startsWith('wähle') && !cleaned.startsWith('[object') && !cleaned.includes('{') && !cleaned.endsWith('GM') && !cleaned.endsWith('SM') && !cleaned.endsWith('KM')) {
+        if (cleaned && !cleaned.toLowerCase().startsWith('wähle')) {
             cleaned.split(/,| und /).forEach(p => {
                 let sub = p.trim();
-                if (sub && sub.length > 2 && !sub.toLowerCase().startsWith('wähle')) result.push(sub);
+                if (sub && sub.length > 2) result.push(sub);
             });
         }
     } else if (Array.isArray(item)) {
@@ -1266,29 +1179,7 @@ function accumulateItems(itemList) {
             if (numMatch) {
                 qty = numMatch[1];
                 name = numMatch[2].trim();
-            } else {
-                let lower = str.toLowerCase();
-                if (lower.startsWith('ein ') || lower.startsWith('eine ') || lower.startsWith('einen ')) {
-                    qty = "1";
-                    name = str.replace(/^(ein|eine|einen)\s+/i, '').trim();
-                } else if (lower.startsWith('zwei ')) {
-                    qty = "2";
-                    name = str.replace(/^zwei\s+/i, '').trim();
-                } else if (lower.startsWith('drei ')) {
-                    qty = "3";
-                    name = str.replace(/^drei\s+/i, '').trim();
-                } else if (lower.startsWith('vier ')) {
-                    qty = "4";
-                    name = str.replace(/^vier\s+/i, '').trim();
-                } else if (lower.startsWith('fünf ')) {
-                    qty = "5";
-                    name = str.replace(/^fünf\s+/i, '').trim();
-                } else if (lower.startsWith('zehn ')) {
-                    qty = "10";
-                    name = str.replace(/^zehn\s+/i, '').trim();
-                }
             }
-
             name = name.replace(/[.,;]$/, '').trim();
             if (!name || name.length < 2) return;
 
@@ -1311,25 +1202,15 @@ function renderEquipmentSectionInSheet(clsName, bgCustomData) {
     const container = document.getElementById('sheet-equipment-controls');
     if (!container) return;
 
-    let classItems = [];
-    if (clsName === "Artifizier") classItems = ["1 Dolch", "1 Schuppenpanzer", "1 Tüftlerwerkzeuge", "1 Materialkomponentenbeutel"];
-    else if (clsName === "Barbar") classItems = ["1 Zweihandaxt", "4 Wurfspeer", "1 Entdeckerausrüstung"];
-    else if (clsName === "Barde") classItems = ["1 Laute", "1 Diplomatenausrüstung", "1 Leder"];
-    else if (clsName === "Kleriker") classItems = ["1 Streitkolben", "1 Kettenhemd", "1 Heiliges Symbol", "1 Entdeckerausrüstung"];
-    else if (clsName === "Kämpfer") classItems = ["1 Langschwert", "1 Plattenpanzer", "1 Schild", "1 Gewölbeforscherausrüstung"];
-    else classItems = ["1 Dolch", "1 Entdeckerausrüstung"];
-
-    // Zusätzliche klassenspezifische Auswahlen mit einbeziehen
-    let classChoices = [];
-    for (let i = 1; i <= 3; i++) {
-        let sel = document.getElementById(`class-select-${i}`);
-        let wrapper = document.getElementById(`class-choice-wrapper-${i}`);
-        if (wrapper && wrapper.style.display !== 'none' && sel) {
-            classChoices.push(sel.value);
+    const clsObj = classesData[clsName] || {};
+    let startingEqList = [];
+    if (clsObj.startingEquipment) {
+        if (clsObj.startingEquipment.choiceA) {
+            clsObj.startingEquipment.choiceA.forEach(it => startingEqList.push(`${it.qty || 1} ${it.name}`));
         }
     }
 
-    let rawList = [...classItems, ...classChoices, bgCustomData.equipment, bgCustomData.tools];
+    let rawList = [...startingEqList, bgCustomData.equipment, bgCustomData.tools];
     let accumulated = accumulateItems(rawList);
 
     let rowsHtml = accumulated.map(item => `
@@ -1355,7 +1236,7 @@ function manualSaveCharacter() {
 }
 
 function resetLocalStorage() {
-    if (confirm("Möchtest du wirklich den gesamten lokalen Speicher leeren? Alle gespeicherten Helden und Einstellungen gehen verloren.")) {
+    if (confirm("Möchtest du wirklich den gesamten lokalen Speicher leeren? Alle gespeicherten Helden gehen verloren.")) {
         localStorage.clear();
         showCustomAlert("Speicher erfolgreich geleert!");
         location.reload();
