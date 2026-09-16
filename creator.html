@@ -133,47 +133,30 @@
             border-left: 3px solid var(--accent);
             border-radius: 4px;
         }
-        
-        .custom-select-trigger {
-            background: var(--btn-back-bg);
-            border: 1.5px solid var(--border);
+
+        /* Einheitliches Design für echte Dropdown-Selects im Seiten-Stil */
+        select, .styled-select {
+            background: var(--btn-back-bg, #f4f0ea);
+            border: 1.5px solid var(--border, #b5a48b);
             border-radius: 6px;
             padding: 10px 12px;
             width: 100%;
-            text-align: left;
             font-family: serif;
-            color: var(--text);
+            color: var(--text, #2c221e);
             cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             box-sizing: border-box;
             font-size: 0.95rem;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg fill='%238b0000' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            padding-right: 30px;
         }
-
-        /* Saubere Dropdown-Listenoptik im Modal */
-        .dropdown-list-item {
-            padding: 12px 14px;
-            background: var(--btn-back-bg);
-            border: 1.5px solid var(--border);
-            border-radius: 6px;
-            cursor: pointer;
-            font-family: serif;
-            color: var(--text);
-            font-size: 1rem;
-            text-align: left;
-            transition: all 0.15s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .dropdown-list-item:hover, .dropdown-list-item.selected {
-            background: var(--accent);
-            color: #fff;
-            border-color: var(--accent);
-        }
-        .dropdown-list-item.selected i {
-            color: #fff !important;
+        select:focus {
+            outline: none;
+            border-color: var(--accent, #8b0000);
         }
     </style>
 </head>
@@ -217,21 +200,13 @@
                 </div>
                 <div style="margin-top: 8px; display: flex; flex-direction: column; gap: 10px;">
                     <div>
-                        <label>Volk</label>
-                        <button type="button" id="trigger-main-race" class="custom-select-trigger" onclick="openCustomSelect('main-race')">
-                            <span id="label-main-race">Bitte wählen</span>
-                            <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
-                        </button>
-                        <select id="main-race" style="display:none;" onchange="onMainRaceChange()"></select>
+                        <label for="main-race">Volk</label>
+                        <select id="main-race" onchange="onMainRaceChange()"></select>
                     </div>
                     <div id="subrace-container" style="display: none;">
-                        <label>Abstammung</label>
+                        <label for="sub-race">Abstammung</label>
                         <div class="input-row">
-                            <button type="button" id="trigger-sub-race" class="custom-select-trigger" onclick="openCustomSelect('sub-race')" style="flex-grow:1;">
-                                <span id="label-sub-race">Bitte wählen</span>
-                                <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
-                            </button>
-                            <select id="sub-race" style="display:none;" onchange="updateSubraceOptions()"></select>
+                            <select id="sub-race" onchange="updateSubraceOptions()"></select>
                             <button type="button" class="info-btn" onclick="showRaceModal()">ℹ</button>
                         </div>
                     </div>
@@ -243,19 +218,15 @@
                 <div class="step-title">Klasse & Optionen</div>
                 <div style="display: flex; flex-direction: column; gap: 10px;">
                     <div>
-                        <label>Klasse wählen</label>
+                        <label for="class-select">Klasse wählen</label>
                         <div class="input-row">
-                            <button type="button" id="trigger-class-select" class="custom-select-trigger" onclick="openCustomSelect('class-select')" style="flex-grow:1;">
-                                <span id="label-class-select">Bitte wählen</span>
-                                <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
-                            </button>
-                            <select id="class-select" style="display:none;" onchange="onClassChange()"></select>
+                            <select id="class-select" onchange="onClassChange()"></select>
                             <button type="button" class="info-btn" id="class-info-btn" onclick="showClassModal()"><i class="fa-solid fa-wrench" id="class-icon-indicator"></i></button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Dynamischer Bereich für klassenbasierte Wahlen über Modal-Buttons -->
+                <!-- Dynamischer Bereich für klassenbasierte Wahlen -->
                 <div id="class-dynamic-options-container" style="display: none; margin-top: 10px;"></div>
 
                 <div id="spells-step-card" class="step-card" style="margin-top: 15px; box-shadow: none;">
@@ -272,13 +243,9 @@
                 <div class="step-title">Hintergrund</div>
                 <div style="display: flex; flex-direction: column; gap: 10px;">
                     <div>
-                        <label>Hintergrund wählen</label>
+                        <label for="bg-select">Hintergrund wählen</label>
                         <div class="input-row">
-                            <button type="button" id="trigger-bg-select" class="custom-select-trigger" onclick="openCustomSelect('bg-select')" style="flex-grow:1;">
-                                <span id="label-bg-select">Bitte wählen</span>
-                                <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
-                            </button>
-                            <select id="bg-select" style="display:none;" onchange="onBgChange()"></select>
+                            <select id="bg-select" onchange="onBgChange()"></select>
                             <button type="button" class="info-btn" onclick="showBgModal()">ℹ</button>
                         </div>
                     </div>
@@ -286,11 +253,7 @@
 
                 <div class="step-card" style="margin-top: 12px; box-shadow: none;">
                     <label for="bg-asi-mode" style="margin-top:0; color:var(--accent);">Hintergrund-Attributsbonus (+3 Punkte):</label>
-                    <button type="button" id="trigger-bg-asi-mode" class="custom-select-trigger" onclick="openCustomSelect('bg-asi-mode')" style="margin-top:4px; margin-bottom:8px;">
-                        <span id="label-bg-asi-mode">+2 auf ein Attribut, +1 auf ein anderes</span>
-                        <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
-                    </button>
-                    <select id="bg-asi-mode" style="display:none;" onchange="onBgAsiModeChange()">
+                    <select id="bg-asi-mode" onchange="onBgAsiModeChange()" style="margin-top:4px; margin-bottom:8px;">
                         <option value="2_1">+2 auf ein Attribut, +1 auf ein anderes</option>
                         <option value="1_1_1">+1 auf drei verschiedene Attribute</option>
                     </select>
@@ -301,19 +264,11 @@
                 <div id="bg-dynamic-options-container" class="step-card" style="margin-top: 12px; display: none; box-shadow: none;">
                     <div id="bg-tool-choice-wrapper" style="margin-bottom: 8px; display: none;">
                         <label id="bg-tool-label" style="margin-top:0; color:var(--accent);">Werkzeug-Wahl:</label>
-                        <button type="button" id="trigger-bg-tool-select" class="custom-select-trigger" onclick="openCustomSelect('bg-tool-select')" style="margin-top:4px;">
-                            <span id="label-bg-tool-select">Bitte wählen</span>
-                            <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
-                        </button>
-                        <select id="bg-tool-select" style="display:none;"></select>
+                        <select id="bg-tool-select" style="margin-top:4px;"></select>
                     </div>
                     <div id="bg-eq-choice-wrapper" style="display: none;">
                         <label id="bg-eq-label" style="margin-top:0; color:var(--accent);">Startausrüstung (Paket wählen):</label>
-                        <button type="button" id="trigger-bg-eq-select" class="custom-select-trigger" onclick="openCustomSelect('bg-eq-select')" style="margin-top:4px;">
-                            <span id="label-bg-eq-select">Option A (Ausrüstungspaket + Werkzeug)</span>
-                            <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
-                        </button>
-                        <select id="bg-eq-select" style="display:none;">
+                        <select id="bg-eq-select" style="margin-top:4px;">
                             <option value="A">Option A (Ausrüstungspaket + Werkzeug)</option>
                             <option value="B">Option B (50 Goldstücke)</option>
                         </select>
@@ -324,48 +279,12 @@
             <div class="step-card">
                 <div class="step-title">Start-Attribute zuweisen</div>
                 <div class="grid-3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
-                    <div>
-                        <label>Stärke</label>
-                        <button type="button" id="trigger-str-val" class="custom-select-trigger" onclick="openCustomSelect('str-val')">
-                            <span id="label-str-val">--</span>
-                        </button>
-                        <select class="array-select" id="str-val" style="display:none;" onchange="onStatsChange()"></select>
-                    </div>
-                    <div>
-                        <label>Geschicklichkeit</label>
-                        <button type="button" id="trigger-dex-val" class="custom-select-trigger" onclick="openCustomSelect('dex-val')">
-                            <span id="label-dex-val">--</span>
-                        </button>
-                        <select class="array-select" id="dex-val" style="display:none;" onchange="onStatsChange()"></select>
-                    </div>
-                    <div>
-                        <label>Konstitution</label>
-                        <button type="button" id="trigger-con-val" class="custom-select-trigger" onclick="openCustomSelect('con-val')">
-                            <span id="label-con-val">--</span>
-                        </button>
-                        <select class="array-select" id="con-val" style="display:none;" onchange="onStatsChange()"></select>
-                    </div>
-                    <div>
-                        <label>Intelligenz</label>
-                        <button type="button" id="trigger-int-val" class="custom-select-trigger" onclick="openCustomSelect('int-val')">
-                            <span id="label-int-val">--</span>
-                        </button>
-                        <select class="array-select" id="int-val" style="display:none;" onchange="onStatsChange()"></select>
-                    </div>
-                    <div>
-                        <label>Weisheit</label>
-                        <button type="button" id="trigger-wis-val" class="custom-select-trigger" onclick="openCustomSelect('wis-val')">
-                            <span id="label-wis-val">--</span>
-                        </button>
-                        <select class="array-select" id="wis-val" style="display:none;" onchange="onStatsChange()"></select>
-                    </div>
-                    <div>
-                        <label>Charisma</label>
-                        <button type="button" id="trigger-cha-val" class="custom-select-trigger" onclick="openCustomSelect('cha-val')">
-                            <span id="label-cha-val">--</span>
-                        </button>
-                        <select class="array-select" id="cha-val" style="display:none;" onchange="onStatsChange()"></select>
-                    </div>
+                    <div><label>Stärke</label><select class="array-select" id="str-val" onchange="onStatsChange()"></select></div>
+                    <div><label>Geschicklichkeit</label><select class="array-select" id="dex-val" onchange="onStatsChange()"></select></div>
+                    <div><label>Konstitution</label><select class="array-select" id="con-val" onchange="onStatsChange()"></select></div>
+                    <div><label>Intelligenz</label><select class="array-select" id="int-val" onchange="onStatsChange()"></select></div>
+                    <div><label>Weisheit</label><select class="array-select" id="wis-val" onchange="onStatsChange()"></select></div>
+                    <div><label>Charisma</label><select class="array-select" id="cha-val" onchange="onStatsChange()"></select></div>
                 </div>
                 <div id="array-error" class="error" style="display:none; color: darkred; font-size: 0.85rem; margin-top: 5px;">Wähle 15, 14, 13, 12, 10, 8 ohne Dopplungen!</div>
             </div>
@@ -375,24 +294,16 @@
                 <div class="step-title">Fertigkeiten wählen</div>
                 <div style="display: flex; flex-direction: column; gap: 10px;">
                     <div>
-                        <label>Fertigkeit 1</label>
+                        <label for="skill1">Fertigkeit 1</label>
                         <div class="input-row">
-                            <button type="button" id="trigger-skill1" class="custom-select-trigger" onclick="openCustomSelect('skill1')" style="flex-grow:1;">
-                                <span id="label-skill1">Bitte wählen</span>
-                                <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
-                            </button>
-                            <select id="skill1" style="display:none;" onchange="validateSkills()"></select>
+                            <select id="skill1" onchange="validateSkills()"></select>
                             <button type="button" class="info-btn" onclick="showSkillModal('skill1')">ℹ</button>
                         </div>
                     </div>
                     <div>
-                        <label>Fertigkeit 2</label>
+                        <label for="skill2">Fertigkeit 2</label>
                         <div class="input-row">
-                            <button type="button" id="trigger-skill2" class="custom-select-trigger" onclick="openCustomSelect('skill2')" style="flex-grow:1;">
-                                <span id="label-skill2">Bitte wählen</span>
-                                <i class="fa-solid fa-chevron-down" style="color: var(--accent);"></i>
-                            </button>
-                            <select id="skill2" style="display:none;" onchange="validateSkills()"></select>
+                            <select id="skill2" onchange="validateSkills()"></select>
                             <button type="button" class="info-btn" onclick="showSkillModal('skill2')">ℹ</button>
                         </div>
                     </div>
@@ -468,13 +379,13 @@
     </div>
 </div>
 
-<!-- MODAL: Echtes Dropdown-Auswahlfenster (im Seiten-Design) -->
+<!-- MODAL: Spezielles Auswahlfenster nur für Klassen-Werkzeuge (Multi-Auswahl) -->
 <div id="selection-modal" class="modal-overlay" style="display:none;" onclick="closeSelectionModal()">
     <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 400px; width: 90%;">
         <div class="modal-title" id="selection-modal-title">Auswahl</div>
         <div id="selection-modal-subtitle" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;"></div>
-        <div class="modal-body" id="selection-modal-body" style="max-height: 50vh; overflow-y: auto; padding: 0; display: flex; flex-direction: column; gap: 8px;"></div>
-        <button class="btn-gray-main" onclick="closeSelectionModal()" style="margin-top: 15px; background: var(--btn-back-bg); color: var(--text); border: 1.5px solid var(--border); width: 100%;">Abbrechen</button>
+        <div class="modal-body" id="selection-modal-body" style="max-height: 50vh; overflow-y: auto; padding: 0;"></div>
+        <button class="main-btn" onclick="closeSelectionModal()" style="margin-top: 15px; width: 100%; font-weight: bold;">Auswahl übernehmen</button>
     </div>
 </div>
 
@@ -654,102 +565,38 @@ function loadCharacterIntoCreator(char) {
     if (char.name && document.getElementById('char-name')) document.getElementById('char-name').value = char.name;
     
     if (char.mainRace && document.getElementById('main-race')) {
-        setSelectValue('main-race', char.mainRace);
+        document.getElementById('main-race').value = char.mainRace;
         onMainRaceChange();
     }
     if (char.species && document.getElementById('sub-race')) {
-        setSelectValue('sub-race', char.species);
+        document.getElementById('sub-race').value = char.species;
     }
     
     if (char.class && document.getElementById('class-select')) {
-        setSelectValue('class-select', char.class);
+        document.getElementById('class-select').value = char.class;
         onClassChange();
     }
 
     if (char.background && document.getElementById('bg-select')) {
-        setSelectValue('bg-select', char.background);
+        document.getElementById('bg-select').value = char.background;
         onBgChange();
     }
 
     if (char.rawStats) {
-        if (document.getElementById('str-val')) setSelectValue('str-val', char.rawStats.STR);
-        if (document.getElementById('dex-val')) setSelectValue('dex-val', char.rawStats.DEX);
-        if (document.getElementById('con-val')) setSelectValue('con-val', char.rawStats.CON);
-        if (document.getElementById('int-val')) setSelectValue('int-val', char.rawStats.INT);
-        if (document.getElementById('wis-val')) setSelectValue('wis-val', char.rawStats.WIS);
-        if (document.getElementById('cha-val')) setSelectValue('cha-val', char.rawStats.CHA);
+        if (document.getElementById('str-val')) document.getElementById('str-val').value = char.rawStats.STR;
+        if (document.getElementById('dex-val')) document.getElementById('dex-val').value = char.rawStats.DEX;
+        if (document.getElementById('con-val')) document.getElementById('con-val').value = char.rawStats.CON;
+        if (document.getElementById('int-val')) document.getElementById('int-val').value = char.rawStats.INT;
+        if (document.getElementById('wis-val')) document.getElementById('wis-val').value = char.rawStats.WIS;
+        if (document.getElementById('cha-val')) document.getElementById('cha-val').value = char.rawStats.CHA;
     }
 
     if (char.skills && char.skills.length >= 2) {
         const bgSkills = backgrounds[char.background]?.skills || [];
         const customSkills = char.skills.filter(s => !bgSkills.includes(s));
-        if (customSkills[0] && document.getElementById('skill1')) setSelectValue('skill1', customSkills[0]);
-        if (customSkills[1] && document.getElementById('skill2')) setSelectValue('skill2', customSkills[1]);
+        if (customSkills[0] && document.getElementById('skill1')) document.getElementById('skill1').value = customSkills[0];
+        if (customSkills[1] && document.getElementById('skill2')) document.getElementById('skill2').value = customSkills[1];
     }
-}
-
-function setSelectValue(id, val) {
-    const sel = document.getElementById(id);
-    if (!sel) return;
-    sel.value = val;
-    updateCustomSelectLabel(id);
-}
-
-function updateCustomSelectLabel(id) {
-    const sel = document.getElementById(id);
-    const label = document.getElementById('label-' + id);
-    if (sel && label) {
-        label.innerText = sel.options[sel.selectedIndex]?.text || sel.value || "Bitte wählen";
-    }
-}
-
-let activeCustomSelectId = null;
-
-function openCustomSelect(id) {
-    activeCustomSelectId = id;
-    const sel = document.getElementById(id);
-    if (!sel) return;
-
-    const modal = document.getElementById('selection-modal');
-    const title = document.getElementById('selection-modal-title');
-    const subtitle = document.getElementById('selection-modal-subtitle');
-    const body = document.getElementById('selection-modal-body');
-
-    title.innerText = "Bitte wählen";
-    subtitle.innerText = "";
-
-    let bodyHtml = "";
-    Array.from(sel.options).forEach((opt) => {
-        let isSelected = sel.value === opt.value;
-        bodyHtml += `<div class="dropdown-list-item ${isSelected ? 'selected' : ''}" onclick="selectCustomOption('${id}', '${opt.value.replace(/'/g, "\\'")}')">
-            <span>${opt.text}</span>
-            ${isSelected ? '<i class="fa-solid fa-check" style="color:var(--accent);"></i>' : ''}
-        </div>`;
-    });
-
-    body.innerHTML = bodyHtml;
-    modal.style.display = 'flex';
-}
-
-function selectCustomOption(id, val) {
-    const sel = document.getElementById(id);
-    if (sel) {
-        sel.value = val;
-        updateCustomSelectLabel(id);
-        
-        if (typeof sel.onchange === 'function') {
-            sel.onchange();
-        } else {
-            sel.dispatchEvent(new Event('change'));
-        }
-    }
-    closeSelectionModal();
-}
-
-function closeSelectionModal() {
-    const modal = document.getElementById('selection-modal');
-    modal.style.display = 'none';
-    activeCustomSelectId = null;
 }
 
 function buildCharacterAndSave() {
@@ -920,7 +767,6 @@ function initApp() {
         sel.innerHTML = '<option value="">--</option>';
         standardArray.forEach(val => sel.innerHTML += `<option value="${val}">${val}</option>`);
         sel.selectedIndex = idx + 1;
-        updateCustomSelectLabel(sel.id);
     });
 
     onMainRaceChange();
@@ -933,7 +779,6 @@ function populateSelect(id, items) {
     if (!sel) return;
     sel.innerHTML = '';
     items.forEach(i => sel.innerHTML += `<option value="${i}">${i}</option>`);
-    updateCustomSelectLabel(id);
 }
 
 function openModal(title, text, iconClass = null, subtitle = null) {
@@ -1074,7 +919,6 @@ function onMainRaceChange() {
         subSelect.innerHTML = '';
         subContainer.style.display = 'none';
     }
-    updateCustomSelectLabel('sub-race');
     updateSubraceOptions();
 }
 
@@ -1099,8 +943,6 @@ function onClassChange() {
         });
         s1.selectedIndex = 0;
         s2.selectedIndex = skills.length > 1 ? 1 : 0;
-        updateCustomSelectLabel('skill1');
-        updateCustomSelectLabel('skill2');
         validateSkills();
     }
 
@@ -1192,11 +1034,14 @@ function openToolSelectionModal(toolChoice) {
     });
     bodyHtml += `</div>`;
 
-    body.innerHTML = bodyHtml + `<button onclick="closeToolModalDirect()" class="main-btn" style="margin-top:15px; width:100%; font-weight:bold;">Auswahl übernehmen</button>`;
+    body.innerHTML = bodyHtml;
     modal.style.display = 'flex';
 }
 
-function closeToolModalDirect() {
+function closeSelectionModal() {
+    const modal = document.getElementById('selection-modal');
+    modal.style.display = 'none';
+
     const checkedInputs = document.querySelectorAll('input[name="modal_tool_option"]:checked');
     let selectedValues = Array.from(checkedInputs).map(inp => inp.value);
 
@@ -1221,7 +1066,6 @@ function closeToolModalDirect() {
             btnLabel.innerText = `Auswahl treffen (${activeToolChoiceData ? activeToolChoiceData.choose : 1} wählen)`;
         }
     }
-    closeSelectionModal();
 }
 
 function onBgChange() {
@@ -1250,58 +1094,20 @@ function updateBgAsiUI() {
 
     if (mode === "2_1") {
         slotsContainer.innerHTML = `
-            <div>
-                <label style="font-size:0.75rem;">+2 Wert</label>
-                <button type="button" id="trigger-bg-asi-2" class="custom-select-trigger" onclick="openCustomSelect('bg-asi-2')">
-                    <span id="label-bg-asi-2">--</span>
-                </button>
-                <select id="bg-asi-2" style="display:none;" onchange="validateBgAsi()">${optionsHtml}</select>
-            </div>
-            <div>
-                <label style="font-size:0.75rem;">+1 Wert</label>
-                <button type="button" id="trigger-bg-asi-1a" class="custom-select-trigger" onclick="openCustomSelect('bg-asi-1a')">
-                    <span id="label-bg-asi-1a">--</span>
-                </button>
-                <select id="bg-asi-1a" style="display:none;" onchange="validateBgAsi()">${optionsHtml}</select>
-            </div>
+            <div><label style="font-size:0.75rem;">+2 Wert</label><select id="bg-asi-2" onchange="validateBgAsi()">${optionsHtml}</select></div>
+            <div><label style="font-size:0.75rem;">+1 Wert</label><select id="bg-asi-1a" onchange="validateBgAsi()">${optionsHtml}</select></div>
             <div></div>`;
         const sel1a = document.getElementById('bg-asi-1a');
-        if (sel1a && bgObj.attributes.length > 1) {
-            sel1a.selectedIndex = 1;
-            updateCustomSelectLabel('bg-asi-1a');
-        }
-        const sel2 = document.getElementById('bg-asi-2');
-        if (sel2 && bgObj.attributes.length > 0) {
-            sel2.selectedIndex = 0;
-            updateCustomSelectLabel('bg-asi-2');
-        }
+        if (sel1a && bgObj.attributes.length > 1) sel1a.selectedIndex = 1;
     } else {
         slotsContainer.innerHTML = `
-            <div>
-                <label style="font-size:0.75rem;">+1</label>
-                <button type="button" id="trigger-bg-asi-1a" class="custom-select-trigger" onclick="openCustomSelect('bg-asi-1a')">
-                    <span id="label-bg-asi-1a">--</span>
-                </button>
-                <select id="bg-asi-1a" style="display:none;" onchange="validateBgAsi()">${optionsHtml}</select>
-            </div>
-            <div>
-                <label style="font-size:0.75rem;">+1</label>
-                <button type="button" id="trigger-bg-asi-1b" class="custom-select-trigger" onclick="openCustomSelect('bg-asi-1b')">
-                    <span id="label-bg-asi-1b">--</span>
-                </button>
-                <select id="bg-asi-1b" style="display:none;" onchange="validateBgAsi()">${optionsHtml}</select>
-            </div>
-            <div>
-                <label style="font-size:0.75rem;">+1</label>
-                <button type="button" id="trigger-bg-asi-1c" class="custom-select-trigger" onclick="openCustomSelect('bg-asi-1c')">
-                    <span id="label-bg-asi-1c">--</span>
-                </button>
-                <select id="bg-asi-1c" style="display:none;" onchange="validateBgAsi()">${optionsHtml}</select>
-            </div>`;
+            <div><label style="font-size:0.75rem;">+1</label><select id="bg-asi-1a" onchange="validateBgAsi()">${optionsHtml}</select></div>
+            <div><label style="font-size:0.75rem;">+1</label><select id="bg-asi-1b" onchange="validateBgAsi()">${optionsHtml}</select></div>
+            <div><label style="font-size:0.75rem;">+1</label><select id="bg-asi-1c" onchange="validateBgAsi()">${optionsHtml}</select></div>`;
         const sel1a = document.getElementById('bg-asi-1a'), sel1b = document.getElementById('bg-asi-1b'), sel1c = document.getElementById('bg-asi-1c');
-        if (sel1a && bgObj.attributes.length > 0) { sel1a.selectedIndex = 0; updateCustomSelectLabel('bg-asi-1a'); }
-        if (sel1b && bgObj.attributes.length > 1) { sel1b.selectedIndex = 1; updateCustomSelectLabel('bg-asi-1b'); }
-        if (sel1c && bgObj.attributes.length > 2) { sel1c.selectedIndex = 2; updateCustomSelectLabel('bg-asi-1c'); }
+        if (sel1a && bgObj.attributes.length > 0) sel1a.selectedIndex = 0;
+        if (sel1b && bgObj.attributes.length > 1) sel1b.selectedIndex = 1;
+        if (sel1c && bgObj.attributes.length > 2) sel1c.selectedIndex = 2;
     }
     validateBgAsi();
 }
@@ -1325,7 +1131,6 @@ function updateBgToolAndEquipmentUI() {
         if (toolSelect) {
             toolSelect.innerHTML = '';
             toolsDef.choiceA.options.forEach(opt => toolSelect.options.add(new Option(opt, opt)));
-            updateCustomSelectLabel('bg-tool-select');
         }
         if (toolWrapper) toolWrapper.style.display = 'block';
         hasChoices = true;
@@ -1471,7 +1276,7 @@ function updateSpellsUI() {
     if (cantripLabel) cantripLabel.innerText = `Wähle ${maxCantrips} Zaubertricks:`;
     for (let i = 0; i < maxCantrips; i++) {
         let opts = allowedCantrips.map(c => `<option value="${c}">${c}</option>`).join('');
-        cantripGroup.innerHTML += `<div class="input-row"><select class="char-cantrip-select" style="display:none;"></select><button type="button" class="custom-select-trigger" onclick="openSpellSelect(this, '${opts}')"><span class="spell-btn-label">-- Wählen --</span><i class="fa-solid fa-chevron-down" style="color:var(--accent);"></i></button><button type="button" class="info-btn" onclick="showSpellModalFromCustomBtn(this)">✨</button></div>`;
+        cantripGroup.innerHTML += `<div class="input-row"><select class="char-cantrip-select"><option value="">-- Wählen --</option>${opts}</select><button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling)">✨</button></div>`;
     }
 
     let allowedLvl1 = classSpellLists[clsName]?.level1?.length ? classSpellLists[clsName].level1 : Object.keys(spellCompendium.level1);
@@ -1480,63 +1285,7 @@ function updateSpellsUI() {
 
     for (let i = 0; i < maxPrep; i++) {
         let opts = allowedLvl1.map(s => `<option value="${s}">${s}</option>`).join('');
-        lvl1Group.innerHTML += `<div class="input-row"><select class="char-spell-select" style="display:none;"></select><button type="button" class="custom-select-trigger" onclick="openSpellSelect(this, '${opts}')"><span class="spell-btn-label">-- Wählen --</span><i class="fa-solid fa-chevron-down" style="color:var(--accent);"></i></button><button type="button" class="info-btn" onclick="showSpellModalFromCustomBtn(this)">I</button></div>`;
-    }
-}
-
-function openSpellSelect(btn, optsHtml) {
-    const modal = document.getElementById('selection-modal');
-    const title = document.getElementById('selection-modal-title');
-    const subtitle = document.getElementById('selection-modal-subtitle');
-    const body = document.getElementById('selection-modal-body');
-
-    title.innerText = "Zauber wählen";
-    subtitle.innerText = "";
-
-    let tempSel = document.createElement('select');
-    tempSel.innerHTML = optsHtml;
-
-    let bodyHtml = "";
-    let currentVal = btn.querySelector('.spell-btn-label').innerText;
-    Array.from(tempSel.options).forEach(opt => {
-        let isSelected = currentVal === opt.value;
-        bodyHtml += `<div class="dropdown-list-item ${isSelected ? 'selected' : ''}" onclick="selectSpellOption('${opt.value.replace(/'/g, "\\'")}', this)">
-            <span>${opt.text}</span>
-            ${isSelected ? '<i class="fa-solid fa-check" style="color:var(--accent);"></i>' : ''}
-        </div>`;
-    });
-
-    body.innerHTML = bodyHtml;
-    modal.style.display = 'flex';
-
-    modal.onSelectCustomSpell = function(val) {
-        btn.querySelector('.spell-btn-label').innerText = val;
-        let hiddenSelect = btn.previousElementSibling;
-        if (hiddenSelect) hiddenSelect.value = val;
-        closeSelectionModal();
-    };
-}
-
-function selectSpellOption(val) {
-    const modal = document.getElementById('selection-modal');
-    if (modal.onSelectCustomSpell) {
-        modal.onSelectCustomSpell(val);
-    }
-}
-
-const originalCloseSelectionModal = closeSelectionModal;
-closeSelectionModal = function() {
-    const modal = document.getElementById('selection-modal');
-    if (modal.onSelectCustomSpell) {
-        modal.onSelectCustomSpell = null;
-    }
-    originalCloseSelectionModal();
-};
-
-function showSpellModalFromCustomBtn(infoBtn) {
-    let btnLabel = infoBtn.previousElementSibling.querySelector('.spell-btn-label').innerText;
-    if (btnLabel && btnLabel !== '-- Wählen --') {
-        showSpellModalByName(btnLabel);
+        lvl1Group.innerHTML += `<div class="input-row"><select class="char-spell-select"><option value="">-- Wählen --</option>${opts}</select><button type="button" class="info-btn" onclick="showSpellModalFromDropdown(this.previousElementSibling)">I</button></div>`;
     }
 }
 
