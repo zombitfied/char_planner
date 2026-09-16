@@ -128,7 +128,7 @@
         }
         .selection-group {
             margin-top: 10px;
-            padding: 8px;
+            padding: 10px;
             background: var(--btn-back-bg);
             border-left: 3px solid var(--accent);
             border-radius: 4px;
@@ -198,7 +198,7 @@
                 <!-- Dynamischer Bereich für klassenbasierte Wahlen über Modal-Buttons -->
                 <div id="class-dynamic-options-container" style="display: none; margin-top: 10px;"></div>
 
-                <div id="spells-step-card" style="margin-top: 15px; background: var(--btn-back-bg); padding: 10px; border-radius: 8px; border: 1.5px solid var(--border);">
+                <div id="spells-step-card" class="step-card" style="margin-top: 15px; box-shadow: none;">
                     <label id="cantrip-label" style="margin-top:0; color:var(--accent);">Zaubertricks wählen</label>
                     <div class="spell-container" id="cantrips-group"></div>
 
@@ -220,7 +220,7 @@
                     </div>
                 </div>
 
-                <div style="margin-top: 12px; background: var(--btn-back-bg); padding: 10px; border-radius: 8px; border: 1.5px solid var(--border);">
+                <div class="step-card" style="margin-top: 12px; box-shadow: none;">
                     <label for="bg-asi-mode" style="margin-top:0; color:var(--accent);">Hintergrund-Attributsbonus (+3 Punkte):</label>
                     <select id="bg-asi-mode" onchange="onBgAsiModeChange()" style="margin-top:4px; margin-bottom:8px;">
                         <option value="2_1">+2 auf ein Attribut, +1 auf ein anderes</option>
@@ -230,7 +230,7 @@
                     <div id="bg-asi-error" class="error" style="display:none; color: darkred; font-size: 0.85rem;">Wähle unterschiedliche Attribute ohne Dopplungen innerhalb der Boni!</div>
                 </div>
 
-                <div id="bg-dynamic-options-container" style="margin-top: 12px; display: none; background: var(--btn-back-bg); padding: 10px; border-radius: 8px; border: 1.5px solid var(--border);">
+                <div id="bg-dynamic-options-container" class="step-card" style="margin-top: 12px; display: none; box-shadow: none;">
                     <div id="bg-tool-choice-wrapper" style="margin-bottom: 8px; display: none;">
                         <label id="bg-tool-label" style="margin-top:0; color:var(--accent);">Werkzeug-Wahl:</label>
                         <select id="bg-tool-select" style="margin-top:4px;"></select>
@@ -285,7 +285,7 @@
     <!-- SEITE 2: HELD / CHARAKTERBLATT -->
     <div class="book-page">
         <div class="container" style="max-width:100%;">
-            <div id="sheet" class="sheet" style="display: block; margin-top: 10px; margin-bottom: 20px;">
+            <div id="sheet" class="step-card" style="display: block; margin-top: 10px; margin-bottom: 20px;">
                 <h2 id="screen-out-name" style="margin-top:0; color:var(--accent);"></h2>
                 <div id="screen-out-meta" style="font-size:0.9rem; color:var(--text-muted); text-align:center; margin-bottom:10px;"></div>
                 
@@ -304,13 +304,13 @@
                 <ul id="screen-out-features" style="margin-bottom:15px;"></ul>
 
                 <h3 style="color:var(--accent);">Ausrüstung & Waffen-Konfiguration</h3>
-                <div id="sheet-equipment-controls" style="background:var(--btn-back-bg); padding:12px; border-radius:6px; border:1.5px solid var(--border); margin-bottom:15px;"></div>
+                <div id="sheet-equipment-controls" class="step-card" style="padding:12px; box-shadow:none; margin-bottom:15px;"></div>
 
                 <h3 style="color:var(--accent);">Zauber & Zaubertricks Übersicht</h3>
                 <div id="screen-out-spells" style="margin-bottom:20px;"></div>
 
                 <div style="display: flex; gap: 10px; margin-top: 15px; margin-bottom: 40px;">
-                    <button class="btn-gray-main" onclick="manualSaveCharacter()" style="margin-top:0; width: 100%;">
+                    <button class="main-btn" onclick="manualSaveCharacter()" style="margin-top:0; width: 100%;">
                         <i class="fa-solid fa-floppy-disk"></i> Held speichern
                     </button>
                 </div>
@@ -933,19 +933,19 @@ function renderClassDynamicOptions(clsObj) {
 
     let html = '';
 
-    // Werkzeug-Wahl über Modal-Button lösen (sauber auf dem Handy)
+    // Werkzeug-Wahl über Modal-Button lösen
     if (clsObj.proficiencies.tools && clsObj.proficiencies.tools.choice) {
         const toolChoice = clsObj.proficiencies.tools.choice;
         html += `<div class="selection-group">`;
         html += `<label style="margin-top:0; color:var(--accent);">${toolChoice.text || 'Werkzeug-Wahl:'}</label>`;
         html += `<div style="margin-top: 8px;">`;
-        html += `<button type="button" class="main-btn" onclick='openToolSelectionModal(${JSON.stringify(toolChoice)})' style="background: var(--btn-back-bg); color: var(--text); border: 1.5px solid var(--border); margin-bottom: 0; width: 100%;">
+        html += `<button type="button" class="main-btn" onclick='openToolSelectionModal(${JSON.stringify(toolChoice)})' style="margin-bottom: 0; width: 100%;">
                     <i class="fa-solid fa-list-check" style="color: var(--accent);"></i> <span id="tool-selection-button-label">Auswahl treffen (${toolChoice.choose} wählen)</span>
                  </button>`;
         html += `</div></div>`;
     }
 
-    // Startausrüstung Optionen direkt im Kasten anzeigen (choiceA, choiceB, choiceC)
+    // Startausrüstung Optionen im Kasten anzeigen (choiceA, choiceB, choiceC)
     if (clsObj.startingEquipment) {
         html += `<div class="selection-group">`;
         html += `<label style="margin-top:0; color:var(--accent);">Startausrüstung wählen:</label>`;
@@ -993,12 +993,11 @@ function openToolSelectionModal(toolChoice) {
         let inputType = toolChoice.choose === 1 ? 'radio' : 'checkbox';
         let groupName = 'modal_tool_option';
         
-        // Prüfen, ob bereits etwas ausgewählt wurde
         let isChecked = false;
         if (inputType === 'radio') {
             const existingChecked = document.querySelector(`input[name="class_tool_choice"]:checked`);
             if (existingChecked && existingChecked.value === opt) isChecked = true;
-            else if (!existingChecked && idx === 0) isChecked = true; // Standard erster Haken bei Radio
+            else if (!existingChecked && idx === 0) isChecked = true;
         } else {
             const existingChecked = document.querySelectorAll(`input[name="class_tool_choice"][value="${opt}"]:checked`);
             if (existingChecked.length > 0) isChecked = true;
@@ -1016,14 +1015,11 @@ function closeSelectionModal() {
     const modal = document.getElementById('selection-modal');
     modal.style.display = 'none';
 
-    // Werte einsammeln und Button-Label aktualisieren
     const checkedInputs = document.querySelectorAll('input[name="modal_tool_option"]:checked');
     let selectedValues = Array.from(checkedInputs).map(inp => inp.value);
 
-    // Alte unsichtbare Inputs entfernen
     document.querySelectorAll('input[name="class_tool_choice"]').forEach(el => el.remove());
 
-    // Neue Inputs im Hintergrund unsichtbar oder als Verweis speichern für accumulateItems
     const container = document.getElementById('class-dynamic-options-container');
     if (container) {
         selectedValues.forEach(val => {
@@ -1352,7 +1348,7 @@ function renderEquipmentSectionInSheet(clsName, bgCustomData) {
             <span style="color: var(--text); font-weight: bold;">
                 <i class="fa-solid fa-box-open" style="color: var(--accent); margin-right: 6px;"></i>${item.originalName}
             </span>
-            <span style="background: var(--btn-back-bg); border: 1px solid var(--border); padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; color: var(--text);">
+            <span style="background: var(--btn-back-bg); border: 1.5px solid var(--border); padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; color: var(--text);">
                 Anzahl: ${item.qty}
             </span>
         </div>
