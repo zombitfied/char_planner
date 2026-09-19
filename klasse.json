@@ -608,3 +608,210 @@
     }
   }
 }
+{
+  "Druide": {
+    "summary": "Priester der Natur mit Urmacht",
+    "hitDice": "d8",
+    "hpAt1stLevel": "8 + Konstitutionsmodifikator",
+    "hpPerLevel": "5 + Konstitutionsmodifikator",
+    "primaryAbility": "Weisheit",
+    "savingThrows": ["Intelligenz", "Weisheit"],
+    "proficiencies": {
+      "armor": ["Leichte Rüstung", "Mittlere Rüstung", "Schilde"],
+      "weapons": ["Einfache Waffen"],
+      "tools": {
+        "choice": {
+          "text": "Werkzeug-Wahl:",
+          "options": ["Kräuterkundeausrüstung"],
+          "choose": 1
+        }
+      },
+      "skills": {
+        "from": [
+          "Arkane Kunde", "Heilkunde", "Mit Tieren umgehen", "Motiv erkennen",
+          "Naturkunde", "Religion", "Überlebenskunst", "Wahrnehmung"
+        ],
+        "choose": 2
+      }
+    },
+    "startingEquipment": {
+      "choiceA": [
+        {"name": "Lederrüstung", "qty": 1},
+        {"name": "Schild", "qty": 1},
+        {"name": "Sichel", "qty": 1},
+        {"name": "Druidischer Fokus", "qty": 1},
+        {"name": "Entdeckerausrüstung", "qty": 1},
+        {"name": "Kräuterkundeausrüstung", "qty": 1},
+        {"name": "Gold", "qty": 9, "unit": "GM"}
+      ],
+      "choiceB": [
+        {"name": "Gold", "qty": 50, "unit": "GM"}
+      ]
+    },
+    "multiClassing": {
+      "prerequisites": {"WIS": 13},
+      "proficienciesGranted": ["Leichte Rüstung", "Mittlere Rüstung", "Schilde"]
+    },
+    "features": [
+      {
+        "level": 1,
+        "name": "Zauberwirken",
+        "description": "Du hast gelernt, Zauber zu wirken, indem du die mystischen Kräfte der Natur studierst. Weisheit ist deine Zauberwirkfähigkeit. Du beherrschst Zaubertricks und vorbereitete Zauber."
+      },
+      {
+        "level": 1,
+        "name": "Druidisch",
+        "description": "Du beherrschst Druidisch, die Geheimsprache der Druiden, um mit Tieren zu kommunizieren (Zauber Mit Tieren sprechen stets vorbereitet) und verborgene Botschaften zu hinterlassen."
+      },
+      {
+        "level": 1,
+        "name": "Urtümliche Ordnung",
+        "description": "Wähle zwischen Magier (zusätzlicher Zaubertrick & Bonus auf INT-Würfe wie Arkane Kunde/Naturkunde) oder Wächter (Kriegswaffen und mittelschwere Rüstung).",
+        "choice": {
+          "text": "Wähle deine urtümliche Ordnung:",
+          "options": [
+            {"name": "Magier", "description": "Erhalte einen zusätzlichen Zaubertrick und einen Bonus auf Intelligenzwürfe (Arkane Kunde oder Naturkunde) in Höhe deines Weisheitsmodifikators."},
+            {"name": "Wächter", "description": "Erhalte Übung mit Kriegswaffen und Vertrautheit mit mittelschwerer Rüstung."}
+          ]
+        }
+      },
+      {
+        "level": 2,
+        "name": "Tiergestalt",
+        "description": "Nimm als Bonusaktion die Gestalt eines Tieres an (Dauer: halbe Druidenstufe in Stunden). Erhalte temporäre Trefferpunkte und behalte deine geistigen Werte, Fertigkeiten und Rettungswürfe bei."
+      },
+      {
+        "level": 2,
+        "name": "Wilder Gefährte",
+        "description": "Du kannst einen Naturgeist beschwören, der eine Tiergestalt annimmt und dich unterstützt (verbraucht einen Zauberplatz oder eine Tiergestalt-Anwendung)."
+      },
+      {
+        "level": 3,
+        "name": "Druiden-Unterklasse",
+        "description": "Du erhältst eine Druiden-Unterklasse deiner Wahl (Zirkel des Landes, Zirkel des Meeres, Zirkel des Mondes, Zirkel der Sterne).",
+        "choice": {
+          "text": "Wähle deinen Druiden-Zirkel:",
+          "availableAtLevel": 3,
+          "options": [
+            {
+              "name": "Zirkel des Landes",
+              "features": [
+                {"level": 3, "name": "Beistand des Landes", "description": "Verbrauche Tiergestalt, um eine Kugel aus Blumen/Dornen zu erschaffen, die nekrotischen Schaden zufügt und Verbündete heilt."},
+                {"level": 3, "name": "Zirkelzauber des Landes", "description": "Erhalte nach langer Rast stets vorbereitete Zauber basierend auf deiner gewählten Landart (Gemäßigt, Polar, Trocken, Tropisch)."},
+                {"level": 6, "name": "Natürliche Erholung", "description": "Wirke einen vorbereiteten Stufe-1-Zauber ohne Zauberplatz oder stelle verbrauchte Zauberplätze nach kurzer Rast wieder her."},
+                {"level": 10, "name": "Schutz der Natur", "description": "Immunität gegen den Zustand Vergiftet und Resistenz gegen eine Schadensart passend zu deinem Land-Typ."},
+                {"level": 14, "name": "Heiligtum der Natur", "description": "Beschwöre magische Bäume und Ranken, die dir und Verbündeten Teildeckung und Resistenz gewähren."}
+              ]
+            },
+            {
+              "name": "Zirkel des Meeres",
+              "features": [
+                {"level": 3, "name": "Grimm der See", "description": "Manifestiere als Bonusaktion eine Ausströmung aus Gischt (Kälteschaden und Gegner wegstoßen)."},
+                {"level": 3, "name": "Zirkelzauber des Meeres", "description": "Erhalte über deine Stufen hinweg stets vorbereitete Meeres-Zauber (Donnerwoge, Kältestrand etc.)."},
+                {"level": 6, "name": "Aquatische Affinität", "description": "Die Größe deiner Ausströmung vergrößert sich und du erhältst eine Schwimmbewegungsrate."},
+                {"level": 10, "name": "Sturmgeboren", "description": "Erhalte eine Flugbewegungsrate sowie Resistenzen gegen Blitz-, Kälte- und Schallschaden."},
+                {"level": 14, "name": "Geschenk des Ozeans", "description": "Manifestiere die Ausströmung um eine befreundete Kreatur oder verbrauche zwei Anwendungen für dich und einen Verbündeten gleichzeitig."}
+              ]
+            },
+            {
+              "name": "Zirkel des Mondes",
+              "features": [
+                {"level": 3, "name": "Tiergestalten des Zirkels", "description": "Mondmagie verstärkt deine Tiergestalt: höherer Herausforderungsgrad, verbesserte RK (13 + Weisheitsmodifikator) und dreifache Druidenstufe als temporäre Trefferpunkte."},
+                {"level": 3, "name": "Zirkelzauber des Mondes", "description": "Erhalte stets vorbereitete Mond-Zauber (Mondstrahl, Sternefunke etc.) und wirke sie auch in Tiergestalt."},
+                {"level": 6, "name": "Verbesserte Tiergestalten des Zirkels", "description": "In Tiergestalt erhältst du folgende Vorzüge: Strahlen des Mondes (einmal pro Zug zusätzlicher gleißender Schaden von 2W10 bei Treffer) und Erhöhte Zähigkeit (Konstitutionsrettungswürfe erhalten den Weisheitsmodifikator hinzu)."},
+                {"level": 10, "name": "Mondscheinschritt", "description": "Teleportiere dich magisch als Bonusaktion in einem Ausbruch von Mondlicht (Anzahl Nutzungen gleich Weisheitsmodifikator)."},
+                {"level": 14, "name": "Mondgestalt", "description": "Gemeinsames Mondlicht: Wann immer du den Mondscheinschritt einsetzt, kannst du zusätzlich eine bereitwillige Kreatur in bis zu 3 Metern Abstand mit teleportieren."}
+              ]
+            },
+            {
+              "name": "Zirkel der Sterne",
+              "features": [
+                {"level": 3, "name": "Sterngestalt", "description": "Nimm als Bonusaktion durch Verbrauchen einer Tiergestalt-Anwendung eine Sterngestalt an (strahlt Licht aus). Wähle eine Konstellation: Bogenschütze, Drache oder Kelch."},
+                {"level": 3, "name": "Sternkarte", "description": "Erschaffe eine Sternkarte als Druidenfokus (ermöglicht das vorbereitete Wirken von Göttliche Führung und Lenkendes Geschoss ohne Zauberplatz-Verbrauch in Höhe des Weisheitsmodifikators)."},
+                {"level": 6, "name": "Kosmisches Omen", "description": "Ziehe nach langer Rast Omen von deiner Sternkarte (gerade Zahl = Wohl / Bonus; ungerade Zahl = Wehe / Malus von 1W6 auf W20-Prüfung)."},
+                {"level": 10, "name": "Funkelnde Sternbilder", "description": "Deine Sterngestalt wird stärker: Der Schaden/Heilung von Bogenschütze und Kelch erhöht sich auf 2W8. Drache erhält 6 Meter Fluggeschwindigkeit und Schweben."},
+                {"level": 14, "name": "Voller Sterne", "description": "In Sterngestalt wirst du teilweise körperlos und erhältst Resistenz gegen Hieb-, Stich- und Wuchtschaden."}
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "level": 4,
+        "name": "Attributswerterhöhung",
+        "description": "Erhöhe einen Attributswert um 2 oder zwei um je 1 (wiederholt sich auf Stufe 8, 12 und 16)."
+      },
+      {
+        "level": 5,
+        "name": "Wilde Wiederkehr",
+        "description": "Verbrauche bei keinen Tiergestalt-Anwendungen stattdessen einen Zauberplatz, um Tiergestalt zu aktivieren, oder erhalte einen Stufe-1-Zauberplatz zurück."
+      },
+      {
+        "level": 7,
+        "name": "Elementare Wut",
+        "description": "Füge einmal pro Zug bei einem erfolgreichen Angriff mit Waffe oder Tiergestalt zusätzlich 1W8 Blitz-, Feuer-, Kälte- oder Schallschaden zu. Verstärke zudem Druidenzaubertricks um deinen Weisheitsmodifikator."
+      },
+      {
+        "level": 15,
+        "name": "Verbesserte Elementare Wut",
+        "description": "Der zusätzliche Schaden erhöht sich auf 2W8 und die Reichweite deiner Druidenzaubertricks erhöht sich auf 90 Meter."
+      },
+      {
+        "level": 18,
+        "name": "In Tiergestalt zaubern",
+        "description": "Du kannst in Tiergestalt Zauber wirken, sofern diese keine teuren Materialkomponenten erfordern."
+      },
+      {
+        "level": 19,
+        "name": "Epische Gabe",
+        "description": "Erhalte eine Epische-Gabe-Talent oder ein anderes Talent deiner Wahl."
+      },
+      {
+        "level": 20,
+        "name": "Erzdruide",
+        "description": "Erhalte Ausdauernde Tiergestalt (automatische Rückgewinnung bei Initiative), Naturmagier (Tiergestalten in Zauberplätze umwandeln) und Langlebigkeit."
+      }
+    ],
+    "spellcasting": {
+      "ability": "Weisheit",
+      "cantripsKnown": [
+        {"level": 1, "count": 2},
+        {"level": 4, "count": 3},
+        {"level": 10, "count": 4}
+      ],
+      "spellsPrepared": [
+        {"level": 1, "count": 4},
+        {"level": 2, "count": 5},
+        {"level": 3, "count": 6},
+        {"level": 4, "count": 7},
+        {"level": 5, "count": 9},
+        {"level": 6, "count": 10},
+        {"level": 7, "count": 11},
+        {"level": 8, "count": 12},
+        {"level": 9, "count": 14},
+        {"level": 10, "count": 15},
+        {"level": 11, "count": 16},
+        {"level": 12, "count": 16},
+        {"level": 13, "count": 17},
+        {"level": 14, "count": 17},
+        {"level": 15, "count": 18},
+        {"level": 16, "count": 18},
+        {"level": 17, "count": 19},
+        {"level": 18, "count": 20},
+        {"level": 19, "count": 21},
+        {"level": 20, "count": 22}
+      ],
+      "spellSlotsByLevel": {
+        "1st": {"1": 2, "2": 3, "3": 4, "4": 4, "5": 4, "6": 4, "7": 4, "8": 4, "9": 4, "10": 4, "11": 4, "12": 4, "13": 4, "14": 4, "15": 4, "16": 4, "17": 4, "18": 4, "19": 4, "20": 4},
+        "2nd": {"3": 2, "4": 3, "5": 3, "6": 3, "7": 3, "8": 3, "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+        "3rd": {"5": 2, "6": 3, "7": 3, "8": 3, "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+        "4th": {"7": 1, "8": 2, "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+        "5th": {"9": 1, "10": 2, "11": 2, "12": 2, "13": 2, "14": 2, "15": 2, "16": 2, "17": 2, "18": 2, "19": 2, "20": 2},
+        "6th": {"11": 1, "12": 1, "13": 1, "14": 1, "15": 2, "16": 2, "17": 2, "18": 3, "19": 3, "20": 3},
+        "7th": {"13": 1, "14": 1, "15": 1, "16": 1, "17": 2, "18": 2, "19": 2, "20": 2},
+        "8th": {"15": 1, "16": 1, "17": 1, "18": 1, "19": 1, "20": 2},
+        "9th": {"17": 1, "18": 1, "19": 1, "20": 1}
+      }
+    }
+  }
+}
