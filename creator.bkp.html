@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&D 5e / 2024 Charakter erstellen</title>
+    
+    <script>
+        const savedTheme = localStorage.getItem('dnd_theme') || 'standard';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        html, body {
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: var(--bg, #f4f0ea);
+            font-family: serif;
+            color: var(--text, #2c221e);
+        }
+        .main-wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 16px;
+            padding-bottom: 60px;
+        }
+        .top-nav {
+            margin-bottom: 15px;
+        }
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--accent, #8b0000);
+            font-weight: bold;
+            font-size: 0.95rem;
+            background: var(--btn-back-bg, #fff);
+            padding: 8px 12px;
+            border: 1.5px solid var(--border, #b5a48b);
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            filter: url(#rough-edge);
+        }
+
+        /* Tab-Navigation im Look */
+        .creator-tabs {
+            display: flex;
+            background: var(--card, #fff);
+            border: 1.5px solid var(--border, #b5a48b);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            filter: url(#rough-edge);
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            font-family: serif;
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--text, #2c221e);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab-btn:not(:last-child) {
+            border-right: 1.5px solid var(--border, #b5a48b);
+        }
+        .tab-btn.active {
+            background: var(--accent, #8b0000);
+            color: #fff;
+        }
+
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Sanfte Einblend-Animation */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(10px);
+            visibility: hidden;
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+        .fade-in-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+            max-height: 4000px;
+        }
+
+        .step-card {
+            background: var(--card, #fff);
+            border: 1.5px solid var(--border, #b5a48b);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            filter: url(#rough-edge);
+        }
+        .step-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--accent, #8b0000);
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border, #eee);
+            padding-bottom: 6px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+        select, input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            background: var(--btn-back-bg, #f4f0ea);
+            border: 1.5px solid var(--border, #b5a48b);
+            border-radius: 6px;
+            font-family: serif;
+            color: var(--text, #2c221e);
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- SVG Rough-Edge Filter für den handgezeichneten Kanten-Look -->
+<svg style="display:none;" aria-hidden="true">
+    <filter id="rough-edge">
+        <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="3" result="noise" />
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+</svg>
+
+<div class="main-wrapper">
+    <!-- Zum Eingang -->
+    <div class="top-nav">
+        <a href="index.html" class="btn-back">
+            <i class="fa-solid fa-arrow-left"></i> Zum Eingang
+        </a>
+    </div>
+
+    <!-- 3 Tabs Container -->
+    <div class="creator-tabs">
+        <button type="button" class="tab-btn active" onclick="switchTab('class', event)">Klasse</button>
+        <button type="button" class="tab-btn" onclick="switchTab('background', event)">Hintergrund</button>
+        <button type="button" class="tab-btn" onclick="switchTab('ethnia', event)">Ethnie</button>
+    </div>
+
+    <!-- TAB 1: KLASSE -->
+    <div id="tab-class" class="tab-content active">
+        <div class="step-card">
+            <div class="step-title">Klasse wählen</div>
+            <label for="class-select">Wähle deine Klasse</label>
+            <select id="class-select" onchange="onClassSelectionChange()">
+                <option value="">-- Wähle deine Klasse --</option>
+            </select>
+        </div>
+
+        <!-- Dynamischer Bereich für Stufe-1-Optionen -->
+        <div id="class-dynamic-options" class="fade-in-section">
+            <div class="step-card">
+                <div class="step-title" id="class-summary-title">Klassen-Details</div>
+                <p id="class-summary-text" style="font-size: 0.95rem; margin-top: 0; color: var(--text-muted);"></p>
+                
+                <div style="margin-top: 12px;">
+                    <label>Fertigkeiten wählen</label>
+                    <div id="class-skills-container"></div>
+                </div>
+            </div>
+
+            <div class="step-card" id="class-tools-card" style="display: none;">
+                <div class="step-title" id="class-tools-title">Werkzeug- / Instrumentenwahl</div>
+                <div id="class-tools-container"></div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-title">Startausrüstung</div>
+                <div id="class-equipment-container"></div>
+            </div>
+
+            <div class="step-card" id="class-special-options-card" style="display: none;">
+                <div class="step-title" id="class-special-title">Spezielle Wahl</div>
+                <div id="class-special-container"></div>
+            </div>
+
+            <div class="step-card" id="class-spells-card" style="display: none;">
+                <div class="step-title">Zauber (Stufe 1)</div>
+                <div id="class-spells-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2: HINTERGRUND -->
+    <div id="tab-background" class="tab-content">
+        <div class="step-card">
+            <div class="step-title">Hintergrund</div>
+            <p>Hier entsteht die Hintergrund-Auswahl...</p>
+        </div>
+    </div>
+
+    <!-- TAB 3: ETHNIE -->
+    <div id="tab-ethnia" class="tab-content">
+        <div class="step-card">
+            <div class="step-title">Ethnie / Volk</div>
+            <p>Hier entsteht die Auswahl für Völker und Abstammungen...</p>
+        </div>
+    </div>
+</div>
+
+<script>
+let classesData = {};
+
+window.onload = async function() {
+    try {
+        const classRes = await fetch("klassen.json?t=" + new Date().getTime());
+        if (!classRes.ok) throw new Error("HTTP-Fehler beim Laden: " + classRes.status);
+        
+        const classJson = await classRes.json();
+        classesData = classJson.classes || classJson;
+
+        initClassDropdown();
+    } catch (err) {
+        console.error("Konnte klassen.json nicht laden:", err);
+        alert("Fehler beim Laden von klassen.json: " + err.message);
+    }
+};
+
+// Tab-Umschaltung
+function switchTab(tabId, event) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+    document.getElementById('tab-' + tabId).classList.add('active');
+    event.currentTarget.classList.add('active');
+}
+
+// Dropdown initialisieren
+function initClassDropdown() {
+    const sel = document.getElementById('class-select');
+    sel.innerHTML = '<option value="">-- Wähle deine Klasse --</option>';
+    Object.keys(classesData).forEach(className => {
+        let opt = document.createElement('option');
+        opt.value = className;
+        opt.textContent = className;
+        sel.appendChild(opt);
+    });
+}
+
+// Logik bei Klassenauswahl mit Einblend-Effekt
+function onClassSelectionChange() {
+    const selVal = document.getElementById('class-select').value;
+    const dynamicSection = document.getElementById('class-dynamic-options');
+
+    if (!selVal) {
+        dynamicSection.classList.remove('visible');
+        return;
+    }
+
+    const clsObj = classesData[selVal];
+    
+    document.getElementById('class-summary-title').textContent = selVal + " - Übersicht";
+    document.getElementById('class-summary-text').textContent = clsObj.summary || "";
+
+    renderClassSkills(clsObj);
+    renderClassTools(clsObj);
+    renderClassEquipment(clsObj);
+    renderClassSpecialOptions(clsObj);
+    renderClassSpells(clsObj);
+
+    dynamicSection.classList.add('visible');
+}
+
+function renderClassSkills(clsObj) {
+    const container = document.getElementById('class-skills-container');
+    container.innerHTML = "";
+    if (clsObj.proficiencies && clsObj.proficiencies.skills) {
+        let skillInfo = clsObj.proficiencies.skills;
+        let html = `<p style="font-size:0.85rem; margin-bottom:6px;">Wähle ${skillInfo.choose} aus:</p>`;
+        for(let i=0; i < skillInfo.choose; i++) {
+            html += `<select style="margin-bottom:6px;"><option value="">-- Fertigkeit ${i+1} --</option>`;
+            skillInfo.from.forEach(sk => html += `<option value="${sk}">${sk}</option>`);
+            html += `</select>`;
+        }
+        container.innerHTML = html;
+    }
+}
+
+function renderClassTools(clsObj) {
+    const card = document.getElementById('class-tools-card');
+    const container = document.getElementById('class-tools-container');
+    container.innerHTML = "";
+
+    let tools = clsObj.proficiencies?.tools;
+    if (tools && tools.choice) {
+        let choice = tools.choice;
+        document.getElementById('class-tools-title').textContent = choice.text || "Werkzeug- / Instrumentenwahl";
+        let html = `<p style="font-size:0.85rem; margin-bottom:6px;">Wähle ${choice.choose || 1}:</p>`;
+        for(let i=0; i < (choice.choose || 1); i++) {
+            html += `<select style="margin-bottom:6px;"><option value="">-- Bitte wählen --</option>`;
+            choice.options.forEach(opt => html += `<option value="${opt}">${opt}</option>`);
+            html += `</select>`;
+        }
+        container.innerHTML = html;
+        card.style.display = 'block';
+    } else {
+        card.style.display = 'none';
+    }
+}
+
+function renderClassEquipment(clsObj) {
+    const container = document.getElementById('class-equipment-container');
+    container.innerHTML = "";
+    if (clsObj.startingEquipment) {
+        let html = "";
+        if (clsObj.startingEquipment.choiceA) {
+            let itemsA = clsObj.startingEquipment.choiceA.map(i => `${i.qty || 1}x ${i.name} ${i.unit || ''}`).join(', ');
+            html += `<label><input type="radio" name="eq_choice" checked> <strong>Option A:</strong> ${itemsA}</label>`;
+        }
+        if (clsObj.startingEquipment.choiceB) {
+            let itemsB = clsObj.startingEquipment.choiceB.map(i => `${i.qty || 1}x ${i.name} ${i.unit || ''}`).join(', ');
+            html += `<label style="margin-top:6px;"><input type="radio" name="eq_choice"> <strong>Option B:</strong> ${itemsB}</label>`;
+        }
+        if (clsObj.startingEquipment.choiceC) {
+            let itemsC = clsObj.startingEquipment.choiceC.map(i => `${i.qty || 1}x ${i.name} ${i.unit || ''}`).join(', ');
+            html += `<label style="margin-top:6px;"><input type="radio" name="eq_choice"> <strong>Option C:</strong> ${itemsC}</label>`;
+        }
+        container.innerHTML = html;
+    }
+}
+
+function renderClassSpecialOptions(clsObj) {
+    const card = document.getElementById('class-special-options-card');
+    const container = document.getElementById('class-special-container');
+    container.innerHTML = "";
+
+    let featureList = clsObj.features || [];
+    let specialFeature = featureList.find(f => f.choice && (f.name.includes("Ordnung")));
+
+    if (specialFeature && specialFeature.choice) {
+        document.getElementById('class-special-title').textContent = specialFeature.name;
+        let html = `<p style="font-size:0.85rem;">${specialFeature.choice.text}</p>`;
+        specialFeature.choice.options.forEach((opt, idx) => {
+            html += `<label style="margin-top:6px;"><input type="radio" name="special_choice" ${idx===0?'checked':''}> <strong>${opt.name}:</strong> ${opt.description || ''}</label>`;
+        });
+        container.innerHTML = html;
+        card.style.display = 'block';
+    } else {
+        card.style.display = 'none';
+    }
+}
+
+function renderClassSpells(clsObj) {
+    const card = document.getElementById('class-spells-card');
+    const container = document.getElementById('class-spells-container');
+    container.innerHTML = "";
+
+    if (clsObj.spellcasting) {
+        let sc = clsObj.spellcasting;
+        let cantripsCount = sc.cantripsKnown?.[0]?.count || 0;
+        let preparedCount = sc.spellsPrepared?.[0]?.count || 0;
+
+        let html = `<p style="font-size:0.85rem; margin-bottom: 10px;">Diese Klasse besitzt Zauberwirken auf Stufe 1.</p>`;
+        
+        if (cantripsCount > 0) {
+            html += `<p style="font-size:0.85rem;"><b>Zaubertricks wählbar:</b> ${cantripsCount}</p>`;
+        }
+        if (preparedCount > 0) {
+            html += `<p style="font-size:0.85rem; margin-top:5px;"><b>Vorbereitete Zauber (Stufe 1):</b> ${preparedCount}</p>`;
+        }
+
+        container.innerHTML = html;
+        card.style.display = 'block';
+    } else {
+        card.style.display = 'none';
+    }
+}
+</script>
+</body>
+</html>
