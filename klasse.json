@@ -815,3 +815,303 @@
     }
   }
 }
+{
+  "Hexenmeister": {
+    "summary": "Ein Okkultist, durch außerweltliche Pakte ermächtigt",
+    "hitDice": "d8",
+    "hpAt1stLevel": "8 + Konstitutionsmodifikator",
+    "hpPerLevel": "5 + Konstitutionsmodifikator",
+    "primaryAbility": "Charisma",
+    "savingThrows": ["Weisheit", "Charisma"],
+    "proficiencies": {
+      "armor": ["Leichte Rüstung"],
+      "weapons": ["Einfache Waffen"],
+      "tools": [],
+      "skills": {
+        "from": [
+          "Arkane Kunde", "Einschüchtern", "Geschichte", "Nachforschungen",
+          "Naturkunde", "Religion", "Täuschen"
+        ],
+        "choose": 2
+      }
+    },
+    "startingEquipment": {
+      "choiceA": [
+        {"name": "Lederrüstung", "qty": 1},
+        {"name": "Sichel", "qty": 1},
+        {"name": "Dolch", "qty": 2},
+        {"name": "Arkaner Fokus (Kugel)", "qty": 1},
+        {"name": "Buch (okkulte Überlieferungen)", "qty": 1},
+        {"name": "Gelehrtenausrüstung", "qty": 1},
+        {"name": "Gold", "qty": 15, "unit": "GM"}
+      ],
+      "choiceB": [
+        {"name": "Gold", "qty": 100, "unit": "GM"}
+      ]
+    },
+    "multiClassing": {
+      "prerequisites": {"CHA": 13},
+      "proficienciesGranted": ["Leichte Rüstung", "Einfache Waffen"]
+    },
+    "features": [
+      {
+        "level": 1,
+        "name": "Paktmagie",
+        "description": "Durch einen Pakt mit einer Wesenheit erhältst du Paktmagie-Zauberplätze, die sich nach einer kurzen oder langen Rast komplett erneuern."
+      },
+      {
+        "level": 1,
+        "name": "Schauerliche Anrufungen",
+        "description": "Du hast verbotenes Wissen erlangt und erhältst schauerliche Anrufungen (z. B. Pakt des Buches, Pakt der Klinge), die dir permanente Modifikatoren oder Gratis-Zauber gewähren."
+      },
+      {
+        "level": 2,
+        "name": "Magische Raffinesse",
+        "description": "Führe einen Ritual-Ritus aus, um verbrauchte Paktmagie-Zauberplätze zurückzuerhalten (höchstens in Höhe der Hälfte deiner Hexenmeisterstufe, einmal pro langer Rast)."
+      },
+      {
+        "level": 3,
+        "name": "Hexenmeister-Unterklasse",
+        "description": "Du erhältst eine Hexenmeister-Unterklasse (Schutzherr) deiner Wahl (Celestischer Schutzherr, Erzfee-Schutzherr, Großes-Alter-Schutzherr, Unhold-Schutzherr).",
+        "choice": {
+          "text": "Wähle deinen Schutzherrn:",
+          "availableAtLevel": 3,
+          "options": [
+            {
+              "name": "Celestischer Schutzherr",
+              "features": [
+                {"level": 3, "name": "Celestische Zauber", "description": "Erhalte stets vorbereitete Celestische Zauber (Beistand, Heilige Flamme etc.)."},
+                {"level": 3, "name": "Heilendes Licht", "description": "Heile Verbündete über einen Vorrat von W6-Würfeln als Bonusaktion."},
+                {"level": 6, "name": "Gleitende Seele", "description": "Erhalte Resistenz gegen gleißenden Schaden und füge Zaubern zusätzlichen Schaden hinzu."},
+                {"level": 10, "name": "Celestische Widerstandskraft", "description": "Erhalte temporäre Trefferpunkte bei Raffinesse/Rast und verleihe Verbündeten ebenfalls temporäre Trefferpunkte."},
+                {"level": 14, "name": "Sengende Rache", "description": "Entfessle bei Todesrettungswürfen gleißende Energie zur Heilung und um Gegner zu schädigen/blenden."}
+              ]
+            },
+            {
+              "name": "Erzfee-Schutzherr",
+              "features": [
+                {"level": 3, "name": "Erzfeenzauber", "description": "Erhalte stets vorbereitete Erzfeenzauber (Feenfeuer, Nebelschritt etc.)."},
+                {"level": 3, "name": "Schritte der Feenwesen", "description": "Nutze Nebelschritt per Pakt-Platz und erhalte temporäre Trefferpunkte oder belege Gegner mit Nachteilen."},
+                {"level": 6, "name": "Neblige Flucht", "description": "Wirke Nebelschritt als Reaktion bei erlittenem Schaden mit zusätzlichen Schreckenstricks."},
+                {"level": 10, "name": "Betörende Abwehr", "description": "Immunität gegen den Zustand Bezaubert und erzwinge bei Treffern Weisheitsrettungswürfe zur Schadenshalbierung."},
+                {"level": 14, "name": "Verhexende Magie", "description": "Wirke Nebelschritt direkt zusammen mit Verzauberungs- oder Illusionszaubern ohne Extra-Aktion."}
+              ]
+            },
+            {
+              "name": "Großer-Alter-Schutzherr",
+              "features": [
+                {"level": 3, "name": "Erwachter Geist", "description": "Kommuniziere telepathisch auf bis zu 9 Meter Entfernung."},
+                {"level": 3, "name": "Großer-Alter-Zauber", "description": "Erhalte stets vorbereitete Zauber (Dissonantes Flüstern, Gedankenwahrnehmen etc.)."},
+                {"level": 3, "name": "Psychische Zauber", "description": "Ändere den Schaden deiner Hexenmeisterzauber in psychischen Schaden und wirke Verzauberungen/Illusionen ohne Verbal- oder Gestenkomponenten."},
+                {"level": 6, "name": "Hellsichtiger Kämpfer", "description": "Zwinge telepathisch verbundene Kreaturen zu Rettungswürfen mit Nachteil und erhalte Vorteile gegen sie."},
+                {"level": 10, "name": "Gedankenschild", "description": "Schütze deine Gedanken vor Telepathie, erhalte Psychoresistenz und reflektiere psychischen Schaden."},
+                {"level": 10, "name": "Schauerliches Verwünschen", "description": "Erhalte den Zauber Verwünschen stets vorbereitet mit Nachteil für das Ziel bei Rettungswürfen."},
+                {"level": 14, "name": "Diener erschaffen", "description": "Modifiziere Beschwörungen von Aberrationen ohne Konzentration mit temporären Trefferpunkten und Extraschaden."}
+              ]
+            },
+            {
+              "name": "Unhold-Schutzherr",
+              "features": [
+                {"level": 3, "name": "Segen des dunklen Meisters", "description": "Erhalte temporäre Trefferpunkte, wenn du die Trefferpunkte eines Gegners auf 0 reduzierst."},
+                {"level": 3, "name": "Unhold-Zauber", "description": "Erhalte stets vorbereitete Unhold-Zauber (Befehl, Brennende Hände, Feuerball etc.)."},
+                {"level": 6, "name": "Schicksal des dunklen Meisters", "description": "Füge deinen Attributs- oder Rettungswürfen 1W10 hinzu, um das Schicksal zu deinen Gunsten zu ändern."},
+                {"level": 10, "name": "Widerstandskraft des Unholds", "description": "Wähle nach kurzer oder langer Rast eine Schadensart aus, gegen die du resistent bist."},
+                {"level": 14, "name": "Schlund des Wahnsinns", "description": "Schleudere eine Kreatur per Angriff in die Unteren Ebenen, wo sie 8W10 psychischen Schaden erleidet."}
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "level": 4,
+        "name": "Attributswerterhöhung",
+        "description": "Erhöhe einen Attributswert um 2 oder zwei um je 1 (wiederholt sich auf Stufe 8, 12 und 16)."
+      },
+      {
+        "level": 9,
+        "name": "Schutzherrn kontaktieren",
+        "description": "Wirke den Zauber Kontakt zu anderen Ebenen ohne Zauberplatz und bestehe den Rettungswurf automatisch."
+      },
+      {
+        "level": 11,
+        "name": "Mystisches Arkanum (Stufe 6)",
+        "description": "Erhalte die Fähigkeit, einen Hexenmeisterzauber des 6. Grades einmal pro langer Rast ohne Zauberplatz zu wirken (weitere Grade folgen auf Stufe 13, 15 und 17)."
+      },
+      {
+        "level": 19,
+        "name": "Epische Gabe",
+        "description": "Erhalte eine Epische-Gabe-Talent (z. B. Gabe des Schicksals) oder ein anderes Talent deiner Wahl."
+      },
+      {
+        "level": 20,
+        "name": "Mystischer Meister",
+        "description": "Setze Magische Raffinesse ein, um alle verbrauchten Paktmagie-Zauberplätze augenblicklich wiederzuerhalten."
+      }
+    ],
+    "spellcasting": {
+      "ability": "Charisma",
+      "cantripsKnown": [
+        {"level": 1, "count": 2},
+        {"level": 4, "count": 3},
+        {"level": 10, "count": 4}
+      ],
+      "spellsPrepared": [
+        {"level": 1, "count": 2},
+        {"level": 2, "count": 3},
+        {"level": 3, "count": 4},
+        {"level": 4, "count": 5},
+        {"level": 5, "count": 6},
+        {"level": 6, "count": 7},
+        {"level": 7, "count": 8},
+        {"level": 8, "count": 9},
+        {"level": 9, "count": 10},
+        {"level": 10, "count": 10},
+        {"level": 11, "count": 11},
+        {"level": 12, "count": 12},
+        {"level": 13, "count": 12},
+        {"level": 14, "count": 13},
+        {"level": 15, "count": 13},
+        {"level": 16, "count": 14},
+        {"level": 17, "count": 14},
+        {"level": 18, "count": 15},
+        {"level": 19, "count": 15},
+        {"level": 20, "count": 15}
+      ],
+      "availableCantrips": [
+        "Donnerschlag",
+        "Einfache Illusion",
+        "Freundschaft",
+        "Gedankensplitter",
+        "Gift versprühen",
+        "Kalte Hand",
+        "Klingenbann",
+        "Magierhand",
+        "Schauriger Strahl",
+        "Taschenspielerei",
+        "Totenläuten",
+        "Zielsicherer Schlag"
+      ],
+      "available1stLevelSpells": [
+        "Arme von Hadar",
+        "Hexenpfeil",
+        "Höllischer Tadel",
+        "Illusionsschrift",
+        "Magie entdecken",
+        "Mit Tieren sprechen",
+        "Person bezaubern",
+        "Rascher Rückzug",
+        "Rüstung von Agathys",
+        "Schutz vor Gut und Böse",
+        "Sprachen verstehen",
+        "Tashas Fürchterlicher Lachanfall",
+        "Untersichtbarer Diener",
+        "Verderben",
+        "Verwünschen"
+      ],
+      "available2ndLevelSpells": [
+        "Dolchwolke",
+        "Dunkelheit",
+        "Einflüsterung",
+        "Fesseln",
+        "Gedankendorn",
+        "Krone des Wahnsinns",
+        "Nebelschritt",
+        "Person festhalten",
+        "Schwächestrahl",
+        "Spiegelbilder",
+        "Spinnenklettern",
+        "Unsichtbarkeit"
+      ],
+      "available3rdLevelSpells": [
+        "Feenwesen herbeirufen",
+        "Fliegen",
+        "Fluch brechen",
+        "Furcht",
+        "Gasförmige Gestalt",
+        "Gegenzauber",
+        "Hunger von Hadar",
+        "Hypnotisches Muster",
+        "Mächtiges Trugbild",
+        "Magie bannen",
+        "Schutzkreis",
+        "Untote herbeirufen",
+        "Vampirgriff",
+        "Zungen"
+      ],
+      "available4thLevelSpells": [
+        "Aberration herbeirufen",
+        "Dimensionstür",
+        "Dürre",
+        "Monster bezaubern",
+        "Scheingelände",
+        "Verbannung"
+      ],
+      "available5thLevelSpells": [
+        "Ablenkung",
+        "Ausspähung",
+        "Bindung der Ebenen",
+        "Jallarzis Sturm des Strahlens",
+        "Kontakt zu anderen Ebenen",
+        "Kreis der Teleportation",
+        "Monster festhalten",
+        "Synoptisches Rauschen",
+        "Traum"
+      ],
+      "available6thLevelSpells": [
+        "Arkanes Tor",
+        "Böser Blick",
+        "Tashas Brodelnder Kessel",
+        "Todeskreis",
+        "Unhold herbeirufen",
+        "Untote erschaffen",
+        "Wahrer Blick"
+      ],
+      "available7thLevelSpells": [
+        "Ätherische Gestalten",
+        "Ebenenwechsel",
+        "Energiekäfig",
+        "Finger des Todes"
+      ],
+      "available8thLevelSpells": [
+        "Halbebene",
+        "Monster beherrschen",
+        "Redegewandtheit",
+        "Wirrwarr",
+        "Wort der Macht: Betäubung"
+      ],
+      "available9thLevelSpells": [
+        "Astrale Projektion",
+        "Einkerkerung",
+        "Tor",
+        "Unheimliches Schicksal",
+        "Voraussicht",
+        "Wahre Verwandlung",
+        "Wort der Macht: Tod"
+      ],
+      "spellSlotsByLevel": {
+        "pactMagicSlots": {
+          "1": {"slots": 1, "slotLevel": 1},
+          "2": {"slots": 2, "slotLevel": 1},
+          "3": {"slots": 2, "slotLevel": 2},
+          "4": {"slots": 2, "slotLevel": 2},
+          "5": {"slots": 2, "slotLevel": 3},
+          "6": {"slots": 2, "slotLevel": 3},
+          "7": {"slots": 2, "slotLevel": 4},
+          "8": {"slots": 2, "slotLevel": 4},
+          "9": {"slots": 2, "slotLevel": 5},
+          "10": {"slots": 2, "slotLevel": 5},
+          "11": {"slots": 3, "slotLevel": 5},
+          "12": {"slots": 3, "slotLevel": 5},
+          "13": {"slots": 3, "slotLevel": 5},
+          "14": {"slots": 3, "slotLevel": 5},
+          "15": {"slots": 3, "slotLevel": 5},
+          "16": {"slots": 3, "slotLevel": 5},
+          "17": {"slots": 4, "slotLevel": 5},
+          "18": {"slots": 4, "slotLevel": 5},
+          "19": {"slots": 4, "slotLevel": 5},
+          "20": {"slots": 4, "slotLevel": 5}
+        }
+      }
+    }
+  }
+}
