@@ -99,7 +99,7 @@
             opacity: 1;
             transform: translateY(0);
             visibility: visible;
-            max-height: 3000px;
+            max-height: 4000px;
         }
 
         .step-card {
@@ -279,14 +279,12 @@ function onClassSelectionChange() {
     document.getElementById('class-summary-title').textContent = selVal + " - Übersicht";
     document.getElementById('class-summary-text').textContent = clsObj.summary || "";
 
-    // Fertigkeiten, Werkzeuge, Ausrüstung, Ordnungen und Zauber rendern
     renderClassSkills(clsObj);
     renderClassTools(clsObj);
     renderClassEquipment(clsObj);
     renderClassSpecialOptions(clsObj);
     renderClassSpells(clsObj);
 
-    // Sanft einblenden
     dynamicSection.classList.add('visible');
 }
 
@@ -374,11 +372,36 @@ function renderClassSpells(clsObj) {
     container.innerHTML = "";
 
     if (clsObj.spellcasting) {
-        let cantripsCount = clsObj.spellcasting.cantripsKnown?.[0]?.count || 0;
-        let html = `<p style="font-size:0.85rem;">Diese Klasse besitzt Zauberwirken auf Stufe 1.</p>`;
-        if (cantripsCount > 0) {
-            html += `<p style="font-size:0.85rem; margin-top:4px;"><b>Zaubertricks wählbar:</b> ${cantripsCount}</p>`;
+        let sc = clsObj.spellcasting;
+        let cantripsCount = sc.cantripsKnown?.[0]?.count || 0;
+        let preparedCount = sc.spellsPrepared?.[0]?.count || 0;
+
+        let html = `<p style="font-size:0.85rem; margin-bottom: 10px;">Diese Klasse besitzt Zauberwirken auf Stufe 1.</p>`;
+        
+        // Zaubertricks-Auswahl generieren falls vorhanden
+        if (cantripsCount > 0 && sc.availableCantrips) {
+            html ilə += `<label>Wähle ${cantripsCount} Zaubertricks:</label>`;
+            for(let i=0; i<cantripsCount; i++) {
+                html += `<select style="margin-bottom:6px;"><option value="">-- Zaubertrick ${i+1} --</option>`;
+                sc.availableCantrips.forEach(c => html += `<option value="${c}">${c}</option>`);
+                html += `</select>`;
+            }
+        } else if (cantripsCount > 0) {
+            html += `<p style="font-size:0.85rem;"><b>Zaubertricks wählbar:</b> ${cantripsCount}</p>`;
         }
+
+        // Stufe 1 Zauber-Auswahl generieren falls vorhanden
+        if (preparedCount > 0 && sc.available1stLevelSpells) {
+            html += `<label style="margin-top:10px;">Wähle ${preparedCount} vorbereitete Stufe-1-Zauber:</label>`;
+            for(let i=0; i<preparedCount; i++) {
+                html += `<select style="margin-bottom:6px;"><option value="">-- Stufe-1-Zauber ${i+1} --</option>`;
+                sc.available1stLevelSpells.forEach(s => html += `<option value="${s}">${s}</option>`);
+                html += `</select>`;
+            }
+        } else if (preparedCount > 0) {
+            html += `<p style="font-size:0.85rem; margin-top:5px;"><b>Vorbereitete Zauber (Stufe 1):</b> ${preparedCount}</p>`;
+        }
+
         container.innerHTML = html;
         card.style.display = 'block';
     } else {
