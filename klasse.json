@@ -1,0 +1,357 @@
+{
+  "Barde": {
+    "summary": "Inspirierender Musiker, Magiewirker und Tänzer",
+    "hitDice": "d8",
+    "hpAt1stLevel": "8 + Konstitutionsmodifikator",
+    "hpPerLevel": "5 + Konstitutionsmodifikator",
+    "primaryAbility": "Charisma",
+    "savingThrows": ["Geschicklichkeit", "Charisma"],
+    "proficiencies": {
+      "armor": ["Leichte Rüstung"],
+      "weapons": ["Einfache Waffen"],
+      "tools": {
+        "choice": {
+          "text": "Wähle drei Musikinstrumente:",
+          "options": ["Laute", "Flöte", "Harfe", "Trommel", "Lyra", "Dudelsack", "Horn", "Pande", "Schalmei", "Violine"],
+          "choose": 3
+        }
+      },
+      "skills": {
+        "from": [
+          "Akrobatik", "Auftreten", "Athletik", "Einblick", "Geschichte",
+          "Heimlichkeit", "Medizin", "Naturkunde", "Religion", "Täuschen",
+          "Überzeugen", "Wahrnehmung"
+        ],
+        "choose": 3
+      }
+    },
+    "startingEquipment": {
+      "choiceA": [
+        {"name": "Lederrüstung", "qty": 1},
+        {"name": "Dolch", "qty": 2},
+        {"name": "Musikinstrument", "qty": 1},
+        {"name": "Unterhaltungskünstler-Ausrüstung", "qty": 1},
+        {"name": "Gold", "qty": 19, "unit": "GM"}
+      ],
+      "choiceB": [
+        {"name": "Gold", "qty": 90, "unit": "GM"}
+      ]
+    },
+    "multiClassing": {
+      "prerequisites": {"CHA": 13},
+      "proficienciesGranted": ["Leichte Rüstung", "Eine Fertigkeit deiner Wahl", "Ein Musikinstrument deiner Wahl"]
+    },
+    "features": [
+      {
+        "level": 1,
+        "name": "Bardische Inspiration",
+        "description": "Du kannst andere durch Worte, Musik oder Tänze inspirieren. Du hast eine Anzahl von Verwendungen gleich deinem Charisma-Modifikator (mindestens 1), die sich nach einer langen Rast erneuern. Ein Verbündeter kann den Bardische-Inspiration-Würfel nutzen, um einen verfehlten W20-Prüfungserfolg zu erzielen.",
+        "dieSize": {
+          "1-4": "W6",
+          "5-9": "W8",
+          "10-14": "W10",
+          "15+": "W12"
+        }
+      },
+      {
+        "level": 1,
+        "name": "Zauberwirken",
+        "description": "Du kannst arkane Zauber wirken. Charisma ist deine Zauberwirkfähigkeit. Du beherrschst Zaubertricks und vorbereitete Stufe-1-Zauber."
+      },
+      {
+        "level": 2,
+        "name": "Alleskönner",
+        "description": "Du kannst die Hälfte deines Übungsbonus (abgerundet) jedem Attributswurf hinzufügen, der eine Fertigkeit verwendet, in der du nicht geübt bist."
+      },
+      {
+        "level": 2,
+        "name": "Expertise",
+        "description": "Du erhältst Expertise in zwei Fertigkeiten deiner Wahl, in denen du geübt bist. Auf Stufe 9 erhältst du zwei weitere."
+      },
+      {
+        "level": 3,
+        "name": "Barden-Unterklasse",
+        "description": "Du erhältst eine Barden-Unterklasse deiner Wahl (Schule des Wagemuts, Schule des Wissens, Schule des Tanzes, Schule des Zauberbanns).",
+        "choice": {
+          "text": "Wähle eine Barden-Schule:",
+          "availableAtLevel": 3,
+          "options": [
+            {
+              "name": "Schule des Tanzes",
+              "features": [
+                {"level": 3, "name": "Blendende Beinarbeit", "description": "Erhalte ungerüstete Verteidigung (10 + GES + CHA), virtuoser Tänzer (Vorteil auf Auftreten) und finke Schläge / waffenloser Kampfrausch."},
+                {"level": 6, "name": "Inspirierende Bewegung", "description": "Verbrauche Bardische Inspiration als Reaktion, um dich zu bewegen, wenn ein Gegner sich nähert."},
+                {"level": 6, "name": "Tandem-Beinarbeit", "description": "Füge Mitstreitern beim Initiativewurf deinen Bardische-Inspiration-Würfel hinzu."},
+                {"level": 14, "name": "Führendes Entrinnen", "description": "Teile Geschicklichkeitsrettungswurf-Vorteile und Schadenshalbierung mit nahen Verbündeten."}
+              ]
+            },
+            {
+              "name": "Schule des Wagemuts",
+              "features": [
+                {"level": 3, "name": "Kampfinspiration", "description": "Bardische Inspiration kann für zusätzlichen Schaden oder Rüstungsklasse (Verteidigung) genutzt werden."},
+                {"level": 3, "name": "Kampfkunst-Vertrautheit", "description": "Erhalte Übung mit Kriegswaffen und mittelschweren Rüstungen sowie Schilden."},
+                {"level": 6, "name": "Zusätzlicher Angriff", "description": "Greife zweimal an oder wirke einen Zaubertrick anstelle eines Angriffs."},
+                {"level": 14, "name": "Kampfmagie", "description": "Führe nach dem Wirken eines Zaubers einen Bonusangriff mit einer Waffe aus."}
+              ]
+            },
+            {
+              "name": "Schule des Wissens",
+              "features": [
+                {"level": 3, "name": "Schneidende Worte", "description": "Nutze eine Reaktion und Bardische Inspiration, um den Attributswurf, Angriffswurf oder Schaden eines Gegners zu verringern."},
+                {"level": 3, "name": "Zusätzliches Wissen", "description": "Erhalte Übung in drei Fertigkeiten deiner Wahl."},
+                {"level": 6, "name": "Magische Entdeckungen", "description": "Erlerne zwei Zauber von den Listen des Druiden, Klerikers oder Magiers."},
+                {"level": 14, "name": "Grenzenlose Begabung", "description": "Füge bei gescheiterten Würfen Bardische Inspiration hinzu, ohne sie bei Erfolg zu verbrauchen."}
+              ]
+            },
+            {
+              "name": "Schule des Zauberbanns",
+              "features": [
+                {"level": 3, "name": "Betörende Magie", "description": "Verzauberungs- und Illusionszauber erzwingen Weisheitsrettungswürfe oder bezaubern/verängstigen Gegner."},
+                {"level": 3, "name": "Mantel der Inspiration", "description": "Verleihe Verbündeten temporäre Trefferpunkte und Gratis-Bewegung via Inspiration."},
+                {"level": 6, "name": "Mantel der Erhabenheit", "description": "Wirke den Zauber Befehl als Bonusaktion ohne Zauberplatzverbrauch."},
+                {"level": 14, "name": "Stete Erhabenheit", "description": "Erschaffe eine erhabene Präsenz, die Angreifer per Charismarettungswurf abschreckt."}
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "level": 4,
+        "name": "Attributswerterhöhung",
+        "description": "Erhöhe einen Attributswert um 2 oder zwei um je 1 (wiederholt sich auf Stufe 8, 12 und 16)."
+      },
+      {
+        "level": 5,
+        "name": "Quelle der Inspiration",
+        "description": "Erhalte verbrauchte Anwendungen von Bardische Inspiration nach einer kurzen oder langen Rast zurück. Du kannst auch einen Zauberplatz opfern, um Inspiration zurückzuerhalten."
+      },
+      {
+        "level": 7,
+        "name": "Bannlied",
+        "description": "Nutze Musik/Worte als Reaktion, um verpatzte Rettungswürfe gegen Bezaubert oder Verängstigt zu wiederholen (mit Vorteil)."
+      },
+      {
+        "level": 10,
+        "name": "Magische Geheimnisse",
+        "description": "Erweitere deine vorbereiteten Zauber um beliebige Zauber aus den Listen des Barden, Druiden, Klerikers oder Magiers."
+      },
+      {
+        "level": 18,
+        "name": "Überlegene Inspiration",
+        "description": "Erhalte beim Auswürfeln der Initiative verbrauchte Anwendungen Bardischer Inspiration zurück (bis zu zwei)."
+      },
+      {
+        "level": 19,
+        "name": "Epische Gabe",
+        "description": "Erhalte eine Epische-Gabe-Talent oder ein anderes Talent deiner Wahl."
+      },
+      {
+        "level": 20,
+        "name": "Worte der Schöpfung",
+        "description": "Du hast die Worte von Leben und Tod gemeistert (Heilung und Tod). Wenn du einen Zauber wirkst, kannst du damit eine zweite Kreatur im Nahbereich ins Visier nehmen."
+      }
+    ],
+    "spellcasting": {
+      "ability": "Charisma",
+      "cantripsKnown": [
+        {"level": 1, "count": 2},
+        {"level": 4, "count": 3},
+        {"level": 10, "count": 4}
+      ],
+      "spellsPrepared": [
+        {"level": 1, "count": 4},
+        {"level": 2, "count": 5},
+        {"level": 3, "count": 6},
+        {"level": 4, "count": 7},
+        {"level": 5, "count": 9},
+        {"level": 6, "count": 10},
+        {"level": 7, "count": 11},
+        {"level": 8, "count": 12},
+        {"level": 9, "count": 13},
+        {"level": 10, "count": 14},
+        {"level": 11, "count": 15},
+        {"level": 12, "count": 16},
+        {"level": 13, "count": 17},
+        {"level": 14, "count": 17},
+        {"level": 15, "count": 18},
+        {"level": 16, "count": 18},
+        {"level": 17, "count": 19},
+        {"level": 18, "count": 20},
+        {"level": 19, "count": 21},
+        {"level": 20, "count": 22}
+      ],
+      "availableCantrips": [
+        "Ausbessern",
+        "Botschaft",
+        "Donnerschlag",
+        "Einfache Illusion",
+        "Freundschaft",
+        "Gehässiger Spott",
+        "Klingenbann",
+        "Licht",
+        "Magierhand",
+        "Sternenfunke",
+        "Tanzende Lichter",
+        "Taschenspielerei",
+        "Zielsicherer Schlag"
+      ],
+      "available1stLevelSpells": [
+        "Beschwörender Diener",
+        "Verderben",
+        "Wunden heilen",
+        "Befehl",
+        "Dissonantes Flüstern",
+        "Donnerwoge",
+        "Federfall",
+        "Feenfeuer",
+        "Heilendes Wort",
+        "Heldenmut",
+        "Identifizieren",
+        "Illusionsschrift",
+        "Lange Schritte",
+        "Lautloses Trugbild",
+        "Magie entdecken",
+        "Mit Tieren sprechen",
+        "Person bezaubern",
+        "Schlaf",
+        "Selbstverkleidung",
+        "Sprachen verstehen",
+        "Sprühende Farben",
+        "Tashas Fürchterlicher Lachanfall",
+        "Tierfreundschaft"
+      ],
+      "available2ndLevelSpells": [
+        "Attribut verbessern",
+        "Beistand",
+        "Blindheit/Taubheit",
+        "Dolchwolke",
+        "Einflüsterung",
+        "Fesseln",
+        "Gedanken wahrnehmen",
+        "Gefühle besänftigen",
+        "Gegenstand aufspüren",
+        "Klopfen",
+        "Krone des Wahnsinns",
+        "Macht der Illusionen",
+        "Magischer Mund",
+        "Metall erhitzen",
+        "Person festhalten",
+        "Schwache Genesung",
+        "Spiegelbilder",
+        "Stille",
+        "Tierbote",
+        "Tiere oder Pflanzen aufspüren",
+        "Unsichtbares sehen",
+        "Unsichtbarkeit",
+        "Vergrößern/Verkleinern",
+        "Zerbersten",
+        "Zone der Wahrheit"
+      ],
+      "available3rdLevelSpells": [
+        "Fluch",
+        "Furcht",
+        "Glyphe des Schutzes",
+        "Hellsehen",
+        "Hypnotisches Muster",
+        "Leomunds Winzige Hütte",
+        "Mächtiges Trugbild",
+        "Magie bannen",
+        "Massen-Heilendes Wort",
+        "Mit Pflanzen sprechen",
+        "Mit Toten sprechen",
+        "Pflanzenwachstum",
+        "Stinkende Wolke",
+        "Totstellen",
+        "Unauffindbarkeit",
+        "Verlangsamen",
+        "Verständigung",
+        "Zungen"
+      ],
+      "available4thLevelSpells": [
+        "Bewegungsfreiheit",
+        "Dimensionstür",
+        "Kreatur aufspüren",
+        "Mächtige Unsichtbarkeit",
+        "Monster bezaubern",
+        "Quell des Mondlichts",
+        "Scheingelände",
+        "Tödliches Phantom",
+        "Verwandlung",
+        "Verwirrung",
+        "Zwang"
+      ],
+      "available5thLevelSpells": [
+        "Ablenkung",
+        "Außerlichkeiten",
+        "Ausspähung",
+        "Bindung der Ebenen",
+        "Erinnerung verändern",
+        "Erwecken",
+        "Geas",
+        "Gegenstände beleben",
+        "Kreis der Teleportation",
+        "Massen-Wunden heilen",
+        "Monster festhalten",
+        "Person beherrschen",
+        "Rarys Telepathisches Band",
+        "Sagenkunde",
+        "Synoptisches Rauschen",
+        "Tote erwecken",
+        "Traum",
+        "Vollständige Genesung",
+        "Yolandes Majestätische Präsenz"
+      ],
+      "available6thLevelSpells": [
+        "Böser Blick",
+        "Heldenmahl",
+        "Massen-Einflüsterung",
+        "Ottos Unwiderstehlicher Tanz",
+        "Verbessertes Trugbild",
+        "Wächter und Hüter",
+        "Wahrer Blick",
+        "Weg finden"
+      ],
+      "available7thLevelSpells": [
+        "Arkane Spiegelung",
+        "Ätherische Gestalten",
+        "Auferstehung",
+        "Energiekäfig",
+        "Mordenkainens Beschwörung",
+        "Herrliches Herrenhaus",
+        "Mordenkainens Schwert",
+        "Regenbogenspiel",
+        "Regeneration",
+        "Symbol",
+        "Teleportieren",
+        "Trugbild projizieren",
+        "Wort der Macht: Stärken"
+      ],
+      "available8thLevelSpells": [
+        "Antipathie/Sympathie",
+        "Gedankenleere",
+        "Monster beherrschen",
+        "Redegewandtheit",
+        "Wirrwarr",
+        "Wort der Macht: Betäubung"
+      ],
+      "available9thLevelSpells": [
+        "Regenbogenwand",
+        "Voraussicht",
+        "Wahre Verwandlung",
+        "Wort der Macht: Heilung",
+        "Wort der Macht: Tod"
+      ],
+      "spellSlotsByLevel": {
+        "1st": {"1": 2, "2": 3, "3": 4, "4": 4, "5": 4, "6": 4, "7": 4, "8": 4, "9": 4, "10": 4, "11": 4, "12": 4, "13": 4, "14": 4, "15": 4, "16": 4, "17": 4, "18": 4, "19": 4, "20": 4},
+        "2nd": {"3": 2, "4": 3, "5": 3, "6": 3, "7": 3, "8": 3, "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+        "3rd": {"5": 2, "6": 3, "7": 3, "8": 3, "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+        "4th": {"7": 1, "8": 2, "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3, "17": 3, "18": 3, "19": 3, "20": 3},
+        "5th": {"9": 1, "10": 2, "11": 2, "12": 2, "13": 2, "14": 2, "15": 2, "16": 2, "17": 2, "18": 2, "19": 2, "20": 2},
+        "6th": {"11": 1, "12": 1, "13": 1, "14": 1, "15": 2, "16": 2, "17": 2, "18": 3, "19": 3, "20": 3},
+        "7th": {"13": 1, "14": 1, "15": 1, "16": 1, "17": 2, "18": 2, "19": 2, "20": 2},
+        "8th": {"15": 1, "16": 1, "17": 1, "18": 1, "19": 1, "20": 2},
+        "9th": {"17": 1, "18": 1, "19": 1, "20": 1}
+      }
+    }
+  }
+}
