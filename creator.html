@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D&D 5e / 2024 Charakter erstellen</title>
+    <title>D&D 2024 Charakter-Erstellung</title>
     
     <script>
         const savedTheme = localStorage.getItem('dnd_theme') || 'standard';
@@ -18,1599 +18,305 @@
             margin: 0;
             padding: 0;
             min-height: 100vh;
+            background: var(--bg, #f4f0ea);
+            font-family: serif;
+            color: var(--text, #2c221e);
         }
-        .book-wrapper {
-            display: flex;
-            width: 200vw;
-            transition: transform 0.4s ease-in-out;
-        }
-        .book-page {
-            width: 100vw;
-            box-sizing: border-box;
-            padding: 16px;
-            padding-top: 16px;
-            padding-bottom: 105px;
-            display: flex;
-            justify-content: center;
-        }
-        .book-page .container {
-            width: 100%;
+        .main-wrapper {
             max-width: 600px;
+            margin: 0 auto;
+            padding: 16px;
+            padding-bottom: 60px;
+        }
+        .top-nav {
+            margin-bottom: 15px;
+        }
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--accent, #8b0000);
+            font-weight: bold;
+            font-size: 0.95rem;
         }
 
-        .page-footer-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: var(--card, #fff);
-            border-top: 2px solid var(--border, #ccc);
-            border-top-left-radius: 18px;
-            border-top-right-radius: 18px;
+        /* Tab-Navigation */
+        .creator-tabs {
             display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 1000;
-            box-shadow: 0 -4px 15px rgba(0,0,0,0.15);
-            padding: 10px 16px;
-            box-sizing: border-box;
-            gap: 12px;
-        }
-        
-        .footer-tab-btn {
-            background: var(--btn-back-bg, #f4f0ea);
+            background: var(--card, #fff);
             border: 1.5px solid var(--border, #b5a48b);
-            border-radius: 8px;
-            padding: 10px 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            font-family: serif;
+            font-size: 1rem;
             font-weight: bold;
             color: var(--text, #2c221e);
             cursor: pointer;
-            font-family: serif;
-            font-size: 0.95rem;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            max-width: 300px;
             transition: all 0.2s;
         }
-        .footer-tab-btn i {
-            font-size: 1rem;
-            color: var(--accent, #8b0000);
+        .tab-btn:not(:last-child) {
+            border-right: 1.5px solid var(--border, #b5a48b);
         }
-        .footer-tab-btn:hover {
+        .tab-btn.active {
             background: var(--accent, #8b0000);
             color: #fff;
         }
 
-        .btn-debug-reset {
-            position: fixed;
-            top: 16px;
-            right: 68px;
-            z-index: 1100;
-            background: var(--btn-back-bg, #fff);
-            border: 1.5px solid #8b0000;
-            color: #8b0000;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
         }
 
-        .checkbox-grid, .radio-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 10px;
-            text-align: left;
-            max-height: 50vh;
-            overflow-y: auto;
-            padding: 4px;
+        /* Sanfte Einblend-Animation */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(10px);
+            visibility: hidden;
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
         }
-        .checkbox-grid label, .radio-grid label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1rem;
-            cursor: pointer;
-            background: var(--btn-back-bg);
-            padding: 8px 12px;
-            border-radius: 6px;
-            border: 1.5px solid var(--border);
-        }
-        .selection-group {
-            margin-top: 10px;
-            padding: 10px;
-            background: var(--btn-back-bg);
-            border-left: 3px solid var(--accent);
-            border-radius: 4px;
+        .fade-in-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+            max-height: 2000px; /* Groß genug für den Inhalt */
         }
 
-        /* Stabiles Inline-Accordion Dropdown im Seitendesign */
-        .custom-dropdown-wrapper {
-            position: relative;
-            width: 100%;
-        }
-        .custom-dropdown-trigger {
-            background: var(--btn-back-bg, #f4f0ea);
-            border: 1.5px solid var(--border, #b5a48b);
-            border-radius: 6px;
-            padding: 10px 12px;
-            width: 100%;
-            text-align: left;
-            font-family: serif;
-            color: var(--text, #2c221e);
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-sizing: border-box;
-            font-size: 0.95rem;
-        }
-        .custom-dropdown-inline-menu {
+        .step-card {
             background: var(--card, #fff);
             border: 1.5px solid var(--border, #b5a48b);
-            border-top: none;
-            border-bottom-left-radius: 6px;
-            border-bottom-right-radius: 6px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            display: none;
-            max-height: 220px;
-            overflow-y: auto;
-            box-sizing: border-box;
-            -webkit-overflow-scrolling: touch;
-            margin-top: -2px;
-            position: relative;
-            z-index: 10;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        .custom-dropdown-item {
-            padding: 12px 14px;
-            cursor: pointer;
+        .step-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--accent, #8b0000);
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border, #eee);
+            padding-bottom: 6px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+        select, input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            background: var(--btn-back-bg, #f4f0ea);
+            border: 1.5px solid var(--border, #b5a48b);
+            border-radius: 6px;
             font-family: serif;
             color: var(--text, #2c221e);
             font-size: 0.95rem;
-            border-bottom: 1px solid var(--border, #eee);
-            background: var(--btn-back-bg, #f4f0ea);
-        }
-        .custom-dropdown-item:last-child {
-            border-bottom: none;
-        }
-        .custom-dropdown-item:hover, .custom-dropdown-item.selected {
-            background: var(--accent, #8b0000);
-            color: #fff;
+            box-sizing: border-box;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
 
-<!-- SVG Rough-Edge Filter -->
-<svg style="display:none;" aria-hidden="true">
-    <filter id="rough-edge">
-        <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="3" result="noise" />
-        <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G" />
-    </filter>
-</svg>
-
-<div class="page-footer-nav" id="footerNavContainer">
-    <button type="button" class="footer-tab-btn" onclick="requestSwitchToSheet()">
-        <i class="fa-solid fa-shield-halved"></i> Zum Heldenbogen
-    </button>
-</div>
-
-<button class="btn-debug-reset" onclick="resetLocalStorage()" title="Speicher komplett leeren (Reset)">
-    <i class="fa-solid fa-bug"></i>
-</button>
-
-<div class="book-wrapper" id="bookWrapper">
-    <!-- SEITE 1: ERSTELLUNG -->
-    <div class="book-page">
-        <div class="container" style="max-width:100%;">
-            <div class="top-nav" style="justify-content: space-between; margin-bottom: 15px;">
-                <a href="index.html" class="btn-back">
-                    <i class="fa-solid fa-arrow-left"></i> Zum Eingang
-                </a>
-            </div>
-
-            <div class="page-title" style="font-size: 1.6rem; font-weight: bold; margin-bottom: 15px;">Held/in erstellen</div>
-
-            <div class="step-card">
-                <div class="step-title">Identität & Volk</div>
-                <div>
-                    <label for="char-name">Name</label>
-                    <input type="text" id="char-name" value="Gimble">
-                </div>
-                <div style="margin-top: 8px; display: flex; flex-direction: column; gap: 10px;">
-                    <div>
-                        <label>Volk</label>
-                        <div class="custom-dropdown-wrapper" id="wrap-main-race">
-                            <button type="button" class="custom-dropdown-trigger" onclick="toggleInlineDropdown('main-race', event)">
-                                <span id="val-main-race">Bitte wählen</span>
-                                <i class="fa-solid fa-chevron-down" style="color: var(--accent);" id="icon-main-race"></i>
-                            </button>
-                            <div id="inline-menu-main-race" class="custom-dropdown-inline-menu"></div>
-                        </div>
-                        <select id="main-race" style="display:none;" onchange="onMainRaceChange()"></select>
-                    </div>
-                    <div id="subrace-container" style="display: none;">
-                        <label>Abstammung</label>
-                        <div class="input-row">
-                            <div class="custom-dropdown-wrapper" id="wrap-sub-race" style="flex-grow:1;">
-                                <button type="button" class="custom-dropdown-trigger" onclick="toggleInlineDropdown('sub-race', event)">
-                                    <span id="val-sub-race">Bitte wählen</span>
-                                    <i class="fa-solid fa-chevron-down" style="color: var(--accent);" id="icon-sub-race"></i>
-                                </button>
-                                <div id="inline-menu-sub-race" class="custom-dropdown-inline-menu"></div>
-                            </div>
-                            <select id="sub-race" style="display:none;" onchange="updateSubraceOptions()"></select>
-                            <button type="button" class="info-btn" onclick="showRaceModal()">ℹ</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- KLASSE KASTEN -->
-            <div class="step-card">
-                <div class="step-title">Klasse & Optionen</div>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <div>
-                        <label>Klasse wählen</label>
-                        <div class="input-row">
-                            <div class="custom-dropdown-wrapper" id="wrap-class-select" style="flex-grow:1;">
-                                <button type="button" class="custom-dropdown-trigger" onclick="toggleInlineDropdown('class-select', event)">
-                                    <span id="val-class-select">Bitte wählen</span>
-                                    <i class="fa-solid fa-chevron-down" style="color: var(--accent);" id="icon-class-select"></i>
-                                </button>
-                                <div id="inline-menu-class-select" class="custom-dropdown-inline-menu"></div>
-                            </div>
-                            <select id="class-select" style="display:none;" onchange="onClassChange()"></select>
-                            <button type="button" class="info-btn" id="class-info-btn" onclick="showClassModal()"><i class="fa-solid fa-wrench" id="class-icon-indicator"></i></button>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="class-dynamic-options-container" style="display: none; margin-top: 10px;"></div>
-
-                <div id="spells-step-card" class="step-card" style="margin-top: 15px; box-shadow: none;">
-                    <label id="cantrip-label" style="margin-top:0; color:var(--accent);">Zaubertricks wählen</label>
-                    <div class="spell-container" id="cantrips-group"></div>
-
-                    <label id="prep-spells-label" style="margin-top:15px; color:var(--accent);">Stufe 1 Zauber wählen:</label>
-                    <div class="spell-container" id="level1-group"></div>
-                </div>
-            </div>
-
-            <!-- HINTERGRUND KASTEN -->
-            <div class="step-card">
-                <div class="step-title">Hintergrund</div>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <div>
-                        <label>Hintergrund wählen</label>
-                        <div class="input-row">
-                            <div class="custom-dropdown-wrapper" id="wrap-bg-select" style="flex-grow:1;">
-                                <button type="button" class="custom-dropdown-trigger" onclick="toggleInlineDropdown('bg-select', event)">
-                                    <span id="val-bg-select">Bitte wählen</span>
-                                    <i class="fa-solid fa-chevron-down" style="color: var(--accent);" id="icon-bg-select"></i>
-                                </button>
-                                <div id="inline-menu-bg-select" class="custom-dropdown-inline-menu"></div>
-                            </div>
-                            <select id="bg-select" style="display:none;" onchange="onBgChange()"></select>
-                            <button type="button" class="info-btn" onclick="showBgModal()">ℹ</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="step-card" style="margin-top: 12px; box-shadow: none;">
-                    <label style="margin-top:0; color:var(--accent);">Hintergrund-Attributsbonus (+3 Punkte):</label>
-                    <div class="custom-dropdown-wrapper" id="wrap-bg-asi-mode" style="margin-top:4px; margin-bottom:8px;">
-                        <button type="button" class="custom-dropdown-trigger" onclick="toggleInlineDropdown('bg-asi-mode', event)">
-                            <span id="val-bg-asi-mode">+2 auf ein Attribut, +1 auf ein anderes</span>
-                            <i class="fa-solid fa-chevron-down" style="color: var(--accent);" id="icon-bg-asi-mode"></i>
-                        </button>
-                        <div id="inline-menu-bg-asi-mode" class="custom-dropdown-inline-menu"></div>
-                    </div>
-                    <select id="bg-asi-mode" style="display:none;" onchange="onBgAsiModeChange()">
-                        <option value="2_1">+2 auf ein Attribut, +1 auf ein anderes</option>
-                        <option value="1_1_1">+1 auf drei verschiedene Attribute</option>
-                    </select>
-                    <div id="bg-asi-slots" class="grid-3" style="gap:6px;"></div>
-                    <div id="bg-asi-error" class="error" style="display:none; color: darkred; font-size: 0.85rem;">Wähle unterschiedliche Attribute ohne Dopplungen innerhalb der Boni!</div>
-                </div>
-
-                <div id="bg-dynamic-options-container" class="step-card" style="margin-top: 12px; display: none; box-shadow: none;">
-                    <div id="bg-tool-choice-wrapper" style="margin-bottom: 8px; display: none;">
-                        <label id="bg-tool-label" style="margin-top:0; color:var(--accent);">Werkzeug-Wahl:</label>
-                        <div class="custom-dropdown-wrapper" id="wrap-bg-tool-select" style="margin-top:4px;">
-                            <button type="button" class="custom-dropdown-trigger" onclick="toggleInlineDropdown('bg-tool-select', event)">
-                                <span id="val-bg-tool-select">Bitte wählen</span>
-                                <i class="fa-solid fa-chevron-down" style="color: var(--accent);" id="icon-bg-tool-select"></i>
-                            </button>
-                            <div id="inline-menu-bg-tool-select" class="custom-dropdown-inline-menu"></div>
-                        </div>
-                        <select id="bg-tool-select" style="display:none;"></select>
-                    </div>
-                    <div id="bg-eq-choice-wrapper" style="display: none;">
-                        <label id="bg-eq-label" style="margin-top:0; color:var(--accent);">Startausrüstung (Paket wählen):</label>
-                        <div class="custom-dropdown-wrapper" id="wrap-bg-eq-select" style="margin-top:4px;">
-                            <button type="button" class="custom-dropdown-trigger" onclick="toggleInlineDropdown('bg-eq-select', event)">
-                                <span id="val-bg-eq-select">Option A (Ausrüstungspaket + Werkzeug)</span>
-                                <i class="fa-solid fa-chevron-down" style="color: var(--accent);" id="icon-bg-eq-select"></i>
-                            </button>
-                            <div id="inline-menu-bg-eq-select" class="custom-dropdown-inline-menu"></div>
-                        </div>
-                        <select id="bg-eq-select" style="display:none;">
-                            <option value="A">Option A (Ausrüstungspaket + Werkzeug)</option>
-                            <option value="B">Option B (50 Goldstücke)</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="step-card">
-                <div class="step-title">Start-Attribute zuweisen</div>
-                <div class="grid-3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
-                    <div>
-                        <label>Stärke</label>
-                        <div class="custom-dropdown-wrapper" id="wrap-str-val">
-                            <button type="button" class="custom-dropdown-trigger" onclick="toggleInlineDropdown('str-val', event)"><span id="val-str-val">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;" id="icon-str-val"></i></button>
-                            <div id="inline-menu-str-val" class="custom-dropdown-inline-menu"></div>
-                        </div>
-                        <select class="array-select" id="str-val" style="display:none;" onchange="onStatsChange()"></select>
-                    </div>
-                    <div>
-                        <label>Geschicklichkeit</label>
-                        <div class="custom-dropdown-wrapper" id="wrap-dex-val">
-                            <button type="button" class="custom-dropdown-trigger" onclick="toggleInlineDropdown('dex-val', event)"><span id="val-dex-val">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;" id="icon-dex-val"></i></button>
-                            <div id="inline-menu-dex-val" class="custom-dropdown-inline-menu"></div>
-                        </div>
-                        <select class="array-select" id="dex-val" style="display:none;" onchange="onStatsChange()"></select>
-                    </div>
-                    <div>
-                        <label>Konstitution</label>
-                        <div class="custom-dropdown-wrapper" id="wrap-con-val">
-                            <button type="button" class="custom-dropdown-trigger" onclick="toggleInlineDropdown('con-val', event)"><span id="val-con-val">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;" id="icon-con-val"></i></button>
-                            <div id="inline-menu-con-val" class="custom-dropdown-inline-menu"></div>
-                        </div>
-                        <select class="array-select" id="con-val" style="display:none;" onchange="onStatsChange()"></select>
-                    </div>
-                    <div>
-                        <label>Intelligenz</label>
-                        <div class="custom-dropdown-wrapper" id="wrap-int-val">
-                            <button type="button" class="custom-dropdown-trigger" onclick="toggleInlineDropdown('int-val', event)"><span id="val-int-val">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;" id="icon-int-val"></i></button>
-                            <div id="inline-menu-int-val" class="custom-dropdown-inline-menu"></div>
-                        </div>
-                        <select class="array-select" id="int-val" style="display:none;" onchange="onStatsChange()"></select>
-                    </div>
-                    <div>
-                        <label>Weisheit</label>
-                        <div class="custom-dropdown-wrapper" id="wrap-wis-val">
-                            <button type="button" class="custom-dropdown-trigger" onclick="toggleInlineDropdown('wis-val', event)"><span id="val-wis-val">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;" id="icon-wis-val"></i></button>
-                            <div id="inline-menu-wis-val" class="custom-dropdown-inline-menu"></div>
-                        </div>
-                        <select class="array-select" id="wis-val" style="display:none;" onchange="onStatsChange()"></select>
-                    </div>
-                    <div>
-                        <label>Charisma</label>
-                        <div class="custom-dropdown-wrapper" id="wrap-cha-val">
-                            <button type="button" class="custom-dropdown-trigger" onclick="toggleInlineDropdown('cha-val', event)"><span id="val-cha-val">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;" id="icon-cha-val"></i></button>
-                            <div id="inline-menu-cha-val" class="custom-dropdown-inline-menu"></div>
-                        </div>
-                        <select class="array-select" id="cha-val" style="display:none;" onchange="onStatsChange()"></select>
-                    </div>
-                </div>
-                <div id="array-error" class="error" style="display:none; color: darkred; font-size: 0.85rem; margin-top: 5px;">Wähle 15, 14, 13, 12, 10, 8 ohne Dopplungen!</div>
-            </div>
-
-            <!-- FERTIGKEITEN -->
-            <div class="step-card" style="margin-bottom: 40px;">
-                <div class="step-title">Fertigkeiten wählen</div>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <div>
-                        <label>Fertigkeit 1</label>
-                        <div class="input-row">
-                            <div class="custom-dropdown-wrapper" id="wrap-skill1" style="flex-grow:1;">
-                                <button type="button" class="custom-dropdown-trigger" onclick="toggleInlineDropdown('skill1', event)">
-                                    <span id="val-skill1">Bitte wählen</span>
-                                    <i class="fa-solid fa-chevron-down" style="color: var(--accent);" id="icon-skill1"></i>
-                                </button>
-                                <div id="inline-menu-skill1" class="custom-dropdown-inline-menu"></div>
-                            </div>
-                            <select id="skill1" style="display:none;" onchange="validateSkills()"></select>
-                            <button type="button" class="info-btn" onclick="showSkillModal('skill1')">ℹ</button>
-                        </div>
-                    </div>
-                    <div>
-                        <label>Fertigkeit 2</label>
-                        <div class="input-row">
-                            <div class="custom-dropdown-wrapper" id="wrap-skill2" style="flex-grow:1;">
-                                <button type="button" class="custom-dropdown-trigger" onclick="toggleInlineDropdown('skill2', event)">
-                                    <span id="val-skill2">Bitte wählen</span>
-                                    <i class="fa-solid fa-chevron-down" style="color: var(--accent);" id="icon-skill2"></i>
-                                </button>
-                                <div id="inline-menu-skill2" class="custom-dropdown-inline-menu"></div>
-                            </div>
-                            <select id="skill2" style="display:none;" onchange="validateSkills()"></select>
-                            <button type="button" class="info-btn" onclick="showSkillModal('skill2')">ℹ</button>
-                        </div>
-                    </div>
-                </div>
-                <div id="skill-error" class="error" style="display:none; color: darkred; font-size: 0.85rem; margin-top: 5px;">Wähle 2 verschiedene Fertigkeiten, die sich nicht mit deinem Hintergrund überschneiden!</div>
-            </div>
-        </div>
+<div class="main-wrapper">
+    <!-- Nur der Zurück-Button -->
+    <div class="top-nav">
+        <a href="index.html" class="btn-back">
+            <i class="fa-solid fa-arrow-left"></i> Zum Eingang
+        </a>
     </div>
 
-    <!-- SEITE 2: HELD / CHARAKTERBLATT -->
-    <div class="book-page">
-        <div class="container" style="max-width:100%;">
-            <div id="sheet" class="step-card" style="display: block; margin-top: 10px; margin-bottom: 20px;">
-                <h2 id="screen-out-name" style="margin-top:0; color:var(--accent);"></h2>
-                <div id="screen-out-meta" style="font-size:0.9rem; color:var(--text-muted); text-align:center; margin-bottom:10px;"></div>
+    <!-- 3 Tabs Container -->
+    <div class="creator-tabs">
+        <button type="button" class="tab-btn active" onclick="switchTab('class', event)">Klasse</button>
+        <button type="button" class="tab-btn" onclick="switchTab('background', event)">Hintergrund</button>
+        <button type="button" class="tab-btn" onclick="switchTab('ethnia', event)">Ethnie</button>
+    </div>
+
+    <!-- TAB 1: KLASSE -->
+    <div id="tab-class" class="tab-content active">
+        <div class="step-card">
+            <div class="step-title">Klasse wählen</div>
+            <label for="class-select">Wähle deine Klasse</label>
+            <select id="class-select" onchange="onClassSelectionChange()">
+                <option value="">-- Wähle deine Klasse --</option>
+            </select>
+        </div>
+
+        <!-- Dynamischer Bereich, der sich sanft einblendet -->
+        <div id="class-dynamic-options" class="fade-in-section">
+            <div class="step-card">
+                <div class="step-title" id="class-summary-title">Klassen-Details</div>
+                <p id="class-summary-text" style="font-size: 0.95rem; margin-top: 0; color: var(--text-muted);"></p>
                 
-                <div style="margin-bottom: 12px;">
-                    <span class="badge" id="screen-out-hp" onclick="showCalcModal('HP')"></span>
-                    <span class="badge" id="screen-out-ac" onclick="showCalcModal('RK')"></span>
-                    <span class="badge" id="screen-out-init" onclick="showCalcModal('Initiative')"></span>
-                    <span class="badge" id="screen-out-prof" onclick="showCalcModal('Übungsbonus')">Übungsbonus: +2</span>
-                    <span class="badge" id="screen-out-speed" onclick="showCalcModal('Bewegungsrate')"></span>
+                <div style="margin-top: 12px;">
+                    <label>Fertigkeiten wählen</label>
+                    <div id="class-skills-container"></div>
                 </div>
+            </div>
 
-                <h3 style="color:var(--accent);">Attributswerte & Modifikatoren</h3>
-                <div class="grid-3" id="screen-out-stats" style="margin-bottom:15px;"></div>
+            <div class="step-card">
+                <div class="step-title">Startausrüstung</div>
+                <div id="class-equipment-container"></div>
+            </div>
 
-                <h3 style="color:var(--accent);">Fertigkeiten & Merkmale</h3>
-                <ul id="screen-out-features" style="margin-bottom:15px;"></ul>
-
-                <h3 style="color:var(--accent);">Ausrüstung & Waffen-Konfiguration</h3>
-                <div id="sheet-equipment-controls" class="step-card" style="padding:12px; box-shadow:none; margin-bottom:15px;"></div>
-
-                <h3 style="color:var(--accent);">Zauber & Zaubertricks Übersicht</h3>
-                <div id="screen-out-spells" style="margin-bottom:20px;"></div>
-
-                <div style="display: flex; gap: 10px; margin-top: 15px; margin-bottom: 40px;">
-                    <button class="main-btn" onclick="manualSaveCharacter()" style="margin-top:0; width: 100%;">
-                        <i class="fa-solid fa-floppy-disk"></i> Held speichern
-                    </button>
-                </div>
+            <div class="step-card" id="class-special-options-card" style="display: none;">
+                <div class="step-title" id="class-special-title">Spezielle Wahl</div>
+                <div id="class-special-container"></div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- MODAL: Änderungen übernehmen Abfrage -->
-<div id="change-confirm-modal" class="modal-overlay" style="display:none;">
-    <div class="modal-content" style="text-align: center; max-width: 340px;">
-        <div class="modal-title" style="justify-content: center;">
-            <span>Änderungen übernehmen?</span>
-        </div>
-        <div class="modal-body" style="font-size: 0.9rem; color: var(--text); margin: 15px 0;">
-            <span>Möchtest du die aktuellen Änderungen aus dem Formular für deinen Helden übernehmen?</span>
-        </div>
-        <div style="display: flex; gap: 10px; margin-top: 10px;">
-            <button onclick="confirmPageSwitch(true)" class="main-btn" style="flex: 1; font-weight:bold; margin-bottom:0;">Ja</button>
-            <button onclick="confirmPageSwitch(false)" class="main-btn" style="flex: 1; background: var(--btn-back-bg); color: var(--text); border: 1.5px solid var(--border); margin-bottom: 0;">Nein</button>
+    <!-- TAB 2: HINTERGRUND -->
+    <div id="tab-background" class="tab-content">
+        <div class="step-card">
+            <div class="step-title">Hintergrund</div>
+            <p>Hier entsteht die Hintergrund-Auswahl...</p>
         </div>
     </div>
-</div>
 
-<!-- MODAL: Einheitlicher Hinweis-Dialog -->
-<div id="custom-alert-modal" class="modal-overlay" style="display:none;">
-    <div class="modal-content" style="text-align: center; max-width: 320px;">
-        <div class="modal-title" style="justify-content: center;">
-            <span id="custom-alert-title">Hinweis</span>
+    <!-- TAB 3: ETHNIE -->
+    <div id="tab-ethnia" class="tab-content">
+        <div class="step-card">
+            <div class="step-title">Ethnie / Volk</div>
+            <p>Hier entsteht die Auswahl für Völker und Abstammungen...</p>
         </div>
-        <div class="modal-body" id="custom-alert-text" style="font-size: 0.9rem; color: var(--text); margin: 15px 0; font-weight: bold;">
-            Nachricht...
-        </div>
-        <button onclick="closeCustomAlert()" class="main-btn" style="background: var(--btn-back-bg); color: var(--text); border: 1.5px solid var(--border); margin-bottom: 0; width: 100%;">OK</button>
-    </div>
-</div>
-
-<div id="rule-modal" class="modal-overlay" onclick="closeModal()">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <div class="modal-title" id="modal-title">Regeldetails</div>
-        <div id="modal-subtitle-container"></div>
-        <div class="modal-body" id="modal-body">Beschreibungstext...</div>
     </div>
 </div>
 
 <script>
-let currentPage = 'create';
-let lastBuiltCharacter = null;
-let speciesData = {};
-let backgrounds = {};
 let classesData = {};
-let skillDescriptions = {};
-let spellCompendium = { cantrips: {}, level1: {} };
-let classSpellLists = {};
-let activeInlineDropdownId = null;
-
-const standardArray = [15, 14, 13, 12, 10, 8];
-
-const attributeDescriptions = {
-    "STR": "<b>Stärke:</b> Athletik, Nahkampfangriffe, Tragekapazität.",
-    "DEX": "<b>Geschicklichkeit:</b> Akrobatik, Fingerfertigkeit, Heimlichkeit, RK, Initiative.",
-    "CON": "<b>Konstitution:</b> Trefferpunkte, Konzentrationswürfe.",
-    "INT": "<b>Intelligenz:</b> Arkankunde, Geschichte, Untersuchung, Naturkunde, Religion.",
-    "WIS": "<b>Weisheit:</b> Tierumgang, Einblick, Heilkunde, Wahrnehmung, Überleben.",
-    "CHA": "<b>Charisma:</b> Täuschen, Einschüchtern, Auftreten, Überzeugen."
-};
-
-const attrNamesDE = {
-    "STR": "STR", "DEX": "GES", "CON": "KON",
-    "INT": "INT", "WIS": "WEI", "CHA": "CHA"
-};
 
 window.onload = async function() {
     try {
-        const [raceRes, classRes, bgRes] = await Promise.all([
-            fetch("rassen.json?t=" + new Date().getTime()),
-            fetch("klassen.json?t=" + new Date().getTime()),
-            fetch("hintergruende.json?t=" + new Date().getTime())
-        ]);
-
-        if (!raceRes.ok) throw new Error(`Fehler beim Laden von rassen.json (404)`);
-        if (!classRes.ok) throw new Error(`Fehler beim Laden von klassen.json (404)`);
-        if (!bgRes.ok) throw new Error(`Fehler beim Laden von hintergruende.json (404)`);
-
-        const raceJson = await raceRes.json();
-        speciesData = raceJson.races || raceJson;
-
+        const classRes = await fetch("klassen (6).json?t=" + new Date().getTime());
+        if (!classRes.ok) throw new Error("Fehler beim Laden von klassen (6).json");
+        
         const classJson = await classRes.json();
         classesData = classJson.classes || classJson;
 
-        const bgJson = await bgRes.json();
-        backgrounds = bgJson.backgrounds || bgJson;
-
-        skillDescriptions = {
-            "Arkane Kunde": "Wissen über magische Traditionen.", "Geschichte": "Erinnerung an vergangene Ereignisse.",
-            "Heilkunde": "Erste Hilfe und Medizin.", "Naturkunde": "Wissen über Natur und Tiere.",
-            "Religion": "Wissen über Gottheiten.", "Täuschen": "Lügen und Betrügen.",
-            "Überzeugen": "Freundliche Diplomatie.", "Einschüchtern": "Einschüchterung von Personen.",
-            "Motiv erkennen": "Absichten von Personen durchschauen.", "Athletik": "Körperliche Kraftakte.",
-            "Akrobatik": "Balance und Verwindungen.", "Heimlichkeit": "Leises Bewegen."
-        };
-
-        try {
-            const spellResponse = await fetch("spells-parsed.html?t=" + new Date().getTime());
-            if (spellResponse.ok) parseSpellsHtml(await spellResponse.text());
-        } catch (e) {}
-
-        try {
-            const listResponse = await fetch("spelllists-parsed.html?t=" + new Date().getTime());
-            if (listResponse.ok) parseSpellListsHtml(await listResponse.text());
-        } catch (e) {}
-
-        initApp();
-        handleUrlModeAndStartup();
+        initClassDropdown();
     } catch (err) {
-        showCustomAlert("Ladefehler: " + err.message, "Fehler");
+        console.error(err);
     }
 };
 
-// Globaler Klick-Handler zum Schließen des offenen Menüs bei Klick außerhalb
-window.addEventListener('click', function(e) {
-    if (!e.target.closest('.custom-dropdown-wrapper')) {
-        closeAllInlineDropdowns();
-    }
-});
+// Tab-Umschaltung
+function switchTab(tabId, event) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
 
-function closeAllInlineDropdowns() {
-    document.querySelectorAll('.custom-dropdown-inline-menu').forEach(menu => {
-        menu.style.display = 'none';
+    document.getElementById('tab-' + tabId).classList.add('active');
+    event.currentTarget.classList.add('active');
+}
+
+// Dropdown initialisieren
+function initClassDropdown() {
+    const sel = document.getElementById('class-select');
+    Object.keys(classesData).forEach(className => {
+        let opt = document.createElement('option');
+        opt.value = className;
+        opt.textContent = className;
+        sel.appendChild(opt);
     });
-    document.querySelectorAll('.custom-dropdown-trigger').forEach(btn => {
-        btn.style.borderBottomLeftRadius = '6px';
-        btn.style.borderBottomRightRadius = '6px';
-    });
-    activeInlineDropdownId = null;
 }
 
-function toggleInlineDropdown(id, event) {
-    event.stopPropagation();
-    event.preventDefault();
+// Logik bei Klassenauswahl mit Einblend-Effekt
+function onClassSelectionChange() {
+    const selVal = document.getElementById('class-select').value;
+    const dynamicSection = document.getElementById('class-dynamic-options');
 
-    const menu = document.getElementById('inline-menu-' + id);
-    const trigger = event.currentTarget;
-    if (!menu || !trigger) return;
-
-    const isOpen = menu.style.display === 'block';
-    closeAllInlineDropdowns();
-
-    if (!isOpen) {
-        const sel = document.getElementById(id);
-        if (!sel) return;
-
-        let html = '';
-        Array.from(sel.options).forEach(opt => {
-            let isSelected = sel.value === opt.value;
-            html += `<div class="custom-dropdown-item ${isSelected ? 'selected' : ''}" onclick="selectInlineOption('${id}', '${opt.value.replace(/'/g, "\\'")}')">${opt.text}</div>`;
-        });
-        menu.innerHTML = html;
-        menu.style.display = 'block';
-        trigger.style.borderBottomLeftRadius = '0';
-        trigger.style.borderBottomRightRadius = '0';
-        activeInlineDropdownId = id;
-    }
-}
-
-function selectInlineOption(id, val) {
-    const sel = document.getElementById(id);
-    if (sel) {
-        sel.value = val;
-        updateCustomDropdownLabel(id);
-        closeAllInlineDropdowns();
-
-        if (typeof sel.onchange === 'function') {
-            sel.onchange();
-        } else {
-            sel.dispatchEvent(new Event('change'));
-        }
-    }
-}
-
-function updateCustomDropdownLabel(id) {
-    const sel = document.getElementById(id);
-    const valSpan = document.getElementById('val-' + id);
-    if (sel && valSpan) {
-        valSpan.innerText = sel.options[sel.selectedIndex]?.text || sel.value || "--";
-    }
-}
-
-function setSelectValue(id, val) {
-    const sel = document.getElementById(id);
-    if (!sel) return;
-    sel.value = val;
-    updateCustomDropdownLabel(id);
-}
-
-function showCustomAlert(text, title = "Hinweis") {
-    document.getElementById('custom-alert-title').innerText = title;
-    document.getElementById('custom-alert-text').innerText = text;
-    document.getElementById('custom-alert-modal').style.display = 'flex';
-}
-
-function closeCustomAlert() {
-    document.getElementById('custom-alert-modal').style.display = 'none';
-}
-
-function requestSwitchToSheet() {
-    document.getElementById('change-confirm-modal').style.display = 'flex';
-}
-
-function confirmPageSwitch(doSave) {
-    document.getElementById('change-confirm-modal').style.display = 'none';
-    if (doSave) {
-        buildCharacterAndSave();
-    } else {
-        loadExistingOrFallbackCharacter();
-    }
-    executePageSwitch('sheet');
-}
-
-function switchToCreate() {
-    if (lastBuiltCharacter) {
-        loadCharacterIntoCreator(lastBuiltCharacter);
-    }
-    executePageSwitch('create');
-}
-
-function executePageSwitch(targetPage) {
-    currentPage = targetPage;
-    const wrapper = document.getElementById('bookWrapper');
-    const footerContainer = document.getElementById('footerNavContainer');
-
-    if (targetPage === 'sheet') {
-        wrapper.style.transform = 'translateX(-100vw)';
-        footerContainer.innerHTML = `
-            <button type="button" class="footer-tab-btn" onclick="switchToCreate()">
-                <i class="fa-solid fa-feather"></i> Held bearbeiten
-            </button>
-        `;
-    } else {
-        wrapper.style.transform = 'translateX(0vw)';
-        footerContainer.innerHTML = `
-            <button type="button" class="footer-tab-btn" onclick="requestSwitchToSheet()">
-                <i class="fa-solid fa-shield-halved"></i> Zum Heldenbogen
-            </button>
-        `;
-    }
-}
-
-function handleUrlModeAndStartup() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const mode = urlParams.get('mode');
-
-    if (mode === 'create') {
-        localStorage.removeItem('dnd_active_character');
-        lastBuiltCharacter = null;
-        executePageSwitch('create');
-    } else {
-        const activeCharJson = localStorage.getItem('dnd_active_character');
-        if (activeCharJson) {
-            try {
-                const char = JSON.parse(activeCharJson);
-                lastBuiltCharacter = char;
-                loadCharacterIntoCreator(char);
-                renderCharacterToSheet(char);
-                executePageSwitch('sheet');
-                return;
-            } catch (e) {}
-        }
-        buildCharacterAndSave();
-        executePageSwitch('create');
-    }
-}
-
-function loadExistingOrFallbackCharacter() {
-    const activeCharJson = localStorage.getItem('dnd_active_character');
-    if (activeCharJson) {
-        try {
-            lastBuiltCharacter = JSON.parse(activeCharJson);
-            renderCharacterToSheet(lastBuiltCharacter);
-            return;
-        } catch (e) {}
-    }
-    buildCharacterAndSave();
-}
-
-function loadCharacterIntoCreator(char) {
-    if (!char) return;
-    if (char.name && document.getElementById('char-name')) document.getElementById('char-name').value = char.name;
-    
-    if (char.mainRace && document.getElementById('main-race')) {
-        setSelectValue('main-race', char.mainRace);
-        onMainRaceChange();
-    }
-    if (char.species && document.getElementById('sub-race')) {
-        setSelectValue('sub-race', char.species);
-    }
-    
-    if (char.class && document.getElementById('class-select')) {
-        setSelectValue('class-select', char.class);
-        onClassChange();
-    }
-
-    if (char.background && document.getElementById('bg-select')) {
-        setSelectValue('bg-select', char.background);
-        onBgChange();
-    }
-
-    if (char.rawStats) {
-        if (document.getElementById('str-val')) setSelectValue('str-val', char.rawStats.STR);
-        if (document.getElementById('dex-val')) setSelectValue('dex-val', char.rawStats.DEX);
-        if (document.getElementById('con-val')) setSelectValue('con-val', char.rawStats.CON);
-        if (document.getElementById('int-val')) setSelectValue('int-val', char.rawStats.INT);
-        if (document.getElementById('wis-val')) setSelectValue('wis-val', char.rawStats.WIS);
-        if (document.getElementById('cha-val')) setSelectValue('cha-val', char.rawStats.CHA);
-    }
-
-    if (char.skills && char.skills.length >= 2) {
-        const bgSkills = backgrounds[char.background]?.skills || [];
-        const customSkills = char.skills.filter(s => !bgSkills.includes(s));
-        if (customSkills[0] && document.getElementById('skill1')) setSelectValue('skill1', customSkills[0]);
-        if (customSkills[1] && document.getElementById('skill2')) setSelectValue('skill2', customSkills[1]);
-    }
-}
-
-function buildCharacterAndSave() {
-    if (!validateArray() || !validateSkills() || !validateBgAsi()) {
-        showCustomAlert("Bitte behebe alle Validierungsfehler im Formular!", "Achtung");
+    if (!selVal) {
+        dynamicSection.classList.remove('visible');
         return;
     }
 
-    const name = document.getElementById('char-name').value || "Unbenannter Held";
-    const mainRace = document.getElementById('main-race').value || Object.keys(speciesData)[0];
-    const subRaceSelect = document.getElementById('sub-race');
-    const subRace = (subRaceSelect && subRaceSelect.offsetParent !== null) ? subRaceSelect.value : mainRace;
-    const clsName = document.getElementById('class-select').value || "Kämpfer";
-    const bg = document.getElementById('bg-select').value || Object.keys(backgrounds)[0];
+    const clsObj = classesData[selVal];
     
-    let rawStats = {
-        STR: parseInt(document.getElementById('str-val')?.value) || 15,
-        DEX: parseInt(document.getElementById('dex-val')?.value) || 14,
-        CON: parseInt(document.getElementById('con-val')?.value) || 13,
-        INT: parseInt(document.getElementById('int-val')?.value) || 12,
-        WIS: parseInt(document.getElementById('wis-val')?.value) || 10,
-        CHA: parseInt(document.getElementById('cha-val')?.value) || 8
-    };
+    // Inhalte füllen
+    document.getElementById('class-summary-title').textContent = selVal + " - Übersicht";
+    document.getElementById('class-summary-text').textContent = clsObj.summary || "";
 
-    let bgBonuses = getBgBonuses();
-    let stats = { ...rawStats };
-    for (let s in stats) {
-        if (bgBonuses[s]) stats[s] += bgBonuses[s];
-    }
+    // Fertigkeiten rendern
+    renderClassSkills(clsObj);
 
-    let mods = {};
-    for (let s in stats) mods[s] = getMod(stats[s]);
+    // Ausrüstung rendern
+    renderClassEquipment(clsObj);
 
-    const clsObj = classesData[clsName] || {};
-    const hpBase = clsObj.hitDice ? parseInt(clsObj.hitDice.replace('d', '')) : 8;
-    const hp = hpBase + mods.CON;
-    const ac = 10 + mods.DEX;
+    // Spezielle Optionen (wie Urtümliche / Göttliche Ordnung) prüfen
+    renderClassSpecialOptions(clsObj, selVal);
 
-    let chosenCantrips = Array.from(document.querySelectorAll('.char-cantrip-select')).map(s => s.value).filter(Boolean);
-    let chosenSpells = Array.from(document.querySelectorAll('.char-spell-select')).map(s => s.value).filter(Boolean);
-    const allSkills = [...(backgrounds[bg]?.skills || []), document.getElementById('skill1')?.value, document.getElementById('skill2')?.value].filter(Boolean);
-
-    const charId = (lastBuiltCharacter && lastBuiltCharacter.id) ? lastBuiltCharacter.id : 'char_' + Date.now();
-
-    lastBuiltCharacter = {
-        id: charId, 
-        name, 
-        class: clsName, 
-        species: subRace, 
-        mainRace: mainRace,
-        background: bg,
-        level: 1, 
-        hp, 
-        maxHp: hp, 
-        ac, 
-        speed: 9, 
-        stats, 
-        mods, 
-        rawStats,
-        skills: allSkills, 
-        cantrips: chosenCantrips, 
-        spells: chosenSpells, 
-        lastAccess: new Date().toISOString()
-    };
-
-    let list = JSON.parse(localStorage.getItem('dnd_character_list') || '[]');
-    const index = list.findIndex(c => c.id === lastBuiltCharacter.id);
-    if (index >= 0) {
-        list[index] = lastBuiltCharacter;
-    } else {
-        list.push(lastBuiltCharacter);
-    }
-
-    localStorage.setItem('dnd_character_list', JSON.stringify(list));
-    localStorage.setItem('dnd_active_character', JSON.stringify(lastBuiltCharacter));
-
-    renderCharacterToSheet(lastBuiltCharacter);
+    // Sanft einblenden
+    dynamicSection.classList.add('visible');
 }
 
-function renderCharacterToSheet(charData) {
-    if (!charData) return;
-    
-    document.getElementById('screen-out-name').innerHTML = `<i class="fa-solid ${getClassIcon(charData.class)}"></i> ${charData.name}`;
-    document.getElementById('screen-out-meta').innerText = `${charData.species} | ${charData.class} Stufe ${charData.level || 1} | ${charData.background}`;
-    document.getElementById('screen-out-hp').innerText = `HP: ${charData.hp}`;
-    document.getElementById('screen-out-ac').innerText = `RK: ${charData.ac}`;
-    document.getElementById('screen-out-init').innerText = `Initiative: ${charData.mods.DEX >= 0 ? '+' : ''}${charData.mods.DEX}`;
-    document.getElementById('screen-out-prof').innerText = `Übungsbonus: +2`;
-    document.getElementById('screen-out-speed').innerText = `Bewegungsrate: ${charData.speed || 9} Meter`;
-
-    document.getElementById('screen-out-stats').innerHTML = Object.keys(charData.stats).map(s => `
-        <div class="stat-box" onclick="openModal('${s} Wert', '${attributeDescriptions[s]}')">
-            <div style="font-size:0.75rem; color:var(--text-muted);">${s}</div>
-            <div class="stat-val">${charData.stats[s]}</div>
-            <div class="stat-mod">${charData.mods[s] >= 0 ? '+' : ''}${charData.mods[s]}</div>
-        </div>`).join('');
-
-    const bgObj = backgrounds[charData.background] || {};
-    let bgCustomData = getSelectedBgEquipmentAndTools(charData.background);
-    let flattenedTools = flattenEquipment(bgCustomData.tools);
-    let flattenedEq = flattenEquipment(bgCustomData.equipment);
-    let toolsStr = flattenedTools.join(', ') || 'Keine';
-    let eqStr = flattenedEq.join(', ') || 'Keine';
-
-    document.getElementById('screen-out-features').innerHTML = `
-        <li><b>Fertigkeiten:</b> ${charData.skills.join(', ')}</li>
-        <li><b>Volksmerkmale:</b> Geladener Charakter aus rassen.json</li>
-        <li><b>Talent:</b> ${bgObj.feat || ''}</li>
-        <li><b>Werkzeuge:</b> ${toolsStr}</li>
-        <li><b>Hintergrund-Ausrüstung:</b> ${eqStr}</li>
-    `;
-
-    renderEquipmentSectionInSheet(charData.class, bgCustomData);
-
-    document.getElementById('screen-out-spells').innerHTML = `
-        <div style="font-weight:bold; font-size:0.85rem; color:var(--text-muted);">Zaubertricks:</div>
-        <div>${(charData.cantrips || []).join(', ') || 'Keine'}</div>
-        <div style="margin-top:8px; font-weight:bold; font-size:0.85rem; color:var(--text-muted);">Vorbereitete Stufe 1 Zauber:</div>
-        <div>${(charData.spells || []).join(', ') || 'Keine'}</div>
-    `;
-}
-
-function parseSpellsHtml(htmlText) {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(htmlText, 'text/html');
-    doc.querySelectorAll('.spell').forEach(div => {
-        const h5 = div.querySelector('h5');
-        if (!h5) return;
-        const name = h5.textContent.trim();
-        if (div.textContent.includes('Zaubertrick')) spellCompendium.cantrips[name] = { rule: div.innerHTML };
-        else if (div.textContent.includes('1. Grades')) spellCompendium.level1[name] = { rule: div.innerHTML };
-    });
-}
-
-function parseSpellListsHtml(htmlText) {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(htmlText, 'text/html');
-    doc.querySelectorAll('h4').forEach(h4 => {
-        let className = h4.textContent.replace('Zauber des ', '').replace('Zauber der ', '').trim();
-        const map = { "Barden": "Barde", "Druiden": "Druide", "Hexenmeisters": "Hexenmeister", "Klerikers": "Kleriker", "Magiers": "Magier", "Paladins": "Paladin", "Waldläufers": "Waldläufer", "Zauberers": "Zauberer" };
-        if (map[className]) className = map[className];
-
-        if (!classSpellLists[className]) classSpellLists[className] = { cantrips: [], level1: [] };
-
-        let next = h4.nextElementSibling;
-        let lvl = null;
-        while (next && next.tagName !== 'H4') {
-            if (next.tagName === 'H5') {
-                lvl = next.textContent.toLowerCase().includes('zaubertrick') ? 'cantrips' : (next.textContent.toLowerCase().includes('1. grad') ? 'level1' : null);
-            } else if (next.tagName === 'UL' && lvl) {
-                next.querySelectorAll('a').forEach(a => {
-                    let s = a.textContent.trim();
-                    if (s && !classSpellLists[className][lvl].includes(s)) classSpellLists[className][lvl].push(s);
-                });
-            }
-            next = next.nextElementSibling;
+function renderClassSkills(clsObj) {
+    const container = document.getElementById('class-skills-container');
+    container.innerHTML = "";
+    if (clsObj.proficiencies && clsObj.proficiencies.skills) {
+        let skillInfo = clsObj.proficiencies.skills;
+        let html = `<p style="font-size:0.85rem; margin-bottom:6px;">Wähle ${skillInfo.choose} aus: ${skillInfo.from.join(', ')}</p>`;
+        for(let i=0; i < skillInfo.choose; i++) {
+            html += `<select style="margin-bottom:6px;"><option value="">-- Fertigkeit ${i+1} --</option>`;
+            skillInfo.from.forEach(sk => html += `<option value="${sk}">${sk}</option>`);
+            html += `</select>`;
         }
-    });
-}
-
-function initApp() {
-    populateSelect('main-race', Object.keys(speciesData));
-    populateSelect('class-select', Object.keys(classesData));
-    populateSelect('bg-select', Object.keys(backgrounds));
-
-    const arraySelects = document.querySelectorAll('.array-select');
-    arraySelects.forEach((sel, idx) => {
-        sel.innerHTML = '<option value="">--</option>';
-        standardArray.forEach(val => sel.innerHTML += `<option value="${val}">${val}</option>`);
-        sel.selectedIndex = idx + 1;
-        updateCustomDropdownLabel(sel.id);
-    });
-
-    onMainRaceChange();
-    onClassChange();
-    updateBgDynamicUI();
-}
-
-function populateSelect(id, items) {
-    const sel = document.getElementById(id);
-    if (!sel) return;
-    sel.innerHTML = '';
-    items.forEach(i => sel.innerHTML += `<option value="${i}">${i}</option>`);
-    updateCustomDropdownLabel(id);
-}
-
-function openModal(title, text, iconClass = null, subtitle = null) {
-    const titleElem = document.getElementById('modal-title');
-    const subContainer = document.getElementById('modal-subtitle-container');
-    const modalBody = document.getElementById('modal-body');
-    const ruleModal = document.getElementById('rule-modal');
-
-    if (!titleElem || !modalBody || !ruleModal) return;
-
-    titleElem.innerHTML = iconClass ? `<span class="modal-icon-box"><i class="fa-solid ${iconClass}"></i></span> ${title}` : title;
-    if (subContainer) {
-        subContainer.innerHTML = subtitle ? `<div class="modal-subtitle">${subtitle}</div>` : '';
-    }
-
-    modalBody.innerHTML = text;
-    ruleModal.style.display = 'flex';
-    document.body.classList.add('modal-open');
-}
-
-function closeModal() {
-    const ruleModal = document.getElementById('rule-modal');
-    if (ruleModal) ruleModal.style.display = 'none';
-    document.body.classList.remove('modal-open');
-}
-
-function showRaceModal() {
-    const mainRace = document.getElementById('main-race').value;
-    const raceObj = speciesData[mainRace];
-    if (!raceObj) return;
-    let desc = raceObj.description || "Keine Beschreibung verfügbar.";
-    openModal(mainRace, desc, "fa-child");
-}
-
-async function showClassModal() {
-    const clsName = document.getElementById('class-select').value;
-    const clsObj = classesData[clsName];
-    if (!clsObj) return openModal(clsName, "Keine Details vorhanden.", getClassIcon(clsName));
-
-    let html = `<b>Zusammenfassung:</b> ${clsObj.summary || ''}<br>`;
-    if (clsObj.hitDice) html += `<b>Trefferwürfel:</b> ${clsObj.hitDice}<br>`;
-    if (clsObj.primaryAbility) html += `<b>Primärattribut:</b> ${clsObj.primaryAbility}<br>`;
-    
-    openModal(clsName, html, getClassIcon(clsName));
-}
-
-function showBgModal() {
-    const b = document.getElementById('bg-select').value;
-    const bg = backgrounds[b];
-    if (!bg) return;
-    openModal(b, `<b>Mögliche Attribute:</b> ${bg.attributes.map(a => attrNamesDE[a] || a).join(', ')}<br><b>Talent:</b> ${bg.feat}<br><b>Fertigkeiten:</b> ${bg.skills.join(', ')}<br><br>${bg.text}`, "fa-book");
-}
-
-function showSkillModal(selectId) {
-    const skill = document.getElementById(selectId).value;
-    openModal(skill, skillDescriptions[skill] || "Keine Beschreibung verfügbar.", "fa-check");
-}
-
-function showSpellModalFromDropdown(selectElem) {
-    showSpellModalByName(selectElem.value);
-}
-
-function showSpellModalByName(spellName) {
-    if (!spellName) return;
-    let clean = spellName.replace(/ \((Racial|Auto|.*)\)/, '').trim();
-    let obj = spellCompendium.cantrips[clean] || spellCompendium.level1[clean] || spellCompendium.cantrips[spellName] || spellCompendium.level1[spellName];
-
-    if (!obj) return openModal(clean, "Keine detaillierte Beschreibung verfügbar.", "fa-wand-magic-sparkles");
-
-    let temp = document.createElement('div');
-    temp.innerHTML = obj.rule;
-    if (temp.querySelector('h5')) temp.querySelector('h5').remove();
-
-    let school = "";
-    temp.querySelectorAll('p, div').forEach(p => {
-        if (p.textContent.includes('Zaubertrick') || p.textContent.includes('Grades')) {
-            school = p.textContent.trim();
-            p.remove();
-        }
-    });
-
-    openModal(clean, temp.innerHTML, "fa-wand-magic-sparkles", school);
-}
-
-function showCalcModal(type) {
-    if (!lastBuiltCharacter) return;
-    const c = lastBuiltCharacter;
-    let text = "";
-    if (type === 'HP') text = `Basis: ${c.hp - c.mods.CON}<br>+ Konstitution (${c.mods.CON}): ${c.mods.CON}<br><b>Total: ${c.hp}</b>`;
-    else if (type === 'RK') text = `Basis: 10<br>+ Geschicklichkeit (${c.mods.DEX}): ${c.mods.DEX}<br><b>Total: ${c.ac}</b>`;
-    else if (type === 'Initiative') text = `Geschicklichkeits-Modifikator: ${c.mods.DEX}`;
-    else if (type === 'Übungsbonus') text = `Stufe 1–4 = +2`;
-    else if (type === 'Bewegungsrate') text = `${c.speed || 9} Meter`;
-    openModal(type, text, "fa-calculator");
-}
-
-function getClassIcon(className) {
-    switch (className) {
-        case "Artificer":
-        case "Artifizier": return "fa-wrench";
-        case "Barbar": return "fa-hammer";
-        case "Barde": return "fa-guitar";
-        case "Kleriker": return "fa-cross";
-        case "Druide": return "fa-tree";
-        case "Kämpfer": return "fa-shield";
-        case "Mönch": return "fa-ring";
-        case "Paladin": return "fa-shield";
-        case "Waldläufer": return "fa-crosshairs";
-        case "Schurke": return "fa-dagger";
-        case "Zauberer": return "fa-fire";
-        case "Hexenmeister": return "fa-star-of-life";
-        case "Magier": return "fa-hat-wizard";
-        default: return "fa-user";
-    }
-}
-
-function updateClassIconDisplay() {
-    const c = document.getElementById('class-select').value;
-    const iconElem = document.getElementById('class-icon-indicator');
-    if (iconElem) iconElem.className = `fa-solid ${getClassIcon(c)}`;
-}
-
-function onMainRaceChange() {
-    const mainRace = document.getElementById('main-race').value;
-    const subContainer = document.getElementById('subrace-container');
-    const subSelect = document.getElementById('sub-race');
-    const raceObj = speciesData[mainRace];
-
-    if (!subSelect || !subContainer) return;
-
-    if (raceObj && raceObj.subtypes && raceObj.subtypes.choice && raceObj.subtypes.choice.options) {
-        subSelect.innerHTML = '';
-        raceObj.subtypes.choice.options.forEach(subOpt => {
-            subSelect.innerHTML += `<option value="${subOpt.name}">${subOpt.name}</option>`;
-        });
-        subContainer.style.display = 'block';
-    } else {
-        subSelect.innerHTML = '';
-        subContainer.style.display = 'none';
-    }
-    updateCustomDropdownLabel('sub-race');
-    updateSubraceOptions();
-}
-
-function updateSubraceOptions() {
-    updateSpellsUI();
-}
-
-function onClassChange() {
-    const clsName = document.getElementById('class-select').value;
-    updateClassIconDisplay();
-
-    const s1 = document.getElementById('skill1');
-    const s2 = document.getElementById('skill2');
-    const clsObj = classesData[clsName];
-
-    if (s1 && s2 && clsObj && clsObj.proficiencies && clsObj.proficiencies.skills) {
-        s1.innerHTML = ''; s2.innerHTML = '';
-        const skills = clsObj.proficiencies.skills.from || ["Akrobatik", "Athletik"];
-        skills.forEach(sk => {
-            s1.innerHTML += `<option value="${sk}">${sk}</option>`;
-            s2.innerHTML += `<option value="${sk}">${sk}</option>`;
-        });
-        s1.selectedIndex = 0;
-        s2.selectedIndex = skills.length > 1 ? 1 : 0;
-        updateCustomDropdownLabel('skill1');
-        updateCustomDropdownLabel('skill2');
-        validateSkills();
-    }
-
-    renderClassDynamicOptions(clsObj);
-    updateSpellsUI();
-}
-
-function renderClassDynamicOptions(clsObj) {
-    const container = document.getElementById('class-dynamic-options-container');
-    if (!container) return;
-
-    if (!clsObj || !clsObj.proficiencies) {
-        container.style.display = 'none';
-        container.innerHTML = '';
-        return;
-    }
-
-    let html = '';
-
-    if (clsObj.proficiencies.tools && clsObj.proficiencies.tools.choice) {
-        const toolChoice = clsObj.proficiencies.tools.choice;
-        html += `<div class="selection-group">`;
-        html += `<label style="margin-top:0; color:var(--accent);">${toolChoice.text || 'Werkzeug-Wahl:'}</label>`;
-        html += `<div style="margin-top: 8px;">`;
-        html += `<button type="button" class="main-btn" onclick='openToolSelectionModal(${JSON.stringify(toolChoice)})' style="margin-bottom: 0; width: 100%;">
-                    <i class="fa-solid fa-list-check" style="color: var(--accent);"></i> <span id="tool-selection-button-label">Auswahl treffen (${toolChoice.choose} wählen)</span>
-                 </button>`;
-        html += `</div></div>`;
-    }
-
-    if (clsObj.startingEquipment) {
-        html += `<div class="selection-group">`;
-        html += `<label style="margin-top:0; color:var(--accent);">Startausrüstung wählen:</label>`;
-        
-        ['choiceA', 'choiceB', 'choiceC'].forEach((choiceKey, index) => {
-            if (clsObj.startingEquipment[choiceKey]) {
-                const labelChar = String.fromCharCode(65 + index);
-                const itemsStr = clsObj.startingEquipment[choiceKey].map(i => `${i.qty || 1}x ${i.name}${i.unit ? ' ' + i.unit : ''}`).join(', ');
-                html += `<div style="margin-top:6px;">`;
-                html += `<label style="font-weight:normal;"><input type="radio" name="class_eq_package" value="${choiceKey}" ${index === 0 ? 'checked' : ''}> <strong>Option ${labelChar}:</strong> ${itemsStr}</label>`;
-                html += `</div>`;
-            }
-        });
-
-        if (clsObj.startingEquipment.additionalItems) {
-            const addStr = clsObj.startingEquipment.additionalItems.map(i => `${i.qty || 1}x ${i.name}`).join(', ');
-            html += `<div style="margin-top:6px; font-size:0.85rem; color:var(--text-muted);"><b>Zusätzlich enthalten:</b> ${addStr}</div>`;
-        }
-        html += `</div>`;
-    }
-
-    if (html !== '') {
         container.innerHTML = html;
-        container.style.display = 'block';
-    } else {
-        container.style.display = 'none';
-        container.innerHTML = '';
     }
 }
 
-let activeToolChoiceData = null;
-
-function openToolSelectionModal(toolChoice) {
-    activeToolChoiceData = toolChoice;
-    const modal = document.getElementById('selection-modal');
-    if (!modal) return;
-}
-
-function onBgChange() {
-    updateBgDynamicUI();
-    validateSkills();
-}
-
-function onBgAsiModeChange() { updateBgAsiUI(); }
-
-function updateBgDynamicUI() {
-    updateBgAsiUI();
-    updateBgToolAndEquipmentUI();
-}
-
-function updateBgAsiUI() {
-    const bgName = document.getElementById('bg-select').value;
-    const bgObj = backgrounds[bgName];
-    const slotsContainer = document.getElementById('bg-asi-slots');
-    const mode = document.getElementById('bg-asi-mode').value;
-    
-    if (!slotsContainer) return;
-    if (!bgObj || !bgObj.attributes) { slotsContainer.innerHTML = ''; return; }
-
-    slotsContainer.innerHTML = '';
-    let optionsHtml = bgObj.attributes.map(attr => `<option value="${attr}">${attrNamesDE[attr] || attr}</option>`).join('');
-
-    if (mode === "2_1") {
-        slotsContainer.innerHTML = `
-            <div>
-                <label style="font-size:0.75rem;">+2 Wert</label>
-                <div class="custom-dropdown-wrapper" id="wrap-bg-asi-2">
-                    <button type="button" class="custom-dropdown-trigger" onclick="toggleInlineDropdown('bg-asi-2', event)"><span id="val-bg-asi-2">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;" id="icon-bg-asi-2"></i></button>
-                    <div id="inline-menu-bg-asi-2" class="custom-dropdown-inline-menu"></div>
-                </div>
-                <select id="bg-asi-2" style="display:none;" onchange="validateBgAsi()">${optionsHtml}</select>
-            </div>
-            <div>
-                <label style="font-size:0.75rem;">+1 Wert</label>
-                <div class="custom-dropdown-wrapper" id="wrap-bg-asi-1a">
-                    <button type="button" class="custom-dropdown-trigger" onclick="toggleInlineDropdown('bg-asi-1a', event)"><span id="val-bg-asi-1a">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;" id="icon-bg-asi-1a"></i></button>
-                    <div id="inline-menu-bg-asi-1a" class="custom-dropdown-inline-menu"></div>
-                </div>
-                <select id="bg-asi-1a" style="display:none;" onchange="validateBgAsi()">${optionsHtml}</select>
-            </div>
-            <div></div>`;
-        const sel1a = document.getElementById('bg-asi-1a');
-        if (sel1a && bgObj.attributes.length > 1) {
-            sel1a.selectedIndex = 1;
-            updateCustomDropdownLabel('bg-asi-1a');
-        }
-        const sel2 = document.getElementById('bg-asi-2');
-        if (sel2 && bgObj.attributes.length > 0) {
-            sel2.selectedIndex = 0;
-            updateCustomDropdownLabel('bg-asi-2');
-        }
-    } else {
-        slotsContainer.innerHTML = `
-            <div>
-                <label style="font-size:0.75rem;">+1</label>
-                <div class="custom-dropdown-wrapper" id="wrap-bg-asi-1a">
-                    <button type="button" class="custom-dropdown-trigger" onclick="toggleInlineDropdown('bg-asi-1a', event)"><span id="val-bg-asi-1a">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;" id="icon-bg-asi-1a"></i></button>
-                    <div id="inline-menu-bg-asi-1a" class="custom-dropdown-inline-menu"></div>
-                </div>
-                <select id="bg-asi-1a" style="display:none;" onchange="validateBgAsi()">${optionsHtml}</select>
-            </div>
-            <div>
-                <label style="font-size:0.75rem;">+1</label>
-                <div class="custom-dropdown-wrapper" id="wrap-bg-asi-1b">
-                    <button type="button" class="custom-dropdown-trigger" onclick="toggleInlineDropdown('bg-asi-1b', event)"><span id="val-bg-asi-1b">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;" id="icon-bg-asi-1b"></i></button>
-                    <div id="inline-menu-bg-asi-1b" class="custom-dropdown-inline-menu"></div>
-                </div>
-                <select id="bg-asi-1b" style="display:none;" onchange="validateBgAsi()">${optionsHtml}</select>
-            </div>
-            <div>
-                <label style="font-size:0.75rem;">+1</label>
-                <div class="custom-dropdown-wrapper" id="wrap-bg-asi-1c">
-                    <button type="button" class="custom-dropdown-trigger" onclick="toggleInlineDropdown('bg-asi-1c', event)"><span id="val-bg-asi-1c">--</span><i class="fa-solid fa-chevron-down" style="color:var(--accent); font-size:0.8rem;" id="icon-bg-asi-1c"></i></button>
-                    <div id="inline-menu-bg-asi-1c" class="custom-dropdown-inline-menu"></div>
-                </div>
-                <select id="bg-asi-1c" style="display:none;" onchange="validateBgAsi()">${optionsHtml}</select>
-            </div>`;
-        const sel1a = document.getElementById('bg-asi-1a'), sel1b = document.getElementById('bg-asi-1b'), sel1c = document.getElementById('bg-asi-1c');
-        if (sel1a && bgObj.attributes.length > 0) { sel1a.selectedIndex = 0; updateCustomDropdownLabel('bg-asi-1a'); }
-        if (sel1b && bgObj.attributes.length > 1) { sel1b.selectedIndex = 1; updateCustomDropdownLabel('bg-asi-1b'); }
-        if (sel1c && bgObj.attributes.length > 2) { sel1c.selectedIndex = 2; updateCustomDropdownLabel('bg-asi-1c'); }
-    }
-    validateBgAsi();
-}
-
-function updateBgToolAndEquipmentUI() {
-    const bgName = document.getElementById('bg-select').value;
-    const bgObj = backgrounds[bgName];
-    const container = document.getElementById('bg-dynamic-options-container');
-    const toolWrapper = document.getElementById('bg-tool-choice-wrapper');
-    const toolLabel = document.getElementById('bg-tool-label');
-    const toolSelect = document.getElementById('bg-tool-select');
-    const eqWrapper = document.getElementById('bg-eq-choice-wrapper');
-
-    if (!container) return;
-    if (!bgObj) { container.style.display = 'none'; return; }
-
-    let hasChoices = false;
-    let toolsDef = bgObj.tools;
-    if (toolsDef && typeof toolsDef === 'object' && toolsDef.choiceA && toolsDef.choiceA.options) {
-        if (toolLabel) toolLabel.innerText = toolsDef.choiceA.text || "Werkzeug-Wahl:";
-        if (toolSelect) {
-            toolSelect.innerHTML = '';
-            toolsDef.choiceA.options.forEach(opt => toolSelect.options.add(new Option(opt, opt)));
-            updateCustomDropdownLabel('bg-tool-select');
-        }
-        if (toolWrapper) toolWrapper.style.display = 'block';
-        hasChoices = true;
-    } else {
-        if (toolWrapper) toolWrapper.style.display = 'none';
-    }
-
-    if (bgObj.equipment && bgObj.equipment.choiceA && bgObj.equipment.choiceB) {
-        if (eqWrapper) eqWrapper.style.display = 'block';
-        hasChoices = true;
-    } else {
-        if (eqWrapper) eqWrapper.style.display = 'none';
-    }
-
-    container.style.display = hasChoices ? 'block' : 'none';
-}
-
-function validateBgAsi() {
-    const mode = document.getElementById('bg-asi-mode').value;
-    const errElem = document.getElementById('bg-asi-error');
-    if (!errElem) return true;
-
-    let isValid = true;
-    if (mode === "2_1") {
-        const sel2 = document.getElementById('bg-asi-2');
-        const sel1a = document.getElementById('bg-asi-1a');
-        if (sel2 && sel1a && sel2.value === sel1a.value) isValid = false;
-    } else {
-        const v1 = document.getElementById('bg-asi-1a')?.value;
-        const v2 = document.getElementById('bg-asi-1b')?.value;
-        const v3 = document.getElementById('bg-asi-1c')?.value;
-        if (v1 && v2 && v3 && (v1 === v2 || v1 === v3 || v2 === v3)) isValid = false;
-    }
-    errElem.style.display = isValid ? 'none' : 'block';
-    return isValid;
-}
-
-function getBgBonuses() {
-    const mode = document.getElementById('bg-asi-mode').value;
-    let bonuses = { STR: 0, DEX: 0, CON: 0, INT: 0, WIS: 0, CHA: 0 };
-    if (!validateBgAsi()) return bonuses;
-
-    if (mode === "2_1") {
-        const val2 = document.getElementById('bg-asi-2')?.value;
-        const val1a = document.getElementById('bg-asi-1a')?.value;
-        if (val2 && bonuses[val2] !== undefined) bonuses[val2] += 2;
-        if (val1a && bonuses[val1a] !== undefined) bonuses[val1a] += 1;
-    } else {
-        const v1 = document.getElementById('bg-asi-1a')?.value;
-        const v2 = document.getElementById('bg-asi-1b')?.value;
-        const v3 = document.getElementById('bg-asi-1c')?.value;
-        if (v1 && bonuses[v1] !== undefined) bonuses[v1] += 1;
-        if (v2 && bonuses[v2] !== undefined) bonuses[v2] += 1;
-        if (v3 && bonuses[v3] !== undefined) bonuses[v3] += 1;
-    }
-    return bonuses;
-}
-
-function getSelectedBgEquipmentAndTools(bgName) {
-    const bgObj = backgrounds[bgName];
-    if (!bgObj) return { tools: [], equipment: [] };
-
-    let tools = [];
-    if (bgObj.tools) {
-        if (typeof bgObj.tools === 'object' && bgObj.tools.choiceA && bgObj.tools.choiceA.options) {
-            let selectedTool = document.getElementById('bg-tool-select')?.value;
-            if (selectedTool) tools.push(selectedTool);
-        } else if (Array.isArray(bgObj.tools)) {
-            tools = [...bgObj.tools];
-        } else if (typeof bgObj.tools === 'string') {
-            tools = [bgObj.tools];
-        }
-    }
-
-    let eqMode = document.getElementById('bg-eq-select')?.value || 'A';
-    let equipmentRaw = eqMode === 'B' ? bgObj.equipment.choiceB : bgObj.equipment.choiceA;
-    
-    let equipment = [];
-    if (equipmentRaw) {
-        if (typeof equipmentRaw === 'object' && !Array.isArray(equipmentRaw)) {
-            if (equipmentRaw.options) {
-                let chosenTool = document.getElementById('bg-tool-select')?.value;
-                if (chosenTool) equipment.push({ name: chosenTool, qty: 1 });
-            }
-            if (equipmentRaw.additionalItems && Array.isArray(equipmentRaw.additionalItems)) {
-                equipment.push(...equipmentRaw.additionalItems);
-            }
-        } else if (Array.isArray(equipmentRaw)) {
-            equipment = [...equipmentRaw];
-        }
-    }
-
-    return { tools: tools.filter(Boolean), equipment: equipment };
-}
-
-function getMod(score) { return Math.floor((score - 10) / 2); }
-function onStatsChange() { validateArray(); updateSpellsUI(); }
-
-function validateArray() {
-    const vals = Array.from(document.querySelectorAll('.array-select')).map(s => parseInt(s.value)).filter(v => !isNaN(v));
-    const errElem = document.getElementById('array-error');
-    if (!errElem) return true;
-    const isValid = vals.length === 6 && new Set(vals).size === 6;
-    errElem.style.display = isValid ? 'none' : 'block';
-    return isValid;
-}
-
-function validateSkills() {
-    const sk1 = document.getElementById('skill1')?.value;
-    const sk2 = document.getElementById('skill2')?.value;
-    const bgElem = document.getElementById('bg-select');
-    const errElem = document.getElementById('skill-error');
-    if (!errElem || !bgElem) return true;
-
-    const bgSkills = backgrounds[bgElem.value]?.skills || [];
-    const isValid = (sk1 && sk2 && sk1 !== sk2) && !bgSkills.includes(sk1) && !bgSkills.includes(sk2);
-    errElem.style.display = isValid ? 'none' : 'block';
-    return isValid;
-}
-
-function updateSpellsUI() {
-    const clsName = document.getElementById('class-select')?.value;
-    const cantripGroup = document.getElementById('cantrips-group');
-    const lvl1Group = document.getElementById('level1-group');
-    const cantripLabel = document.getElementById('cantrip-label');
-    const prepLabel = document.getElementById('prep-spells-label');
-
-    if (!cantripGroup || !lvl1Group) return;
-
-    cantripGroup.innerHTML = ''; 
-    lvl1Group.innerHTML = '';
-
-    const nonCasters = ["Kämpfer", "Barbar", "Schurke", "Mönch"];
-    if (nonCasters.includes(clsName)) {
-        if (cantripLabel) cantripLabel.innerText = "Zaubertricks: Keine für diese Klasse.";
-        if (prepLabel) prepLabel.innerText = "Stufe 1 Zauber: Keine für diese Klasse.";
-        return;
-    }
-
-    let allowedCantrips = classSpellLists[clsName]?.cantrips?.length ? classSpellLists[clsName].cantrips : Object.keys(spellCompendium.cantrips);
-    let maxCantrips = 2;
-    
-    if (cantripLabel) cantripLabel.innerText = `Wähle ${maxCantrips} Zaubertricks:`;
-    for (let i = 0; i < maxCantrips; i++) {
-        let opts = allowedCantrips.map(c => `<option value="${c}">${c}</option>`).join('');
-        let uniqueId = 'spell_c_' + i;
-        cantripGroup.innerHTML += `
-            <div class="input-row">
-                <div class="custom-dropdown-wrapper" id="wrap-${uniqueId}" style="flex-grow:1;">
-                    <button type="button" class="custom-dropdown-trigger" onclick="toggleInlineDropdown('${uniqueId}', event)">
-                        <span id="val-${uniqueId}">-- Wählen --</span>
-                        <i class="fa-solid fa-chevron-down" style="color: var(--accent);" id="icon-${uniqueId}"></i>
-                    </button>
-                    <div id="inline-menu-${uniqueId}" class="custom-dropdown-inline-menu"></div>
-                </div>
-                <select class="char-cantrip-select" id="${uniqueId}" style="display:none;"><option value="">-- Wählen --</option>${opts}</select>
-                <button type="button" class="info-btn" onclick="showSpellModalFromDropdown(document.getElementById('${uniqueId}'))">✨</button>
-            </div>`;
-    }
-
-    let allowedLvl1 = classSpellLists[clsName]?.level1?.length ? classSpellLists[clsName].level1 : Object.keys(spellCompendium.level1);
-    let maxPrep = 2;
-    if (prepLabel) prepLabel.innerText = `Wähle Stufe 1 Zauber (Limit: ${maxPrep}):`;
-
-    for (let i = 0; i < maxPrep; i++) {
-        let opts = allowedLvl1.map(s => `<option value="${s}">${s}</option>`).join('');
-        let uniqueId = 'spell_l1_' + i;
-        lvl1Group.innerHTML += `
-            <div class="input-row">
-                <div class="custom-dropdown-wrapper" id="wrap-${uniqueId}" style="flex-grow:1;">
-                    <button type="button" class="custom-dropdown-trigger" onclick="toggleInlineDropdown('${uniqueId}', event)">
-                        <span id="val-${uniqueId}">-- Wählen --</span>
-                        <i class="fa-solid fa-chevron-down" style="color: var(--accent);" id="icon-${uniqueId}"></i>
-                    </button>
-                    <div id="inline-menu-${uniqueId}" class="custom-dropdown-inline-menu"></div>
-                </div>
-                <select class="char-spell-select" id="${uniqueId}" style="display:none;"><option value="">-- Wählen --</option>${opts}</select>
-                <button type="button" class="info-btn" onclick="showSpellModalFromDropdown(document.getElementById('${uniqueId}'))">I</button>
-            </div>`;
-    }
-}
-
-function flattenEquipment(item) {
-    let result = [];
-    if (!item) return result;
-
-    if (typeof item === 'string') {
-        let cleaned = item.trim();
-        if (cleaned && !cleaned.toLowerCase().startsWith('wähle')) {
-            cleaned.split(/,| und /).forEach(p => {
-                let sub = p.trim();
-                if (sub && sub.length > 2) result.push(sub);
-            });
-        }
-    } else if (item.name) {
-        let q = item.qty ? `${item.qty}x ` : '';
-        result.push(`${q}${item.name}`);
-    } else if (Array.isArray(item)) {
-        item.forEach(sub => result.push(...flattenEquipment(sub)));
-    } else if (typeof item === 'object') {
-        for (let key in item) {
-            result.push(...flattenEquipment(item[key]));
-        }
-    }
-    return result;
-}
-
-function accumulateItems(itemList) {
-    let map = {};
-    itemList.forEach(raw => {
-        let flattened = flattenEquipment(raw);
-        flattened.forEach(str => {
-            let qty = "1";
-            let name = str;
-
-            let numMatch = str.match(/^(\d+)\s*(?:x\s*)?(.*)$/);
-            if (numMatch) {
-                qty = numMatch[1];
-                name = numMatch[2].trim();
-            }
-            name = name.replace(/[.,;]$/, '').trim();
-            if (!name || name.length < 2) return;
-
-            let key = name.toLowerCase();
-            if (map[key]) {
-                let q1 = parseInt(map[key].qty);
-                let q2 = parseInt(qty);
-                if (!isNaN(q1) && !isNaN(q2)) {
-                    map[key].qty = (q1 + q2).toString();
-                }
-            } else {
-                map[key] = { originalName: name, qty: qty };
-            }
-        });
-    });
-    return Object.values(map);
-}
-
-function renderEquipmentSectionInSheet(clsName, bgCustomData) {
-    const container = document.getElementById('sheet-equipment-controls');
-    if (!container) return;
-
-    const clsObj = classesData[clsName] || {};
-    let startingEqList = [];
+function renderClassEquipment(clsObj) {
+    const container = document.getElementById('class-equipment-container');
+    container.innerHTML = "";
     if (clsObj.startingEquipment) {
-        const selectedPackageKey = document.querySelector('input[name="class_eq_package"]:checked')?.value || 'choiceA';
-        const pkg = clsObj.startingEquipment[selectedPackageKey] || clsObj.startingEquipment.choiceA;
-        if (pkg) {
-            pkg.forEach(it => startingEqList.push(`${it.qty || 1} ${it.name}${it.unit ? ' ' + it.unit : ''}`));
+        let html = "";
+        if (clsObj.startingEquipment.choiceA) {
+            let itemsA = clsObj.startingEquipment.choiceA.map(i => `${i.qty || 1}x ${i.name}`).join(', ');
+            html += `<label><input type="radio" name="eq_choice" checked> <strong>Option A:</strong> ${itemsA}</label>`;
         }
-        if (clsObj.startingEquipment.additionalItems) {
-            clsObj.startingEquipment.additionalItems.forEach(it => startingEqList.push(`${it.qty || 1} ${it.name}`));
+        if (clsObj.startingEquipment.choiceB) {
+            let itemsB = clsObj.startingEquipment.choiceB.map(i => `${i.qty || 1}x ${i.name} ${i.unit || ''}`).join(', ');
+            html += `<label style="margin-top:6px;"><input type="radio" name="eq_choice"> <strong>Option B:</strong> ${itemsB}</label>`;
         }
+        container.innerHTML = html;
     }
-
-    let selectedClassTools = [];
-    document.querySelectorAll('input[name="class_tool_choice"]').forEach(inp => {
-        selectedClassTools.push(inp.value);
-    });
-
-    let rawList = [...startingEqList, selectedClassTools, bgCustomData.equipment, bgCustomData.tools];
-    let accumulated = accumulateItems(rawList);
-
-    let rowsHtml = accumulated.map(item => `
-        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--card); border: 1.5px solid var(--border); padding: 6px 10px; border-radius: 6px; margin-bottom: 6px;">
-            <span style="color: var(--text); font-weight: bold;">
-                <i class="fa-solid fa-box-open" style="color: var(--accent); margin-right: 6px;"></i>${item.originalName}
-            </span>
-            <span style="background: var(--btn-back-bg); border: 1.5px solid var(--border); padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; color: var(--text);">
-                Anzahl: ${item.qty}
-            </span>
-        </div>
-    `).join('');
-
-    container.innerHTML = `
-        <div style="font-size:0.85rem; margin-bottom: 8px; color: var(--text-muted);"><b>Ausrüstungsliste (kumuliert):</b></div>
-        <div style="display: flex; flex-direction: column;">${rowsHtml}</div>
-    `;
 }
 
-function manualSaveCharacter() {
-    buildCharacterAndSave();
-    showCustomAlert("Held erfolgreich gespeichert!");
-}
+function renderClassSpecialOptions(clsObj, className) {
+    const card = document.getElementById('class-special-options-card');
+    const container = document.getElementById('class-special-container');
+    container.innerHTML = "";
 
-function resetLocalStorage() {
-    if (confirm("Möchtest du wirklich den gesamten lokalen Speicher leeren? Alle gespeicherten Helden gehen verloren.")) {
-        localStorage.clear();
-        showCustomAlert("Speicher erfolgreich geleert!");
-        location.reload();
+    // Beispiel für Druide / Kleriker (Ordnungen)
+    let featureList = clsObj.features || [];
+    let specialFeature = featureList.find(f => f.choice && (f.name.includes("Ordnung")));
+
+    if (specialFeature && specialFeature.choice) {
+        document.getElementById('class-special-title').textContent = specialFeature.name;
+        let html = `<p style="font-size:0.85rem;">${specialFeature.choice.text}</p>`;
+        specialFeature.choice.options.forEach((opt, idx) => {
+            html += `<label style="margin-top:6px;"><input type="radio" name="special_choice" ${idx===0?'checked':''}> <strong>${opt.name}:</strong> ${opt.description || ''}</label>`;
+        });
+        container.innerHTML = html;
+        card.style.display = 'block';
+    } else {
+        card.style.display = 'none';
     }
 }
 </script>
