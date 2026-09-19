@@ -232,14 +232,15 @@ let classesData = {};
 window.onload = async function() {
     try {
         const classRes = await fetch("klassen.json?t=" + new Date().getTime());
-        if (!classRes.ok) throw new Error("Fehler beim Laden von klassen.json");
+        if (!classRes.ok) throw new Error("HTTP-Fehler beim Laden: " + classRes.status);
         
         const classJson = await classRes.json();
         classesData = classJson.classes || classJson;
 
         initClassDropdown();
     } catch (err) {
-        console.error(err);
+        console.error("Konnte klassen.json nicht laden:", err);
+        alert("Fehler beim Laden von klassen.json: " + err.message);
     }
 };
 
@@ -255,6 +256,7 @@ function switchTab(tabId, event) {
 // Dropdown initialisieren
 function initClassDropdown() {
     const sel = document.getElementById('class-select');
+    sel.innerHTML = '<option value="">-- Wähle deine Klasse --</option>';
     Object.keys(classesData).forEach(className => {
         let opt = document.createElement('option');
         opt.value = className;
@@ -275,7 +277,6 @@ function onClassSelectionChange() {
 
     const clsObj = classesData[selVal];
     
-    // Inhalte füllen
     document.getElementById('class-summary-title').textContent = selVal + " - Übersicht";
     document.getElementById('class-summary-text').textContent = clsObj.summary || "";
 
@@ -293,7 +294,7 @@ function renderClassSkills(clsObj) {
     container.innerHTML = "";
     if (clsObj.proficiencies && clsObj.proficiencies.skills) {
         let skillInfo = clsObj.proficiencies.skills;
-        let html = `<p style="font-size:0.85rem; margin-bottom:6px;">Wähle ${skillInfo.choose} aus: ${skillInfo.from.join(', ')}</p>`;
+        let html = `<p style="font-size:0.85rem; margin-bottom:6px;">Wähle ${skillInfo.choose} aus:</p>`;
         for(let i=0; i < skillInfo.choose; i++) {
             html += `<select style="margin-bottom:6px;"><option value="">-- Fertigkeit ${i+1} --</option>`;
             skillInfo.from.forEach(sk => html += `<option value="${sk}">${sk}</option>`);
@@ -311,7 +312,8 @@ function renderClassTools(clsObj) {
     let tools = clsObj.proficiencies?.tools;
     if (tools && tools.choice) {
         let choice = tools.choice;
-        let html = `<p style="font-size:0.85rem; margin-bottom:6px;">${choice.text || 'Wähle:'}</p>`;
+        document.getElementById('class-tools-title').textContent = choice.text || "Werkzeug- / Instrumentenwahl";
+        let html = `<p style="font-size:0.85rem; margin-bottom:6px;">Wähle ${choice.choose || 1}:</p>`;
         for(let i=0; i < (choice.choose || 1); i++) {
             html += `<select style="margin-bottom:6px;"><option value="">-- Bitte wählen --</option>`;
             choice.options.forEach(opt => html += `<option value="${opt}">${opt}</option>`);
@@ -378,27 +380,10 @@ function renderClassSpells(clsObj) {
 
         let html = `<p style="font-size:0.85rem; margin-bottom: 10px;">Diese Klasse besitzt Zauberwirken auf Stufe 1.</p>`;
         
-        // Zaubertricks-Auswahl generieren falls vorhanden
-        if (cantripsCount > 0 && sc.availableCantrips) {
-            html ilə += `<label>Wähle ${cantripsCount} Zaubertricks:</label>`;
-            for(let i=0; i<cantripsCount; i++) {
-                html += `<select style="margin-bottom:6px;"><option value="">-- Zaubertrick ${i+1} --</option>`;
-                sc.availableCantrips.forEach(c => html += `<option value="${c}">${c}</option>`);
-                html += `</select>`;
-            }
-        } else if (cantripsCount > 0) {
+        if (cantripsCount > 0) {
             html += `<p style="font-size:0.85rem;"><b>Zaubertricks wählbar:</b> ${cantripsCount}</p>`;
         }
-
-        // Stufe 1 Zauber-Auswahl generieren falls vorhanden
-        if (preparedCount > 0 && sc.available1stLevelSpells) {
-            html += `<label style="margin-top:10px;">Wähle ${preparedCount} vorbereitete Stufe-1-Zauber:</label>`;
-            for(let i=0; i<preparedCount; i++) {
-                html += `<select style="margin-bottom:6px;"><option value="">-- Stufe-1-Zauber ${i+1} --</option>`;
-                sc.available1stLevelSpells.forEach(s => html += `<option value="${s}">${s}</option>`);
-                html += `</select>`;
-            }
-        } else if (preparedCount > 0) {
+        if (preparedCount > 0) {
             html += `<p style="font-size:0.85rem; margin-top:5px;"><b>Vorbereitete Zauber (Stufe 1):</b> ${preparedCount}</p>`;
         }
 
