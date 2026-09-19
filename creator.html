@@ -99,7 +99,7 @@
             opacity: 1;
             transform: translateY(0);
             visibility: visible;
-            max-height: 2000px;
+            max-height: 3000px;
         }
 
         .step-card {
@@ -187,6 +187,11 @@
                 </div>
             </div>
 
+            <div class="step-card" id="class-tools-card" style="display: none;">
+                <div class="step-title" id="class-tools-title">Werkzeug- / Instrumentenwahl</div>
+                <div id="class-tools-container"></div>
+            </div>
+
             <div class="step-card">
                 <div class="step-title">Startausrüstung</div>
                 <div id="class-equipment-container"></div>
@@ -195,6 +200,11 @@
             <div class="step-card" id="class-special-options-card" style="display: none;">
                 <div class="step-title" id="class-special-title">Spezielle Wahl</div>
                 <div id="class-special-container"></div>
+            </div>
+
+            <div class="step-card" id="class-spells-card" style="display: none;">
+                <div class="step-title">Zauber (Stufe 1)</div>
+                <div id="class-spells-container"></div>
             </div>
         </div>
     </div>
@@ -221,7 +231,6 @@ let classesData = {};
 
 window.onload = async function() {
     try {
-        // Lädt nun sauber klassen.json ohne Klammer-Fehler
         const classRes = await fetch("klassen.json?t=" + new Date().getTime());
         if (!classRes.ok) throw new Error("Fehler beim Laden von klassen.json");
         
@@ -270,14 +279,12 @@ function onClassSelectionChange() {
     document.getElementById('class-summary-title').textContent = selVal + " - Übersicht";
     document.getElementById('class-summary-text').textContent = clsObj.summary || "";
 
-    // Fertigkeiten rendern
+    // Fertigkeiten, Werkzeuge, Ausrüstung, Ordnungen und Zauber rendern
     renderClassSkills(clsObj);
-
-    // Ausrüstung rendern
+    renderClassTools(clsObj);
     renderClassEquipment(clsObj);
-
-    // Spezielle Optionen (wie Urtümliche / Göttliche Ordnung) prüfen
     renderClassSpecialOptions(clsObj);
+    renderClassSpells(clsObj);
 
     // Sanft einblenden
     dynamicSection.classList.add('visible');
@@ -298,18 +305,43 @@ function renderClassSkills(clsObj) {
     }
 }
 
+function renderClassTools(clsObj) {
+    const card = document.getElementById('class-tools-card');
+    const container = document.getElementById('class-tools-container');
+    container.innerHTML = "";
+
+    let tools = clsObj.proficiencies?.tools;
+    if (tools && tools.choice) {
+        let choice = tools.choice;
+        let html = `<p style="font-size:0.85rem; margin-bottom:6px;">${choice.text || 'Wähle:'}</p>`;
+        for(let i=0; i < (choice.choose || 1); i++) {
+            html += `<select style="margin-bottom:6px;"><option value="">-- Bitte wählen --</option>`;
+            choice.options.forEach(opt => html += `<option value="${opt}">${opt}</option>`);
+            html += `</select>`;
+        }
+        container.innerHTML = html;
+        card.style.display = 'block';
+    } else {
+        card.style.display = 'none';
+    }
+}
+
 function renderClassEquipment(clsObj) {
     const container = document.getElementById('class-equipment-container');
     container.innerHTML = "";
     if (clsObj.startingEquipment) {
         let html = "";
         if (clsObj.startingEquipment.choiceA) {
-            let itemsA = clsObj.startingEquipment.choiceA.map(i => `${i.qty || 1}x ${i.name}`).join(', ');
+            let itemsA = clsObj.startingEquipment.choiceA.map(i => `${i.qty || 1}x ${i.name} ${i.unit || ''}`).join(', ');
             html += `<label><input type="radio" name="eq_choice" checked> <strong>Option A:</strong> ${itemsA}</label>`;
         }
         if (clsObj.startingEquipment.choiceB) {
             let itemsB = clsObj.startingEquipment.choiceB.map(i => `${i.qty || 1}x ${i.name} ${i.unit || ''}`).join(', ');
             html += `<label style="margin-top:6px;"><input type="radio" name="eq_choice"> <strong>Option B:</strong> ${itemsB}</label>`;
+        }
+        if (clsObj.startingEquipment.choiceC) {
+            let itemsC = clsObj.startingEquipment.choiceC.map(i => `${i.qty || 1}x ${i.name} ${i.unit || ''}`).join(', ');
+            html += `<label style="margin-top:6px;"><input type="radio" name="eq_choice"> <strong>Option C:</strong> ${itemsC}</label>`;
         }
         container.innerHTML = html;
     }
@@ -329,6 +361,24 @@ function renderClassSpecialOptions(clsObj) {
         specialFeature.choice.options.forEach((opt, idx) => {
             html += `<label style="margin-top:6px;"><input type="radio" name="special_choice" ${idx===0?'checked':''}> <strong>${opt.name}:</strong> ${opt.description || ''}</label>`;
         });
+        container.innerHTML = html;
+        card.style.display = 'block';
+    } else {
+        card.style.display = 'none';
+    }
+}
+
+function renderClassSpells(clsObj) {
+    const card = document.getElementById('class-spells-card');
+    const container = document.getElementById('class-spells-container');
+    container.innerHTML = "";
+
+    if (clsObj.spellcasting) {
+        let cantripsCount = clsObj.spellcasting.cantripsKnown?.[0]?.count || 0;
+        let html = `<p style="font-size:0.85rem;">Diese Klasse besitzt Zauberwirken auf Stufe 1.</p>`;
+        if (cantripsCount > 0) {
+            html += `<p style="font-size:0.85rem; margin-top:4px;"><b>Zaubertricks wählbar:</b> ${cantripsCount}</p>`;
+        }
         container.innerHTML = html;
         card.style.display = 'block';
     } else {
