@@ -1115,3 +1115,178 @@
     }
   }
 }
+{
+  "Kämpfer": {
+    "summary": "Meister aller Waffen und Rüstungen",
+    "hitDice": "d10",
+    "hpAt1stLevel": "10 + Konstitutionsmodifikator",
+    "hpPerLevel": "6 + Konstitutionsmodifikator",
+    "primaryAbility": "Stärke oder Geschicklichkeit",
+    "savingThrows": ["Stärke", "Konstitution"],
+    "proficiencies": {
+      "armor": ["Leichte Rüstung", "Mittlere Rüstung", "Schwere Rüstung", "Schilde"],
+      "weapons": ["Einfache Waffen", "Kriegswaffen"],
+      "tools": [],
+      "skills": {
+        "from": [
+          "Akrobatik", "Athletik", "Einschüchtern", "Geschichte",
+          "Mit Tieren umgehen", "Motiv erkennen", "Überlebenskunst",
+          "Überzeugen", "Wahrnehmung"
+        ],
+        "choose": 2
+      }
+    },
+    "startingEquipment": {
+      "choiceA": [
+        {"name": "Kettenpanzer", "qty": 1},
+        {"name": "Zweihandschwert", "qty": 1},
+        {"name": "Flegel", "qty": 1},
+        {"name": "Wurfspeer", "qty": 8},
+        {"name": "Gewölbeforscherausrüstung", "qty": 1},
+        {"name": "Gold", "qty": 4, "unit": "GM"}
+      ],
+      "choiceB": [
+        {"name": "Beschlagene Lederrüstung", "qty": 1},
+        {"name": "Krummsäbel", "qty": 1},
+        {"name": "Kurzschwert", "qty": 1},
+        {"name": "Langbogen", "qty": 1},
+        {"name": "Pfeile", "qty": 20},
+        {"name": "Köcher", "qty": 1},
+        {"name": "Gewölbeforscherausrüstung", "qty": 1},
+        {"name": "Gold", "qty": 11, "unit": "GM"}
+      ],
+      "choiceC": [
+        {"name": "Gold", "qty": 155, "unit": "GM"}
+      ]
+    },
+    "multiClassing": {
+      "prerequisites": {"STR": 13, "DEX": 13},
+      "proficienciesGranted": ["Leichte Rüstung", "Mittlere Rüstung", "Schwere Rüstung", "Schilde", "Einfache Waffen", "Kriegswaffen"]
+    },
+    "features": [
+      {
+        "level": 1,
+        "name": "Durchschnaufen",
+        "description": "Du hast einen Vorrat an körperlicher und geistiger Ausdauer (Trefferpunkte in Höhe von 1W10 plus Kämpferstufe). Nutzungen erhöhen sich mit höheren Stufen."
+      },
+      {
+        "level": 1,
+        "name": "Kampfstil",
+        "description": "Du erhältst ein Kampfstil-Talent deiner Wahl (z. B. Verteidigung wird empfohlen). Bei Stufenaufstieg austauschbar."
+      },
+      {
+        "level": 1,
+        "name": "Waffenmeisterung",
+        "description": "Verwende die Meisterschaftseigenschaften dreier Arten von einfachen oder Kriegswaffen deiner Wahl. Wechselbar bei langer Rast."
+      },
+      {
+        "level": 2,
+        "name": "Taktisches Verständnis",
+        "description": "Verbrauche bei gescheiterten Attributswürfen eine Anwendung von Durchschnaufen (1W10 dazu addieren), um es vielleicht doch zu schaffen, ohne die Nutzung zu verbrauchen bei anhaltendem Fehlschlag."
+      },
+      {
+        "level": 2,
+        "name": "Tatendrang",
+        "description": "Führe in deinem Zug eine zusätzliche Aktion (außer der magischen Aktion) aus. (Ab Stufe 17 zweimal pro Zug einsetzbar)."
+      },
+      {
+        "level": 3,
+        "name": "Kämpfer-Unterklasse",
+        "description": "Wähle eine Unterklasse (Champion, Kampfmeister, Mystischer Ritter, Psi-Krieger).",
+        "choice": {
+          "text": "Wähle deine Kämpfer-Unterklasse:",
+          "availableAtLevel": 3,
+          "options": [
+            {
+              "name": "Champion",
+              "features": [
+                {"level": 3, "name": "Bemerkenswerter Athlet", "description": "Vorteil bei Initiative- und Stärkewürfen (Athletik); halbe Bewegungsrate mehr bei Kills ohne Gelegenheitsangriffe."},
+                {"level": 3, "name": "Verbesserter kritischer Treffer", "description": "Kritische Treffer bei einer gewürfelten 19 oder 20."},
+                {"level": 7, "name": "Weiterer Kampfstil", "description": "Erhalte ein weiteres Kampfstil-Talent."},
+                {"level": 10, "name": "Heldenhafter Krieger", "description": "Erlange Heldische Inspiration zu Beginn deines Zuges, wenn du keine hast."},
+                {"level": 15, "name": "Überlegener kritischer Treffer", "description": "Kritische Treffer bei einer gewürfelten 18–20."},
+                {"level": 18, "name": "Der Überlebende", "description": "Vorteil bei Todesrettungswürfen (18-20 gilt als Erfolg mit 20) und automatisches Heilen im blutigen Zustand zu Beginn deiner Züge."}
+              ]
+            },
+            {
+              "name": "Kampfmeister",
+              "features": [
+                {"level": 3, "name": "Kampfüberlegenheit", "description": "Erhalte Überlegenheitswürfel (W8) und erlerne Manöver (z. B. Ablenkender Schlag, Ausfall, Präzisionsangriff etc.). Rettungswurf-SG basiert auf Stärke/Geschicklichkeit."},
+                {"level": 3, "name": "Adept des Krieges", "description": "Erhalte Übung mit einer Art Handwerkszeug und einer Fertigkeit."},
+                {"level": 7, "name": "Kenne deinen Feind", "description": "Schätze Stärken und Schwächen einer Kreatur als Bonusaktion ein."},
+                {"level": 10, "name": "Verbesserte Kampfüberlegenheit", "description": "Überlegenheitswürfel steigen auf W10."},
+                {"level": 15, "name": "Unermüdlich", "description": "Setze Manöver ein und verbrauche einen W8 statt eines echten Überlegenheitswürfels."},
+                {"level": 18, "name": "Ultimative Kampfüberlegenheit", "description": "Überlegenheitswürfel steigen auf W12."}
+              ]
+            },
+            {
+              "name": "Mystischer Ritter",
+              "features": [
+                {"level": 3, "name": "Kriegsbindung", "description": "Magische Bindung an Waffen, um sie vor Entwaffnung zu schützen und per Bonusaktion zu rufen."},
+                {"level": 3, "name": "Zauberwirken", "description": "Wirke Magier-Zauber mit Intelligenz als Attribut. Enthält spezielle Zauberplatztabelle."},
+                {"level": 7, "name": "Kriegsmagie", "description": "Ersetze bei einer Angriffsaktion einen Angriff durch einen Magierzaubertrick."},
+                {"level": 10, "name": "Mystischer Schlag", "description": "Getroffene Kreaturen sind bei Rettungswürfen gegen deine Zauber im Nachteil."},
+                {"level": 15, "name": "Arkaner Sturmangriff", "description": "Teleportiere dich im Rahmen von Tatendrang bis zu 9 Meter weit."}
+              ]
+            },
+            {
+              "name": "Psi-Krieger",
+              "features": [
+                {"level": 3, "name": "Psionische Kraft", "description": "Nutze Psi-Energie-Würfel für psionische Effekte (Psionischer Schlag, Schützende Barriere, Telekinese)."},
+                {"level": 7, "name": "Adept der Telekinese", "description": "Erhalte Psi-Sprung und Telekinetischer Stoß."},
+                {"level": 10, "name": "Bewachter Wille", "description": "Psychische Resistenz und automatisches Beenden von Bezaubert/Verängstigt bei Nutzung von Psi-Würfeln."},
+                {"level": 15, "name": "Mentaler Schutzwall", "description": "Erschaffe als Bonusaktion Schutzzonen mit Teildeckung für Verbündete."},
+                {"level": 18, "name": "Meister der Telekinese", "description": "Wirke den Zauber Telekinese ohne Zauberplatz und kombiniere ihn mit einem Bonusangriff."}
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "level": 4,
+        "name": "Attributswerterhöhung",
+        "description": "Erhalte ein Talent oder Attributswerterhöhung (wiederholt sich auf Stufe 8, 12 und 16)."
+      },
+      {
+        "level": 5,
+        "name": "Taktikwechsel",
+        "description": "Bewege dich bei Durchschnaufen um die Hälfte deiner Bewegungsrate, ohne Gelegenheitsangriffe zu provozieren."
+      },
+      {
+        "level": 5,
+        "name": "Zusätzlicher Angriff",
+        "description": "Du kannst jetzt zweimal angreifen, wenn du eine Angriffsaktion ausführst."
+      },
+      {
+        "level": 9,
+        "name": "Taktischer Meister",
+        "description": "Nutze bei Waffenangriffen Meisterschaftseigenschaften wie Auslaugen, Stoßen oder Verlangsamen."
+      },
+      {
+        "level": 9,
+        "name": "Unbeugsamkeit",
+        "description": "Wiederhole gescheiterte Rettungswürfe mit einem Bonus in Höhe deiner Kämpferstufe (Anzahl Nutzungen steigt auf Stufe 13 und 17)."
+      },
+      {
+        "level": 11,
+        "name": "Zwei zusätzliche Angriffe",
+        "description": "Du kannst jetzt dreimal angreifen, wenn du eine Angriffsaktion ausführen tust."
+      },
+      {
+        "level": 13,
+        "name": "Angriffsstudien",
+        "description": "Studiere Gegner: Wenn du einen Angriff verfehlst, ist der nächste Angriffswurf gegen diese Kreatur im Vorteil."
+      },
+      {
+        "level": 19,
+        "name": "Epische Gabe",
+        "description": "Erhalte eine Epische-Gabe-Talent (z. B. Gabe der Kampfffertigkeit) oder ein anderes Talent."
+      },
+      {
+        "level": 20,
+        "name": "Drei zusätzliche Angriffe",
+        "description": "Du kannst jetzt viermal angreifen, wenn du eine Angriffsaktion ausführst."
+      }
+    ]
+  }
+}
